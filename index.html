@@ -129,44 +129,16 @@
         </div>
         <div class="project-body">
           <div class="project-part">
-            <div class="part-label">背景与约束</div>
-            <p class="part-text">realsyncer 仓库解决跨地域数据同步的一致性问题。约束：强一致要求 + 延迟预算 50ms + 不能丢消息。</p>
+            <div class="part-label">项目简介</div>
+            <p class="part-text">RealSyncer 是分布式数据存储与全球同步组件，用户从全球任意中心/边缘节点接入，实现毫秒级消息全球分发。基于版本号机制与分片指纹解决数据冲突和乱序，确保多节点间最终一致性。自动重传保障消息送达，分片保活机制兜底清理残留数据。同时解决 Redis 热 Key、大 Key 问题，多级索引分散存储，极大简化业务开发流程。</p>
           </div>
 
           <div class="project-part">
-            <div class="part-label">问题</div>
-            <p class="part-text">跨地域网络分区时出现数据脑裂，一致性事故月均 1-2 起。</p>
-          </div>
-
-          <div class="project-part">
-            <div class="part-label">方案与备选</div>
-            <div class="scheme chosen">
-              <span class="scheme-label">方案 A（最终选择）</span>
-              <strong>引入分布式一致性协议 + 幂等保护</strong>
-              <ul class="scheme-pros">
-                <li>⚠ 代价：需改动 3 个仓库，对下游系统有 2 周观察期</li>
-              </ul>
-            </div>
-            <div class="scheme rejected">
-              <span class="scheme-label">方案 B（被放弃）</span>
-              <strong>切换到最终一致模型</strong>
-              <p class="scheme-reason">→ 放弃原因：业务要求强一致，无法妥协</p>
-            </div>
-          </div>
-
-          <div class="project-part">
-            <div class="part-label">落地与风险控制</div>
+            <div class="part-label">当前负责方向</div>
             <ul class="part-list">
-              <li>灰度节奏：10% → 30% → 全量</li>
-              <li>实操踩坑：早期未做幂等保护，X 场景下出现数据重复，已补齐幂等逻辑</li>
-            </ul>
-          </div>
-
-          <div class="project-part">
-            <div class="part-label">结果与复盘</div>
-            <ul class="result-list">
-              <li>同步延迟 P99 从 80ms 降至 <strong>35ms</strong>（↓56%）</li>
-              <li>数据一致性：连续 <strong>6 个月零一致性事故</strong></li>
+              <li>数据组件巡检服务设计与开发</li>
+              <li>最终一致性逻辑的设计与开发</li>
+              <li>RealSyncer 整体设计与维护</li>
             </ul>
           </div>
         </div>
