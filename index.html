@@ -89,7 +89,7 @@
         <div class="project-header" onclick="toggleProject(this)">
           <div class="project-meta">
             <span class="project-badge deep">深度项目</span>
-            <h3 class="project-name">signal_access</h3>
+            <h3 class="project-name">gsync</h3>
           </div>
           <div class="project-chevron">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -99,46 +99,16 @@
         </div>
         <div class="project-body">
           <div class="project-part">
-            <div class="part-label">背景与约束</div>
-            <p class="part-text">signal_access 仓库负责信令接入层，支撑高并发连接。面临的核心问题：</p>
-            <ol class="part-list">
-              <li>长连网关单节点连接数上限受限于单机内存，水平扩容时状态同步瓶颈明显</li>
-              <li>推送延迟峰值不稳定，影响用户体验</li>
-            </ol>
+            <div class="part-label">项目简介</div>
+            <p class="part-text">支撑全球流媒体网络信令传输，负责云边与云间双向通信保障。云边通信：75ms 触达率 99%，总触达率 >7 个 9；云间全球通信：150ms 触达率 >99%。采用多链路冗余传输机制，支持自动去重与单链路故障避障，月均避障次数云边 3.5 次、云间 1.9 次。支持跨 TTP 异构传输（RoW↔US-TTP/EU-TTP、US-TTP↔EU-TTP），多区域多出口，故障场景自动切换。</p>
           </div>
 
           <div class="project-part">
-            <div class="part-label">方案与备选</div>
-            <div class="scheme chosen">
-              <span class="scheme-label">方案 A（最终选择）</span>
-              <strong>分层连接管理 + 消息流水线化</strong>
-              <ul class="scheme-pros">
-                <li>✓ 优点：可渐进灰度，对现有架构改动小</li>
-                <li>⚠ 代价：需与路由层协同改造，开发周期约 2 人月</li>
-              </ul>
-            </div>
-            <div class="scheme rejected">
-              <span class="scheme-label">方案 B（被放弃）</span>
-              <strong>直接换用 X 中间件</strong>
-              <p class="scheme-reason">→ 放弃原因：数据面控制面耦合过深，改造风险不可控</p>
-            </div>
-          </div>
-
-          <div class="project-part">
-            <div class="part-label">落地与风险控制</div>
+            <div class="part-label">当前负责方向</div>
             <ul class="part-list">
-              <li>分阶段灰度：5% → 20% → 50% → 100%，历时 6 周</li>
-              <li>回滚触发条件：连接成功率 &lt; 99.5%</li>
-              <li>踩过的坑：初期未做连接迁移，导致换层时部分用户被动断连，修复耗时约 4 小时</li>
-            </ul>
-          </div>
-
-          <div class="project-part">
-            <div class="part-label">结果与复盘</div>
-            <ul class="result-list">
-              <li>连接成功率 <strong>99.8%</strong>（↑0.3pp），P99 延迟从 320ms 降至 <strong>140ms</strong>（↓56%）</li>
-              <li>单节点承载连接数提升 <strong>180%</strong></li>
-              <li>复盘：方案选择优先可渐进落地，避免了方案 B 的踩坑</li>
+              <li>LiveNet & RealNet 节点融合，内网环境节点部署兼容</li>
+              <li>边缘控制面部署与通讯</li>
+              <li>跨 TTP 通讯 SDK 实现</li>
             </ul>
           </div>
         </div>
