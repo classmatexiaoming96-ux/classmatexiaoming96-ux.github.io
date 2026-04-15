@@ -174,13 +174,23 @@
         </div>
       </div>
 
-      <!-- Simple Projects -->
-      <div class="simple-projects">
-        <div class="simple-project-label">简单项目</div>
-        <div class="simple-list">
-          <div class="simple-item">
-            <span class="simple-name">signal_health</span>
-            <span class="simple-desc">负责可观测性体系建设，主导了全链路 Trace 覆盖，告警收敛率 85%</span>
+      <!-- Project D -->
+      <div class="project-card" data-expandable>
+        <div class="project-header" onclick="toggleProject(this)">
+          <div class="project-meta">
+            <span class="project-badge deep">深度项目</span>
+            <h3 class="project-name">信令 SLO 系统</h3>
+          </div>
+          <div class="project-chevron">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-part">
+            <div class="part-label">项目简介</div>
+            <p class="part-text">设计信令 SLO 指标体系，以「健康用户占比」为核心，低于 99.98% 自动报警；搭建多层次监控（实时+历史+定位）并实现自动化归因，大幅提升故障定位效率。</p>
           </div>
         </div>
       </div>
