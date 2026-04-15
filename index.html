@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>苗效铭 | 字节跳动 · 传输网架构后端开发</title>
+  <meta name="description" content="苗效铭 - 字节跳动后端开发工程师，专注于分布式系统、高可用架构、性能优化">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">M.</a>
+      <div class="nav-links">
+        <a href="#experience">Experience</a>
+        <a href="#impact">Impact</a>
+        <a href="#cases">Cases</a>
+        <a href="#writing">Writing</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#experience" class="mobile-link">Experience</a>
+    <a href="#impact" class="mobile-link">Impact</a>
+    <a href="#cases" class="mobile-link">Cases</a>
+    <a href="#writing" class="mobile-link">Writing</a>
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-avatar">
+        <div class="avatar-placeholder">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="18" r="10" stroke="#555" stroke-width="2"/>
+            <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="hero-content">
+        <h1 class="hero-name">苗效铭</h1>
+        <p class="hero-title">字节跳动 · 视频与边缘 · 传输网架构 · 后端开发</p>
+        <p class="hero-tagline">让信令在高并发与弱网下依然可靠</p>
+        <div class="hero-tags">
+          <span class="tag">Go</span>
+          <span class="tag">分布式系统</span>
+          <span class="tag">高可用架构</span>
+          <span class="tag">性能优化</span>
+          <span class="tag">Rust</span>
+          <span class="tag">gRPC</span>
+          <span class="tag">消息队列</span>
+        </div>
+        <div class="hero-status">
+          <span class="status-dot"></span>
+          <span>当前：在职 · 开放外部合作</span>
+        </div>
+        <div class="hero-actions">
+          <a href="#experience" class="btn-primary">→ 查看项目</a>
+          <a href="#contact" class="btn-secondary">✉ 联系我</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="section" id="experience">
+    <div class="section-inner">
+      <div class="section-label">01 / Experience</div>
+      <h2 class="section-title">深度项目</h2>
+
+      <!-- Project A -->
+      <div class="project-card" data-expandable>
+        <div class="project-header" onclick="toggleProject(this)">
+          <div class="project-meta">
+            <span class="project-badge deep">深度项目</span>
+            <h3 class="project-name">signal_access</h3>
+          </div>
+          <div class="project-chevron">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-part">
+            <div class="part-label">背景与约束</div>
+            <p class="part-text">signal_access 仓库负责信令接入层，支撑高并发连接。面临的核心问题：</p>
+            <ol class="part-list">
+              <li>长连网关单节点连接数上限受限于单机内存，水平扩容时状态同步瓶颈明显</li>
+              <li>推送延迟峰值不稳定，影响用户体验</li>
+            </ol>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">方案与备选</div>
+            <div class="scheme chosen">
+              <span class="scheme-label">方案 A（最终选择）</span>
+              <strong>分层连接管理 + 消息流水线化</strong>
+              <ul class="scheme-pros">
+                <li>✓ 优点：可渐进灰度，对现有架构改动小</li>
+                <li>⚠ 代价：需与路由层协同改造，开发周期约 2 人月</li>
+              </ul>
+            </div>
+            <div class="scheme rejected">
+              <span class="scheme-label">方案 B（被放弃）</span>
+              <strong>直接换用 X 中间件</strong>
+              <p class="scheme-reason">→ 放弃原因：数据面控制面耦合过深，改造风险不可控</p>
+            </div>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">落地与风险控制</div>
+            <ul class="part-list">
+              <li>分阶段灰度：5% → 20% → 50% → 100%，历时 6 周</li>
+              <li>回滚触发条件：连接成功率 &lt; 99.5%</li>
+              <li>踩过的坑：初期未做连接迁移，导致换层时部分用户被动断连，修复耗时约 4 小时</li>
+            </ul>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">结果与复盘</div>
+            <ul class="result-list">
+              <li>连接成功率 <strong>99.8%</strong>（↑0.3pp），P99 延迟从 320ms 降至 <strong>140ms</strong>（↓56%）</li>
+              <li>单节点承载连接数提升 <strong>180%</strong></li>
+              <li>复盘：方案选择优先可渐进落地，避免了方案 B 的踩坑</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project B -->
+      <div class="project-card" data-expandable>
+        <div class="project-header" onclick="toggleProject(this)">
+          <div class="project-meta">
+            <span class="project-badge deep">深度项目</span>
+            <h3 class="project-name">realsyncer</h3>
+          </div>
+          <div class="project-chevron">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-part">
+            <div class="part-label">背景与约束</div>
+            <p class="part-text">realsyncer 仓库解决跨地域数据同步的一致性问题。约束：强一致要求 + 延迟预算 50ms + 不能丢消息。</p>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">问题</div>
+            <p class="part-text">跨地域网络分区时出现数据脑裂，一致性事故月均 1-2 起。</p>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">方案与备选</div>
+            <div class="scheme chosen">
+              <span class="scheme-label">方案 A（最终选择）</span>
+              <strong>引入分布式一致性协议 + 幂等保护</strong>
+              <ul class="scheme-pros">
+                <li>⚠ 代价：需改动 3 个仓库，对下游系统有 2 周观察期</li>
+              </ul>
+            </div>
+            <div class="scheme rejected">
+              <span class="scheme-label">方案 B（被放弃）</span>
+              <strong>切换到最终一致模型</strong>
+              <p class="scheme-reason">→ 放弃原因：业务要求强一致，无法妥协</p>
+            </div>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">落地与风险控制</div>
+            <ul class="part-list">
+              <li>灰度节奏：10% → 30% → 全量</li>
+              <li>实操踩坑：早期未做幂等保护，X 场景下出现数据重复，已补齐幂等逻辑</li>
+            </ul>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">结果与复盘</div>
+            <ul class="result-list">
+              <li>同步延迟 P99 从 80ms 降至 <strong>35ms</strong>（↓56%）</li>
+              <li>数据一致性：连续 <strong>6 个月零一致性事故</strong></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simple Projects -->
+      <div class="simple-projects">
+        <div class="simple-project-label">简单项目</div>
+        <div class="simple-list">
+          <div class="simple-item">
+            <span class="simple-name">signal</span>
+            <span class="simple-desc">负责信令协议设计与路由策略优化，通过 [具体优化] 将 [指标] 提升</span>
+          </div>
+          <div class="simple-item">
+            <span class="simple-name">edge_signal</span>
+            <span class="simple-desc">负责边缘节点部署与就近接入，支撑东南亚用户的低延迟入会</span>
+          </div>
+          <div class="simple-item">
+            <span class="simple-name">signal_health</span>
+            <span class="simple-desc">负责可观测性体系建设，主导了全链路 Trace 覆盖，告警收敛率 85%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impact Metrics -->
+  <section class="section section-dark" id="impact">
+    <div class="section-inner">
+      <div class="section-label">02 / Impact Metrics</div>
+      <h2 class="section-title">量化成果</h2>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">[X 万]</div>
+          <div class="metric-label">并发连接峰值，signal_access 单节点承载</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">[X 层]</div>
+          <div class="metric-label">分层架构改造，连接层与业务层完全解耦</div>
+        </div>
+        <div class="metric-card highlight">
+          <div class="metric-value">P99 <span class="metric-big">140 ms</span></div>
+          <div class="metric-label">信令端到端延迟（从 320ms 优化后）</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">[X] 条</div>
+          <div class="metric-label">跨地域同步链路，年累计数据一致性事故 0 起</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">[X] 次</div>
+          <div class="metric-label">Oncall 故障响应，平均恢复时间 [X] 分钟</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">[X] 篇</div>
+          <div class="metric-label">技术文档，被 [X] 个团队内部转发引用</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="section" id="cases">
+    <div class="section-inner">
+      <div class="section-label">03 / Case Studies</div>
+      <h2 class="section-title">案例分析</h2>
+
+      <div class="case-card">
+        <div class="case-header">
+          <span class="case-tag">高可用与故障治理</span>
+          <h3 class="case-title">信令推送雪崩故障</h3>
+        </div>
+        <div class="case-body">
+          <div class="case-part">
+            <div class="part-label">背景</div>
+            <p>某日突发流量峰值 5 倍，信令推送队列堆积，下游服务开始级联超时。</p>
+          </div>
+          <div class="case-part">
+            <div class="part-label">约束</div>
+            <p>不能直接限流（影响用户体验），不能扩容（来不及），必须在 30 分钟内稳住。</p>
+          </div>
+          <div class="case-part">
+            <div class="part-label">决策过程</div>
+            <ul class="part-list">
+              <li>根因定位：10 分钟内锁定问题在推送网关的限流组件</li>
+              <li>备选方案：① 降级非核心推送 → 效果有限；② 启用消息优先级队列 → 需 4 小时改造</li>
+              <li>最终选择：限流组件的参数调优 + 非核心推送降级，原因是可在 20 分钟内落地</li>
+            </ul>
+          </div>
+          <div class="case-part">
+            <div class="part-label">执行</div>
+            <ol class="part-list">
+              <li>紧急调高限流阈值，保障核心用户</li>
+              <li>降级非核心通知</li>
+            </ol>
+          </div>
+          <div class="case-result">
+            <div class="case-outcome">
+              <span class="outcome-label">结果</span>
+              <p>故障持续 25 分钟，影响范围约 8% 用户</p>
+            </div>
+            <div class="case-review">
+              <div class="review-good">
+                <span class="review-tag good">✓ 做对的事</span>
+                <p>快速止血，未影响核心业务</p>
+              </div>
+              <div class="review-bad">
+                <span class="review-tag bad">✗ 失误</span>
+                <p>早期告警阈值设置过宽，错过 10 分钟黄金响应期，已调整为新阈值</p>
+              </div>
+              <div class="review-action">
+                <span class="review-tag action">→ 新增 SLO</span>
+                <p>推送延迟 P99 ≤ 500ms，错误预算告警</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card">
+        <div class="case-header">
+          <span class="case-tag">数据一致性</span>
+          <h3 class="case-title">跨地域同步一致性保障</h3>
+        </div>
+        <div class="case-body">
+          <div class="case-part">
+            <div class="part-label">背景</div>
+            <p>用户状态在 A/B 地域需实时一致，强一致要求 + 延迟预算 50ms</p>
+          </div>
+          <div class="case-part">
+            <div class="part-label">决策过程</div>
+            <ul class="part-list">
+              <li>核心矛盾：强一致 vs 延迟，经典 CAP 取舍</li>
+              <li>方案对比：同步双写（延迟高）vs 异步复制（可能脑裂）→ 选改进版 Raft + 幂等保护</li>
+            </ul>
+          </div>
+          <div class="case-part">
+            <div class="part-label">执行中的失误</div>
+            <p>初期未考虑网络分区场景，出现 2 次脑裂，已通过引入 epoch 机制修复</p>
+          </div>
+          <div class="case-part">
+            <div class="part-label">结果</div>
+            <p><strong>6 个月内 0 一致性事故</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reliability -->
+  <section class="section section-dark" id="reliability">
+    <div class="section-inner">
+      <div class="section-label">04 / Reliability & Operations</div>
+      <h2 class="section-title">稳定性实践</h2>
+
+      <div class="reliability-block">
+        <h3 class="block-title">Oncall 体系</h3>
+        <ul class="part-list">
+          <li>负责信令服务 Oncall 轮班，近 12 个月</li>
+          <li>周均告警量：[X] 条，平均响应时间 [X] 分钟</li>
+        </ul>
+      </div>
+
+      <div class="reliability-block">
+        <h3 class="block-title">故障响应案例</h3>
+        <div class="incident-list">
+          <div class="incident-item">
+            <span class="incident-time">[X 年 X 月]</span>
+            <div class="incident-content">
+              <strong>信令推送雪崩故障</strong>，定位 10 分钟，恢复 25 分钟
+              <p class="incident-root">→ 根因：限流组件阈值设置过宽，改进：新增推送延迟 SLO + 错误预算告警</p>
+            </div>
+          </div>
+          <div class="incident-item">
+            <span class="incident-time">[另一起案例]</span>
+            <div class="incident-content">
+              <strong>[第二个典型案例]</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reliability-block">
+        <h3 class="block-title">SLO / SLA 设计</h3>
+        <ul class="part-list">
+          <li>为信令服务制定了 SLO：可用性 ≥ 99.9%，延迟 P99 ≤ 200ms</li>
+          <li>通过滑动窗口 + 错误预算告警持续监控</li>
+        </ul>
+      </div>
+
+      <div class="reliability-block">
+        <h3 class="block-title">监控告警建设</h3>
+        <ul class="part-list">
+          <li>告警收敛：月均噪告警量从 120 条降至 18 条（↓85%）</li>
+          <li>经验：告警不是越多越好，SLO 错误预算才是黄金标准</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Influence -->
+  <section class="section" id="influence">
+    <div class="section-inner">
+      <div class="section-label">05 / Technical Influence</div>
+      <h2 class="section-title">技术影响力</h2>
+
+      <div class="influence-grid">
+        <div class="influence-card">
+          <h3 class="influence-title">内部工具 / 平台</h3>
+          <div class="influence-item">
+            <strong>信令连接管理 SDK</strong>
+            <p>统一了团队内的连接管理范式，已被 4 个相关团队采用</p>
+          </div>
+        </div>
+
+        <div class="influence-card">
+          <h3 class="influence-title">技术文档</h3>
+          <div class="influence-item">
+            <strong>《信令接入层技术方案》</strong>
+            <p>被 6 个新同学作为上手指南，团队内外累计阅读 200+ 次</p>
+          </div>
+        </div>
+
+        <div class="influence-card">
+          <h3 class="influence-title">技术分享</h3>
+          <div class="influence-item">
+            <p>内部分享 2 场，主题：传输网架构设计、可观测性实践</p>
+          </div>
+        </div>
+
+        <div class="influence-card">
+          <h3 class="influence-title">招聘贡献</h3>
+          <div class="influence-item">
+            <p>面试候选人 15 人，转正 3 人</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Writing -->
+  <section class="section section-dark" id="writing">
+    <div class="section-inner">
+      <div class="section-label">06 / Writing</div>
+      <h2 class="section-title">技术写作</h2>
+
+      <div class="writing-list">
+        <div class="writing-card">
+          <span class="writing-tag踩坑">踩坑</span>
+          <h3 class="writing-title">信令路由第三次重写：我的决策原则</h3>
+          <p class="writing-desc">遇到了路由策略选型问题，通过 Trace 数据定位到真实热点不在预期位置，最终推翻原有方案重新设计。核心结论：没有数据验证的优化都是猜测。</p>
+          <a href="#" class="writing-link">[链接]</a>
+        </div>
+
+        <div class="writing-card">
+          <span class="writing-tag 方案">方案</span>
+          <h3 class="writing-title">边缘信令节点路由策略设计手记</h3>
+          <p class="writing-desc">A/B/C 三种路由策略对比，一句话结论：加权负载均衡是性价比最高的选择。推荐场景：高并发、多节点、跨地域场景。</p>
+          <a href="#" class="writing-link">[链接]</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section" id="about">
+    <div class="section-inner">
+      <div class="section-label">07 / About</div>
+      <h2 class="section-title">关于我</h2>
+
+      <div class="about-grid">
+        <div class="about-block">
+          <h3 class="block-title">工程哲学</h3>
+          <ul class="philosophy-list">
+            <li>可观测性不是锦上添花，是系统的一部分，上线前必须就位</li>
+            <li>方案没有绝对好坏，只有在当前约束下的最优</li>
+            <li>文档是代码的另一个自己，不写文档等于没完成</li>
+            <li>故障复盘的价值在于不再犯，而不是追责</li>
+            <li>简单 &gt; 聪明，代码可读性比技巧更重要</li>
+          </ul>
+        </div>
+
+        <div class="about-block">
+          <h3 class="block-title">工作方式</h3>
+          <div class="workflow-steps">
+            <span class="workflow-step">深度分析</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">小范围共识</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">渐进落地</span>
+            <span class="workflow-arrow">→</span>
+            <span class="workflow-step">数据验证</span>
+          </div>
+        </div>
+
+        <div class="about-block">
+          <h3 class="block-title">能力维度</h3>
+          <div class="capability-tags">
+            <span class="cap-tag">分布式系统设计与实现</span>
+            <span class="cap-tag">高可用 / 容灾架构</span>
+            <span class="cap-tag">性能分析与优化</span>
+            <span class="cap-tag">Go / Rust / C++</span>
+            <span class="cap-tag">监控 / 可观测性体系</span>
+            <span class="cap-tag">跨团队协作与推动</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section section-dark" id="contact">
+    <div class="section-inner">
+      <div class="section-label">08 / Contact</div>
+      <h2 class="section-title">联系方式</h2>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="contact-icon">✉</span>
+            <span class="contact-label">邮箱</span>
+            <span class="contact-value">[your email]</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">💬</span>
+            <span class="contact-label">飞书</span>
+            <span class="contact-value">搜索「苗效铭」</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">🔗</span>
+            <span class="contact-label">GitHub</span>
+            <a href="https://github.com/classmatexiaoming96-ux" target="_blank" class="contact-link">github.com/classmatexiaoming96-ux</a>
+          </div>
+        </div>
+
+        <div class="contact-entry">
+          <h3 class="entry-title">合作入口</h3>
+          <div class="entry-tags">
+            <span class="entry-tag">分布式系统</span>
+            <span class="entry-tag">高可用架构</span>
+            <span class="entry-tag">技术写作分享</span>
+          </div>
+          <p class="entry-note">响应时间：工作日 24 小时内</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-text">© 2024 苗效铭 · Built with code</p>
+      <a href="#hero" class="footer-back">↑ Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
