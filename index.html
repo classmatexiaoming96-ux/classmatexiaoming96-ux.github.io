@@ -144,18 +144,40 @@
         </div>
       </div>
 
+      <!-- Project C -->
+      <div class="project-card" data-expandable>
+        <div class="project-header" onclick="toggleProject(this)">
+          <div class="project-meta">
+            <span class="project-badge deep">深度项目</span>
+            <h3 class="project-name">RTC 信令服务</h3>
+          </div>
+          <div class="project-chevron">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="project-body">
+          <div class="project-part">
+            <div class="part-label">项目简介</div>
+            <p class="part-text">RealNet 流媒体网络核心组件，负责用户、房间、流的管理以及信令的可靠传输，为大规模实时通信提供稳定的连接保障。</p>
+          </div>
+
+          <div class="project-part">
+            <div class="part-label">当前负责方向</div>
+            <ul class="part-list">
+              <li>支持业务方计费能力开发和改造</li>
+              <li>信令服务架构 2.0，提高大房间上限</li>
+              <li>计费链路容灾改造以及信令容量预测流水线</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <!-- Simple Projects -->
       <div class="simple-projects">
         <div class="simple-project-label">简单项目</div>
         <div class="simple-list">
-          <div class="simple-item">
-            <span class="simple-name">signal</span>
-            <span class="simple-desc">负责信令协议设计与路由策略优化，通过 [具体优化] 将 [指标] 提升</span>
-          </div>
-          <div class="simple-item">
-            <span class="simple-name">edge_signal</span>
-            <span class="simple-desc">负责边缘节点部署与就近接入，支撑东南亚用户的低延迟入会</span>
-          </div>
           <div class="simple-item">
             <span class="simple-name">signal_health</span>
             <span class="simple-desc">负责可观测性体系建设，主导了全链路 Trace 覆盖，告警收敛率 85%</span>
