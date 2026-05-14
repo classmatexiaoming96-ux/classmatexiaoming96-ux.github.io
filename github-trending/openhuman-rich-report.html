@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenHuman 深度源码研究报告</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+<style>
+:root {
+  --bg: #f6f8fa; --panel: #ffffff; --ink: #1f2328; --muted: #59636e;
+  --brand: #c2410c; --brand-soft: #fff1e8; --border: #d1d9e0;
+  --code-bg: #0d1117; --accent: #0969da;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height: 1.75; font-size: 16px;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.layout { display: flex; max-width: 1280px; margin: 0 auto; gap: 32px; padding: 0 24px; }
+nav.toc {
+  position: sticky; top: 0; align-self: flex-start; height: 100vh;
+  overflow-y: auto; width: 248px; flex-shrink: 0; padding: 28px 0;
+  font-size: 14px;
+}
+nav.toc .toc-title {
+  font-weight: 700; color: var(--brand); margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .5px; font-size: 12px;
+}
+nav.toc a { display: block; color: var(--muted); padding: 4px 10px; border-left: 2px solid transparent; }
+nav.toc a:hover { color: var(--brand); border-left-color: var(--brand); background: var(--brand-soft); text-decoration: none; }
+main { flex: 1; min-width: 0; padding: 28px 0 80px; }
+header.hero {
+  background: linear-gradient(135deg, var(--brand), #9a3412);
+  color: #fff; border-radius: 16px; padding: 36px 40px; margin-bottom: 32px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+}
+header.hero h1 { margin: 0 0 8px; font-size: 30px; }
+header.hero p.sub { margin: 0 0 20px; font-size: 16px; opacity: .92; }
+.badges { display: flex; flex-wrap: wrap; gap: 10px; }
+.badge {
+  background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28);
+  padding: 5px 12px; border-radius: 999px; font-size: 13px; backdrop-filter: blur(4px);
+}
+section { background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 26px 32px; margin-bottom: 22px; }
+section h2 {
+  margin-top: 0; font-size: 22px; color: var(--brand);
+  border-bottom: 2px solid var(--brand-soft); padding-bottom: 8px;
+}
+section h3 { font-size: 17px; margin-top: 26px; color: var(--ink); }
+section h4 { font-size: 15px; color: var(--muted); margin-bottom: 6px; }
+p, li { color: var(--ink); }
+code:not(pre code) {
+  background: var(--brand-soft); color: #9a3412; padding: 1px 6px;
+  border-radius: 5px; font-size: 13.5px; font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+pre {
+  background: var(--code-bg); border-radius: 10px; padding: 16px 18px;
+  overflow-x: auto; font-size: 13.5px; line-height: 1.6; margin: 14px 0;
+}
+pre code { font-family: "SF Mono", Menlo, Consolas, monospace; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
+th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--brand-soft); color: #9a3412; font-weight: 600; }
+tr:nth-child(even) td { background: #fafbfc; }
+blockquote {
+  border-left: 4px solid var(--brand); background: var(--brand-soft);
+  margin: 14px 0; padding: 10px 18px; border-radius: 0 8px 8px 0; color: var(--muted);
+}
+.mermaid { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px; margin: 16px 0; text-align: center; }
+.callout {
+  border: 1px solid var(--border); border-left: 5px solid var(--brand);
+  background: #fbfcfd; border-radius: 8px; padding: 12px 18px; margin: 14px 0;
+}
+.callout.warn { border-left-color: #d29922; background: #fff8e6; }
+.callout.good { border-left-color: #2da44e; background: #eefbf2; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.kv { font-size: 14px; }
+.kv b { color: var(--brand); }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 30px 0; }
+@media (max-width: 900px) {
+  nav.toc { display: none; }
+  .grid2 { grid-template-columns: 1fr; }
+  .layout { padding: 0 14px; }
+  section { padding: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <a href="#overview">一、项目定位与核心命题</a>
+  <a href="#arch">二、核心架构总览</a>
+  <a href="#memorytree">三、Memory Tree 深度解析（核心创新）</a>
+  <a href="#neocortex">四、Neocortex 与 Subconscious Loop</a>
+  <a href="#tokenjuice">五、TokenJuice 压缩管线</a>
+  <a href="#repo">六、工程结构与 Monorepo 布局</a>
+  <a href="#install">七、快速上手</a>
+  <a href="#compare">八、与同类项目对比</a>
+  <a href="#refs">九、参考资料</a>
+</nav>
+<main>
+<header class="hero">
+  <h1>OpenHuman 深度源码研究报告</h1>
+  <p class="sub">tinyhumansai/openhuman · 本地优先的个人 AI 超级智能 · Rust + Tauri 桌面助手</p>
+  <div class="badges"><span class="badge">⭐ ~4.3K stars</span><span class="badge">Rust 69% / TS 26%</span><span class="badge">GPL-3.0</span><span class="badge">v0.53.x Early Beta</span><span class="badge">Tauri 桌面壳</span><span class="badge">Memory Tree</span><span class="badge">Neocortex 1B-token</span><span class="badge">118+ OAuth</span></div>
+</header>
+<section id="overview">
+<h2>一、项目定位与核心命题</h2>
+
+<p><b>OpenHuman</b>（仓库 <code>tinyhumansai/openhuman</code>）是一款<b>本地优先（local-first）的"个人 AI 超级智能"桌面助手</b>。
+它要解决的不是"再做一个聊天框"，而是一个更尖锐的工程命题：<b>如何让一个 AI 助手在普通笔记本上，拥有近乎无限、可导航、低成本的长期记忆</b>。</p>
+<blockquote>官方一句话定位："Your Personal AI super intelligence. Private, Simple and extremely powerful."
+作者明确把它归类为 <b>ANI（Artificial Narrow Intelligence，人工窄智能）</b>，而非 AGI——这是一个克制且诚实的定位。</blockquote>
+<p>与多数"云端 Agent + 向量库"的范式不同，OpenHuman 的三大设计支柱是：</p>
+<ul>
+<li><b>Memory Tree</b>——用"确定性管道 + 分层摘要树"取代纯向量库，让记忆可导航、可溯源；</li>
+<li><b>Neocortex / Subconscious Loop</b>——号称可处理 <b>10 亿 token 级</b>记忆、且不依赖 LLM 做索引的记忆引擎，并模拟"潜意识回忆"；</li>
+<li><b>TokenJuice</b>——在数据进入 LLM 前做确定性压缩，把成本与延迟最多砍掉 80%。</li>
+</ul>
+<div class="callout warn"><b>事实校准：</b> 本报告分析的是 URL 对应的真实项目 <code>tinyhumansai/openhuman</code>（Rust + Tauri 桌面 AI 助手）。
+它<b>不是</b> Open-Sora 视频生成模型，因此不涉及 DiT / VAE / Tokenizer / CogVideoX 等视频扩散技术栈。
+若你需要的是 Open-Sora 分析，请告知，我会另起一份。</div>
+
+</section>
+<section id="arch">
+<h2>二、核心架构总览</h2>
+
+<p>OpenHuman 是一个 <b>Tauri 桌面壳 + Rust 核心 + TypeScript UI</b> 的 monorepo。Rust 占 ~69%，承担记忆管线、工具调度、压缩等"重活"；TypeScript 占 ~26%，负责 UI 与编排。</p>
+<div class="mermaid">
+flowchart TB
+    subgraph Client["桌面客户端 (Tauri)"]
+        UI["TypeScript UI · 26%<br/>Intelligence Tab / Chat"]
+        Mascot["桌面吉祥物<br/>表情 · 语音 · 会议替身"]
+    end
+    subgraph RustCore["Rust 核心 · 69%"]
+        Ingest["Ingest 热路径<br/>canonicalize→chunk→fast-score→persist"]
+        Workers["3× 后台 Worker<br/>extract / seal / digest / topic_route"]
+        TokenJuice["TokenJuice 压缩层<br/>HTML→MD · URL 缩短 · 去非ASCII"]
+        Router["Model Router"]
+        Neocortex["Neocortex 记忆引擎<br/>非 LLM 索引 · 1B token"]
+        SubLoop["Subconscious Loop<br/>周期性核心记忆回忆"]
+    end
+    subgraph Storage["本地存储 (~/.openhuman)"]
+        ChunksDB[("memory_tree/chunks.db<br/>chunks·scores·summaries·jobs")]
+        Wiki[("wiki/ · Obsidian 兼容 Vault")]
+    end
+    subgraph External["外部"]
+        OAuth["118+ OAuth 源<br/>Gmail/Slack/Notion/GitHub/Stripe"]
+        LLM["云端 LLM / 本地 Ollama"]
+    end
+    OAuth --> Ingest
+    UI --> Router
+    Mascot --> Router
+    Ingest --> ChunksDB
+    Ingest --> Workers
+    Workers --> ChunksDB
+    Workers --> Wiki
+    Neocortex --> ChunksDB
+    SubLoop --> Neocortex
+    Router --> TokenJuice
+    TokenJuice --> LLM
+    Neocortex --> Router
+</div>
+<div class="grid2">
+<div class="callout"><h4>为什么用 Tauri 而非 Electron</h4>Tauri 用系统 WebView + Rust 后端，包体小、内存低，且能直接复用 Rust 写的记忆/压缩管线——避免了 Electron "JS 全栈但性能受限" 的取舍。</div>
+<div class="callout"><h4>为什么 Rust 占比这么高</h4>记忆管线的热路径（分块、打分、原子持久化）和 TokenJuice 压缩都是 CPU 密集、需要确定性的活，Rust 的零成本抽象与可预测性能在这里是刚需。</div>
+</div>
+</section>
+<section id="memorytree">
+<h2>三、Memory Tree 深度解析（核心创新）</h2>
+
+<p>Memory Tree 是 OpenHuman 最有工程含量的部分。它<b>不是向量库</b>，而是一个"确定性、桶封存（bucket-sealed）的管道"，把一天里杂乱的输入流（聊天、邮件、文档、集成同步结果）变成<b>结构化、可查询、带摘要的 Markdown</b>，全部存在本机。</p>
+
+<h3>3.1 处理管线（热路径 vs 后台）</h3>
+<p>设计的精髓在于<b>把慢的事（LLM 调用、embedding、摘要树构建）全部推到后台</b>，热路径只做确定性的廉价操作，保证 UI 永不阻塞。</p>
+<div class="mermaid">
+flowchart LR
+    src["源适配器<br/>Gmail/Slack/..."] --> canon["Canonicalize<br/>归一化为 Markdown+元数据"]
+    canon --> chunk["Chunk<br/>确定性 ID · ≤3k token"]
+    chunk --> fast["Fast-Score<br/>廉价启发式 · 无 LLM"]
+    fast --> persist[("原子持久化<br/>单事务写入 chunks.db")]
+    persist --> enqueue["标记 pending_extraction<br/>入队后台作业"]
+    enqueue -.异步.-> bg["后台 Worker 队列"]
+    bg --> extract["extract_chunk<br/>深度打分+实体抽取"]
+    bg --> seal["seal<br/>L0→L1 级联压缩"]
+    bg --> digest["digest_daily<br/>全局日摘要"]
+    bg --> topic["topic_route<br/>路由到实体主题树"]
+</div>
+<h3>3.2 三种并存的摘要树</h3>
+<table>
+<tr><th>树类型</th><th>作用域</th><th>构建策略</th><th>能回答的问题</th></tr>
+<tr><td><b>Source Tree</b><br/>源树</td><td>每个独立源（Gmail 标签 / Slack 频道 / 上传文档）</td><td>滚动缓冲，多级 L0→L1→L2…，缓冲满则封存压缩</td><td>"周二下午3点那个 Webhook 说了什么"——精确溯源</td></tr>
+<tr><td><b>Topic Tree</b><br/>主题树</td><td>高频实体（人、项目、ticker、仓库）</td><td>惰性物化，实体出现越频繁，主题树构建/刷新越激进（hotness 驱动）</td><td>"这个人最近的进展是什么"</td></tr>
+<tr><td><b>Global Tree</b><br/>全局树</td><td>每个 UTC 自然日的全部内容</td><td>单一日摘要，随天数累积分层增长</td><td>"今天发生了什么"</td></tr>
+</table>
+<h3>3.3 Chunk 生命周期状态机</h3>
+<div class="mermaid">
+stateDiagram-v2
+    [*] --> pending_extraction: 热路径写入
+    pending_extraction --> admitted: extract_chunk 深度打分通过
+    pending_extraction --> dropped: 打分未通过
+    admitted --> buffered: append_buffer 进入 L0
+    buffered --> sealed: seal 级联压缩
+    dropped --> [*]: 保留供溯源,不影响摘要
+    sealed --> [*]: 终态,保留溯源
+</div>
+<p>双阶段打分是关键设计：<b>Fast-Score</b>（热路径，廉价启发式，无 LLM）只做粗筛并标记；<b>Deep Score</b>（后台 <code>extract_chunk</code> 作业）才做完整打分 + 实体抽取，决定 chunk 是 <code>admitted</code> 还是 <code>dropped</code>。一个共享信号量（semaphore）限制并发的 LLM 操作，防止突发摄入时意外扇出。</p>
+<h3>3.4 本地文件布局</h3>
+<table>
+<tr><th>路径</th><th>内容</th></tr>
+<tr><td><code>~/.openhuman/memory_tree/chunks.db</code></td><td>chunks、scores、summaries、实体索引、jobs、hotness 指标</td></tr>
+<tr><td><code>~/.openhuman/wiki/</code></td><td>Obsidian 兼容的 Markdown vault，每个 chunk 一个原子 <code>.md</code> 文件</td></tr>
+</table>
+<p>工作区路径可由 <code>OPENHUMAN_WORKSPACE</code> 环境变量覆盖。Intelligence Tab 里有 "View vault in Obsidian" 按钮，通过 <code>obsidian://open?path=...</code> deep link 直接打开。</p>
+<div class="callout good"><h4>为什么是树而不是纯向量库</h4>
+向量库擅长"语义相似"，但答不了"今天发生了什么"（需要时间维度）、"这个人最新进展"（需要 hotness 聚合）、"周二3点那条消息"（需要精确溯源）。
+树结构同时提供<b>导航层级 + 压缩 + 溯源</b>，embedding 仍保留用于语义检索——这是"树为主、向量为辅"的混合策略。</div>
+</section>
+<section id="neocortex">
+<h2>四、Neocortex 与 Subconscious Loop</h2>
+
+<p>作者在 DEV.to 的技术博客里把记忆引擎称为 <b>Neocortex</b>，并提出了几个相当激进的指标声明：</p>
+<table>
+<tr><th>声明</th><th>数值</th></tr>
+<tr><td>记忆容量</td><td>可"准确工作"于 <b>10 亿（1B）token</b> 以上</td></tr>
+<tr><td>索引速度</td><td>10 分钟级 → <b>10M token / &lt;10 秒</b>（号称比替代方案快 1000×）</td></tr>
+<tr><td>硬件要求</td><td>CPU 级硬件即可（MacBook Air 可跑）</td></tr>
+<tr><td>成本</td><td>索引 5M token 约 <b>$1</b></td></tr>
+<tr><td>索引方式</td><td><b>不使用 LLM</b>，依赖实体理解 + 时间理解</td></tr>
+<tr><td>排序因子</td><td>按时间、交互次数、随机性因子排序</td></tr>
+</table>
+<h3>4.1 Subconscious Loop（潜意识循环）</h3>
+<p>设计灵感来自人脑的 <b>Purkinje 细胞神经元</b>。实现上：</p>
+<ul>
+<li>Neocortex 周期性触发"核心记忆回忆"；</li>
+<li>每天运行 <b>10,000+ 次</b>，总成本 &lt;$1；</li>
+<li>从回忆出的记忆中生成自主动作或确认，模拟人类"意识/潜意识"交互。</li>
+</ul>
+<div class="callout warn"><b>研判：</b> 这些指标目前主要来自作者自述博客，缺少独立第三方基准。"1B token / 不用 LLM 索引 / CPU 可跑" 在工程上意味着它本质更接近一个<b>带实体与时间索引的确定性检索引擎</b>，而非语义模型——这与 Memory Tree "树为主、向量为辅" 的定位是自洽的。读者应把它当作<b>有前景但待验证</b>的设计。</div>
+<blockquote>作者引用 CMU 的研究 "Forgetting Is a Feature, Not a Bug"——主张<b>选择性记忆</b>比"全量塞上下文"更能提升准确率。这正是 Memory Tree 会 <code>drop</code> 低分 chunk 的理论依据。</blockquote>
+
+</section>
+<section id="tokenjuice">
+<h2>五、TokenJuice 压缩管线</h2>
+
+<p>TokenJuice 是一个<b>确定性压缩层</b>：每一次工具调用、抓取结果、邮件正文、搜索负载，在抵达 LLM 之前都会先过一遍压缩。</p>
+<h4>压缩手段</h4>
+<ul>
+<li>HTML → Markdown（剥离标签噪声）</li>
+<li>长 URL 缩短</li>
+<li>去除非 ASCII 字符</li>
+<li>结构化裁剪——"同样的信息，零头的 token"</li>
+</ul>
+<p>效果：<b>成本与延迟最多降低 80%</b>。它和 Memory Tree 是互补的——Memory Tree 解决"记什么、怎么导航"，TokenJuice 解决"喂给 LLM 的每一段都尽量便宜"。</p>
+<div class="mermaid">
+flowchart LR
+    raw["原始负载<br/>HTML/邮件/抓取结果"] --> tj{TokenJuice}
+    tj --> h2m["HTML→Markdown"]
+    tj --> url["URL 缩短"]
+    tj --> ascii["去非ASCII"]
+    h2m & url & ascii --> out["压缩负载<br/>-80% tokens"]
+    out --> llm["LLM"]
+</div>
+</section>
+<section id="repo">
+<h2>六、工程结构与 Monorepo 布局</h2>
+
+<p>OpenHuman 是一个 Cargo workspace + pnpm workspace 双重 monorepo。顶层目录：</p>
+<table>
+<tr><th>目录</th><th>用途</th></tr>
+<tr><td><code>src/</code></td><td>核心应用源码</td></tr>
+<tr><td><code>packages/</code></td><td>TypeScript/JS 共享包与工具</td></tr>
+<tr><td><code>app/</code></td><td>桌面应用壳与 UI 组件</td></tr>
+<tr><td><code>e2e/</code> · <code>tests/</code></td><td>端到端与单元测试</td></tr>
+<tr><td><code>examples/</code></td><td>示例实现</td></tr>
+<tr><td><code>docs/</code> · <code>gitbooks/</code></td><td>文档与 GitBook 资产</td></tr>
+<tr><td><code>.agents/</code> · <code>.codex/</code></td><td>Agent 配置 / Codex 命令定义</td></tr>
+</table>
+<h4>构建配置文件</h4>
+<table>
+<tr><td><code>Cargo.toml</code></td><td>Rust workspace 配置</td></tr>
+<tr><td><code>package.json</code> + <code>pnpm-workspace.yaml</code></td><td>pnpm monorepo 配置</td></tr>
+<tr><td><code>rust-toolchain.toml</code></td><td>锁定 Rust 1.93.0</td></tr>
+<tr><td><code>Dockerfile</code></td><td>容器构建</td></tr>
+</table>
+<h4>开发命令</h4>
+<pre><code class="language-bash"># 环境要求: Node.js 24+ · pnpm 10.10.0 · Rust 1.93.0 · CMake
+pnpm install
+pnpm dev                                   # 仅 Web UI
+pnpm --filter openhuman-app dev:app        # 桌面壳
+pnpm typecheck &amp;&amp; pnpm format:check &amp;&amp; cargo check</code></pre>
+<p>从近期 PR（如 #357 "extract and load user working memory from skill sync payloads"）可见，项目仍在<b>把"技能同步" 与 工作记忆打通</b>——说明 OpenHuman 正在向"技能化 Agent" 方向演进。</p>
+
+</section>
+<section id="install">
+<h2>七、快速上手</h2>
+<pre><code class="language-bash"># macOS / Linux x64 一键安装
+curl -fsSL https://raw.githubusercontent.com/tinyhumansai/openhuman/main/scripts/install.sh | bash
+
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/tinyhumansai/openhuman/main/scripts/install.ps1 | iex</code></pre>
+<p>或从官网 <a href="https://tinyhumans.ai/openhuman">tinyhumans.ai/openhuman</a> 下载安装包。首次配置三步：① OAuth 授权（按需勾选 Gmail/Notion/Slack…）；② 选 LLM 源（云端 API 或本地 Ollama）；③ 指定 Obsidian Vault 路径。</p>
+</section>
+<section id="compare">
+<h2>八、与同类项目对比</h2>
+
+<table>
+<tr><th>维度</th><th>OpenHuman</th><th>Claude Cowork</th><th>OpenClaw</th><th>Hermes Agent</th></tr>
+<tr><td>开源</td><td><b>GPL-3.0 全开源</b></td><td>闭源 SaaS</td><td>部分开源</td><td>开源框架</td></tr>
+<tr><td>记忆系统</td><td><b>Memory Tree + Neocortex 内置</b></td><td>无持久记忆</td><td>云端为主</td><td>需自配记忆层</td></tr>
+<tr><td>集成数量</td><td><b>118+ OAuth</b></td><td>较少</td><td>中等</td><td>无集成包</td></tr>
+<tr><td>本地模型</td><td><b>原生 Ollama</b></td><td>云端</td><td>云端为主</td><td>可配</td></tr>
+<tr><td>桌面形态</td><td><b>Tauri 原生 + 吉祥物 + 会议替身</b></td><td>聊天窗口</td><td>无桌面</td><td>无桌面</td></tr>
+<tr><td>Token 优化</td><td><b>TokenJuice -80%</b></td><td>无</td><td>无</td><td>无</td></tr>
+</table>
+<h3>与 Karpathy "LLM Wiki" 模式的关系</h3>
+<p>OpenHuman 的 Memory Tree 思路与 Andrej Karpathy 提出的"LLM 个人知识库（LLM Wiki）"一脉相承——都主张<b>把知识沉淀为人可读、可编辑的 Markdown</b>，而非锁进不透明的向量库。OpenHuman 的差异化是把它<b>产品化、自动化、并加上确定性管道与三种摘要树</b>。</p>
+<h3>优劣势研判</h3>
+<div class="grid2">
+<div class="callout good"><h4>优势</h4>
+<ul><li>本地优先 + 全开源，隐私叙事扎实</li><li>Memory Tree 是真正有工程含量的差异化</li><li>热路径/后台分离的架构成熟、UI 不阻塞</li><li>118+ 集成构成强护城河</li></ul></div>
+<div class="callout warn"><h4>风险/短板</h4>
+<ul><li>Neocortex "1B token" 等指标缺第三方验证</li><li>仍是 Early Beta（v0.53.x），发布极频繁意味着不稳定</li><li>桌面吉祥物/会议替身偏"产品噱头"，对严肃用户价值待证</li><li>GPL-3.0 对商业集成方有传染性约束</li></ul></div>
+</div>
+
+</section>
+<section id="refs">
+<h2>九、参考资料</h2>
+
+<ul>
+<li><a href="https://github.com/tinyhumansai/openhuman">GitHub · tinyhumansai/openhuman</a></li>
+<li><a href="https://tinyhumans.gitbook.io/openhuman">官方文档 · GitBook</a></li>
+<li><a href="https://tinyhumans.gitbook.io/openhuman/features/obsidian-wiki/memory-tree">Memory Tree 文档</a></li>
+<li><a href="https://dev.to/neocortexdev/i-am-building-the-first-ai-agent-with-big-data-capabilities-70e">DEV.to · 作者关于 Neocortex / Subconscious Loop 的技术博客</a></li>
+<li><a href="https://github.com/tinyhumansai/openhuman/pull/357">PR #357 · working memory from skill sync payloads</a></li>
+<li><a href="https://tinyhumans.ai/openhuman">官网与下载</a></li>
+</ul>
+
+</section>
+<footer>本报告由深度源码研究 + 外部生态调研生成 · 生成日期 2026-05-14 · 数据来源见各文末参考资料</footer>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  hljs.highlightAll();
+  mermaid.initialize({ startOnLoad: true, theme: "default", securityLevel: "loose" });
+</script>
+</body>
+</html>
