@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgentMemory 深度源码研究报告</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+<style>
+:root {
+  --bg: #f6f8fa; --panel: #ffffff; --ink: #1f2328; --muted: #59636e;
+  --brand: #1d4ed8; --brand-soft: #eaf0ff; --border: #d1d9e0;
+  --code-bg: #0d1117; --accent: #0969da;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height: 1.75; font-size: 16px;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.layout { display: flex; max-width: 1280px; margin: 0 auto; gap: 32px; padding: 0 24px; }
+nav.toc {
+  position: sticky; top: 0; align-self: flex-start; height: 100vh;
+  overflow-y: auto; width: 248px; flex-shrink: 0; padding: 28px 0;
+  font-size: 14px;
+}
+nav.toc .toc-title {
+  font-weight: 700; color: var(--brand); margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .5px; font-size: 12px;
+}
+nav.toc a { display: block; color: var(--muted); padding: 4px 10px; border-left: 2px solid transparent; }
+nav.toc a:hover { color: var(--brand); border-left-color: var(--brand); background: var(--brand-soft); text-decoration: none; }
+main { flex: 1; min-width: 0; padding: 28px 0 80px; }
+header.hero {
+  background: linear-gradient(135deg, var(--brand), #1e3a8a);
+  color: #fff; border-radius: 16px; padding: 36px 40px; margin-bottom: 32px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+}
+header.hero h1 { margin: 0 0 8px; font-size: 30px; }
+header.hero p.sub { margin: 0 0 20px; font-size: 16px; opacity: .92; }
+.badges { display: flex; flex-wrap: wrap; gap: 10px; }
+.badge {
+  background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28);
+  padding: 5px 12px; border-radius: 999px; font-size: 13px; backdrop-filter: blur(4px);
+}
+section { background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 26px 32px; margin-bottom: 22px; }
+section h2 {
+  margin-top: 0; font-size: 22px; color: var(--brand);
+  border-bottom: 2px solid var(--brand-soft); padding-bottom: 8px;
+}
+section h3 { font-size: 17px; margin-top: 26px; color: var(--ink); }
+section h4 { font-size: 15px; color: var(--muted); margin-bottom: 6px; }
+p, li { color: var(--ink); }
+code:not(pre code) {
+  background: var(--brand-soft); color: #1e3a8a; padding: 1px 6px;
+  border-radius: 5px; font-size: 13.5px; font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+pre {
+  background: var(--code-bg); border-radius: 10px; padding: 16px 18px;
+  overflow-x: auto; font-size: 13.5px; line-height: 1.6; margin: 14px 0;
+}
+pre code { font-family: "SF Mono", Menlo, Consolas, monospace; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
+th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--brand-soft); color: #1e3a8a; font-weight: 600; }
+tr:nth-child(even) td { background: #fafbfc; }
+blockquote {
+  border-left: 4px solid var(--brand); background: var(--brand-soft);
+  margin: 14px 0; padding: 10px 18px; border-radius: 0 8px 8px 0; color: var(--muted);
+}
+.mermaid { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px; margin: 16px 0; text-align: center; }
+.callout {
+  border: 1px solid var(--border); border-left: 5px solid var(--brand);
+  background: #fbfcfd; border-radius: 8px; padding: 12px 18px; margin: 14px 0;
+}
+.callout.warn { border-left-color: #d29922; background: #fff8e6; }
+.callout.good { border-left-color: #2da44e; background: #eefbf2; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.kv { font-size: 14px; }
+.kv b { color: var(--brand); }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 30px 0; }
+@media (max-width: 900px) {
+  nav.toc { display: none; }
+  .grid2 { grid-template-columns: 1fr; }
+  .layout { padding: 0 14px; }
+  section { padding: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <a href="#overview">一、项目定位</a>
+  <a href="#arch">二、核心架构总览</a>
+  <a href="#iii">三、iii engine 与 iii-config.yaml 深度解析</a>
+  <a href="#hooks">四、12 Hook 自动捕获管线</a>
+  <a href="#memory4">五、4 层记忆模型</a>
+  <a href="#retrieval">六、三流融合检索与 RRF</a>
+  <a href="#surface">七、API 与 MCP 工具面</a>
+  <a href="#setup">八、快速上手</a>
+  <a href="#compare">九、与 MemGPT / mem0 / Letta 对比</a>
+  <a href="#scene">十、典型使用场景</a>
+  <a href="#refs">十一、参考资料</a>
+</nav>
+<main>
+<header class="hero">
+  <h1>AgentMemory 深度源码研究报告</h1>
+  <p class="sub">rohitg00/agentmemory · 面向 AI 编程 Agent 的持久化记忆基础设施</p>
+  <div class="badges"><span class="badge">⭐ ~7K stars</span><span class="badge">TypeScript 82%</span><span class="badge">Apache-2.0</span><span class="badge">LongMemEval 95.2%</span><span class="badge">iii engine</span><span class="badge">12 Hooks</span><span class="badge">51 MCP 工具</span><span class="badge">零外部数据库</span></div>
+</header>
+<section id="overview">
+<h2>一、项目定位</h2>
+
+<p><b>AgentMemory</b>（仓库 <code>rohitg00/agentmemory</code>）是一套<b>面向 AI 编程 Agent 的持久化记忆基础设施</b>。
+它的口号直白："Your coding agent remembers everything. No more re-explaining."——让 Claude Code、Cursor、Codex 等 Agent <b>跨会话</b>自动记住代码库架构、Bug 上下文、用户偏好。</p>
+<p>它在 LongMemEval-S 基准上拿到 <b>95.2% Recall@5</b>，显著领先 mem0（68.5%）与 Letta（83.2%）；同时号称<b>零外部数据库依赖</b>、年 token 成本约 <b>$10</b>。</p>
+<blockquote>定位关键词：<b>Hook 驱动的自动捕获</b> + <b>4 层记忆模型</b> + <b>三流融合检索（BM25 + 向量 + 知识图谱 + RRF）</b> + <b>iii engine 统一运行时</b>。</blockquote>
+
+</section>
+<section id="arch">
+<h2>二、核心架构总览</h2>
+
+<p>AgentMemory 整体跑在 <b>iii engine</b> 之上——一个把 Express / SQLite / Redis / pm2 / Prometheus 统一成单一运行时原语的引擎。每个 function、trigger、state scope、stream 都是 iii primitive，<b>可观测性"白送"</b>。</p>
+<div class="mermaid">
+flowchart TB
+    subgraph Agents["AI 编程 Agent"]
+        CC["Claude Code · 12 Hook+MCP"]
+        CX["Codex CLI · 6 Hook+MCP"]
+        OT["Cursor/Cline/OpenClaw/Hermes..."]
+    end
+    subgraph Capture["捕获层"]
+        Hooks["12 Hooks<br/>PostToolUse/SessionStart/End..."]
+        Filter["隐私过滤<br/>SHA-256 去重 + 剥离 secrets"]
+    end
+    subgraph Memory["4 层记忆 (后台 consolidation)"]
+        W["Working 原始观察"]
+        E["Episodic 会话摘要"]
+        S["Semantic 抽取事实"]
+        P["Procedural 工作流"]
+    end
+    subgraph Retrieval["三流融合检索"]
+        BM["BM25 关键词+同义词"]
+        VEC["向量 embedding · 6 provider+本地"]
+        KG["知识图谱 BFS 遍历"]
+        RRF["RRF 融合 k=60 + 会话多样化"]
+    end
+    subgraph iii["iii engine 运行时"]
+        HTTP["iii-http :3111 · 107 REST"]
+        MCP["packages/mcp · 51 工具"]
+        STREAM["iii-stream :3112"]
+        STATE["iii-state · ./data/state_store.db"]
+        CRON["iii-cron 后台 consolidation"]
+    end
+    CC & CX & OT --> Hooks
+    Hooks --> Filter
+    Filter --> W --> E --> S --> P
+    Memory --> STATE
+    CC & CX & OT -->|smart_search| BM & VEC & KG
+    BM & VEC & KG --> RRF --> CC
+    HTTP & MCP --> Memory
+    CRON --> Memory
+</div>
+<p><b>设计哲学：</b> "fire-and-forget" 摄入——PostToolUse hook 静默捕获，后台 cron trigger 做 consolidation；多 Agent 协作用 iii 内建的 leases/signals 而非轮询。</p>
+</section>
+<section id="iii">
+<h2>三、iii engine 与 iii-config.yaml 深度解析</h2>
+
+<p>整个系统的运行时定义在 <code>iii-config.yaml</code> 里，声明了 <b>7 个 worker</b>：</p>
+<table>
+<tr><th>Worker</th><th>职责</th><th>关键配置</th></tr>
+<tr><td><code>iii-http</code></td><td>HTTP 服务器</td><td>:3111 · localhost · CORS（GET/POST/PUT/DELETE/OPTIONS）</td></tr>
+<tr><td><code>iii-state</code></td><td>状态管理</td><td>文件型 KV · <code>./data/state_store.db</code></td></tr>
+<tr><td><code>iii-queue</code></td><td>队列适配器</td><td>builtin 实现</td></tr>
+<tr><td><code>iii-pubsub</code></td><td>发布/订阅</td><td>local 实现</td></tr>
+<tr><td><code>iii-cron</code></td><td>定时调度</td><td>KV adapter（驱动后台 consolidation）</td></tr>
+<tr><td><code>iii-stream</code></td><td>流服务器</td><td>:3112 · 文件型 <code>./data/stream_store</code></td></tr>
+<tr><td><code>iii-exec</code></td><td>执行 worker</td><td>watch <code>src/**/*.ts</code> → run <code>node dist/index.mjs</code></td></tr>
+</table>
+<p>可观测性配置：memory exporter、service name <code>agentmemory</code>、采样率 1.0、metrics + console logging 双开。</p>
+<div class="callout"><h4>关键判断：为什么"零外部数据库"成立</h4>
+state 与 stream 都用<b>文件型 KV</b>持久化（<code>state_store.db</code> / <code>stream_store</code>），向量索引在内存中——所以不需要 Qdrant / pgvector / Redis。
+代价是<b>单机为主</b>：要做多实例 fan-out 才需要额外加 <code>iii-pubsub</code> 等 worker。</div>
+
+</section>
+<section id="hooks">
+<h2>四、12 Hook 自动捕获管线</h2>
+
+<p>AgentMemory 最核心的"无感"体验来自 Hook。以 <b>PostToolUse Hook</b> 为例，完整管线是：</p>
+<div class="mermaid">
+flowchart LR
+    fire["PostToolUse<br/>hook 触发"] --> dedup["SHA-256 去重<br/>5 分钟窗口"]
+    dedup --> priv["隐私过滤<br/>剥离 secrets/API key"]
+    priv --> raw[("存储原始观察")]
+    raw --> compress["LLM 压缩<br/>→结构化 facts+concepts+narrative"]
+    compress --> embed["向量 embedding<br/>6 provider + 本地"]
+    embed --> index[("索引: BM25 + 向量")]
+</div>
+<p>而 <b>SessionStart / SessionEnd Hook</b> 负责"开局注入上下文"：</p>
+<div class="mermaid">
+flowchart LR
+    start["SessionStart<br/>hook 触发"] --> profile["加载项目 profile<br/>top concepts/files/patterns"]
+    profile --> hybrid["混合检索<br/>BM25+向量+图谱"]
+    hybrid --> budget["Token 预算<br/>默认 2000 tokens"]
+    budget --> inject["注入对话上下文"]
+</div>
+<div class="callout good">设计要点：捕获是<b>同步轻量 + 异步重活</b>——hook 同步只做去重+过滤+存原始，重的 LLM 压缩与 embedding 走后台。这与 OpenHuman Memory Tree 的"热路径/后台"哲学异曲同工。</div>
+</section>
+<section id="memory4">
+<h2>五、4 层记忆模型</h2>
+
+<p>记忆按"仿人类认知"分 4 层，由后台 consolidation 逐层提炼：</p>
+<table>
+<tr><th>层级</th><th>内容</th><th>来源</th></tr>
+<tr><td><b>Working</b> 工作记忆</td><td>原始观察（raw observations）</td><td>Hook 直接捕获</td></tr>
+<tr><td><b>Episodic</b> 情节记忆</td><td>会话摘要（session summaries）</td><td>SessionEnd 时聚合</td></tr>
+<tr><td><b>Semantic</b> 语义记忆</td><td>抽取的事实（extracted facts）</td><td>cron consolidation 提炼</td></tr>
+<tr><td><b>Procedural</b> 程序性记忆</td><td>工作流（workflows / "怎么做"）</td><td>跨会话模式归纳</td></tr>
+</table>
+<p>每层都会被版本化、可回放；viewer（:3113）能逐事件渲染并带时间轴拖动 + 倍速。</p>
+
+</section>
+<section id="retrieval">
+<h2>六、三流融合检索与 RRF</h2>
+
+<p>检索是 AgentMemory 拿下 95.2% Recall 的关键。它<b>同时跑三路</b>再融合：</p>
+<table>
+<tr><th>检索流</th><th>机制</th><th>擅长</th></tr>
+<tr><td>BM25</td><td>关键词匹配 + 同义词扩展</td><td>精确术语、专有名词</td></tr>
+<tr><td>向量搜索</td><td>余弦相似度 · 6 provider + 本地 <code>all-MiniLM-L6-v2</code></td><td>语义近似、改写表述</td></tr>
+<tr><td>知识图谱</td><td>实体匹配 + BFS 遍历</td><td>关系链、间接关联</td></tr>
+</table>
+<h3>RRF 融合细节</h3>
+<p>三路结果用 <b>Reciprocal Rank Fusion（RRF，k=60）</b>融合，并做<b>会话多样化</b>（每个 session 最多 3 条结果），避免单一会话刷屏。</p>
+<pre><code class="language-text">RRF score(d) = Σ_streams  1 / (k + rank_stream(d))      # k = 60
+
+# memory_smart_search 的瀑布执行:
+#   BM25 scan → embedding lookup → RRF fusion → reranker
+# 三路并行, 融合后 reranker 收尾, 可在 viewer :3113 看到 waterfall</code></pre>
+<div class="callout"><b>为什么 RRF 而不是加权求和：</b> RRF 只依赖<b>排名</b>不依赖各路<b>分数量纲</b>，BM25 分数和余弦相似度根本不可比——RRF 用 <code>1/(k+rank)</code> 巧妙绕开了归一化难题。k=60 是社区经验值，抑制长尾噪声。</div>
+
+</section>
+<section id="surface">
+<h2>七、API 与 MCP 工具面</h2>
+
+<div class="grid2">
+<div>
+<h4>MCP Server（<code>packages/mcp/</code>）</h4>
+<ul><li><b>51 个工具</b>、6 resources、3 prompts、4 skills</li>
+<li>核心 8 个：<code>memory_recall</code> / <code>memory_save</code> / <code>memory_smart_search</code> / <code>memory_sessions</code> / <code>memory_patterns</code> / <code>memory_compress_file</code> / <code>memory_profile</code> / <code>memory_file_history</code></li>
+<li>扩展 43 个：图查询、consolidation、团队共享、审计、Git 快照、多 Agent 租约、P2P 同步…</li></ul>
+</div>
+<div>
+<h4>REST API（<code>src/triggers/api.ts</code>）</h4>
+<ul><li><b>107 个端点</b> @ :3111</li>
+<li><code>POST /agentmemory/smart-search</code></li>
+<li><code>POST /agentmemory/observe</code></li>
+<li><code>POST /agentmemory/remember</code></li>
+<li><code>POST /agentmemory/session/start</code></li>
+<li><code>GET /agentmemory/health</code>（始终公开）</li>
+<li>受保护端点用 <code>AGENTMEMORY_SECRET</code> 做 Bearer 认证</li></ul>
+</div>
+</div>
+<h4>顶层目录结构</h4>
+<table>
+<tr><td><code>src/</code></td><td>核心记忆引擎 + 检索逻辑 + <code>triggers/api.ts</code></td></tr>
+<tr><td><code>packages/mcp/</code></td><td>MCP 服务器实现</td></tr>
+<tr><td><code>integrations/</code></td><td>各 Agent 插件（claude code / codex / openclaw / hermes / pi）</td></tr>
+<tr><td><code>benchmark/</code></td><td>LongMemEval 等基准与对比</td></tr>
+<tr><td><code>test/</code></td><td>~800 测试</td></tr>
+</table>
+<div class="callout warn"><b>已知坑（Issue #159）：</b> 独立运行的 MCP 工具<b>不会代理到正在运行的 agentmemory server</b>——MCP 的读写与 hook 捕获的观察是隔离的。多入口部署时要留意一致性。</div>
+
+</section>
+<section id="setup">
+<h2>八、快速上手</h2>
+<pre><code class="language-bash"># 30 秒启动
+npx @agentmemory/agentmemory
+
+# 本地开发
+git clone https://github.com/rohitg00/agentmemory.git &amp;&amp; cd agentmemory
+npm install &amp;&amp; npm run build
+npm start            # 完整服务 (iii-engine v0.11.2 或 Docker)
+npm run dev          # 热重载
+npm test             # 800+ 测试</code></pre><pre><code class="language-ini"># ~/.agentmemory/.env
+ANTHROPIC_API_KEY=sk-ant-...        # LLM 压缩, 可选; 默认 no-op
+EMBEDDING_PROVIDER=local            # 推荐本地, $0 离线
+TOKEN_BUDGET=2000
+AGENTMEMORY_SECRET=your-secret      # 保护 REST 端点
+AGENTMEMORY_AUTO_COMPRESS=false     # 默认关闭</code></pre>
+</section>
+<section id="compare">
+<h2>九、与 MemGPT / mem0 / Letta 对比</h2>
+
+<table>
+<tr><th>维度</th><th>AgentMemory</th><th>mem0 (53K⭐)</th><th>Letta / MemGPT (22K⭐)</th><th>Agent 内置记忆</th></tr>
+<tr><td>LongMemEval Recall@5</td><td><b>95.2%</b></td><td>68.5%</td><td>83.2%</td><td>N/A</td></tr>
+<tr><td>捕获方式</td><td><b>12 Hook 自动</b></td><td>手动 API 调用</td><td>Agent 自编辑（self-edit）</td><td>手动</td></tr>
+<tr><td>外部数据库</td><td><b>无</b>（文件 KV）</td><td>需 Qdrant</td><td>需 Postgres</td><td>无</td></tr>
+<tr><td>检索策略</td><td><b>BM25+向量+图谱 RRF</b></td><td>向量为主</td><td>分页式 context 管理</td><td>无</td></tr>
+<tr><td>年 token 成本</td><td><b>~$10</b></td><td>不定</td><td>核心常驻上下文</td><td>22K+ tokens</td></tr>
+<tr><td>多 Agent</td><td><b>MCP+REST+租约+信号</b></td><td>API</td><td>仅 Letta 自身</td><td>各自为政</td></tr>
+<tr><td>运行时</td><td>iii engine 统一</td><td>常规服务+向量库</td><td>常规服务+Postgres</td><td>—</td></tr>
+</table>
+<div class="grid2">
+<div class="callout good"><h4>优势</h4><ul>
+<li>Hook 自动捕获是真正的"无感"，竞品多需手动</li>
+<li>三流 RRF 检索在基准上领先明显</li>
+<li>零外部 DB，部署极简</li>
+<li>真·多 Agent（MCP+REST 双暴露 + 租约/信号）</li></ul></div>
+<div class="callout warn"><h4>风险/短板</h4><ul>
+<li>深度绑定 iii engine——这是个相对小众的运行时，生态与长期维护是变量</li>
+<li>单机为主，水平扩展需自行加 worker</li>
+<li>MCP/server 隔离问题（#159）说明多入口一致性仍在打磨</li>
+<li>95.2% 来自单一基准 LongMemEval-S，泛化性待更多验证</li></ul></div>
+</div>
+
+</section>
+<section id="scene">
+<h2>十、典型使用场景</h2>
+
+<ul>
+<li><b>个人开发者</b>：让 Claude Code 永久记住"本项目用 pnpm workspace + Turbo"，不再每次会话重复交代。</li>
+<li><b>多 Agent Debug</b>：多个 Agent 协作排查长链路问题，共享同一份 episodic 记忆 + 用租约避免冲突。</li>
+<li><b>团队 Onboarding</b>：新成员的 Agent 直接继承团队 semantic + procedural 记忆（架构决策、踩坑经验）。</li>
+<li><b>与 LangChain / AutoGen / CrewAI 集成</b>：通过 REST API（<code>/observe</code> / <code>/remember</code> / <code>/smart-search</code>）作为这些框架的外置记忆后端，任意自定义 Agent 均可接入。</li>
+</ul>
+
+</section>
+<section id="refs">
+<h2>十一、参考资料</h2>
+
+<ul>
+<li><a href="https://github.com/rohitg00/agentmemory">GitHub · rohitg00/agentmemory</a></li>
+<li><a href="https://github.com/rohitg00/agentmemory/blob/main/iii-config.yaml">iii-config.yaml</a> · <a href="https://github.com/rohitg00/agentmemory/blob/main/AGENTS.md">AGENTS.md</a> · <a href="https://github.com/rohitg00/agentmemory/blob/main/CHANGELOG.md">CHANGELOG.md</a></li>
+<li><a href="https://github.com/rohitg00/agentmemory/tree/main/integrations/openclaw">integrations/openclaw 示例</a></li>
+<li><a href="https://github.com/rohitg00/agentmemory/issues/159">Issue #159 · MCP/server 隔离</a></li>
+<li><a href="https://gist.github.com/rohitg00/2067ab416f7bbe447c1977edaaa681e2">Gist · LLM Wiki v2（扩展 Karpathy 模式的经验）</a></li>
+<li><a href="https://agent-memory.dev">官网 agent-memory.dev</a> · NPM <code>@agentmemory/agentmemory</code> · iii engine <a href="https://iii.dev">iii.dev</a></li>
+</ul>
+
+</section>
+<footer>本报告由深度源码研究 + 外部生态调研生成 · 生成日期 2026-05-14 · 数据来源见各文末参考资料</footer>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  hljs.highlightAll();
+  mermaid.initialize({ startOnLoad: true, theme: "default", securityLevel: "loose" });
+</script>
+</body>
+</html>
