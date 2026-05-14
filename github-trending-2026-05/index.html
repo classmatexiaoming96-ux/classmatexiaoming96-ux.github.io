@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Trending 2026-05 · 项目分析</title>
+    <style>
+      :root {
+        --paper: #f7f7f5;
+        --paper-edge: #efefea;
+        --ink: #1a1a1a;
+        --ink-soft: #4a4a4a;
+        --ink-faint: #7a7a7a;
+        --rule: #d8d8d2;
+        --rule-soft: #e8e8e2;
+        --accent: #6f9bb8;
+        --accent-soft: #d9e6f0;
+        --accent-faint: #eef4f8;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html { font-size: 16px; }
+      body {
+        font-family: ui-serif, "Charter", "Iowan Old Style", "Source Serif Pro", Georgia, "Songti SC", "Source Han Serif SC", serif;
+        background: var(--paper);
+        color: var(--ink);
+        line-height: 1.6;
+        padding: 64px 24px 96px;
+        -webkit-font-smoothing: antialiased;
+      }
+      .doc { max-width: 760px; margin: 0 auto; }
+      .doc-header { border-bottom: 1px solid var(--rule); padding-bottom: 28px; margin-bottom: 48px; }
+      .doc-eyebrow {
+        font-family: ui-monospace, "SF Mono", Menlo, "PingFang SC", monospace;
+        font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 14px;
+      }
+      .mascot { display: inline-block; width: 8px; height: 8px; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+      .doc-title { font-size: 32px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+      .doc-subtitle { font-size: 16px; color: var(--ink-soft); margin-top: 10px; font-style: italic; }
+      .doc-meta {
+        font-family: ui-monospace, Menlo, "PingFang SC", monospace;
+        font-size: 11px; color: var(--ink-faint); margin-top: 18px; display: flex; gap: 24px;
+      }
+      .tldr {
+        background: var(--accent-faint); border-left: 2px solid var(--accent);
+        padding: 20px 24px; margin-bottom: 56px; font-size: 15px;
+      }
+      .tldr-label {
+        font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.12em;
+        text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-weight: 600;
+      }
+      .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0 24px; }
+      .card { border: 1px solid var(--rule); background: #fff; padding: 20px 20px 18px; text-decoration: none; color: inherit; display: block; transition: background 0.15s; }
+      .card:hover { background: var(--paper-edge); }
+      .card-icon {
+        font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: 0.1em;
+        text-transform: uppercase; margin-bottom: 10px; font-weight: 600; color: var(--accent);
+      }
+      .card-name { font-family: ui-serif, Georgia, "Songti SC", serif; font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+      .card-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+      .card-tags { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+      .tag {
+        font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 0.08em;
+        padding: 3px 8px; background: var(--accent-faint); color: var(--accent); border-radius: 2px;
+      }
+      footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--rule); font-size: 12px; color: var(--ink-faint); }
+      @media (max-width: 600px) {
+        body { padding: 32px 16px 64px; }
+        .cards { grid-template-columns: 1fr; }
+        .doc-meta { flex-wrap: wrap; gap: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <article class="doc">
+      <header class="doc-header">
+        <div class="doc-eyebrow"><span class="mascot"></span>GitHub Trending · May 2026</div>
+        <h1 class="doc-title">AI 编程工具链深度解析</h1>
+        <p class="doc-subtitle">OpenHuman · AgentMemory · Skills · Spec-Kit — 4 个热门项目的完整分析报告</p>
+        <div class="doc-meta">
+          <span>STATUS · PUBLISHED</span>
+          <span>DATE · 2026-05-13</span>
+          <span>AUTHOR · CC Lead + Claude</span>
+        </div>
+      </header>
+
+      <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        本页面收录了 2026 年 5 月 GitHub Trending 榜单前 5 名项目（除 superpowers）的深度分析报告。覆盖 OpenHuman（桌面 AI 超级智能）、AgentMemory（编程智能体持久记忆）、Skills（工程师 AI 技能包）、Spec-Kit（规格驱动开发）四个方向，每个报告均含架构解析、对比分析、快速上手指南。
+      </div>
+
+      <section>
+        <h2 style="font-size:22px;font-weight:600;letter-spacing:-0.005em;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--rule);">
+          <span style="font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--ink-faint);font-weight:500;margin-right:14px;letter-spacing:0.05em;">01</span>项目分析报告
+        </h2>
+        <div class="cards">
+          <a class="card" href="openhuman.html">
+            <div class="card-icon">OPENHUMAN</div>
+            <div class="card-name">OpenHuman</div>
+            <div class="card-desc">本地优先的个人 AI 超级智能桌面助手。Rust + Tauri，TinyHumans 团队出品。支持 118+ OAuth 集成、Memory Tree 持久记忆、TokenJuice 80% 压缩、Ollama 本地模型。</div>
+            <div class="card-tags">
+              <span class="tag">Rust</span>
+              <span class="tag">Tauri</span>
+              <span class="tag">Memory Tree</span>
+              <span class="tag">桌面应用</span>
+            </div>
+          </a>
+          <a class="card" href="agentmemory.html">
+            <div class="card-icon">AGENTMEMORY</div>
+            <div class="card-name">AgentMemory</div>
+            <div class="card-desc">编程智能体的持久化记忆基础设施。零外部依赖（SQLite），4 层记忆模型，三流融合检索（BM25+向量+知识图谱），Recall@5 达 95.2%，年成本约 $10。</div>
+            <div class="card-tags">
+              <span class="tag">TypeScript</span>
+              <span class="tag">MCP</span>
+              <span class="tag">SQLite</span>
+              <span class="tag">iii engine</span>
+            </div>
+          </a>
+          <a class="card" href="skills.html">
+            <div class="card-icon">SKILLS</div>
+            <div class="card-name">Matt Pocock's Skills</div>
+            <div class="card-desc">给真正工程师的 AI 技能包。18 个开箱即用技能（诊断、 grilling、TDD、架构治理等），源自 The Pragmatic Programmer、DDD 等经典方法论。+3,372 ⭐/天。</div>
+            <div class="card-tags">
+              <span class="tag">Shell</span>
+              <span class="tag">Claude Code</span>
+              <span class="tag">方法论</span>
+              <span class="tag">78k ⭐</span>
+            </div>
+          </a>
+          <a class="card" href="spec-kit.html">
+            <div class="card-icon">SPEC-KIT</div>
+            <div class="card-name">GitHub Spec Kit</div>
+            <div class="card-desc">GitHub 官方的规格驱动开发（SDD）工具包。7 步 SDD 工作流（Constitution → Spec → Plan → Tasks → Implement），120+ 社区扩展，支持 30+ AI 编程 Agent。</div>
+            <div class="card-tags">
+              <span class="tag">Python</span>
+              <span class="tag">SDD</span>
+              <span class="tag">GitHub 官方</span>
+              <span class="tag">98k ⭐</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <footer>
+        <h4 style="font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px;">About</h4>
+        <p style="color:var(--ink-faint);font-size:12px;">分析报告由 CC Lead + article-to-html skill 自动生成。使用 paper proposal 设计系统，单文件 HTML，无外部依赖。</p>
+      </footer>
+    </article>
+  </body>
+</html>
