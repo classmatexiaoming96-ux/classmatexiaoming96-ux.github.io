@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt Pocock Skills 深度研究报告</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/github-dark.min.css">
+<style>
+:root {
+  --bg: #f6f8fa; --panel: #ffffff; --ink: #1f2328; --muted: #59636e;
+  --brand: #7c3aed; --brand-soft: #f3ecff; --border: #d1d9e0;
+  --code-bg: #0d1117; --accent: #0969da;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height: 1.75; font-size: 16px;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.layout { display: flex; max-width: 1280px; margin: 0 auto; gap: 32px; padding: 0 24px; }
+nav.toc {
+  position: sticky; top: 0; align-self: flex-start; height: 100vh;
+  overflow-y: auto; width: 248px; flex-shrink: 0; padding: 28px 0;
+  font-size: 14px;
+}
+nav.toc .toc-title {
+  font-weight: 700; color: var(--brand); margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: .5px; font-size: 12px;
+}
+nav.toc a { display: block; color: var(--muted); padding: 4px 10px; border-left: 2px solid transparent; }
+nav.toc a:hover { color: var(--brand); border-left-color: var(--brand); background: var(--brand-soft); text-decoration: none; }
+main { flex: 1; min-width: 0; padding: 28px 0 80px; }
+header.hero {
+  background: linear-gradient(135deg, var(--brand), #5b21b6);
+  color: #fff; border-radius: 16px; padding: 36px 40px; margin-bottom: 32px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12);
+}
+header.hero h1 { margin: 0 0 8px; font-size: 30px; }
+header.hero p.sub { margin: 0 0 20px; font-size: 16px; opacity: .92; }
+.badges { display: flex; flex-wrap: wrap; gap: 10px; }
+.badge {
+  background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.28);
+  padding: 5px 12px; border-radius: 999px; font-size: 13px; backdrop-filter: blur(4px);
+}
+section { background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 26px 32px; margin-bottom: 22px; }
+section h2 {
+  margin-top: 0; font-size: 22px; color: var(--brand);
+  border-bottom: 2px solid var(--brand-soft); padding-bottom: 8px;
+}
+section h3 { font-size: 17px; margin-top: 26px; color: var(--ink); }
+section h4 { font-size: 15px; color: var(--muted); margin-bottom: 6px; }
+p, li { color: var(--ink); }
+code:not(pre code) {
+  background: var(--brand-soft); color: #5b21b6; padding: 1px 6px;
+  border-radius: 5px; font-size: 13.5px; font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+pre {
+  background: var(--code-bg); border-radius: 10px; padding: 16px 18px;
+  overflow-x: auto; font-size: 13.5px; line-height: 1.6; margin: 14px 0;
+}
+pre code { font-family: "SF Mono", Menlo, Consolas, monospace; }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14.5px; }
+th, td { border: 1px solid var(--border); padding: 9px 12px; text-align: left; vertical-align: top; }
+th { background: var(--brand-soft); color: #5b21b6; font-weight: 600; }
+tr:nth-child(even) td { background: #fafbfc; }
+blockquote {
+  border-left: 4px solid var(--brand); background: var(--brand-soft);
+  margin: 14px 0; padding: 10px 18px; border-radius: 0 8px 8px 0; color: var(--muted);
+}
+.mermaid { background: #fff; border: 1px solid var(--border); border-radius: 10px;
+  padding: 18px; margin: 16px 0; text-align: center; }
+.callout {
+  border: 1px solid var(--border); border-left: 5px solid var(--brand);
+  background: #fbfcfd; border-radius: 8px; padding: 12px 18px; margin: 14px 0;
+}
+.callout.warn { border-left-color: #d29922; background: #fff8e6; }
+.callout.good { border-left-color: #2da44e; background: #eefbf2; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.kv { font-size: 14px; }
+.kv b { color: var(--brand); }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 30px 0; }
+@media (max-width: 900px) {
+  nav.toc { display: none; }
+  .grid2 { grid-template-columns: 1fr; }
+  .layout { padding: 0 14px; }
+  section { padding: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <div class="toc-title">目录</div>
+  <a href="#overview">一、项目定位</a>
+  <a href="#why">二、它要解决的 4 类 AI 协作失败模式</a>
+  <a href="#skillmd">三、SKILL.md 规范深度解析</a>
+  <a href="#example">四、真实 SKILL.md 示例（verbatim）</a>
+  <a href="#structure">五、技能体系完整结构</a>
+  <a href="#workflow">六、推荐工作流</a>
+  <a href="#trio">七、CLAUDE.md / AGENTS.md / CONTEXT.md 三件套</a>
+  <a href="#install">八、安装与上手</a>
+  <a href="#compare">九、与传统 tool calling / 官方 skills 的对比</a>
+  <a href="#scene">十、适用场景与优劣势</a>
+  <a href="#refs">十一、参考资料</a>
+</nav>
+<main>
+<header class="hero">
+  <h1>Matt Pocock Skills 深度研究报告</h1>
+  <p class="sub">mattpocock/skills · 面向严肃软件工程的 Claude Code 技能包</p>
+  <div class="badges"><span class="badge">⭐ ~78K stars</span><span class="badge">100% Shell/Markdown</span><span class="badge">MIT</span><span class="badge">18 个技能</span><span class="badge">SKILL.md 规范</span><span class="badge">Claude Code 一等公民</span><span class="badge">方法论驱动</span></div>
+</header>
+<section id="overview">
+<h2>一、项目定位</h2>
+
+<p><b>mattpocock/skills</b> 是知名 TypeScript 教育者 Matt Pocock 从自己的 <code>.claude</code> 目录里直接抽出来开源的一套 <b>Claude Code 技能包（Agent Skills）</b>。
+它<b>不是</b>一个 Agent 框架，也<b>不涉及 MCP 协议 / Zod schema</b>——它的语言构成是 <b>100% Shell + Markdown</b>，本质是"把资深工程师的方法论翻译成 Agent 能消费的 SKILL.md"。</p>
+<blockquote>副标题很坦诚："Skills for Real Engineers. Straight from my .claude directory." —— 面向<b>严肃软件工程</b>，而非快速原型。</blockquote>
+<div class="callout warn"><b>事实校准：</b> 你的任务描述提到 "mcp-tool / MCP 协议 / Zod schema validation / TypeScript 类型系统驱动 tool calling"——这些<b>不属于</b>本仓库。
+本仓库是 Claude Code 的 <b>SKILL.md（YAML frontmatter + Markdown 正文）</b>技能集合，靠<b>提示词工程</b>而非类型系统工作。本报告分析真实仓库。</div>
+
+</section>
+<section id="why">
+<h2>二、它要解决的 4 类 AI 协作失败模式</h2>
+
+<table>
+<tr><th>失败模式</th><th>本质问题</th><th>对应技能</th></tr>
+<tr><td><b>Misalignment</b> 需求错位</td><td>没问清楚就开写</td><td><code>grill-with-docs</code> / <code>grill-me</code> —— 写代码前先"拷问"需求</td></tr>
+<tr><td><b>Verbosity</b> 啰嗦烧 token</td><td>每次会话重复解释项目背景</td><td>用 <code>CONTEXT.md</code> 建"共同语言"；<code>caveman</code> 压缩表达 -75%</td></tr>
+<tr><td><b>Code Quality</b> 代码质量差</td><td>没有反馈闭环</td><td><code>tdd</code> 红绿重构 / <code>diagnose</code> 结构化 Debug</td></tr>
+<tr><td><b>Architecture Decay</b> 架构腐化</td><td>设计随迭代退化</td><td><code>improve-codebase-architecture</code> 持续治理</td></tr>
+</table>
+
+</section>
+<section id="skillmd">
+<h2>三、SKILL.md 规范深度解析</h2>
+
+<p>Claude Code 的每个技能都是一个文件夹，核心是一个 <b><code>SKILL.md</code></b>，由两部分组成：</p>
+<ol>
+<li><b>YAML frontmatter</b>（<code>---</code> 之间）——告诉 Claude <b>何时</b>该用这个技能；</li>
+<li><b>Markdown 正文</b>——技能触发后 Claude <b>遵循</b>的指令、示例、规范。</li>
+</ol>
+<h3>关键 frontmatter 字段</h3>
+<table>
+<tr><th>字段</th><th>含义</th></tr>
+<tr><td><code>name</code></td><td>必须与父文件夹名完全一致</td></tr>
+<tr><td><code>description</code></td><td>最关键字段——Claude 靠它判断"什么场景调用此技能"，要写得具体</td></tr>
+<tr><td><code>disable-model-invocation</code></td><td>设为 <code>true</code> 则模型不会自动调用，只能由用户显式 <code>/技能名</code> 触发</td></tr>
+<tr><td><code>allowed-tools</code></td><td>（可选）限制此技能可用的工具</td></tr>
+</table>
+
+</section>
+<section id="example">
+<h2>四、真实 SKILL.md 示例（verbatim）</h2>
+
+<p>以下是 <code>skills/engineering/setup-matt-pocock-skills/SKILL.md</code> 的真实 frontmatter：</p>
+<pre><code class="language-yaml">name: setup-matt-pocock-skills
+description: Sets up an `## Agent skills` block in AGENTS.md/CLAUDE.md and `docs/agents/`
+  so the engineering skills know this repo's issue tracker (GitHub or local markdown),
+  triage label vocabulary, and domain doc layout. Run before first use of `to-issues`,
+  `to-prd`, `triage`, `diagnose`, `tdd`, `improve-codebase-architecture`, or `zoom-out`
+  — or if those skills appear to be missing context about the issue tracker, triage
+  labels, or domain docs.
+disable-model-invocation: true</code></pre>
+<p>正文描述了一个<b>三阶段工作流</b>：</p>
+<table>
+<tr><th>阶段</th><th>做什么</th></tr>
+<tr><td><b>Exploration</b> 探索</td><td>审计 repo 现状：git remotes、现有 <code>AGENTS.md</code>/<code>CLAUDE.md</code>、context 文档、ADR 目录、<code>.scratch/</code> 文件夹</td></tr>
+<tr><td><b>Decision</b> 决策</td><td>引导用户做 3 个配置：① issue tracker 位置 ② triage 标签词汇 ③ 领域文档布局——每个都给默认推荐</td></tr>
+<tr><td><b>Implementation</b> 落地</td><td>生成配置文件：更新 <code>CLAUDE.md</code>/<code>AGENTS.md</code>，再加 3 个 md 文件描述 issue tracker、标签映射、领域文档结构</td></tr>
+</table>
+<div class="callout">注意 <code>disable-model-invocation: true</code> 的用意：这是个"一次性配置"技能，不该被模型在日常对话里随意触发，只能用户主动 <code>/setup-matt-pocock-skills</code> 调用。</div>
+
+</section>
+<section id="structure">
+<h2>五、技能体系完整结构</h2>
+
+<p>仓库目录：</p>
+<pre><code class="language-text">skills/
+├── .claude-plugin/          # Claude Code 插件清单
+├── .out-of-scope/           # 明确划定"不做什么"
+├── docs/adr/                # 架构决策记录
+├── scripts/                 # 安装/工具脚本
+├── skills/
+│   ├── engineering/         # 工程类 (10)
+│   ├── productivity/        # 生产力类 (4)
+│   └── misc/                # 杂项 (4)
+├── CLAUDE.md                # Agent 配置
+├── CONTEXT.md               # 项目"共同语言"模板
+├── LICENSE                  # MIT
+└── README.md</code></pre><div class="mermaid">
+flowchart TB
+    Root["mattpocock/skills · 78K⭐ · 100% Shell"]
+    Root --> Eng["engineering (10)"]
+    Root --> Prod["productivity (4)"]
+    Root --> Misc["misc (4)"]
+    Eng --> E1["diagnose · 结构化 Debug"]
+    Eng --> E2["grill-with-docs · 需求追问+ADR"]
+    Eng --> E3["triage · 状态机分诊"]
+    Eng --> E4["tdd · 红绿重构"]
+    Eng --> E5["to-prd / to-issues · 规格→切片"]
+    Eng --> E6["improve-codebase-architecture"]
+    Eng --> E7["zoom-out / prototype / setup-*"]
+    Prod --> P1["caveman · -75% tokens"]
+    Prod --> P2["grill-me · 反向追问"]
+    Prod --> P3["handoff · 会话压缩交接"]
+    Prod --> P4["write-a-skill · 元技能"]
+    Misc --> M1["git-guardrails-claude-code"]
+    Misc --> M2["migrate-to-shoehorn"]
+    Misc --> M3["scaffold-exercises"]
+    Misc --> M4["setup-pre-commit"]
+</div>
+<h3>每个技能文件夹包含什么</h3>
+<ul><li><b><code>SKILL.md</code></b>——frontmatter + 指令正文（核心）</li>
+<li>提示词文件与补充说明</li><li>配置模板与支持资源</li></ul>
+</section>
+<section id="workflow">
+<h2>六、推荐工作流</h2>
+
+<p>这些技能不是孤立的，作者设计了一条"从需求到交付"的链路：</p>
+<div class="mermaid">
+flowchart LR
+    Start(["需求"]) --> A["/grill-with-docs<br/>追问澄清+更新ADR"]
+    A --> B["/to-prd<br/>会话→正式PRD"]
+    B --> C["/to-issues<br/>拆成可独立认领的垂直切片"]
+    C --> D["/tdd<br/>红-绿-重构"]
+    D --> E{"发现 Bug?"}
+    E -->|是| F["/diagnose<br/>复现→最小化→假设→注入→修复"]
+    F --> D
+    E -->|否| G["/improve-codebase-architecture<br/>治理设计退化"]
+    G --> H["/handoff<br/>会话压缩, Agent 间交接"]
+    H --> Finish(["交付"])
+</div>
+<p>配套的 <code>caveman</code>（穴居人模式，压缩到极简表达）和 <code>zoom-out</code>（要求 Agent 先建立更广视野）则是贯穿全程的"调节器"。</p>
+</section>
+<section id="trio">
+<h2>七、CLAUDE.md / AGENTS.md / CONTEXT.md 三件套</h2>
+
+<table>
+<tr><th>文件</th><th>角色</th></tr>
+<tr><td><code>CLAUDE.md</code> / <code>AGENTS.md</code></td><td>Agent 配置入口，<code>setup-matt-pocock-skills</code> 会在其中写入 <code>## Agent skills</code> 块，记录本 repo 的 issue tracker、triage 标签、领域文档布局</td></tr>
+<tr><td><code>CONTEXT.md</code></td><td><b>项目"共同语言"文档</b>——一次性建立领域术语，之后每次会话用极少 token 沟通。作者称之为"投资一次，受益每次"</td></tr>
+<tr><td><code>docs/adr/</code></td><td>架构决策记录，<code>grill-with-docs</code> 会内联更新它</td></tr>
+</table>
+<div class="callout good">这套三件套的本质：把"项目知识"从<b>会话上下文</b>（易失、烧 token）外置成<b>仓库文件</b>（持久、可 review、可 git 管理）——与 AgentMemory 把记忆外置成 SQLite、OpenHuman 外置成 Memory Tree 是同一个时代命题的不同解法。</div>
+
+</section>
+<section id="install">
+<h2>八、安装与上手</h2>
+<pre><code class="language-bash"># 30 秒安装
+npx skills@latest add mattpocock/skills
+
+# 安装器交互流程:
+#  1. 选择要装哪些技能 + 指定目标 AI agent
+#  2. 自动跑 /setup-matt-pocock-skills:
+#       - 选 issue tracker (GitHub / Linear / 本地 markdown)
+#       - 定义 triage 标签词汇
+#       - 指定领域文档目录
+#  3. 把技能加载进 .claude 目录
+
+# 之后在 Claude Code 里作为斜杠命令调用:
+#   /diagnose   /tdd   /caveman   /grill-with-docs  ...</code></pre>
+<p>技能与任意模型/Agent 兼容，但<b>一等公民是 Claude Code</b>。<code>.claude-plugin/</code> 目录让它能作为 Claude Code 插件被发现。</p>
+</section>
+<section id="compare">
+<h2>九、与传统 tool calling / 官方 skills 的对比</h2>
+
+<table>
+<tr><th>维度</th><th>mattpocock/skills</th><th>传统 Function/Tool Calling</th><th>anthropics/skills 官方仓库</th></tr>
+<tr><td>抽象层级</td><td><b>方法论 / 工作流</b>（高层）</td><td>单个函数调用（低层）</td><td>能力示范（中层）</td></tr>
+<tr><td>实现形式</td><td>SKILL.md（YAML+Markdown 提示词）</td><td>JSON Schema + 代码实现</td><td>SKILL.md</td></tr>
+<tr><td>驱动机制</td><td>提示词工程 + Claude 自主判断</td><td>schema 校验 + 确定性执行</td><td>提示词工程</td></tr>
+<tr><td>解决的问题</td><td>"AI 怎么<b>像资深工程师一样工作</b>"</td><td>"AI 怎么<b>调用一个能力</b>"</td><td>"技能机制<b>怎么用</b>"</td></tr>
+<tr><td>方法论密度</td><td><b>极高</b>（每个技能背后有名著支撑）</td><td>无</td><td>中</td></tr>
+</table>
+<div class="callout"><b>关键洞察：</b> tool calling 回答"如何执行一个动作"，而 skills 回答"如何组织一连串动作以达成工程目标"。
+mattpocock/skills 的价值不在技术新颖性（它就是 Markdown），而在<b>把 Pragmatic Programmer / DDD / A Philosophy of Software Design / XP 这些方法论，压缩成 Claude 能即时执行的 SOP</b>。</div>
+<h4>哲学根基（作者明确致谢）</h4>
+<ul>
+<li>David Thomas &amp; Andrew Hunt — <i>The Pragmatic Programmer</i></li>
+<li>Eric Evans — <i>Domain-Driven Design</i></li>
+<li>John Ousterhout — <i>A Philosophy of Software Design</i></li>
+<li>Kent Beck — <i>Extreme Programming Explained</i></li>
+</ul>
+
+</section>
+<section id="scene">
+<h2>十、适用场景与优劣势</h2>
+
+<div class="grid2">
+<div class="callout good"><h4>适合</h4><ul>
+<li>重度使用 Claude Code、想把"野生 AI 流程"标准化的工程师</li>
+<li>从原型走向生产的团队——需要纪律性</li>
+<li>Tech Lead 想让团队 Agent 行为对齐工程文化</li>
+<li>TypeScript / 全栈生态（作者的母语圈）</li></ul></div>
+<div class="callout warn"><h4>局限</h4><ul>
+<li>纯提示词，<b>无强制性</b>——Claude 可能不严格遵循</li>
+<li>偏 Matt Pocock 个人工作流，未必契合所有团队</li>
+<li>100% Shell/Markdown，无代码逻辑，本质是"高质量约定"而非"工具"</li>
+<li>效果强依赖底层模型能力</li></ul></div>
+</div>
+
+</section>
+<section id="refs">
+<h2>十一、参考资料</h2>
+
+<ul>
+<li><a href="https://github.com/mattpocock/skills">GitHub · mattpocock/skills</a></li>
+<li><a href="https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md">真实 SKILL.md 示例 · setup-matt-pocock-skills</a></li>
+<li><a href="https://code.claude.com/docs/en/skills">Claude Code 官方文档 · Extend Claude with skills</a></li>
+<li><a href="https://github.com/anthropics/skills">anthropics/skills · 官方 Agent Skills 仓库</a></li>
+<li><a href="https://support.claude.com/en/articles/12512198-how-to-create-custom-skills">Claude Help · 如何创建自定义 Skills</a></li>
+<li><a href="https://www.mattpocock.com">作者主页 / Newsletter（约 6 万订阅）</a></li>
+</ul>
+
+</section>
+<footer>本报告由深度源码研究 + 外部生态调研生成 · 生成日期 2026-05-14 · 数据来源见各文末参考资料</footer>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  hljs.highlightAll();
+  mermaid.initialize({ startOnLoad: true, theme: "default", securityLevel: "loose" });
+</script>
+</body>
+</html>
