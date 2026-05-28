@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>Claude Code best practices | Code w/ Claude</title>
+<title>Claude Code 最佳实践：从入门到熟练</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
   :root {
@@ -12,11 +12,15 @@
     --accent: #c96442;
     --accent-bg: #f6e8e0;
     --border: #e3e3df;
+    --code-bg: #f3f1ec;
     --sidebar-w: 280px;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg);
-    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
@@ -26,45 +30,77 @@
     padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
     font-size: 14px;
   }
-  aside.toc h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin: 0 0 12px; }
+  aside.toc h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 12px;
+  }
   aside.toc ol { list-style: none; margin: 0; padding: 0; }
-  aside.toc li { margin: 0 0 10px; }
+  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
   aside.toc a { color: var(--fg); display: block; }
   aside.toc a:hover { color: var(--accent); }
-  aside.toc .num { color: var(--muted); margin-right: 6px; font-variant-numeric: tabular-nums; }
 
-  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 880px; }
-  header.meta { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
-  header.meta h1 { font-size: 28px; line-height: 1.25; margin: 0 0 12px; }
-  header.meta .sub { color: var(--muted); font-size: 14px; }
-  header.meta .sub a { color: var(--muted); }
-  header.meta .sub a:hover { color: var(--accent); }
+  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
+  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
 
-  section.chapter { margin: 40px 0; scroll-margin-top: 20px; }
-  section.chapter h2 { font-size: 20px; margin: 0 0 16px; padding-bottom: 8px;
-    border-bottom: 1px solid var(--border); }
-
-  p.para { margin: 0 0 20px; position: relative; padding-left: 76px; }
-  a.ts {
-    position: absolute; left: 0; top: 4px;
-    display: inline-block; min-width: 64px; text-align: center;
-    padding: 2px 8px; border-radius: 4px;
-    background: var(--accent-bg); color: var(--accent);
-    font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-variant-numeric: tabular-nums;
+  h2 {
+    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
   }
-  a.ts:hover { background: var(--accent); color: #fff; text-decoration: none; }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
 
-  footer.meta { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
-    color: var(--muted); font-size: 13px; }
+  p { margin: 0 0 18px; }
 
-  @media (max-width: 720px) {
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); color: #4a3320; font-size: 15px;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 18px; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li > p { margin: 0 0 8px; }
+
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  /* Mermaid containers — let mermaid.js render inside, white bg */
+  .mermaid {
+    background: #fff; padding: 18px; border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; text-align: center;
+  }
+
+  table {
+    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    vertical-align: top; line-height: 1.55;
+  }
+  th { background: #f1ede6; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbf9f4; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  em { color: var(--muted); }
+
+  footer.meta {
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
+    color: var(--muted); font-size: 13px;
+  }
+
+  @media (max-width: 760px) {
     .layout { grid-template-columns: 1fr; }
-    aside.toc { position: static; max-height: none; border-right: none;
-      border-bottom: 1px solid var(--border); }
-    p.para { padding-left: 0; }
-    a.ts { position: static; display: inline-block; margin-right: 8px; }
+    aside.toc {
+      position: static; max-height: none; border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
   }
 </style>
 </head>
@@ -72,388 +108,325 @@
 <div class="layout">
   <aside class="toc">
     <h2>目录</h2>
-    <ol>
-      
-      <li><a href="#sec-1"><span class="num">01</span>Intro & overview</a></li>
-      
-      <li><a href="#sec-2"><span class="num">02</span>How I discovered Claude Code</a></li>
-      
-      <li><a href="#sec-3"><span class="num">03</span>How Claude Code works under the hood</a></li>
-      
-      <li><a href="#sec-4"><span class="num">04</span>Where Claude Code shines</a></li>
-      
-      <li><a href="#sec-5"><span class="num">05</span>Best practices: CLAUDE.md, permissions, context</a></li>
-      
-      <li><a href="#sec-6"><span class="num">06</span>Planning, todos & smart vibe coding</a></li>
-      
-      <li><a href="#sec-7"><span class="num">07</span>Advanced: multi-Claude, escape, MCP, headless</a></li>
-      
-      <li><a href="#sec-8"><span class="num">08</span>What's new in Claude 4 & IDE integrations</a></li>
-      
-      <li><a href="#sec-9"><span class="num">09</span>Q&A</a></li>
-      
-    </ol>
+    <ol><li><a href="#一-claude-code-到底是什么">一、Claude Code 到底是什么？</a></li>
+<li><a href="#二-claude-code-适合做哪些事">二、Claude Code 适合做哪些事？</a></li>
+<li><a href="#三-最佳实践-1-claude-md-文件">三、最佳实践 #1：CLAUDE.md 文件</a></li>
+<li><a href="#四-最佳实践-2-权限管理与速度的取舍">四、最佳实践 #2：权限管理与速度的取舍</a></li>
+<li><a href="#五-最佳实践-3-context-管理">五、最佳实践 #3：context 管理</a></li>
+<li><a href="#六-最佳实践-4-先-plan-再做-看着-todo-不对就拍-escape">六、最佳实践 #4：先 plan 再做，看着 todo 不对就拍 escape</a></li>
+<li><a href="#七-进阶玩法">七、进阶玩法</a></li>
+<li><a href="#八-claude-4-最新版本带来的新东西">八、Claude 4 / 最新版本带来的新东西</a></li>
+<li><a href="#九-q-a-精华">九、Q&A 精华</a></li>
+<li><a href="#十-总结-从入门到熟练的清单">十、总结：从入门到熟练的清单</a></li></ol>
   </aside>
   <main>
-    <header class="meta">
-      <h1>Claude Code best practices | Code w/ Claude</h1>
-      <div class="sub">
-        Anthropic · 25:53 · 2025-07-31 ·
-        <a href="https://www.youtube.com/watch?v=gv0WHhKelSE" target="_blank" rel="noopener">YouTube ↗</a>
-      </div>
-    </header>
+<h1>Claude Code 最佳实践：从入门到熟练</h1>
+<blockquote>
+<p>作者：<strong>Cal</strong>（Anthropic 应用 AI 团队 / Claude Code 核心贡献者） · 演讲场合：Code with Claude · 时长：约 26 分钟 · <a href="https://www.youtube.com/watch?v=gv0WHhKelSE">▶ 原视频</a></p>
+<p><strong>本文是中文整理版</strong>：在视频内容的基础上重新组织、补图表，方便快速阅读。关键节点附 YouTube 时间戳链接，可点击跳回原视频对应位置核对。</p>
+</blockquote>
+<hr />
+<h2 id="一-claude-code-到底是什么">一、Claude Code 到底是什么？</h2>
 
-    
-    <section class="chapter" id="sec-1">
-      <h2>01 · Intro & overview</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=5s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">0:05</a>
-        Let's get started. Welcome everyone to Cloud Code best practices. In this talk, I'm going to talk about kind of what cloud code is at a high level. Then we'll peer under the hood a little bit to kind of understand how cloud code works. And then knowing that because it's useful to kind of know how your tools work.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=24s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">0:24</a>
-        We're going to talk about good use cases for cloud code and also best practices we've figured out both internally and from our users for getting the most out of this tool. But before I get started, I'd like to introduce myself real quick and talk about how I ended up on the stage. So, my name's Cal and I joined Enthropic about a year and a half ago to help start up a team we call applied AI. And it's the applied AI's kind of mission, our team's mission is to help our customers and partners build great products and features on top of Claude. So what that really means is I spend a lot of my day prompting Claude to get the absolute best outputs out of these models.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-2">
-      <h2>02 · How I discovered Claude Code</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=64s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">1:04</a>
-        That said, I also love to code and I'm definitely one of those coders that like starts a lot of projects, has some crazy idea, and then just never finishes them. So, I have this graveyard of just like code that I started, never really finished. But I'm always spinning new things up. And late last year, I was in Slack and I was hearing about this new tool that a few people are using. They were saying it was really cool.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=88s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">1:28</a>
-        And so, on a Friday night, I downloaded the tool that would become Cloud Code. And I threw it at this kind of new notetaking app that I wanted to build. And like that whole weekend just kind of totally changed the way that I code and think about software engineering. I was carrying around my laptop with me all weekend. I was super addicted to just watching Claude Code work and I would press enter and I'd switch over to my browser and refresh and I watched this huge powerful application come together in front of my eyes.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=114s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">1:54</a>
-        And I got way farther into this thing than I ever would have on my own. And it just blew my mind. And while I was doing this, I was a little worried. I was like, I I kind of know how these things work. So I'm like, man, I'm using a lot of tokens.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=129s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">2:09</a>
-        I hope I don't get in trouble or anyone like notices. I'm not really contributing to anthropic code. But what I didn't know is that the claude code team had built this internal like leaderboard tracking how much all the anthropic employees were using this. And over the weekend, I had shot to the top. And so through that, I got to meet Boris and Cat and some of the early cloud code team.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=149s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">2:29</a>
-        And I was able to start talking to them and say, "Hey, I love this tool. I also know a lot about prompting. Can I help you all out?" And so through that I got involved and now I'm one of the core contributors on the team and I do a lot of I work a lot on the prompting the system prompts how the tools work the tool descriptions and tool results as well as I work on how we evaluate this tool. So when we think about changing the prompts how do we make how do we know we made things better or the same and we didn't totally ruin cloud code. So with that said let's kind of dive in.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-3">
-      <h2>03 · How Claude Code works under the hood</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=182s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">3:02</a>
-        So, here's my current mental model of Claude Code and how I describe it to people when people ask me. Claude Code is like that co-worker that does everything on the terminal. It's the sort of person that just never touches the guey. They're a whiz. I think of when I was a junior engineer, I had this mentor and I would walk over to his desk and I would say, "Hey, Tony, can you help me with this bug?" and he would whipping it open his terminal and he'd be like doing all these crazy bash commands and changing things around in Vim and I'd always walk away thinking, "Wow, that was crazy.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=215s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">3:35</a>
-        I should learn how to do that." I never did. But having Claude Code on your computer is kind of like having Tony next to you all the time. So, how does Claude code kind of work under the hood? At Anthropic, we try to always do what we call the simple thing that works. And what that means for Cloud Code is it's what we would consider a very pure agent.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=243s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">4:03</a>
-        And anthropic, when we talk about agents, what we really mean is some instructions, some powerful tools, and you let the model just run in a loop until it decides it's done. And that's really what Cloud Code is. So it's tools, powerful tools, and the tools that you know someone that was really good at a terminal would be able to use tools to create and edit files to use the terminal. And then you can also do things like pull in other things with MCP. Now, on top of that, there's how Claude understands the codebase.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=275s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">4:35</a>
-        And if you're going to build a coding agent or a coding tool a year ago, you'd probably have ideas like, well, okay, I'm going to get this user message about something about this codebase and I'll need to figure out which files are relevant. So maybe I'll like index the whole codebase and embed it and do this fancy like kind of rag retrieval thing. That is not how cloud code works. We don't do any sort of indexing. Instead, claude kind of explores and understands the codebase. how you if you were new to a team and new to a codebase would explore a codebase and that is through a gentic search is the same sort of search tools you or I would use things like glob and gp and find and it can work its way through a codebase and understand what's going on and when we talk about a gentic search that really means the model can go do some searches and then it can look at the results and can say hm maybe I need to figure out a few more things I'm going to go do some more searching and then come back and then on top of these primitives.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=337s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">5:37</a>
-        On top of this agent, we have a few things. We have a very nice light UI layer where you get to watch Claude code work. You see all the text fly by and we have this nice permission system that allows the agent to work and allows and kind of forces the human to butt in when the agent is doing something dangerous. And then on top of that, we also care a lot about security in this tool. And so because quad code is just such a lightweight kind of layer on top of the model and the fact that our model is available not just behind anthropic APIs but also with our cloud providers AWS and GCP it's very easy and native to point cloud code at one of these other services if you feel more comfortable consuming cloud that way.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-4">
-      <h2>04 · Where Claude Code shines</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=379s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">6:19</a>
-        Now a lot of people ask me hey Cal what can I use cloud code for? Like what is it good at? where is it interesting? And the reality is it's kind of great at everything. So let's start with discovery. Often times in your career, you will be dropped into a new codebase.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=402s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">6:42</a>
-        Whether that means you're switching teams, you're switching companies, I don't know, you're starting to work on some sort of open source project. And probably when you're first getting started and getting familiar, you're not very productive because you're just trying to figure out where things are in the codebase, what patterns kind of the team is using, things like that. And Claude code can kind of help supercharge that onboarding process. You can ask claude, hey, where is this feature implemented? Or since it's great at the terminal, you can say, hey, look at this file and look at the git history and just kind of tell me a story about how this code has changed over the past couple weeks.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=440s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">7:20</a>
-        One thing you can use cloud code for, and I think this is underrated, is instead of just diving in and starting to work, you can use cloud code as a thought partner. So oftent times when I'm working with Claude and I want to implement a feature or we're going to change something up, I'll open up Claude and I'll say, "Hey Claude, I'm thinking about implementing this feature, can you just kind of like search around and kind of figure out how we would do it and maybe report back with like two or three different options. Don't start working. don't start writing any files writing any files yet and claude will go off and use those agentic search capabilities and come back with a few ideas and then I could work with claude to kind of validate things and then we can jump into the project of course cloud code is great at building and writing code and I would say this in on two different fronts one it can do the zero to one sort of stuff you drop it in an empty directory and you say hey build me an app build me a game that demos where very well it's very fun to do it's very grat gratifying. Of course, in reality, what really matters is is cloud code good working in existing code bases. And this is primarily what we focus on.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=500s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">8:20</a>
-        On the cloud code team, we have in our codebase abnormally high, I would say, unit test coverage. And that's because cloud code makes it so easy and just straightforward to add unit tests. So, we have great code coverage. And then the other thing we have in cloud code in our own codebase is we have great commits and PR messages because when we finish working we'll just say hey cloud write the commit for me write the PR message for me. We also see great opportunities to use cloud code in kind of the deployment like deployments and in other parts of the life cycle.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=538s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">8:58</a>
-        And this is a few other people have talked about this but this is using the cloud code SDK. So using it headlessly, using it programmatically, being able to sprinkle in a coding agent agent anywhere. And so that's things like sprinkling it into CI/CD to use it in GitHub for instance to help people programmatically. And then finally, it's great kind of with support and scale. It can help you debug errors faster.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=570s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">9:30</a>
-        One thing that we saw when we started giving cloud code to customers and talking to them about it, we didn't totally predict this was a lot of customers or potential customers said, "Hey, we've been me we've been kind of putting off this like large codebase migration. People that are on old versions of Java trying to get to a new one or a team that's on PHP and they're trying to get to React or Angular. We've talked to multiple teams like this and having a tool like Cloud Code makes projects like that a little more digestible. when you go to your team and you say, "Hey, we're going to spend a month, refactoring or rewriting large parts of the codebase." And then on top of that, and this kind of matters across all these, is once again remember Claude is great at the terminal. And that means it's going to be great at all those different CLI tools, things like Git, Docker, Big Query, things like that. I never have to worry about, oh, I'm going to get myself, how do I get myself out of this sticky rebase?
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-5">
-      <h2>05 · Best practices: CLAUDE.md, permissions, context</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=622s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">10:22</a>
-        I'll just fire up cloud code and tell it the situation and be like, "Hey, can you fix this for me?" It's incredible. Now, let's talk about best practices. And the first one is not going to be a surprise, but the first one is use claw.md files. So, remember that cloud code, like I said, is an agent and it has some tools, has some lightweight instructions in the prompt, but it doesn't really have memory. And so the main way we share state across kind of sessions or across our team when we fire up cla code in the same codebase over and over again is this cloud.mmd file.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=660s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">11:00</a>
-        So when we start cla what happens is if there's this claw.md file in the working directory it's just plopped into context. It's plopped into the prompt. And basically what it says is hey claude by the way these are important instructions the developer left for you. Be sure to pay close attention to this. And there's various places you can put the cloudmd file.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=682s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">11:22</a>
-        You can put it in a project and check it in so all your teammates share it. You could put one in your home directory if there's things you just want claude to always know about regardless of what you're working on. And the things you put in here are things like, hey, by the way, maybe this is how you run the unit tests. Or just so to make kind of your searching and life easier, here's like just like an overview of kind of how this project is laid out, where the tests live, what different modules are, things like that. or here's our style guide. All sorts of things like that to just make Claude's life a bit easier.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=716s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">11:56</a>
-        And you can build these things up over time. The other thing you can do, which is important, is permission management. When you're running Cloud Code, there's all sorts of different kind of permission things flying by. Kind of out of the box, what happens when you start our tool is for read actions. If Claude is searching or reading, we just let it go.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=733s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">12:13</a>
-        But once it starts writing or running bash commands or doing things that could change change stuff on your machine potentially, that's when we kick in this UI and it says something like yes, yes, always allow this or no I want to do something else. And using that permission management and being smart about it can help you work faster. So there's something called autoaccept mode where if you're working with cloud code and you press shift tab, claude will just start working. There's things you can do like you can configure claude in the settings where specific commands like on bash like if you just are like tired of saying yes run npm run test you can just always approve that. So fiddling with your permission management is a great way to kind of speed up your workflow integration setup.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=781s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">13:01</a>
-        So, one thing that is going to help you get the most out of cloud code is remember that it's great at the terminal. And if there's applications that you use which have kind of a way to access them through CLI and GitHub is a great example of that. They have a powerful tool called GH you can basically give more work to cloud code and you can do that either by just installing more CLI tools or you can attach more MCP servers. I would say just through experience that if you're using something like a CLI tool that's well known and well documented and you're trying to choose between the CLI tool and just installing it on your machine and grabbing an MCP server, I would recommend using the CLI tool. And then also if you internally have your own tools at Anthropic, we have something called coup that does a whole bunch of stuff for us.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=836s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">13:56</a>
-        You can also tell Claude about that and you pro that's the sort of thing you'd put in claude.mmd and then context management. So remember that claude is an agent and when it's an a what what it does it's calls these tools and the context builds up and up over time and at least for anthropic our models have a context window of 200,000 tokens and you can max this thing out. So you kind of have two options when you're in a long session with claude and you're working and you're going back and forth. You'll see in the bottom right you'll start to get this little warning that'll say hey you're starting to fill up the context window and kind of depending on what's going on you have two options. You can run slashcle and just start over and that clears everything out except for for instance claw.mmd or you can run slash compact and what'll happen is basically it's like a user message is inserted and it just says something like hey I need to go summarize everything we've been up to.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=895s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">14:55</a>
-        I'm going to give this to another developer and they're going to pick up where I left off. And then that summary is what kind of seeds the next session. You can go from there. We spend a lot of time tuning this kind of compact functionality so that as you max out the context window and then run compact, you can start back over and keep going efficient workflows. What can you do with cloud code?
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-6">
-      <h2>06 · Planning, todos & smart vibe coding</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=916s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">15:16</a>
-        And how do you get the most out? So using planning and to-dos. talked a little bit about this before, but one of the best things you can do is when you open up Cloud Code, instead of saying, "Hey, I need you to fix this bug," you can say, "Hey, I have this bug. Can you search around, figure out what's causing it, and just like tell me a plan how we're going to fix it?" And this can save you a lot of time because you can verify, you can read Claude's plan, and you can verify what it's going to do. And then the other thing that we have is we have this to-do list feature. So often when Claude's working on a big task, it'll create a to-do list.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=946s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">15:46</a>
-        And if you're kind of paying attention, you can kind of watch this to-do list, and if you see anything kind of weirder in there or something that doesn't make sense, that's when you can press escape and say, "Hey Claude, let's change the to-do list. I think you're on the wrong path." Smart vibe coding. So it's very tempting and it's very powerful to just let Claude work and press enter and see what happens at the end. I think there's a few things that can help make this better. And there's I think a talk later today about just this for 30 minutes.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=976s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">16:16</a>
-        But doing things like having test-driven development, having Claude make small changes, run the tests, make sure they pass, always having Claude do things like check the TypeScript and the linting, and then commit regularly so that if it's kind of going off the rails, you can always fall back and try again. You can use screenshots to guide and debug. So Claude is built on top of our models which are multimodal. You can always just grab a screenshot, paste it in, or if you have a file somewhere that's an image, you can just say, "Hey, Claude, look at this mock.png and then build the website for me or whatever." And then advanced techniques. So, as you're getting used to using Claude, what are some things you can think about to kind of push things to the next level?
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-7">
-      <h2>07 · Advanced: multi-Claude, escape, MCP, headless</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1022s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">17:02</a>
-        And one of the things we see both internally and with customers is when you've started to use this tool for a while, it's going to be very tempting to use multiple clouds at once. And so I know people at Anthropic and a few customers that run four clouds at the same time. There's various ways to do this. You can have it in T-Mox or just different tabs, all sorts of crazy things. So I would challenge you to try getting multiple clubs running at once and kind of be orchestrating all these things.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1050s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">17:30</a>
-        It's quite fun. I can only do two, but I know people that do four. Use escape. So, escape is your best friend. While Claude is working, you can kind of keep an eye on what it's up to, and you can press escape to stop it and interject and say, "Hey, I think you're going on the wrong path, or I want you to do something else." Knowing when the right time to press escape is versus just letting Claude figure it out, is key to getting the most out of the tool.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1076s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">17:56</a>
-        And there's a hidden feature. Not too many people know about it, but if you press escape twice, you can actually jump back in your conversation. You can go back and you can kind of reset tool expansion in MCP. So, this is taking it to the next level. If you feel like with bash and with the tools that cloud has that it still can't do something, this is when you should start looking at MCP servers.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1099s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">18:19</a>
-        And then headless automation. And I think this is the thing we're most excited about, but also we are still trying to wrap our heads around internally, which is how can we use Claude programmatically. We have that in GitHub actions. We want to figure out other creative places we can start using it. I would challenge you all to do the same.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-8">
-      <h2>08 · What's new in Claude 4 & IDE integrations</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1123s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">18:43</a>
-        So, with that said I'm going to jump over to my computer because there's one other best practice, which is it's always good to stay on top of everything that's new. So, we're shipping super fast. I'm going to throw I'm just going to go over a few things that are new as of today. One thing is when you're in Cloud Now and you fire it up, you can do slashmodel. You can see what model you're running on.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1146s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">19:06</a>
-        I'm on default, which happens to be Sonnet. We can jump over to Opus. You can do the same thing in slashconfig. Switch it here. So that's new.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1152s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">19:12</a>
-        Make sure you're running the model that works for you. There's another thing that's new about these models which is you can say something like can you figure out what's in this project? And for a long time for a while we've had this like think hard or extended thinking. Now this is great but with our past models the we wouldn't let our model think between tool calls and that's probably when the thinking matters most. So starting with cloud 4 they can now our models now think between tool calls and we can watch this happen.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1189s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">19:49</a>
-        So we have Claude in this project. There's a few different files in here and I'm just going to tell it to think hard and figure out what's in this project and we can watch Claude start to work. And so the way you know you triggered thinking is you'll see kind of this lighter gray text and then it'll call some file, it'll call some tools, it'll read some stuff, and then we see some more thinking. And this is awesome. So I encourage you when you're working on tasks and solving bugs, throw a think hard in there.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1214s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">20:14</a>
-        And then the other thing, and you know what, we'll just throw it up real quick, is I have this in VS Code, but of course this is in Jet Brains as well, but we have these new great integrations with VS Code and and Jet Brains. We can do things like Claude's going to know what file I'm in. What file am I in? That is not what I meant to say, but Claude's going to figure it out. And you can do things like this.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1258s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">20:58</a>
-        So these are the sort of things I would encourage you to stay on top of. We have a public kind of GitHub project called Claude Code under Enthropic. You can post issues there, but we also post our change log there. And so I check this once a week and make sure that I'm on top of all the new stuff we're shipping because even I can't keep up with it. So, with that said, we have like four minutes left.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-9">
-      <h2>09 · Q&A</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1279s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">21:19</a>
-        I'm happy to answer questions about anything cloud code related. We have it here. I can live demo some stuff if you're interested. Let's do a few. Thanks.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1293s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">21:33</a>
-        Real quick, this might be obvious, but multiple cloud MD files in a project. I presume that's possible and it just figures it out or no? So, there's a few options, of course, like in the same directory. You couldn't but you could have one here and one in a subdirectory. And I think we changed this so that all the subdirectory ones aren't read in because like Anthropic, we have a monor repo and people would open it at the top and blow up their context with all the claud MDs.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1322s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">22:02</a>
-        So, we encourage Claude when it's searching around and it discovers claw.md files in child directories that are relevant to be sure to read them. But by default, it just reads the cloud MD file in the current working directory when you fire it up. And then also you can set one in like your home directory. There are things you can do though. We have this new thing like in your cloud MD you can start referencing other files.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1351s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">22:31</a>
-        So you could for instance do something like this with an at sign if you have other cloud MD files that you just kind of know you always want to read in to do something like that. Hi. Okay. I have not had luck getting Claude to respect my Claude MD. Like there's one thing particular.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1374s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">22:54</a>
-        Yes. where I'll ask it to refactor something and then it will leave inline comments explaining the like the what of it is and it's like like something that's extremely obvious and so I'll tell it like go and remove any inline comments that describe the what of what's happening and then it will remove it and then immediately do it again and like the same pass. So do you have any strategies for dealing with that? So there's kind of two things that fix that. So that was actually kind of a model problem. There's nothing in the prompt.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1398s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">23:18</a>
-        We have actually a lot in the prompt for 37 that said, "Whoa, do not leave comments." And despite that, the model just loves to leave comments. So it doesn't surprise me that your cloud MD didn't help much either. We already did a lot I did a lot of work to try to tamp it down from what happens out of the box. So we mostly fixed that in Cloud 4. Now there might be some new weird behavior quirks, but the other thing we made better in Cloud 4 is it's just better at following instructions.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1429s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">23:49</a>
-        And we've gotten a lot of feedback from early testers that all of a sudden, whoa, my cloud MD is being followed way more closely. And it might be a good chance to go look in your CloudMD and decide, do I still need this stuff? Maybe I can take some of it out. Maybe I need to add a few new things. So, moving over to the new models might be a good time to take another look at what's in there and see what you need and what maybe can go.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1449s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">24:09</a>
-        For the record, I'm trying to think of something that you might not have thought of. We're doing multi- aent execution and parallelization. Can you make it so that for four agents, say agents two and three use the context from agent one, maybe agent four uses the context from agent two at a certain point. Yeah. Yeah, etc.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1470s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">24:30</a>
-        That's interesting. We're trying to So, kind of like I said at the beginning, we're trying to do the simple thing that works, which is just one agent that's great at coding and does everything. I think we want to figure that out. Probably what's going to happen is if you wanted to do that, you would ask all your agents to probably like write to a shared markdown file or something like that so they can all kind of like check in and communicate. Sometimes like I'll be working with cloud.md or claude and I'll just say like, "Hey, I need you to write some stuff in like ticket.md for another developer and then I'll fire up another cloud code and I'll be like, hey, read ticket.md like another developer left this note for you.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1511s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">25:11</a>
-        Like this is what you're going to work on." So, I would think about trying to write that state to a file and then just kind of like count on the model's ability to just like read files and make sense them is probably the best you can do today. And maybe we'll figure out clever ways to expose that in the product as something more native. Cool. All right. And with that said, I have some rare clawed code stickers that I found in my backpack.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=gv0WHhKelSE&t=1536s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">25:36</a>
-        So, come find me. I'll be hanging out over there or something. Happy to share them. Thank you.
-      </p>
-      
-    </section>
-    
+<p>Cal 在 <a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=182s">3:02</a> 给出的心智模型很简单：</p>
+<blockquote>
+<p><strong>Claude Code 就像一个"什么都在终端里完成"的同事</strong>——从不开 GUI，所有操作都靠 bash、Vim、CLI。</p>
+</blockquote>
+<p>他举了个例子：作为初级工程师时，他常去找同事 Tony 帮忙调 bug。Tony 会"啪"地打开终端，一通 bash + Vim 操作，问题就解决了。<strong>Claude Code 就相当于把 Tony 永远摆在你电脑旁边。</strong></p>
+<h3>Anthropic 的工程哲学：do the simple thing that works</h3>
+<p>Anthropic 自己定义的 <strong>Agent</strong> = 一份指令 + 一组强大的工具 + 让模型在循环里跑到它自己觉得"做完了"。Claude Code 就是这个定义的极简实现（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=243s">4:03</a>）。</p>
+<div class="mermaid">flowchart TD
+    User[用户] --> Loop[Claude 模型]
+    Loop --> Tools[强大的工具集]
+    Tools --> Edit[读/写文件]
+    Tools --> Bash[执行 bash 命令]
+    Tools --> Search[agentic search<br/>glob / grep / find]
+    Tools --> MCP[MCP 服务<br/>按需挂载]
+    Tools -.结果回流.-> Loop
+    Loop -.检查是否完成.-> Loop
+    Loop --> UI[轻 UI 层 + 权限系统]
+    UI --> User
+</div>
+<p><strong>图 1：Claude Code 的"纯 Agent"架构</strong>——没有花哨的中间层，模型 + 工具 + loop。</p>
+<h3>关键澄清：<strong>不做 codebase 索引、不做 embedding RAG</strong></h3>
+<p>一年前如果让你设计代码 Agent，常见思路是：把整个 codebase embed 进向量库，靠 RAG 召回相关文件。</p>
+<p><strong>Claude Code 完全不是这种思路。</strong> Claude 像一个新入职的工程师一样<strong>主动探索</strong>——用 <code>glob</code> / <code>grep</code> / <code>find</code> 这种你我都会用的搜索工具，搜一轮、读一段、判断"还需要看什么"，再搜一轮（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=275s">4:35</a>）。这就是 <strong>agentic search</strong>：搜索本身是模型驱动的迭代过程。</p>
+<hr />
+<h2 id="二-claude-code-适合做哪些事">二、Claude Code 适合做哪些事？</h2>
 
-    <footer class="meta">
-      字幕来源：YouTube 人工/自动字幕 · 段落由脚本自动分段 · 时间戳点击跳转 YouTube
-    </footer>
+<p>Cal 用一句话总结：<strong>几乎什么都能干</strong>（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=379s">6:19</a>）。展开看，至少这五个场景特别合身：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>怎么用</th>
+<th>为什么有效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>探索陌生代码库</strong></td>
+<td>"这个 feature 在哪里实现的？""结合 git 历史告诉我这段代码最近几周的演化故事"</td>
+<td>agentic search + bash 同时具备</td>
+</tr>
+<tr>
+<td><strong>当思考伙伴</strong></td>
+<td>"我想加这个 feature，<strong>别动手</strong>，先帮我搜一搜、给出 2~3 个方案"</td>
+<td>让 Claude 先 plan 再执行，便于人工审计</td>
+</tr>
+<tr>
+<td><strong>写新功能 / 维护老代码</strong></td>
+<td>在已有代码库里加测试、写 commit / PR message、修 bug</td>
+<td>单元测试覆盖率自然变高</td>
+</tr>
+<tr>
+<td><strong>CI/CD 与运维</strong></td>
+<td>通过 Claude Code SDK 程序化集成进 GitHub Actions、内部脚本</td>
+<td>headless / non-interactive 模式</td>
+</tr>
+<tr>
+<td><strong>大版本迁移 / 重构</strong></td>
+<td>Java 升级、PHP→React/Angular、大规模重命名</td>
+<td>让原本"难启动"的项目变得可消化</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Cal 补充（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=570s">9:30</a>）：很多客户来跟我们讲的不是"帮我们写新 feature"，而是"我们拖了好几年的老代码迁移，现在敢动了"。这是 Claude Code 给团队带来的<strong>心理预算</strong>层面的变化。</p>
+</blockquote>
+<h3>写代码以外，CLI 工具是它真正的超能力</h3>
+<p>因为 Claude 在终端里特别熟练，所以它顺手就能用 <code>git</code>、<code>docker</code>、<code>gh</code>、<code>bq</code>、<code>kubectl</code>——任何有 CLI 的工具它都会用。Cal 举了个例子：以前遇到棘手的 <code>git rebase</code> 冲突就头大，现在直接把情况描述给 Claude Code，让它收拾就行（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=622s">10:22</a>）。</p>
+<hr />
+<h2 id="三-最佳实践-1-claude-md-文件">三、最佳实践 #1：CLAUDE.md 文件</h2>
+
+<p>Claude Code 是个 agent，<strong>没有跨会话记忆</strong>。在同一个仓库里反复用、想让团队共享行为习惯——靠的就是 <code>CLAUDE.md</code>（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=622s">10:22</a>）。</p>
+<div class="mermaid">flowchart LR
+    Start[启动 claude] --> Check{当前目录<br/>有 CLAUDE.md ?}
+    Check -->|有| Inject[内容自动注入<br/>系统提示]
+    Check -->|无| Skip[只用默认提示]
+    Inject --> Run[Claude 开始工作]
+    Skip --> Run
+
+    Home[~ 家目录<br/>CLAUDE.md] -.全局生效.-> Inject
+    Sub[子目录的<br/>CLAUDE.md] -.被 Claude<br/>按需读入.-> Inject
+</div>
+<p><strong>图 2：CLAUDE.md 注入时机</strong>——启动时自动读当前目录的，家目录的全局生效，子目录的由 Claude 探索代码库时按需读入。</p>
+<h3>CLAUDE.md 里写什么</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>项目入口指引</td>
+<td>"测试这样跑：<code>pnpm test -- --watch</code>"</td>
+</tr>
+<tr>
+<td>代码地图</td>
+<td>"测试在 <code>tests/</code>，业务模块在 <code>src/services/</code>"</td>
+</tr>
+<tr>
+<td>风格 / 约定</td>
+<td>"禁用 <code>any</code>，用 <code>unknown</code> 配合 narrowing"</td>
+</tr>
+<tr>
+<td>内部 CLI 知识</td>
+<td>"我们用内部工具 <code>coup</code> 做 X、Y、Z"</td>
+</tr>
+</tbody>
+</table>
+<p>可以<strong>慢慢长起来</strong>——每次 Claude 走错路、你纠正它一次，那一条规则就值得沉淀到 CLAUDE.md 里。</p>
+<h3>关于多个 CLAUDE.md</h3>
+<p>Cal 在 Q&amp;A 里专门澄清（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1293s">21:33</a>）：</p>
+<ul>
+<li><strong>默认只读当前目录那一份</strong>——因为 Anthropic 是 monorepo，早期一次性加载全部子目录的 CLAUDE.md 会爆上下文；</li>
+<li>子目录的 CLAUDE.md 是 Claude 自己探索到了、判断相关，才会读；</li>
+<li>想强制注入额外文件？在 CLAUDE.md 里用 <code>@filename</code> 语法引用即可。</li>
+</ul>
+<hr />
+<h2 id="四-最佳实践-2-权限管理与速度的取舍">四、最佳实践 #2：权限管理与速度的取舍</h2>
+
+<p>启动时 Claude Code 默认对工具行为分两档（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=733s">12:13</a>）：</p>
+<table>
+<thead>
+<tr>
+<th>行为类型</th>
+<th>默认权限</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读 / 搜索</td>
+<td>直接放行</td>
+<td>不打扰你</td>
+</tr>
+<tr>
+<td>写文件 / bash / 改环境</td>
+<td>弹确认</td>
+<td>"是 / 总是允许 / 否"</td>
+</tr>
+</tbody>
+</table>
+<h3>调出更顺手的权限策略</h3>
+<ul>
+<li><strong><code>Shift+Tab</code></strong>：进入 auto-accept 模式，让 Claude 一路自己走；</li>
+<li><strong>settings 里加白名单</strong>：例如 <code>npm run test</code> 永久放行；</li>
+<li>配合 Cal 后面提到的 <code>escape</code> 键，整个工作流可以做到"放手 + 关键节点拉回"的节奏。</li>
+</ul>
+<h3>工具接入：CLI 优先于 MCP</h3>
+<p>Cal 给的经验值（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=781s">13:01</a>）：</p>
+<blockquote>
+<p><strong>如果一个工具既有成熟的 CLI 又有 MCP server，优先装 CLI。</strong> Claude 用 bash 调 CLI 比走 MCP 更直接、上下文也更省。</p>
+</blockquote>
+<p><code>gh</code>（GitHub CLI）就是经典代表。MCP 真正适合的是"内部没有 CLI、必须封装一层"或"多 Agent 共享治理"那种场景。</p>
+<hr />
+<h2 id="五-最佳实践-3-context-管理">五、最佳实践 #3：context 管理</h2>
+
+<p>Claude 模型默认 <strong>200K token</strong> 的上下文窗口。长会话里随着 Claude 来回搜、读、写，上下文会持续吃满。窗口底部右下会出现警告。这时候有两条路（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=836s">13:56</a>）：</p>
+<div class="mermaid">flowchart TD
+    Long[长会话<br/>上下文接近 200K] --> Choose{选哪条?}
+    Choose -->|"任务还没做完"| Compact[/compact/]
+    Choose -->|"换个新任务"| Clear[/clear/]
+    Compact --> Summary[Claude 自己总结<br/>「交接给下一个工程师」]
+    Summary --> Continue[新会话<br/>带着摘要继续]
+    Clear --> Fresh[全清<br/>但保留 CLAUDE.md]
+</div>
+<p><strong>图 3：<code>/compact</code> vs <code>/clear</code></strong>——任务在做、需要保留思路就 compact；要换主题就 clear。</p>
+<blockquote>
+<p>Cal 提到 Anthropic 团队<strong>专门花了很多精力调 <code>/compact</code> 的 prompt</strong>，目标是即使你把上下文用爆，compact 出来的摘要也能让下一段对话无缝继续（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=895s">14:55</a>）。</p>
+</blockquote>
+<hr />
+<h2 id="六-最佳实践-4-先-plan-再做-看着-todo-不对就拍-escape">六、最佳实践 #4：先 plan 再做，看着 todo 不对就拍 escape</h2>
+
+<h3>让 Claude 先做计划</h3>
+<p>打开 Claude Code，<strong>别</strong>说"修这个 bug"——先说：</p>
+<blockquote>
+<p>"我有个 bug，先 <strong>搜一下原因</strong>，给我一个修复计划，<strong>先别动代码</strong>。"</p>
+</blockquote>
+<p>这样你能审计它要做什么，比直接让它写完再 review 省事得多（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=916s">15:16</a>）。</p>
+<h3>利用 todo 列表的"可观测性"</h3>
+<p>Claude 接到大任务时会自己起一份 todo 列表。<strong>盯着这份列表</strong>：</p>
+<ul>
+<li>看到不对的条目，立刻按 <code>Esc</code> 打断，让它改 todo；</li>
+<li>不要等它把错的事都干完了再回滚。</li>
+</ul>
+<h3>「smart vibe coding」的几个小习惯（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=946s">15:46</a>）</h3>
+<table>
+<thead>
+<tr>
+<th>做法</th>
+<th>为什么有用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TDD：让 Claude 改一点跑一遍测试</td>
+<td>早期发现回归，避免一锅端</td>
+</tr>
+<tr>
+<td>频繁 commit</td>
+<td>走偏了能快速回退</td>
+</tr>
+<tr>
+<td>让 Claude 自己跑 type check 和 lint</td>
+<td>把"形式正确性"的负担甩给机器</td>
+</tr>
+<tr>
+<td>喂截图 / 设计稿</td>
+<td>Claude 4 多模态，可直接看 mock 实现 UI</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七-进阶玩法">七、进阶玩法</h2>
+
+<h3>多开 Claude 并行</h3>
+<p>Cal 自己最多并行 2 个，他认识的客户开过 4 个 Claude Code 并行——用 tmux 或多个终端 tab（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1022s">17:02</a>）。<strong>挑战自己 try 一下</strong>，他说很 fun。</p>
+<h3>Escape 是你的好朋友</h3>
+<ul>
+<li>单按 <code>Esc</code>：打断当前操作，告诉 Claude 你要换方向；</li>
+<li><strong>连按两下 <code>Esc</code></strong>：跳回会话历史的更早位置，从那儿开始 fork 新分支（很多人不知道的隐藏功能，<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1050s">17:30</a>）。</li>
+</ul>
+<h3>什么时候才该上 MCP？</h3>
+<p><strong>bash + 内置工具搞不定 + 真的需要外部能力的时候。</strong> 不要一上来就堆 MCP server。</p>
+<h3>Headless / 程序化使用</h3>
+<p>通过 Claude Code SDK 让它无 UI 跑——CI、内部脚本、batch 处理。Cal 说这是 Anthropic 内部都还在摸索的方向："<strong>希望你们也来试试，告诉我们能玩出什么花。</strong>"（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1099s">18:19</a>）</p>
+<hr />
+<h2 id="八-claude-4-最新版本带来的新东西">八、Claude 4 / 最新版本带来的新东西</h2>
+
+<table>
+<thead>
+<tr>
+<th>新能力</th>
+<th>怎么用</th>
+<th>价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/model</code> 即时切换</td>
+<td><code>default</code>（Sonnet）↔ <code>Opus</code></td>
+<td>重活上 Opus，常规活省钱</td>
+</tr>
+<tr>
+<td><strong>Tool call 之间能思考</strong></td>
+<td>任务里加一句"think hard" 触发 extended thinking</td>
+<td>Claude 4 之前的模型只在最末端思考，4 系列开始在工具调用<strong>中间</strong>也思考——这才是真正用得上的地方（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1152s">19:12</a>）</td>
+</tr>
+<tr>
+<td>VS Code / JetBrains 集成</td>
+<td>编辑器知道你当前打开的文件，Claude 上下文里自然带上</td>
+<td>减少手动指明文件</td>
+</tr>
+</tbody>
+</table>
+<h3>跟住更新</h3>
+<p><code>anthropic/claude-code</code> 这个 GitHub 仓库的 <strong>changelog</strong> 是 Cal 自己每周必看的。Anthropic 出货很快，<strong>他本人都跟不上</strong>——所以养成每周扫一眼的习惯。</p>
+<hr />
+<h2 id="九-q-a-精华">九、Q&A 精华</h2>
+
+<h3>Q：CLAUDE.md 里写的规则，Claude 当面违反怎么办？</h3>
+<p>Cal 的回答有两层（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1374s">22:54</a>）：</p>
+<ol>
+<li><strong>这其实是模型问题，不是 prompt 问题。</strong> 比如老模型特别爱写解释 "what" 的注释，3.7 在系统提示里写了一大段"别留注释"都压不住；</li>
+<li><strong>Claude 4 在"听话"这件事上明显变好。</strong> 早期 4 的测试者反馈是"我 CLAUDE.md 突然真的被认真执行了"。所以借升级 Claude 4 的机会，<strong>回头审视一下你 CLAUDE.md 里哪些规则可以删了</strong>——可能不再需要那么多防御式叮嘱。</li>
+</ol>
+<h3>Q：多 Agent 之间能不能共享上下文？比如 agent2、agent3 都用 agent1 的结果？</h3>
+<p>Cal 的现状判断（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1470s">24:30</a>）：</p>
+<ul>
+<li><strong>目前没有原生机制</strong>，团队还在想这件事；</li>
+<li>务实做法：<strong>让 Agent 之间通过共享 markdown 文件交流</strong>。比如让 A 写 <code>ticket.md</code>，再启动 B "读 <code>ticket.md</code>，另一位工程师给你留了 todo"；</li>
+<li>长期可能会有更原生的产品形态，但今天的最佳实践就是<strong>用文件当通信总线</strong>。</li>
+</ul>
+<h3>Q：TDD 和 Claude 怎么配？</h3>
+<p>总结 Eric 在另一场的回答可以补充这里（同一会场 vibe coding 演讲）：让 Claude 写 <strong>端到端、最简单的 3 个用例</strong>（happy path / 两种 error），别让它自己生成实现相关的细测——那种测试容易跑偏。<strong>只读 test 不读 implementation</strong> 就能给你足够信心。</p>
+<hr />
+<h2 id="十-总结-从入门到熟练的清单">十、总结：从入门到熟练的清单</h2>
+
+<div class="mermaid">flowchart LR
+    A[1. 用 CLAUDE.md<br/>沉淀团队/项目知识] --> B[2. 调权限策略<br/>允许常用命令]
+    B --> C[3. 先 plan 再做<br/>盯着 todo]
+    C --> D[4. 长会话用 /compact]
+    D --> E[5. 加 CLI 工具<br/>优先于 MCP]
+    E --> F[6. 多开 / headless<br/>进阶玩法]
+    F --> G[7. 每周看 changelog<br/>跟住更新]
+</div>
+<p><strong>图 4：熟练度阶梯</strong>——从基础卫生到进阶玩法，按顺序攒习惯。</p>
+<h3>一句话外带</h3>
+<blockquote>
+<p>Claude Code 不是给你一段代码，而是给你<strong>一位永远在终端里干活的同事</strong>。和它一起工作的核心姿势，不是"指挥它写代码"，而是"<strong>像带新人那样喂它上下文、定流程、看进度、关键节点拉回</strong>"。</p>
+</blockquote>
+<hr />
+<p><em>本文基于 YouTube 自动字幕 + 人工章节整理 + 中文重新组织。时间戳链接点击可跳回 YouTube 对应位置核对原话。</em></p>
   </main>
 </div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
 </body>
 </html>

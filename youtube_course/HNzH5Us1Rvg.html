@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<title>MCP 201 | Code w/ Claude</title>
+<title>MCP 201：用全部 5 个原语构建丰富交互</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
   :root {
@@ -12,11 +12,15 @@
     --accent: #c96442;
     --accent-bg: #f6e8e0;
     --border: #e3e3df;
+    --code-bg: #f3f1ec;
     --sidebar-w: 280px;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg);
-    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
@@ -26,45 +30,77 @@
     padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
     font-size: 14px;
   }
-  aside.toc h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin: 0 0 12px; }
+  aside.toc h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 12px;
+  }
   aside.toc ol { list-style: none; margin: 0; padding: 0; }
-  aside.toc li { margin: 0 0 10px; }
+  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
   aside.toc a { color: var(--fg); display: block; }
   aside.toc a:hover { color: var(--accent); }
-  aside.toc .num { color: var(--muted); margin-right: 6px; font-variant-numeric: tabular-nums; }
 
-  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 880px; }
-  header.meta { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
-  header.meta h1 { font-size: 28px; line-height: 1.25; margin: 0 0 12px; }
-  header.meta .sub { color: var(--muted); font-size: 14px; }
-  header.meta .sub a { color: var(--muted); }
-  header.meta .sub a:hover { color: var(--accent); }
+  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
+  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
 
-  section.chapter { margin: 40px 0; scroll-margin-top: 20px; }
-  section.chapter h2 { font-size: 20px; margin: 0 0 16px; padding-bottom: 8px;
-    border-bottom: 1px solid var(--border); }
-
-  p.para { margin: 0 0 20px; position: relative; padding-left: 76px; }
-  a.ts {
-    position: absolute; left: 0; top: 4px;
-    display: inline-block; min-width: 64px; text-align: center;
-    padding: 2px 8px; border-radius: 4px;
-    background: var(--accent-bg); color: var(--accent);
-    font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-variant-numeric: tabular-nums;
+  h2 {
+    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
   }
-  a.ts:hover { background: var(--accent); color: #fff; text-decoration: none; }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
 
-  footer.meta { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
-    color: var(--muted); font-size: 13px; }
+  p { margin: 0 0 18px; }
 
-  @media (max-width: 720px) {
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); color: #4a3320; font-size: 15px;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 18px; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li > p { margin: 0 0 8px; }
+
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  /* Mermaid containers — let mermaid.js render inside, white bg */
+  .mermaid {
+    background: #fff; padding: 18px; border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; text-align: center;
+  }
+
+  table {
+    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    vertical-align: top; line-height: 1.55;
+  }
+  th { background: #f1ede6; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbf9f4; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  em { color: var(--muted); }
+
+  footer.meta {
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
+    color: var(--muted); font-size: 13px;
+  }
+
+  @media (max-width: 760px) {
     .layout { grid-template-columns: 1fr; }
-    aside.toc { position: static; max-height: none; border-right: none;
-      border-bottom: 1px solid var(--border); }
-    p.para { padding-left: 0; }
-    a.ts { position: static; display: inline-block; margin-right: 8px; }
+    aside.toc {
+      position: static; max-height: none; border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
   }
 </style>
 </head>
@@ -72,268 +108,398 @@
 <div class="layout">
   <aside class="toc">
     <h2>目录</h2>
-    <ol>
-      
-      <li><a href="#sec-1"><span class="num">01</span>Intro & talk overview</a></li>
-      
-      <li><a href="#sec-2"><span class="num">02</span>Prompts: user-driven templates</a></li>
-      
-      <li><a href="#sec-3"><span class="num">03</span>Resources: app-driven raw data</a></li>
-      
-      <li><a href="#sec-4"><span class="num">04</span>Tools & the interaction model</a></li>
-      
-      <li><a href="#sec-5"><span class="num">05</span>Sampling: servers requesting completions</a></li>
-      
-      <li><a href="#sec-6"><span class="num">06</span>Roots: querying the client's workspaces</a></li>
-      
-      <li><a href="#sec-7"><span class="num">07</span>Putting the primitives together</a></li>
-      
-      <li><a href="#sec-8"><span class="num">08</span>MCP on the web: auth & scaling</a></li>
-      
-      <li><a href="#sec-9"><span class="num">09</span>What's next & closing</a></li>
-      
-    </ol>
+    <ol><li><a href="#一-为什么要做这场分享">一、为什么要做这场分享</a></li>
+<li><a href="#二-5-个原语的全景">二、5 个原语的全景</a></li>
+<li><a href="#三-prompts-用户主动调入的-模板">三、Prompts：用户主动调入的"模板"</a></li>
+<li><a href="#四-resources-应用驱动的-原始数据接入">四、Resources：应用驱动的"原始数据接入"</a></li>
+<li><a href="#五-tools-模型驱动的动作">五、Tools：模型驱动的动作</a></li>
+<li><a href="#六-决定用哪一个-interaction-model-交互模型">六、决定用哪一个：**Interaction Model（交互模型）**</a></li>
+<li><a href="#七-sampling-server-反过来让-client-跑一次模型">七、Sampling：server 反过来让 client 跑一次模型</a></li>
+<li><a href="#八-roots-server-反过来问-client-你都开了哪些工作区">八、Roots：server 反过来问 client "你都开了哪些工作区"</a></li>
+<li><a href="#九-把-5-个原语组合起来-一个聊天应用的-mcp-server">九、把 5 个原语组合起来：一个聊天应用的 MCP server</a></li>
+<li><a href="#十-mcp-的下一步-从本地走向-web">十、MCP 的下一步：从本地走向 Web</a></li>
+<li><a href="#十一-未来几个月路线图">十一、未来几个月路线图</a></li>
+<li><a href="#十二-一页速查">十二、一页速查</a></li></ol>
   </aside>
   <main>
-    <header class="meta">
-      <h1>MCP 201 | Code w/ Claude</h1>
-      <div class="sub">
-        Anthropic · 26:31 · 2025-07-31 ·
-        <a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg" target="_blank" rel="noopener">YouTube ↗</a>
-      </div>
-    </header>
+<h1>MCP 201：用全部 5 个原语构建丰富交互</h1>
+<blockquote>
+<p>作者：<strong>David</strong>（Anthropic 技术员 / MCP 协议共同创建者） · 演讲场合：Code with Claude · 时长：约 26 分钟 · <a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg">▶ 原视频</a></p>
+<p><strong>本文是中文整理版</strong>：在视频内容的基础上重新组织、补图表、补对照表，方便快速阅读。关键节点附 YouTube 时间戳链接，可点击跳回原视频对应位置核对。</p>
+</blockquote>
+<hr />
+<h2 id="一-为什么要做这场分享">一、为什么要做这场分享</h2>
 
-    
-    <section class="chapter" id="sec-1">
-      <h2>01 · Intro & talk overview</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=13s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">0:13</a>
-        Well, hello. My name is David. I'm a member of technical staff at Anthropic and one of the co-creators of MCP. And today I'm going to tell you a little bit more about the protocol and the things you can do just to give you an understanding of what there's more to the protocol than what most people use it for at the moment which would be tools. So really the goal today is to showcase you what the protocol is capable of and how you can use it in ways to build richer interactions with MCP clients. that goes beyond the tool call tool calling that most people are used to.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-2">
-      <h2>02 · Prompts: user-driven templates</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=51s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">0:51</a>
-        And I will first go through all the different like what we call primitives like ways for the servers to expose information to a client before we go into some of the bit more lesser known aspects of the protocol and then I want to talk a little bit about like how to build a really rich interaction before we take a little stab of what's coming next for MCP and how we bring MCP to the web. But to just get you started, I want to talk about one of the MCP primitives that servers can expose to MCP clients that very few people know. And those are called prompts. And what a prompts are really are predefined templates for AI interactions. And that's to say it's a way for an MCP server to expose a set of text, like a prompt in a way that allows users to directly add this to the context window and see how they would use for example the MCP server you're building.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=117s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">1:57</a>
-        And there are really the two main use cases here is for you as an MCP server author to provide an example for that you can showcase to the user so that they know how to use the MCP server in the best way because realistically you are the one who has built it. You are the one who knows how to use it in the best possible way and probably at the time you would release it are the one who has used it the most time. But since MCP prompts are also dynamic in a way, they're just code under the hood that are executed in MCP server, they allow you to do even richer things than that. What you can do and I want to showcase this in this scenario is an MCP prompt that a user invokes in this Z editor here that will fetch directly GitHub comments that into my context window. And so what you see me here doing is just basically put into the context window the comments from my pull request that is that you know I've written so that I can go and interact with it and have then the model go and help me you know apply the changes that has been requested to me or whatever I want to do.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=203s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">3:23</a>
-        And so this is really a way for exposing things that the user should directly interact and the user should directly wants to put into the context window before it interacts with the yellow lamb. So it's different from that from tools where the model decides when to do it. This is what that the user decides I want to add this to the context window. And if you look carefully, there's one additional thing that very very few people know that you can do and that is prompt completion. So if you have looked carefully, there was a way where it showcased quickly a popup of me selecting the poll requests that are available to myself.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=243s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">4:03</a>
-        And that is a way that you can that is a thing that you can provide as an MCP server author to build richer parameterized templates for example. And this is exceptionally easy to do in the code. Like if you're in Typescript, building a prompt that provides users with like such a template and have parameters for it and like autocomp completion is nothing more than a few lines of code that cloud code together with cloud 4 can most of the time write basically for you. And it's just that simple. It's a function for the completion.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-3">
-      <h2>03 · Resources: app-driven raw data</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=282s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">4:42</a>
-        It's a function for generating the prompt. And so this is already like one of these primitives you can use to build an interaction for users with an MCP server, but it's just a little bit more richer than a tool call. And a second one of these is something that we call resources. It's another primitive than an MCP server can expose to an MCP client. And while prompts are really focused on text snippets that a user can add into the context window, resources are about exposing raw data or content from a server.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=312s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">5:12</a>
-        And why would you want to do this? There are two ways why you want to do this. So one thing is most of the clients today would allow you to add this raw content directly to the context window. So in that way they're not that different from context from prompts but it also allows application to do additional things to that raw data and that could be for example building embeddings around this data the server exposes and then do retrieval augmented generation by adding to the context window the most appropriate things. And so this is an area that at the moment I feel is a bit underexplored.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=355s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">5:55</a>
-        And I just want to quickly showcase you how resources work. In this case, this is again one of these ways where an MCP client exposes a resource as a file like object. And in this scenario here, we are exposing the database schema for apostra database as resources and then you can add them in cloud desktop just like files and that way you can tell claude this is the tables I care about and now please go ahead and visualize them. And so in this scenario, what you're going to see is Claude is going to go and write a beautiful diagram that visualizes the database schema for me. And I've exposed the schema via resources.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-4">
-      <h2>04 · Tools & the interaction model</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=401s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">6:41</a>
-        There's a lot of unexport space still here. Again, if you go beyond just like adding it file and think about like retrieval augmentation or any other thing the application might want to do. And so those are two primitives. one is prompts again the things that the user interacts with there's the second one is resources that the application interact with then of course there should be a third one that you all are very familiar with that I don't want to get into too much depth because if you have built an MCP server you probably have built it for exposing a tool and so tools are really these actions of course that can be invoked that's like one of the I think most magical moment I feel when you build an MCP server is when the model for the first time invokes something that you care about that you have built for and has this little impact on you know it might be like quing a database for you or whatever it might be. But this is again the thing that the model decides when to call to an action. And so these are three very basic primitives that the protocol exposes.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=482s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">8:02</a>
-        And if you think carefully about these three primitives that I just showcased you to to you, there's a little bit of overlap about like how do you use like they could like when do you use what really and so there's something that very that we don't talk enough about and it's somewhere buried in the specification language of the model context protocol is what I call the interaction model and I think showcasing it hopefully makes clear when you use What? Because the interaction model is built in such a way that you can expose the same data in three different ways depending on when you want to have it show up. And prompts again are these userdriven things. It's the thing the user invokes adds to the context window. And the most common scenario where how you see these pop up is a slash command, an add command, something like that.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=536s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">8:56</a>
-        Resources on the other hand are all applicationdriven. The application that uses the LLM be it cloud desktop be it VS code something like that fully is decides what it wants to do with that. And then lastly tools are driven by the model. in between, an AI application using a model and a user, we have all three parts that we eventually cover using these three basic primitives. And that allows you already to go to a little bit of a richer application and experience than what most people can currently do with tools because you just have a way to interact with the user a bit more nuanced than if you just wait for this model to call the tool. But we can even go beyond that because while these basic primitives get us a little bit further than what we see most MCP servers do at the moment, there are even richer interactions that we want to enable.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-5">
-      <h2>05 · Sampling: servers requesting completions</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=601s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">10:01</a>
-        And to make this a bit more understandable, here's a really an example I want to give you that showcases this problem. So how can you build an MCP server for example that summarizes a discussion from an issue tracker? So on one hand side I can build an MCP server that exposes this kind of data very simple and that's quite clear but how do I do the summarization step because for the summarization step I obviously need a model and so there in one way to go and build this is you can build an MCP server that is this issue tracker server and you have a choice here you can bring your own SDK and call the model have the model summarizes But then there's a little problem to that and the problem is that the client has a model selected be it like clawed or whatever else but the server the MCP server that you've built doesn't know what model the client has configured and so you bring your own SDK like of of a model provider and be it the anthropic SDK you still need then like a API key that this user needs to provide and gets very quickly very awkward and so MCP has a little hidden feature or a little primitive called sampling that allows a server to request a completion from the client. What does this mean? It means that the server can use a model independently from like don't having to provide an SDK itself but in but asks the client which model you have configured and the client is the one providing the completion to the server.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=706s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">11:46</a>
-        And what does this do? It does two things. First of all, it allows the client to get full control over the security, privacy and the cost. So instead of having to provide an additional API key, you might tap into the subscription that your client might already have. But it allows also a second part which is that if you take multiple if you chain MCP servers in an interesting way, it makes this whole pattern very recursive.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=737s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">12:17</a>
-        And what do I mean by that? It's a bit abstract. You can take an MCP server that exposes a tool, but during the tool execution, you might want to use more MCP servers downstream. And somewhere downstream in this like system, there might be then your Asia Tracker server that wants to go and have a completion. But using sampling you can bubble up the requests such that the client always stays in full control over the cost of the subscription whatever you want to use.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=774s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">12:54</a>
-        It stays in full control of the privacy over the cost of this interaction and basically manages every interaction that an MCP server wants to do with a model. And that allows for very powerful chaining and it allows for like more complex patterns that go already into like ways of how you can build little MCP agents. But that's sampling. Sampling at the moment is sadly I think one of the more exciting features but also one of the features that's the least supported in clients. for our first party projects products. We will bring sampling somewhere this year.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-6">
-      <h2>06 · Roots: querying the client's workspaces</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=817s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">13:37</a>
-        And so then you can hopefully start building more exciting MCP servers. And then there's the last primitive that I want to touch on that's also a bit more interesting and it's one of these things that in retrospective as one of the person who has built the protocol I've probably named terribly to be fair I'm not a very not not very good at naming and you will see this throughout the talk probably but there's a thing called roots and roots is also an interesting aspect because let's imagine I want to build today an MCP server that deals with my git commands I don't want to deal with git. I don't want to do source control commands. I don't remember any of that. I want to have MCP deal like an MCP server deal with this.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=867s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">14:27</a>
-        So now I'm going to hook up an MCP server into my favorite IDE. But how does the IDE know how does the MC sorry, how does the MCP server know what are the open projects in the IDE? Because obviously I want to run the git commands in the workspaces I have open, right? And so roots is a way for the server to inquire from the client such as VS code for example what are the projects you have open so that I can operate within only those directories that the server has opened and I know where I want to execute my git commands and this again is a feature that's not that widely used but for example VS code currently does support this and so these These are, just all the big primitives that MCP offers. So, we have five primitives, three on the server side, two on the client side.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-7">
-      <h2>07 · Putting the primitives together</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=924s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">15:24</a>
-        But how you put it all together to actually build a rich interaction because that's what we want. We want to build something for users that's a bit richer than just tool calling. And so, let's take a look at how you will build a hypothetical MCP server that interacts with your favorite chat application, be that Discord, be it Slack. You could use prompts to give examples to users such as like summarize this discussion and you can use completions with recent threads, users or whatever you want them to expose. You can have additional prompts like what's new, what happened since yesterday.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=961s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">16:01</a>
-        And so that's one way the user can just kickstart right away into using the server you have provided and get the ideas. that you how you intended it to be used and then you can use resources to directly list the channels to expose recent threats that happened in the in the you know chat application such that the MCP client can index it deal with it in ways that it that it wants. And then of course last but not least we still have our tools. We have search, we have read channels, we have reading a threads and we would use sampling to summarize a thread for example and really expose this. And that's a way to really build a much much much richer experience with MCP to use the full power that the protocol has to offer. But this is just the the beginning because most of these experiences if we build MCP servers so far have been experiences that stayed local.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-8">
-      <h2>08 · MCP on the web: auth & scaling</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1028s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">17:08</a>
-        Out of the 10,000 MCP servers the community has built over the last six to seven months. The vast majority are local experiences. But I think we can take the next step and I think this is MCP's really big next thing is bringing MCP servers away from the local experience to the web. And so what does this mean? It means that instead of having an MCP server that is, a Docker container or some form of local executable, it is nothing else but a website that your client can connect to and exposes MCP and you talk to.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1073s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">17:53</a>
-        But for that we need two critical components. We need authorization and we need scaling. And in the most recent specification of MCP, we made a ton of changes towards this from the lessons we've learned and the feedback we honestly got from the community as well as like key partners. And we work closely for example with like people in the industry that worked on and other aspects to get this right. And so with authorization in MCP, what you can do is you can basically provide the private context of a user that might be behind an online account or something directly to the LLM application.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1124s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">18:44</a>
-        And it really enables MCP authors to bind the capability of the MCP servers to a user, an online account, something like that. And in order to do that, the way this currently has to work in MCP is that you do this by providing OOTH as the authorization layer. And the MCP specification basically says you need to do O 2.1. And that's a bit daunting because very few people know what OOTH 2.1 is. But OA 2.1 is usually just O 2.0 with all the basic things you would do anyway. all these security considerations that people that have done a wall telling you anyway to do.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1164s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">19:24</a>
-        So it's just OS 2.0 zero a little bit cleaned up and you're probably already doing it if you're doing a wall and if you do implement this wall flow you get two interesting patterns out of that and the first one is the scenario of an MCP server in the web and a good example of this is if you for example a payment provider and you have you know website payment.com and I as a user have an online account there now I as the payment provider can expose mcp.payment.com that the user can put into an MCP client and the MCP client will do the or flow. I log in as my account and I know this is payment.com. I know this is the the person that is my online account with the provider that I trust. I don't trust some random Docker container running locally built by a third party developer anymore. I trust the person I already trust with the data anyway and their developers.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1220s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">20:20</a>
-        And on the their development side, they can just ex like ex like update this server as they want and they don't have to wait for me to download a new like docker image. And so this is I think will be a really really big step for enabling MCP servers to be exposed on the web and MCP clients to interact basically with all the online interactions that you already have. And here's just a small little example of this. In this scenario, we use Cloud AAI integrations which we launched earlier this month to connect to a remote server and use this oath flow to log in our user to then have tools available that are aware of my data that I care about it are for it is for me. But it enables another aspect.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1277s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">21:17</a>
-        It enables enterprises to smoothly integrate MCP into their ecosystem how they usually build applications. And what does this mean? It means that internally they can deploy an MCP server to their internet or whatever like they use and use an identity provider like Azure ID or Octar or whatever that central identity provider that you usually use for single sign on and you can have that still exist and it will be the one that gives you the tokens that you require to interact with the MCP server. And that has a lot to say that what it ends up with is a very smooth integration. You as a development team internally, you're going to build an MCP server that you control that you could control the deployment and the user just logs in in the morning with their normal SSO like you always would do and anytime they use an MCP server from them on on out, they will just be logged in and have access to the data that you know the that is their data that the company has for them.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1346s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">22:26</a>
-        And so this I think enables a new way that I've already seen some of the big enterprises do to build really vast systems of MCP servers that allow part of the company to build a server while the other part deals about the integrations really nicely separates integration builder and platform builders. And then the second part that we require is scaling. And we just added a new thing called streamable HTTP which is just to say it's a lot of lot of words to say basically we want MCP servers to scale similar to normal APIs. And it's as simple as that. you have as a server author you can choose to either return results directly as you would be in in a REST API except that it's not quite just REST or if you need to you can open a stream and get richer interactions. So in the most simple way, you just want to provide a tool call result.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1405s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">23:25</a>
-        You get a request, you return application JSON and off you go. End of the story. You close the connection and the next connection come in and you know get served by yet another Lambda function. But if you need richer interactions such as notification or features we talked about like sampling, a request comes in, you start a stream, the client accepts the stream, and now you're being able to send additional things to the client before you're returning finally the result. And those authorization and scaling together is really the foundation to make MCP go from this local experience now to be truly a standard for how LLM applications will interact with the web.
-      </p>
-      
-    </section>
-    
-    <section class="chapter" id="sec-9">
-      <h2>09 · What's next & closing</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1450s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">24:10</a>
-        And just to finish it all up, I just want to show you quickly about like what's coming for MCP in the next few months of some of the the most important highlights. And the most important part is that we are starting to think more and more about agents and there's a lot to do there. There are a synchronous task that you of course want to run things that are longer running that are not just like a minute long but maybe a few few like hours long task that an agent takes and that eventually I want to have a result for. So we think a lot about that and we're going to work to build primitives for that into MCP in the near future. The second part of that is elicitation.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1495s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">24:55</a>
-        So really MCP server authors being able to ask for input from the user and that is something that's going to land just about today or on Monday in the in the protocol. And then we're doing two additional things. We first and foremost going to build an official registry to make sure there's a central place where you can find and publish to MCP servers. so that we can really have one common place where we're going to look for these servers but also allow agents to dynamically download servers and install them and use them and then of course we're thinking more about multimodality and that can be for example streaming of results but that can have other aspects that I just don't want to go into details yet and that's just the specification part on the e on the ecosystem part we going and having a more things to go that we're doing at the moment. We're adding a Ruby SDK that is donated by Shopify in the next few weeks and the Google folks, the Google Go team is currently building an official Go SDK for MCP. And so I just hope that I was able to give you a bit of a more in-depth view of what you could do with MCP if you use the full power of the protocol.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&t=1567s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">26:07</a>
-        And with that, I think I'm bit low on time, so I can't ask question. We can't ask questions. We can't do Q&A, but just grab me afterwards and I can happy to answer on the hallway any questions you might have. So, thank you so much.
-      </p>
-      
-    </section>
-    
+<p>社区目前 1 万多个 MCP server，<strong>绝大多数只用了协议里最容易的那一块——工具（tools）</strong>。但 MCP 协议设计里其实有 <strong>5 个原语</strong>（3 个 server 端 + 2 个 client 端），合在一起能让 LLM 应用做出比"工具调用"丰富得多的交互（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=13s">0:13</a>）。</p>
+<p>这次演讲想做三件事：</p>
+<ol>
+<li>把 5 个原语过一遍，重点讲少有人用的那几个；</li>
+<li>用一个聊天 App 例子演示<strong>怎么把 5 个原语组合</strong>起来；</li>
+<li>谈 MCP 下一步——<strong>从本地走向 Web</strong>。</li>
+</ol>
+<hr />
+<h2 id="二-5-个原语的全景">二、5 个原语的全景</h2>
 
-    <footer class="meta">
-      字幕来源：YouTube 人工/自动字幕 · 段落由脚本自动分段 · 时间戳点击跳转 YouTube
-    </footer>
+<div class="mermaid">flowchart LR
+    subgraph Server[Server 暴露给 Client]
+        P[Prompts<br/>用户驱动]
+        R[Resources<br/>应用驱动]
+        T[Tools<br/>模型驱动]
+    end
+    subgraph Client[Client 暴露给 Server]
+        S[Sampling<br/>请求一次推理]
+        Ro[Roots<br/>询问可见的工作区]
+    end
+    User[用户] -->|slash / 命令| P
+    App[AI 应用] -->|嵌入上下文 / RAG| R
+    Model[模型] -->|自动选择调用| T
+    Server -.向上请求.-> S
+    Server -.向上查询.-> Ro
+</div>
+<p><strong>图 1：MCP 协议的 5 个原语</strong>——一边由 server 暴露给 client，一边由 client 暴露给 server。<strong>最关键的区别在于"谁来发起"</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>谁来发起</th>
+<th>一句话定位</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prompts</strong></td>
+<td>用户</td>
+<td>预制好的提示模板，<strong>用户主动调入上下文</strong></td>
+<td>slash 命令、<code>@cmd</code> 命令</td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td>应用</td>
+<td>原始数据/内容，<strong>由 client 应用决定怎么用</strong></td>
+<td>文件式挂载、RAG embedding</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td>模型</td>
+<td>可被模型自主调用的动作</td>
+<td>查数据库、改文件</td>
+</tr>
+<tr>
+<td><strong>Sampling</strong></td>
+<td>Server</td>
+<td>让 client 帮 server 做一次模型推理</td>
+<td>server 内部想用 LLM 但不持模型</td>
+</tr>
+<tr>
+<td><strong>Roots</strong></td>
+<td>Server</td>
+<td>询问 client 当前开着哪些工作区/目录</td>
+<td>像 IDE 这类多 workspace 的环境</td>
+</tr>
+</tbody>
+</table>
+<p>下面分别展开。</p>
+<hr />
+<h2 id="三-prompts-用户主动调入的-模板">三、Prompts：用户主动调入的"模板"</h2>
+
+<p><strong>Prompts 是 MCP 里最被忽视的原语之一</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=51s">0:51</a>）。一句话：<strong>MCP server 可以暴露一组"提示模板"，让用户在 client 里主动选用</strong>。</p>
+<div class="mermaid">flowchart LR
+    Author[Server 作者] -->|定义| P1[Prompt:<br/>summarize-pr]
+    Author -->|定义| P2[Prompt:<br/>review-issue]
+    User[用户] -->|/summarize-pr| P1
+    P1 -->|参数自动补全<br/>抓取 PR comments| Ctx[上下文窗口]
+    Ctx --> Model[模型作答]
+</div>
+<p><strong>图 2：Prompt 的典型用法</strong>——用户敲一个 slash 命令，server 把对应模板（甚至动态抓取的真实数据）一次性塞进上下文。</p>
+<h3>它解决了什么问题</h3>
+<ul>
+<li><strong>你（作者）最懂自己的 server 该怎么用</strong>——把"招牌玩法"打包成 prompt，让用户开箱即上手；</li>
+<li><strong>prompts 是动态执行的</strong>——背后就是代码，不只是静态模板。可以在用户调用时去远端抓数据。</li>
+</ul>
+<h3>例子：把 PR comments 拉进上下文</h3>
+<p>David 在 Zed 编辑器里演示：用户敲 <code>/pr-comments</code>，prompt 背后就去 GitHub 拉 PR 评论，<strong>直接进上下文</strong>，然后用户跟模型说"按这些 review 意见把代码改一下"。</p>
+<h3>鲜为人知的加分项：<strong>Prompt Completion</strong></h3>
+<p>定义 prompt 时还能给参数附<strong>补全函数</strong>。视频里用户敲完 <code>/pr-comments</code> 后，弹出可选 PR 列表供选择（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=203s">3:23</a>）。在 TypeScript 里实现这个需求只要几行——一个 completion 函数 + 一个生成 prompt 的函数，Claude Code + Claude 4 基本能直接给你写出来。</p>
+<hr />
+<h2 id="四-resources-应用驱动的-原始数据接入">四、Resources：应用驱动的"原始数据接入"</h2>
+
+<p>Prompts 是给用户用的，<strong>Resources 是给应用（client）用的</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=282s">4:42</a>）。</p>
+<div class="mermaid">flowchart LR
+    Server[MCP Server] -->|expose| Res1[Resource:<br/>db_schema/users]
+    Server -->|expose| Res2[Resource:<br/>db_schema/orders]
+    Res1 --> App[Client 应用<br/>Claude Desktop / VS Code]
+    Res2 --> App
+    App -->|方式一| Ctx[加入上下文窗口]
+    App -->|方式二| Embed[做 embedding<br/>RAG 召回]
+    App -->|方式三| UI[像文件一样挂在边栏]
+</div>
+<p><strong>图 3：Resource 的三种消费方式</strong>——应用层决定怎么用，不只是"塞进上下文"这一种。</p>
+<h3>它解决了什么问题</h3>
+<ul>
+<li><strong>应用决定怎么用这份数据</strong>——上下文/索引/UI 渲染都行；</li>
+<li>是 <strong>MCP 中比较被低估的原语</strong>：很多人只想着"加进上下文"，但 client 完全可以拿来做 embedding/RAG。</li>
+</ul>
+<h3>例子：暴露数据库 schema</h3>
+<p>David 演示用 Astra DB 的 MCP server 把库表 schema 作为 resource 暴露。在 Claude Desktop 里<strong>像挂文件一样把表挂上</strong>，然后说"画一张 ER 图"，Claude 自己读 schema 自己画图（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=355s">5:55</a>）。</p>
+<hr />
+<h2 id="五-tools-模型驱动的动作">五、Tools：模型驱动的动作</h2>
+
+<p>第三个 server 端原语，<strong>大家都熟</strong>：模型在跑的过程中自己决定要不要调用，常见用法不展开。David 说"建过 MCP server 的人，第一次看到模型自己调用你建的工具——是最有魔力的时刻"（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=401s">6:41</a>）。</p>
+<hr />
+<h2 id="六-决定用哪一个-interaction-model-交互模型">六、决定用哪一个：**Interaction Model（交互模型）**</h2>
+
+<p>3 个 server 原语功能上有重叠（都能往上下文里塞东西），到底用谁？<strong>协议规范里其实埋着答案，叫 interaction model</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=482s">8:02</a>）：</p>
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>由谁触发</th>
+<th>同一份数据按"何时出现"决定用谁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prompts</strong></td>
+<td><strong>用户</strong> 主动</td>
+<td>用户想立刻把它推到上下文里时</td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td><strong>应用</strong> 决定</td>
+<td>应用层有自己的策略——索引、按需召回、UI 渲染</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td><strong>模型</strong> 自主</td>
+<td>模型在解决任务时按需调用</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"应该让数据出现的<strong>时机</strong>和<strong>意图</strong>，决定你用哪个原语"——这是 David 给的核心判断准则。</p>
+</blockquote>
+<hr />
+<h2 id="七-sampling-server-反过来让-client-跑一次模型">七、Sampling：server 反过来让 client 跑一次模型</h2>
+
+<p>讲到 sampling 之前，David 抛了个具体问题（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=601s">10:01</a>）：</p>
+<blockquote>
+<p>"我想给一个 issue tracker 做 MCP server，<strong>支持「总结某 issue 的讨论」</strong>。总结需要模型——但 server 又不知道 client 用的是哪个模型，更没有 client 的 API key。怎么办？"</p>
+</blockquote>
+<p>最朴素的做法是 server 自己装 Anthropic SDK + 自己要个 key——立刻就尴尬：
+- 用户要在 server 上又配一把 API key；
+- 把"哪个模型、谁付钱、谁审隐私"的控制权从 client 抢走。</p>
+<h3>Sampling 的本质</h3>
+<p><strong>让 server 反过来请求 client 帮忙做一次推理。</strong></p>
+<div class="mermaid">flowchart TD
+    User[用户] --> Client[MCP Client<br/>Claude Desktop]
+    Client -->|tool 调用| Server[MCP Server<br/>issue tracker]
+    Server -->|sampling 请求<br/>「帮我跑这段 prompt」| Client
+    Client -->|"用 client 已配置的模型 + 订阅"| Model[模型]
+    Model --> Client
+    Client -->|completion 结果| Server
+    Server -->|tool 结果| Client
+    Client --> User
+</div>
+<p><strong>图 4：Sampling 让 server "借" client 的模型</strong>——server 不再需要自己持模型/key。</p>
+<h3>它带来的两个红利</h3>
+<ol>
+<li><strong>Client 始终掌握安全 / 隐私 / 成本</strong>——用户在 client 那里看清楚每次推理付了多少 token、走了哪个模型，<strong>不用再额外给 server 一把 key</strong>；</li>
+<li><strong>可递归 / 可链式</strong>——server A 调 server B，B 再要 sampling，请求一路冒泡到最上层的 client。任何一个 MCP server 想用模型，<strong>都向上要</strong>，永远是同一个 client 守门（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=737s">12:17</a>）。</li>
+</ol>
+<blockquote>
+<p>David 坦言：<strong>sampling 是最让他兴奋、但目前 client 支持最差的原语</strong>。Anthropic 第一方产品今年内会落地（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=780s">13:00</a>）。</p>
+</blockquote>
+<hr />
+<h2 id="八-roots-server-反过来问-client-你都开了哪些工作区">八、Roots：server 反过来问 client "你都开了哪些工作区"</h2>
+
+<p>第二个 client 端原语。命名 David 自己也吐槽"起得不好"（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=817s">13:37</a>）。</p>
+<h3>它解决什么</h3>
+<p>想象你做一个 <strong>git MCP server</strong>——希望它在 IDE 里跑 git 命令。问题：</p>
+<blockquote>
+<p>server 怎么知道用户的 IDE 此刻开着哪些工程目录？</p>
+</blockquote>
+<p><strong>Roots 就是 client 暴露给 server 的"我现在打开了这些目录"接口</strong>，server 拿到后只在这些目录里干活，不乱跑。</p>
+<p>VS Code 目前已经支持 roots（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=900s">15:00</a>）。</p>
+<hr />
+<h2 id="九-把-5-个原语组合起来-一个聊天应用的-mcp-server">九、把 5 个原语组合起来：一个聊天应用的 MCP server</h2>
+
+<p>David 给的端到端例子（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=924s">15:24</a>）——给 Slack / Discord 这类聊天 App 做 MCP server：</p>
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>在这个 server 里怎么用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prompts</strong></td>
+<td><code>summarize-this-discussion</code>、<code>what-happened-since-yesterday</code> 这种 slash 命令，用户直接调入</td>
+</tr>
+<tr>
+<td><strong>Prompt Completion</strong></td>
+<td>在 <code>summarize-this-discussion</code> 的参数里给"最近的 thread 列表"做自动补全</td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td>把"频道列表""最近 thread"暴露给 client；client 自己决定要不要 index、要不要做 RAG</td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td><code>search_messages</code>、<code>read_channel</code>、<code>read_thread</code> 这些动作</td>
+</tr>
+<tr>
+<td><strong>Sampling</strong></td>
+<td>在 <code>summarize_thread</code> 内部要做总结时，反过来让 client 跑模型</td>
+</tr>
+</tbody>
+</table>
+<div class="mermaid">flowchart LR
+    User[用户] -->|/summarize| Prompt[Prompts<br/>带 completion]
+    User -->|挂频道| Res[Resources<br/>频道/thread 列表]
+    Model[模型] -->|read_thread| Tool[Tools]
+    Tool -->|内部要总结| Sampling[Sampling]
+    Sampling -->|向上请求| Client[Client]
+    Client -->|completion| Tool
+
+    classDef good fill:#e0f0e0,stroke:#3a6a3a,color:#1a1a1a
+    class Prompt,Res,Tool,Sampling good
+</div>
+<p><strong>图 5：5 个原语组合后的聊天 App MCP server</strong>——用户、应用、模型三条交互链路都被覆盖，不再只是"等模型调工具"。</p>
+<hr />
+<h2 id="十-mcp-的下一步-从本地走向-web">十、MCP 的下一步：从本地走向 Web</h2>
+
+<p>社区现在 1 万多个 server，<strong>绝大多数是本地的</strong>——Docker 容器、本地可执行。下一步：让 MCP server 成为<strong>网站</strong>——client 直接连 URL 就能用（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1028s">17:08</a>）。</p>
+<p>要走这一步需要两块基础：</p>
+<ol>
+<li><strong>Authorization（授权）</strong>——把私有数据安全地接入 LLM 应用；</li>
+<li><strong>Scaling（可伸缩）</strong>——server 能像普通 Web API 一样横向扩展。</li>
+</ol>
+<h3>10.1 授权：OAuth 2.1</h3>
+<p>MCP 规范现在要求远程 server 走 <strong>OAuth 2.1</strong>。这个名字听着唬人，<strong>实际上就是 OAuth 2.0 + 业界已经在做的安全加固</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1124s">18:44</a>）。</p>
+<div class="mermaid">flowchart LR
+    User[用户] -->|输入 mcp.payment.com| Client[MCP Client]
+    Client -->|OAuth 流程| Payment[payment.com<br/>身份 + 授权]
+    Payment -->|token| Client
+    Client -->|带 token 调用| Server[mcp.payment.com<br/>MCP Server]
+    Server -->|用户私有数据| Client
+</div>
+<p><strong>图 6：远程 MCP 的两个典型部署</strong>——To-C 走"我去 payment.com 登录"那一套；To-B 走"公司 SSO（Okta / Azure AD）"。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>关键收益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>公网产品</strong></td>
+<td>用户在 client 里直接配 <code>mcp.payment.com</code>，OAuth 登一下，<strong>不再需要信任随便一个开发者放在本地的 Docker 镜像</strong>——信任锚回到原服务</td>
+</tr>
+<tr>
+<td><strong>企业内部</strong></td>
+<td>现有 SSO / 身份提供方（Okta / Azure AD）继续生效，员工早上登一次，全天调任何内部 MCP server 都自动鉴权（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1277s">21:17</a>）</td>
+</tr>
+</tbody>
+</table>
+<p>David 强调企业场景的好处：<strong>"做 MCP server 的团队"和"做身份/集成的平台团队"可以清晰分工</strong>——这是大企业能跑出体量化部署的关键。</p>
+<h3>10.2 可伸缩：Streamable HTTP</h3>
+<p>新增的 <strong>Streamable HTTP</strong> 让 MCP server "像普通 REST API 一样水平扩展"（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1346s">22:26</a>）：</p>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>简单 tool 调用</td>
+<td>直接 return <code>application/json</code>，<strong>连接关闭</strong>，下一次请求另一个 Lambda 接</td>
+</tr>
+<tr>
+<td>需要流式 / 后续推送（sampling、notification 等）</td>
+<td>升级到 stream，server 可以在最终 return 之前来回发消息</td>
+</tr>
+</tbody>
+</table>
+<p><strong>结果</strong>：MCP server 可以放在 Lambda / Cloud Run / 任何 serverless 上，跟普通 API 一样部署。</p>
+<hr />
+<h2 id="十一-未来几个月路线图">十一、未来几个月路线图</h2>
+
+<p><a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1450s">24:10</a> 起，David 列了协议侧 + 生态侧的下一波重点：</p>
+<div class="mermaid">flowchart TD
+    subgraph Spec[协议规范]
+        A[Async tasks<br/>支持几小时级长任务]
+        E[Elicitation<br/>server 向用户主动要输入]
+        R[官方 Registry<br/>统一发现/发布]
+        M[多模态<br/>结果流式、其他媒介]
+    end
+    subgraph Eco[生态]
+        Ruby[Ruby SDK<br/>Shopify 捐赠]
+        Go[Go SDK<br/>Google Go 团队官方实现]
+    end
+</div>
+<p><strong>图 7：MCP 下一步路线图</strong>——协议在补长任务、用户输入、registry、多模态；生态在补 Ruby / Go 官方 SDK。</p>
+<p>特别提一下 <strong>Elicitation</strong>：服务器能反过来<strong>问用户拿输入</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1495s">24:55</a>）。例如"我需要你确认这个邮箱地址再继续"。这在做 MCP agent 时非常关键。</p>
+<hr />
+<h2 id="十二-一页速查">十二、一页速查</h2>
+
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>方向</th>
+<th>触发者</th>
+<th>何时考虑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompts</td>
+<td>server → client</td>
+<td>用户</td>
+<td>想给 server 配一组"招牌玩法"或 slash 命令</td>
+</tr>
+<tr>
+<td>Resources</td>
+<td>server → client</td>
+<td>应用</td>
+<td>想让 client 用更高级的方式（RAG / 索引）消费数据</td>
+</tr>
+<tr>
+<td>Tools</td>
+<td>server → client</td>
+<td>模型</td>
+<td>经典动作调用</td>
+</tr>
+<tr>
+<td>Sampling</td>
+<td>client → server</td>
+<td>server 反向</td>
+<td>server 内部要用 LLM 但不该自己持模型/key</td>
+</tr>
+<tr>
+<td>Roots</td>
+<td>client → server</td>
+<td>server 反向</td>
+<td>server 需要知道 client 当前的 workspace 范围</td>
+</tr>
+</tbody>
+</table>
+<h3>一句话外带</h3>
+<blockquote>
+<p>大多数人把 MCP 当成"暴露工具的协议"，<strong>实际上 MCP 是一份关于"AI 应用 / 用户 / 模型三方协作"的完整协议</strong>——5 个原语恰好覆盖了 3 方所有方向的交互。要做出比工具调用更丰富的体验，<strong>先把 prompts / resources / sampling / roots 这四个被冷落的原语用起来</strong>。</p>
+</blockquote>
+<hr />
+<p><em>本文基于 YouTube 自动字幕 + 人工章节整理 + 中文重新组织。时间戳链接点击可跳回 YouTube 对应位置核对原话。</em></p>
   </main>
 </div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
 </body>
 </html>
