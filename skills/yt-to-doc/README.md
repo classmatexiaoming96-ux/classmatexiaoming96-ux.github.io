@@ -14,8 +14,8 @@ The mechanical pipeline is Python; the Chinese restructuring step is driven by C
 ## Install as a Claude Code skill
 
 ```bash
-git clone https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io.git
-cp -r classmatexiaoming96-ux.github.io/skills/yt-to-doc ~/.claude/skills/
+git clone https://github.com/<owner>/<repo>.git
+cp -r <repo>/skills/yt-to-doc ~/.claude/skills/
 cd ~/.claude/skills/yt-to-doc
 pip install -r requirements.txt
 ```
