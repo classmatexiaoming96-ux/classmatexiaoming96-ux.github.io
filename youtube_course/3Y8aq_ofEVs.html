@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>机器人的终局 — NVIDIA Jim Fan</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #c96442;
+    --accent-bg: #f6e8e0;
+    --border: #e3e3df;
+    --code-bg: #f3f1ec;
+    --sidebar-w: 280px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+  aside.toc {
+    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
+    font-size: 14px;
+  }
+  aside.toc h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 12px;
+  }
+  aside.toc ol { list-style: none; margin: 0; padding: 0; }
+  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
+  aside.toc a { color: var(--fg); display: block; }
+  aside.toc a:hover { color: var(--accent); }
+
+  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
+  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
+
+  h2 {
+    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
+
+  p { margin: 0 0 18px; }
+
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); color: #4a3320; font-size: 15px;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 18px; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li > p { margin: 0 0 8px; }
+
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  .mermaid {
+    background: #fff; padding: 18px; border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; text-align: center;
+  }
+
+  table {
+    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    vertical-align: top; line-height: 1.55;
+  }
+  th { background: #f1ede6; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbf9f4; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  em { color: var(--muted); }
+
+  footer.meta {
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
+    color: var(--muted); font-size: 13px;
+  }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc {
+      position: static; max-height: none; border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="toc">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="#一-从-2016-的-dgx-1-说起">一、从 2016 的 DGX-1 说起</a></li>
+      <li><a href="#二-the-great-parallel-抄-llm-的作业">二、The Great Parallel：抄 LLM 的作业</a></li>
+      <li><a href="#三-模型策略-从-vla-到-wam">三、模型策略：从 VLA 到 WAM</a></li>
+      <li><a href="#四-世界模型会做梦-dreamer">四、世界模型会"做梦"：Dreamer</a></li>
+      <li><a href="#五-数据策略-给-teleop-默哀">五、数据策略：给 Teleop 默哀</a></li>
+      <li><a href="#六-ego-scale-与灵巧度的-scaling-law">六、Ego Scale 与"灵巧度的 Scaling Law"</a></li>
+      <li><a href="#七-外环-把环境-scale-到一百万">七、外环：把"环境"Scale 到一百万</a></li>
+      <li><a href="#八-还剩三个成就要解锁">八、还剩三个"成就"要解锁</a></li>
+      <li><a href="#九-2040-是科幻吗">九、2040：是科幻吗？</a></li>
+      <li><a href="#附-核心术语速查">附：核心术语速查</a></li>
+    </ol>
+  </aside>
+  <main>
+<h1>机器人的终局（Robotics' End Game）</h1>
+<blockquote>
+<p>演讲者：<strong>Jim Fan</strong>（NVIDIA "具身自主研究组 / GEAR" 负责人，即 NVIDIA Robotics） · 场合：Sequoia <strong>AI Ascent 2026</strong> · 频道：Sequoia Capital · 时长：约 20 分钟 · 发布：2026-04-30 · <a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs">▶ 原视频</a></p>
+<p><strong>本文是中文整理版</strong>：这是 Jim Fan 去年 "Physical Turing Test（物理图灵测试）" 演讲的续作。文中在演讲内容基础上重新组织、补充图表，关键节点附 YouTube 时间戳链接，可点击核对原话。</p>
+</blockquote>
+<hr />
+
+<h2 id="一-从-2016-的-dgx-1-说起">一、从 2016 的 DGX-1 说起</h2>
+<p>Jim Fan 用一个故事开场（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=33s">0:33</a>）：2016 年夏天，就在这间办公室里，一个穿亮皮夹克、二头肌很大的人扛着一块大金属板进来，上面写着<strong>"致 Elon 和 OpenAI 团队——献给计算与人类的未来，我向你们呈上世界上第一台 DGX-1"</strong>。那是他第一次见到黄仁勋（Jensen）。作为一个好实习生，他冲上去在板子上签了名——上面还有另一个签名：<strong>Andrej（Karpathy）</strong>。</p>
+<p>他借 Ilya 的名言串起 LLM 的历程：<strong>"If you believe in deep learning, deep learning will believe in you."</strong>（如果你相信深度学习，深度学习就会相信你。）<strong>三次阶跃、六年时间</strong>把我们带到今天（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=104s">1:44</a>）：</p>
+<table>
+<thead><tr><th>阶跃</th><th>代表</th><th>本质</th></tr></thead>
+<tbody>
+<tr><td>① 预训练</td><td>GPT-3</td><td>下一个 token 预测——学语言/代码/思想"应当如何展开"的形态</td></tr>
+<tr><td>② 监督微调（SFT）</td><td>2022 InstructGPT</td><td>把"模拟"对齐到能做有用的事</td></tr>
+<tr><td>③ 强化学习推理</td><td>o1</td><td>用 RL 超越模仿学习</td></tr>
+<tr><td>+ 自动研究</td><td>auto research</td><td>把整个循环加速到超越人类的程度</td></tr>
+</tbody>
+</table>
+<p>正如 Andrej 所说，所有实验室都在打"最终 Boss 战"——LLM 阵营正处在<strong>终局（end game）</strong>的酣战里。Jim Fan 半开玩笑："我很嫉妒，LLM 那帮人在过他们一生中最爽的派对。<strong>那机器人凭什么不能也分一杯羹？</strong>"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=147s">2:27</a>）</p>
+<hr />
+
+<h2 id="二-the-great-parallel-抄-llm-的作业">二、The Great Parallel：抄 LLM 的作业</h2>
+<p>于是他"像任何有自尊的科学家一样——抄作业，再起个新名字"，称之为 <strong>The Great Parallel（伟大的平行）</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=167s">2:47</a>）：把 LLM 的成功公式照搬到机器人。</p>
+<div class="mermaid">flowchart LR
+    subgraph LLM[LLM 配方]
+      L1[模拟下一个字符串 token] --> L2[对齐: 监督微调] --> L3[RL 跑完最后一公里]
+    end
+    subgraph ROBOT[机器人 the great parallel]
+      R1[模拟下一个物理世界状态] --> R2[对齐: 动作微调<br/>action fine-tuning] --> R3[RL 跑完最后一公里]
+    end
+    LLM ==复制==> ROBOT
+</div>
+<p><strong>图 1：The Great Parallel</strong>——不再"模拟字符串"，而是<strong>模拟下一个物理世界状态</strong>；通过"动作微调"对齐到对真实机器人重要的那一薄层切片；再让 RL 跑完最后一公里。"打不过就加入。"</p>
+<p>怎么玩这个终局？归结为两件事：<strong>模型策略（model strategy）</strong> 与 <strong>数据策略（data strategy）</strong>。</p>
+<hr />
+
+<h2 id="三-模型策略-从-vla-到-wam">三、模型策略：从 VLA 到 WAM</h2>
+<h3>VLA 的局限：其实是"头重脚轻"的 LVA</h3>
+<p>过去三年由 <strong>VLA（视觉-语言-动作模型）</strong> 主导，如 PaLM、Goot 这类：假定预训练由一个视觉语言模型完成，再在上面"嫁接"一个动作头（action head）。但 Jim Fan 指出：它们其实是 <strong>LVA</strong>——绝大多数参数都给了语言，<strong>语言是一等公民，视觉其次，动作垫底</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=211s">3:31</a>）。</p>
+<blockquote><p>VLA 擅长编码<strong>知识与名词（nouns）</strong>，却不擅长<strong>物理与动词（verbs）</strong>——劲使错了地方。最爱的例子：<strong>"把可乐罐移到 Taylor Swift 的照片上"</strong>——模型没见过 Taylor Swift 也能泛化，很厉害，<strong>但这并不是我们要的那种预训练能力</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=253s">4:13</a>）。</p></blockquote>
+
+<h3>第二种预训练范式：视频世界模型</h3>
+<p>他原以为第二种预训练范式会"很光辉"，结果竟是<strong>"AI 视频垃圾（slop）"</strong>——安全摄像头里弹班卓琴的猫之类。没人当回事，<strong>直到你意识到：这些视频模型正在内部学习"模拟下一个世界状态"</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=274s">4:34</a>）。</p>
+<p>以 VEO3 的 rollout 为例：模型<strong>自己</strong>学会了重力、浮力、光照、反射、折射——<strong>没有一行是编码进去的，物理学是"在大规模预测下一团像素"中涌现的</strong>。甚至<strong>视觉规划</strong>也涌现了：VEO 通过在像素空间里向前"跑仿真"来解迷宫（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=295s">4:54</a>）。他打趣有个例子里 VEO3 发现"<strong>只要没人看，几何关系是可选的</strong>"——并戏称为 "physics law"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=337s">5:37</a>）。</p>
+<hr />
+
+<h2 id="四-世界模型会做梦-dreamer">四、世界模型会"做梦"：Dreamer</h2>
+<p>如何让世界模型变得有用？做<strong>动作微调（action fine-tuning）</strong>：把"所有可能未来状态的叠加态"坍缩到对真实机器人重要的那一薄层切片上。由此引出 <strong>Dreamer</strong>——一种新的策略模型，它<strong>向未来"做梦"几秒钟，并据此行动</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=357s">5:57</a>）。</p>
+<p>关键洞察：电机动作是<strong>高维连续信号，长得就像像素</strong>，所以可以和视频在同一时刻一起渲染。<strong>Dreamer 联合解码"下一个世界状态"与"下一个动作"</strong>，因而能<strong>零样本（zero-shot）完成训练中从未见过的任务和动词</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=379s">6:19</a>）。</p>
+<div class="mermaid">flowchart LR
+    Prompt[文本提示 + 当前观测] --> Dreamer[Dreamer 策略模型]
+    Dreamer --> V[解码: 下一个世界状态<br/>像素]
+    Dreamer --> A[解码: 下一个动作<br/>高维连续信号]
+    V -. 紧密相关 .- A
+    A --> Robot[机器人执行]
+    Robot --> Prompt
+</div>
+<p><strong>图 2：Dreamer 联合解码世界状态与动作</strong>。机器人执行时，可以可视化它"梦到"了什么，二者相关性极高：<strong>视频预测对了，动作就对；视频出现幻觉，动作就失败</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=400s">6:40</a>）。</p>
+<p>他们在实验室里把机器人推来推去、往提示框里随便打字。Dreamer 当然不可能 100% 稳健完成所有任务——<strong>但它像 GPT-2 阶段</strong>，在每个任务上都努力把"动作的形态（shape of the motion）"做对（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=420s">7:00</a>）。这是迈向<strong>开放式、开放词汇提示（open-vocabulary prompting）</strong>机器人的第一步。</p>
+<blockquote><p>这种新模型叫 <strong>WAM（World Action Model，世界动作模型）</strong>。"让我们为老朋友 VLA 默哀片刻，它服役有功，安息吧。<strong>World Action Models 万岁。</strong>"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=442s">7:22</a>）此时<strong>视觉与动作重新成为一等公民</strong>。</p></blockquote>
+<hr />
+
+<h2 id="五-数据策略-给-teleop-默哀">五、数据策略：给 Teleop 默哀</h2>
+<p>第二大支柱是数据。他展示 NVIDIA 首席科学家 Bill Dally 在实验室里做<strong>遥操作（teleoperation）</strong>——"按他的薪水算，这大概是数据集里<strong>最贵的一条遥操作轨迹</strong>"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=463s">7:43</a>）。</p>
+<p>过去三年是遥操作的"黄金时代"：VR 头显、极致优化的串流延迟、像"中世纪刑具"的复杂机械臂。但它有<strong>根本物理上限：每台机器人每天 24 小时</strong>——而现实里更像<strong>每天 3 小时</strong>，还得看"机器人之神"心情好不好，因为它们老闹脾气（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=504s">8:24</a>）。</p>
+<h3>把机器人的手"穿"在自己手上：UMI / Dex-UMI</h3>
+<p><strong>UMI（Universal Manipulation Interface，通用操作接口）</strong>：把机器人末端执行器直接戴在人手上采集数据，让机器人的其余身体"出局"。他称 UMI 是<strong>机器人数据领域写得最好的论文之一，并催生了两家独角兽</strong>（Joles 改进了夹爪设计、Sunday 做了三指数据手套）（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=525s">8:45</a>）。</p>
+<p>去年他们更进一步，设计了与五指灵巧手<strong>一一映射</strong>的外骨骼 <strong>Dex-UMI</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=567s">9:27</a>）。对比很鲜明：人直接采集最快；遥操作下，即便是最熟练的博士也要小心对齐、又慢、成功率又低；而戴上外骨骼直接采集，训练出的策略是<strong>在"零遥操作数据"上训练出来的全自动 rollout</strong>，打破了"每天 24 小时"的诅咒（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=588s">9:48</a>）。</p>
+<h3>但还不够：需要机器人界的 "FSD"</h3>
+<p>开 Tesla 或 Waymo 时，你<strong>正在为最大的物理数据飞轮做贡献，而且在 FSD 下你毫无感觉——数据上传是"环境式（ambient）"的后台过程</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=610s">10:09</a>）。可穿戴数据采集仍然笨重、侵入、不如"开车上班"那样无缝。所以机器人需要一个 <strong>FSD 等价物：让数据采集隐入背景</strong>，从而捕捉各行各业、各种经济价值劳动中人类灵巧性的全貌。</p>
+<hr />
+
+<h2 id="六-ego-scale-与灵巧度的-scaling-law">六、Ego Scale 与"灵巧度的 Scaling Law"</h2>
+<p>答案是<strong>全力押注"人类第一人称（egocentric）视频"</strong>，配上手部位置追踪和稠密语言标注。这就是 <strong>Ego Scale</strong>：训练数据 99.9% 来自人类第一人称视频，得到一个端到端策略，<strong>直接从相机像素映射到 22 自由度的高灵巧度机器人手</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=653s">10:53</a>）。</p>
+<p>具体配方（<strong>Ego-Exo</strong>）（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=693s">11:33</a>）：</p>
+<ul>
+<li><strong>预训练</strong>：在 <strong>21K 小时</strong>"野外"第一人称人类数据上预训练，<strong>零机器人数据</strong>，预测手部关节与手腕姿态；</li>
+<li><strong>动作微调</strong>：仅用 <strong>50 小时</strong>高精度动捕数据手套 + <strong>4 小时</strong>遥操作（<strong>占训练混合 &lt; 0.1%</strong>）。</li>
+</ul>
+<p>结果能泛化到很灵巧的任务：分卡片、操作注射器/转移液体（"也许哪天家里会有机器人护士"）、还能<strong>一次示范（one-shot）</strong>就学会不同的叠衬衫策略（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=735s">12:15</a>）。</p>
+<blockquote><p>论文最迷人的发现：他们发现了<strong>"灵巧度的神经 scaling law"</strong>——预训练投入小时数与最优验证损失之间是<strong>干净的 log-linear（对数线性）数学关系</strong>，正好在语言模型 scaling law 提出的 <strong>6 年</strong>之后（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=755s">12:35</a>）。</p></blockquote>
+<h3>把数据策略画到一张图上</h3>
+<p>横轴 = 对机器人硬件的对齐程度，纵轴 = 可扩展性（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=776s">12:56</a>）：</p>
+<table>
+<thead><tr><th>数据来源</th><th>可扩展性</th><th>定位</th></tr></thead>
+<tbody>
+<tr><td><strong>遥操作 Teleop</strong></td><td>最低（~3–24 h/机器人/天）</td><td>对齐硬件最好，但天花板极低</td></tr>
+<tr><td><strong>数据可穿戴 Data wearables</strong></td><td>可达数十万小时</td><td>UMI / Dex-UMI 这类</td></tr>
+<tr><td><strong>第一人称视频 Egocentric video</strong></td><td>若转动 FSD 飞轮，明年即可轻松达 <strong>1000 万小时</strong></td><td>对齐硬件最弱，但可扩展性最强</td></tr>
+</tbody>
+</table>
+<p>在图上画一条线，<strong>线左侧的一切统称"传感化人类数据（sensorized human data）"</strong>这一范式。预测：未来一两年<strong>遥操作会一路下滑到几乎可忽略</strong>；会出现一组为不同硬件/用例定制的数据可穿戴设备的集成；而<strong>机器人的"主食"将是第一人称视频</strong>。"为老朋友 Teleop 默哀……传感化人类数据万岁。"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=817s">13:37</a>）</p>
+<hr />
+
+<h2 id="七-外环-把环境-scale-到一百万">七、外环：把"环境"Scale 到一百万</h2>
+<p>数据策略那张图其实有<strong>两个圈</strong>，外圈是什么？是<strong>RL 环境（environments）</strong>。正如所有前沿实验室如今都花重金获取数百万个编码环境来做 RL，<strong>机器人也急需把环境规模化</strong>（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=839s">13:59</a>）。</p>
+<p>你当然可以<strong>直接在真实机器人上做 RL</strong>：他们用 RL 把某些任务推到接近 100% 成功率，让机器人连续干上好几个小时（"看机器人自己组装 GPU，还挺解压的——老板批准了这个任务"）。但你<strong>没法搞到 100 万个环境</strong>，因为那样意味着要 100 万台机器人（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=860s">14:20</a>）。</p>
+<h3>Real → Sim → Real：iPhone 成了"口袋世界扫描仪"</h3>
+<p>方法：用 iPhone 拍张照，过一条 <strong>3D 世界扫描管线</strong>抽取出所有物体，再在<strong>经典物理仿真器</strong>里自动重建——这些物体扫描后都是<strong>可交互</strong>的；然后在仿真里无限增广出各种变体，称为<strong>"数字表亲（digital cousins）"</strong>。iPhone 由此变成"口袋世界扫描仪"，实现可扩展的"把物理世界搬进数字世界"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=880s">14:40</a>）。</p>
+<h3>Dream Dojo：纯神经的模拟器</h3>
+<p>但这仍依赖经典图形引擎，能不能更进一步？<strong>Dream Dojo</strong>——把视频世界模型变成全功能的<strong>神经模拟器</strong>：输入连续动作信号，<strong>实时输出下一帧 RGB 以及传感器状态</strong>。<strong>你看到的画面没有一个像素是真实的</strong>，整个过程<strong>没有物理方程、没有图形引擎</strong>，纯数据驱动地学习不同机器人的机械特性（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=921s">15:21</a>）。</p>
+<div class="mermaid">flowchart TD
+    RealRobot[少量真实机器人工位<br/>real robot RL] --> RLsys[大规模并行 RL 系统]
+    Scan[图形核心: 世界扫描<br/>real to sim to real] --> RLsys
+    WM[重型推理算力: 世界模型<br/>Dream Dojo 神经模拟器] --> RLsys
+    RLsys --> Policy[机器人策略]
+</div>
+<p><strong>图 3：机器人新的后训练范式</strong>——一个跑在少量真实机器人工位 + 一批做世界扫描的图形核心 + 大量跑世界模型推理算力之上的大规模并行 RL 系统。一句话总结：<strong>"算力 = 环境 = 数据"</strong>；或者用"一位智者"的话说——<strong>"买得越多，省得越多。"</strong>（黄仁勋梗，<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=985s">16:25</a>）</p>
+<hr />
+
+<h2 id="八-还剩三个成就要解锁">八、还剩三个"成就"要解锁</h2>
+<p>他把研究比作在《文明（Civilization）》游戏的科技树上解锁成就（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1007s">16:47</a>）。机器人还剩三个成就要解锁，解锁完"我就能退休了"：</p>
+<div class="mermaid">flowchart LR
+    A1[成就一<br/>物理图灵测试<br/>2 至 3 年] --> A2[成就二<br/>物理 API<br/>机器人像软件被编排]
+    A2 --> A3[成就三<br/>物理自动研究<br/>机器人造下一代自己]
+</div>
+<table>
+<thead><tr><th>成就</th><th>含义</th><th>愿景</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>① 物理图灵测试</strong><br/>（约 2–3 年）</td>
+<td>在大量活动中，你<strong>分不清是人还是机器人在做</strong>这件事（"也许喝醉的人除外"）。核心是<strong>单位能量进、单位劳动出</strong>。</td>
+<td>仅凭机器人现在"性感的姿势"判断，"任务量还很大"。（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1048s">17:28</a>）</td>
+</tr>
+<tr>
+<td><strong>② 物理 API</strong></td>
+<td>一整支机器人舰队，可以像任何软件一样用 API 和命令行配置，<strong>由（未来的）Opus 9.0 来编排</strong>。</td>
+<td><strong>熄灯工厂 = 原子打印机</strong>：输入 markdown 设计文件，输出完全自主组装好的产品；以及自动化化学/生物/医学发现的"湿实验室"。（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1071s">17:51</a>）</td>
+</tr>
+<tr>
+<td><strong>③ 物理自动研究</strong></td>
+<td>机器人开始<strong>设计、改进并建造下一代的自己</strong>，远超人力所及。</td>
+<td>科技树的终点站。（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1093s">18:13</a>）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+
+<h2 id="九-2040-是科幻吗">九、2040：是科幻吗？</h2>
+<p>这会不会太科幻、此生能否看到？他给了一个时间锚（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1113s">18:33</a>）：AI 社区<strong>花了 14 年</strong>，从 2012 年 AlexNet 第一次前向传播（一个勉强能分辨猫狗的模型）走到 2026 年的 AI Ascent（已经在谈 agentic 自动研究）。<strong>再加 14 年</strong>——2026 正好是 2012 与 2040 的中点。</p>
+<blockquote><p>"技术不是线性前进的，而是<strong>指数级</strong>的。所以我可以<strong>有 95% 把握说：我们会在 2040 年抵达终局的终点、科技树的尽头</strong>。而那时我们都还年轻。"（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1154s">19:14</a>）</p></blockquote>
+<p>结语呼应 Ilya：<strong>"If you believe in robotics, robotics will believe in you."</strong> 并以一句广为流传的话收尾（<a href="https://www.youtube.com/watch?v=3Y8aq_ofEVs&amp;t=1176s">19:36</a>）：</p>
+<blockquote><p>"我们这一代，<strong>生得太晚，无缘探索地球；生得太早，无缘探索群星——但我们恰好生得正是时候，去解决机器人（born just in time to solve robotics）。</strong>"</p></blockquote>
+<hr />
+
+<h2 id="附-核心术语速查">附：核心术语速查</h2>
+<table>
+<thead><tr><th>术语</th><th>一句话定义</th><th>本场语境</th></tr></thead>
+<tbody>
+<tr><td><strong>The Great Parallel</strong></td><td>把 LLM 配方平移到机器人</td><td>模拟世界状态 + 动作微调 + RL</td></tr>
+<tr><td><strong>VLA / LVA</strong></td><td>视觉-语言-动作模型，实则语言参数最重</td><td>擅长名词、不擅长物理/动词</td></tr>
+<tr><td><strong>世界模型</strong></td><td>视频模型在预测下一帧像素中涌现物理与规划</td><td>VEO3 自学重力/反射/解迷宫</td></tr>
+<tr><td><strong>Dreamer</strong></td><td>向未来"做梦"几秒、联合解码状态与动作的策略</td><td>零样本完成没见过的动词</td></tr>
+<tr><td><strong>WAM（世界动作模型）</strong></td><td>视觉与动作重回一等公民的新模型类</td><td>取代 VLA</td></tr>
+<tr><td><strong>Teleop（遥操作）</strong></td><td>人远程操控机器人采数据</td><td>上限 24h/天，将被淘汰</td></tr>
+<tr><td><strong>UMI / Dex-UMI</strong></td><td>把机器人末端/外骨骼戴在人手上直接采数据</td><td>零遥操作训练策略</td></tr>
+<tr><td><strong>Ego Scale / Ego-Exo</strong></td><td>以第一人称视频为主的端到端灵巧操作</td><td>21K 小时预训练，零机器人数据</td></tr>
+<tr><td><strong>Real2Sim2Real</strong></td><td>iPhone 扫描→物理仿真→数字表亲增广</td><td>规模化造 RL 环境</td></tr>
+<tr><td><strong>Dream Dojo</strong></td><td>无物理方程/图形引擎的纯神经模拟器</td><td>实时输出 RGB + 传感器状态</td></tr>
+<tr><td><strong>物理图灵测试 / 物理 API / 物理自动研究</strong></td><td>机器人科技树待解锁的三个成就</td><td>预计 2040 抵达终局</td></tr>
+</tbody>
+</table>
+<hr />
+<p><em>本文基于 YouTube 自动字幕 + 人工整理 + 中文重新组织。时间戳链接点击可跳到 YouTube 对应位置核对原话。</em></p>
+  </main>
+</div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
+</body>
+</html>
