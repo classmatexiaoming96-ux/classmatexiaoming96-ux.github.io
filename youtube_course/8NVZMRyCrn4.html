@@ -1,121 +1,87 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>The Problem Solvers | Michael Truell at Cursor</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  :root {
-    --bg: #fafaf7;
-    --fg: #1a1a1a;
-    --muted: #6b6b6b;
-    --accent: #c96442;
-    --accent-bg: #f6e8e0;
-    --border: #e3e3df;
-    --sidebar-w: 280px;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg);
-    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
-  aside.toc {
-    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
-    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
-    font-size: 14px;
-  }
-  aside.toc h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--muted); margin: 0 0 12px; }
-  aside.toc ol { list-style: none; margin: 0; padding: 0; }
-  aside.toc li { margin: 0 0 10px; }
-  aside.toc a { color: var(--fg); display: block; }
-  aside.toc a:hover { color: var(--accent); }
-  aside.toc .num { color: var(--muted); margin-right: 6px; font-variant-numeric: tabular-nums; }
-
-  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 880px; }
-  header.meta { border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 32px; }
-  header.meta h1 { font-size: 28px; line-height: 1.25; margin: 0 0 12px; }
-  header.meta .sub { color: var(--muted); font-size: 14px; }
-  header.meta .sub a { color: var(--muted); }
-  header.meta .sub a:hover { color: var(--accent); }
-
-  section.chapter { margin: 40px 0; scroll-margin-top: 20px; }
-  section.chapter h2 { font-size: 20px; margin: 0 0 16px; padding-bottom: 8px;
-    border-bottom: 1px solid var(--border); }
-
-  p.para { margin: 0 0 20px; position: relative; padding-left: 76px; }
-  a.ts {
-    position: absolute; left: 0; top: 4px;
-    display: inline-block; min-width: 64px; text-align: center;
-    padding: 2px 8px; border-radius: 4px;
-    background: var(--accent-bg); color: var(--accent);
-    font: 600 12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-variant-numeric: tabular-nums;
-  }
-  a.ts:hover { background: var(--accent); color: #fff; text-decoration: none; }
-
-  footer.meta { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
-    color: var(--muted); font-size: 13px; }
-
-  @media (max-width: 720px) {
-    .layout { grid-template-columns: 1fr; }
-    aside.toc { position: static; max-height: none; border-right: none;
-      border-bottom: 1px solid var(--border); }
-    p.para { padding-left: 0; }
-    a.ts { position: static; display: inline-block; margin-right: 8px; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Problem Solvers | Michael Truell at Cursor — Cursor 创始人访谈</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #0f0f0f; color: #eee; }
+    h1 { color: #ff4444; border-bottom: 1px solid #333; padding-bottom: 12px; font-size: 1.5em; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #ff4444; text-decoration: none; font-size: 0.9em; }
+    .back-link:hover { text-decoration: underline; }
+    .meta { color: #888; font-size: 0.85em; margin: 8px 0 16px; }
+    .meta span { margin-right: 16px; }
+    .desc { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 16px; margin: 16px 0; color: #ccc; line-height: 1.6; }
+    .section { margin: 32px 0; }
+    .section h2 { color: #fff; font-size: 1.1em; border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 16px; }
+    .section p { color: #bbb; line-height: 1.7; margin: 0 0 14px; }
+    .timestamp { color: #ff4444; font-size: 0.85em; margin-right: 8px; }
+    .key-point { background: #1a1a1a; border-left: 3px solid #ff4444; padding: 12px 16px; margin: 16px 0; color: #ccc; }
+    .highlight { color: #ff6644; font-weight: 500; }
+    footer { margin-top: 48px; text-align: center; color: #555; font-size: 0.8em; border-top: 1px solid #333; padding-top: 20px; }
+    footer a { color: #888; }
+  </style>
 </head>
 <body>
-<div class="layout">
-  <aside class="toc">
-    <h2>目录</h2>
-    <ol>
-      
-      <li><a href="#sec-1"><span class="num">01</span>I started coding when I was 12 and…</a></li>
-      
-    </ol>
-  </aside>
-  <main>
-    <header class="meta">
-      <h1>The Problem Solvers | Michael Truell at Cursor</h1>
-      <div class="sub">
-        Claude · 2:36 · 2026-06-10 ·
-        <a href="https://www.youtube.com/watch?v=8NVZMRyCrn4" target="_blank" rel="noopener">YouTube ↗</a>
-      </div>
-    </header>
+  <a href="index.html" class="back-link">← 返回课程列表</a>
+  
+  <h1>The Problem Solvers | Michael Truell at Cursor</h1>
+  <div class="meta">
+    <span>⏱ ~3 分钟</span>
+    <span>📺 Cursor</span>
+    <span>📅 2026-06-10</span>
+  </div>
+  
+  <div class="desc">
+    <strong>内容简介</strong><br>
+    Cursor CEO Michael Truell 分享他的编程启蒙、Cursor 的产品理念以及与 Anthropic 的深度合作关系。核心观点：编程的本质是"消除壁垒的构建能力"；Cursor 致力于打造最强大的 AI 编程工具，让专业工程师和编程小白都能更高效地产出；AI 模型能力的飞跃是 Cursor 这类产品得以存在的根本前提。
+  </div>
 
-    
-    <section class="chapter" id="sec-1">
-      <h2>01 · I started coding when I was 12 and…</h2>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=8NVZMRyCrn4&t=4s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">0:04</a>
-        I started coding when I was 12 and very rapidly got kind of obsessed with it and that came from the feeling of being able to build without barriers, which I think is one of the special things about about programming. With coding, you just need a computer and you can build things that you dream up in your mind. >> >> Cursor is a tool that helps professionals build software faster with AI. That means being the best place to work with coding agents, both for professional engineers and folks with no engineering background at all. That's both giving people a tool that's approachable, but then it's also really powerful. >> Anthropic and Cursor have a tight relationship. How would you describe it? >> One of the things we really appreciated about Anthropic is how committed the the company is to principles, which has been one of kind of the core founding components or missions of the company, but I think it extends also to how you all serve customers.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=8NVZMRyCrn4&t=64s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">1:04</a>
-        And I think from the start of the company, there's been a commitment to really being a platform and being something that folks can build lasting businesses on top of. >> >> It's been a a deep partnership and one we're really grateful for. And I actually remember we were a very, very scrappy team back then. Anthropic was a more scrappy organization than it is now, too, but I think that part of what's enabled Cursor to exist is just like this revolution in AI models. There's been this great productive tight alignment between some of the stuff we're doing on the product side of things and some of the increases in model capabilities that you all are working on. >> What differentiates Cursor? >> There's a deep product focus at the company from the very start. We want to give folks more autonomy and help them be more empowered.
-      </p>
-      
-      <p class="para">
-        <a class="ts" href="https://www.youtube.com/watch?v=8NVZMRyCrn4&t=108s" target="_blank"
-           rel="noopener" title="跳转到 YouTube 该时间点">1:48</a>
-        I think that this is like a great time to be working on a company. That's because I think in short order, like a whole new set of companies have been made possible that have like different physics, like different business physics. Two years ago we were 15 people in the room and now we're 700 people and serve over 60% of the Fortune 500 and have very large software business that's, rivals many of the biggest public software companies. It's definitely kind of crazy and it's not lost on us just how special this is how unprecedented it is historically and feel lucky to be able to contribute in some way to to this.
-      </p>
-      
-    </section>
-    
+  <div class="section">
+    <h2>一、编程的起点：从 12 岁开始的热爱</h2>
+    <p><span class="timestamp">[0:04]</span><strong>Michael Truell：</strong>"我 12 岁开始写代码，很快就成了疯狂的代码爱好者。这种热情来自于一种感受——<span class="highlight">能够毫无障碍地构建东西</span>。这就是编程最特别的地方：你只需要一台电脑，就能把脑子里设想的东西变成现实。"</p>
+    <div class="key-point">编程的核心价值不是"写代码"本身，而是<strong>消除壁垒的构建能力</strong>——这是 Cursor 整个产品哲学的起点。</div>
+  </div>
 
-    <footer class="meta">
-      字幕来源：YouTube 人工/自动字幕 · 段落由脚本自动分段 · 时间戳点击跳转 YouTube
-    </footer>
-  </main>
-</div>
+  <div class="section">
+    <h2>二、Cursor 的使命：让所有人用 AI 构建软件</h2>
+    <p><span class="timestamp">[0:27]</span><strong>Cursor 是什么？</strong>一款帮助专业人士用 AI 更快速地构建软件的工具。核心理念：</p>
+    <ul>
+      <li>成为使用编程 Agent 的<span class="highlight">最佳场所</span>——无论是对专业工程师还是没有任何工程背景的人</li>
+      <li>既要工具易于上手，又要真正强大：<strong>有亲和力 + 有深度</strong></li>
+    </ul>
+    <p><span class="timestamp">[1:04]</span><strong>Michael Truell：</strong>"Anthropic 和 Cursor 有非常紧密的合作关系。我们非常欣赏 Anthropic 的一点是——这家公司对<strong>原则（principles）</strong>的坚守。这不仅是公司创始的核心使命，也延伸到了他们如何服务客户。"</p>
+    <p><span class="timestamp">[1:48]</span>从公司创立之初，Anthropic 就承诺做真正的<strong>平台公司</strong>——让合作伙伴能在其上构建持久的事业，而不只是提供一时的工具。</p>
+  </div>
+
+  <div class="section">
+    <h2>三、AI 模型革命与 Cursor 的诞生</h2>
+    <p><span class="timestamp">[1:04]</span>回顾合作历史，Michael 提到："这是一种深度合作关系，我们非常感激。我还记得那时候 Cursor 还是一个非常简陋的团队，Anthropic 也比现在小得多。但 Cursor 能存在，很大程度上归功于 <span class="highlight">AI 模型的那场革命</span>。"</p>
+    <p><span class="timestamp">[1:48]</span>"Anthropic 在模型能力上的提升，和 Cursor 在产品侧的探索，有着非常好的正向对齐关系——产品进步和模型进步相互促进，形成了良性循环。"</p>
+    <div class="key-point">Cursor 的存在前提是 AI 模型能力的飞跃——没有近年来模型能力的大幅提升，就不会有 AI 编程工具的今天。</div>
+  </div>
+
+  <div class="section">
+    <h2>四、Cursor 的差异化：极致产品导向</h2>
+    <p><span class="timestamp">[1:48]</span><strong>是什么让 Cursor 与众不同？</strong></p>
+    <ul>
+      <li>从公司成立的第一天起，就有<span class="highlight">深度的产品导向</span></li>
+      <li>目标是赋予用户更多的<strong>自主性（autonomy）</strong>，帮助他们成为更强大的构建者</li>
+    </ul>
+    <p><span class="timestamp">[1:48]</span>Michael 感叹："这确实是一个做公司的绝佳时机。一批全新的公司正在被创造出来，它们的<strong>商业逻辑（business physics）</strong>与传统公司完全不同。"</p>
+  </div>
+
+  <div class="section">
+    <h2>五、规模与影响：15 人到 700 人，60% 财富 500 强</h2>
+    <p><span class="timestamp">[1:48]</span><strong>Michael Truell：</strong>"两年前，Cursor 只有 15 个人在小小的房间里。现在我们有 <span class="highlight">700 名员工</span>，服务超过 <span class="highlight">60% 的财富 500 强企业</span>，软件业务规模已经可以与最大的上市软件公司相媲美。"</p>
+    <p><span class="timestamp">[1:48]</span>"这确实让人感到不可思议。从历史上看，这也是前所未有的——我们非常清楚这是多么特殊、多么难得。我们很幸运能为这个时代做出一点贡献。"</p>
+    <div class="key-point">Cursor 的高速增长印证了一个事实：AI 编程工具正在从根本上改变软件构建的方式——更少的人、更高的产出、更快的迭代。</div>
+  </div>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=8NVZMRyCrn4" target="_blank">▶ 原视频</a>
+  </footer>
 </body>
 </html>
