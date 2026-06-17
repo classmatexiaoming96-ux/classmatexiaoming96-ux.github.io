@@ -97,38 +97,6 @@
       vertical-align: middle;
     }
     
-    /* Tab Navigation */
-    .tab-nav {
-      display: flex;
-      gap: 8px;
-      margin: 0 0 30px;
-      flex-wrap: wrap;
-    }
-    
-    .tab-btn {
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px 18px;
-      cursor: pointer;
-      font-size: 0.9em;
-      font-family: inherit;
-      transition: all 0.2s;
-    }
-    
-    .tab-btn:hover {
-      border-color: var(--accent-cyan);
-      color: var(--text-primary);
-    }
-    
-    .tab-btn.active {
-      background: var(--accent-cyan);
-      color: #0a0a0f;
-      border-color: var(--accent-cyan);
-      font-weight: 500;
-    }
-    
     /* Stats Bar */
     .stats-bar {
       display: flex;
@@ -157,12 +125,46 @@
       margin-top: 4px;
     }
     
+    /* Category Section */
+    .category-section {
+      margin-bottom: 60px;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    
+    .section-emoji {
+      font-size: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    
+    .section-count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      padding-left: 4px;
+    }
+    
     /* Cards Grid */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 20px;
-      padding-bottom: 60px;
     }
     
     .video-card {
@@ -404,151 +406,154 @@
       <div class="stat-label">分钟时长</div>
     </div>
     <div class="stat-item">
-      <div class="stat-value">4</div>
+      <div class="stat-value">3</div>
       <div class="stat-label">内容分类</div>
     </div>
   </div>
 
-  <nav class="tab-nav">
-    <button class="tab-btn active" data-tab="all">全部</button>
-    <button class="tab-btn" data-tab="ai-frontier">AI 前沿</button>
-    <button class="tab-btn" data-tab="agent-engineering">Agent 工程</button>
-    <button class="tab-btn" data-tab="tool-practice">工具实践</button>
-  </nav>
-
-  <div class="cards-grid">
-    <div class="video-card" data-category="ai-frontier">
-      <div class="card-header">
-        <h2 class="card-title">Code with Claude Tokyo 2026: Opening Keynote</h2>
-        <div class="card-icon">🎙️</div>
-      </div>
-      <div class="badges">
-        <span class="badge badge-time">42 分钟</span>
-        <span class="badge badge-source">Anthropic 官方</span>
-      </div>
-      <p class="card-desc">Anthropic 在东京举办的 Code with Claude 2026 活动开幕演讲，介绍 Claude 最新能力及开发者生态进展。</p>
-      <a href="N4efO8viXXo.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  <!-- AI 前沿 -->
+  <section class="category-section">
+    <div class="section-header">
+      <span class="section-emoji">📚</span>
+      <h2 class="section-title">AI 前沿</h2>
+      <span class="section-count">3 个视频</span>
     </div>
+    <p class="section-desc">大型语言模型、Agent 系统、AI 前沿研究</p>
+    <div class="cards-grid">
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">机器人的终局：NVIDIA Jim Fan</h2>
+          <div class="card-icon">🤖</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">~20 分钟</span>
+          <span class="badge badge-source">Sequoia AI Ascent 2026</span>
+          <span class="badge">Jim Fan</span>
+        </div>
+        <p class="card-desc">NVIDIA Jim Fan 讲述把 LLM 成功配方平移到机器人的"The Great Parallel"：从 VLA 到世界动作模型 WAM、会"做梦"的 Dreamer、以第一人称视频为主食的数据策略，以及通往 2040 终局的三个成就。</p>
+        <a href="3Y8aq_ofEVs.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
 
-    <div class="video-card" data-category="agent-engineering">
-      <div class="card-header">
-        <h2 class="card-title">The Problem Solvers | Michael Truell at Cursor</h2>
-        <div class="card-icon">🤖</div>
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">Code with Claude Tokyo 2026: Opening Keynote</h2>
+          <div class="card-icon">🎙️</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">42 分钟</span>
+          <span class="badge badge-source">Anthropic 官方</span>
+        </div>
+        <p class="card-desc">Anthropic 在东京举办的 Code with Claude 2026 活动开幕演讲，介绍 Claude 最新能力及开发者生态进展。</p>
+        <a href="N4efO8viXXo.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-      <div class="badges">
-        <span class="badge badge-time">~3 分钟</span>
-        <span class="badge badge-source">Cursor</span>
-      </div>
-      <p class="card-desc">Cursor CEO Michael Truell 分享 AI 编程工具的发展愿景，探讨如何通过 AI 增强开发者能力。</p>
-      <a href="8NVZMRyCrn4.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-    </div>
 
-    <div class="video-card" data-category="ai-frontier">
-      <div class="card-header">
-        <h2 class="card-title">从 Vibe Coding 到 Agentic Engineering</h2>
-        <div class="card-icon">🎙️</div>
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">The Problem Solvers | Michael Truell at Cursor</h2>
+          <div class="card-icon">🤖</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">~3 分钟</span>
+          <span class="badge badge-source">Cursor</span>
+        </div>
+        <p class="card-desc">Cursor CEO Michael Truell 分享 AI 编程工具的发展愿景，探讨如何通过 AI 增强开发者能力。</p>
+        <a href="8NVZMRyCrn4.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-      <div class="badges">
-        <span class="badge badge-time">~30 分钟</span>
-        <span class="badge badge-source">Sequoia AI Ascent 2026</span>
-        <span class="badge">Andrej Karpathy</span>
-      </div>
-      <p class="card-desc">Andrej Karpathy 与红杉 Stephanie Zhan 对谈：Software 3.0、可验证性与"锯齿状智能"、Vibe Coding 与 Agentic Engineering 的分界，以及智能廉价时代人类的新价值——品味、判断与"无法外包的理解"。</p>
-      <a href="96jN2OCOfLs.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
+  </section>
 
-    <div class="video-card" data-category="ai-frontier">
-      <div class="card-header">
-        <h2 class="card-title">机器人的终局：NVIDIA Jim Fan</h2>
-        <div class="card-icon">🤖</div>
-      </div>
-      <div class="badges">
-        <span class="badge badge-time">~20 分钟</span>
-        <span class="badge badge-source">Sequoia AI Ascent 2026</span>
-        <span class="badge">Jim Fan</span>
-      </div>
-      <p class="card-desc">NVIDIA Jim Fan 讲述把 LLM 成功配方平移到机器人的"The Great Parallel"：从 VLA 到世界动作模型 WAM、会"做梦"的 Dreamer、以第一人称视频为主食的数据策略，以及通往 2040 终局的三个成就。</p>
-      <a href="3Y8aq_ofEVs.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  <!-- Agent 工程 -->
+  <section class="category-section">
+    <div class="section-header">
+      <span class="section-emoji">📦</span>
+      <h2 class="section-title">Agent 工程</h2>
+      <span class="section-count">2 个视频</span>
     </div>
+    <p class="section-desc">Agent 架构设计、智能体系统、工程实践</p>
+    <div class="cards-grid">
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">从 Vibe Coding 到 Agentic Engineering</h2>
+          <div class="card-icon">🎙️</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">~30 分钟</span>
+          <span class="badge badge-source">Sequoia AI Ascent 2026</span>
+          <span class="badge">Andrej Karpathy</span>
+        </div>
+        <p class="card-desc">Andrej Karpathy 与红杉 Stephanie Zhan 对谈：Software 3.0、可验证性与"锯齿状智能"、Vibe Coding 与 Agentic Engineering 的分界，以及智能廉价时代人类的新价值——品味、判断与"无法外包的理解"。</p>
+        <a href="96jN2OCOfLs.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
 
-    <div class="video-card" data-category="agent-engineering">
-      <div class="card-header">
-        <h2 class="card-title">工具、技能还是子智能体？拆解一个过度膨胀的 Agent</h2>
-        <div class="card-icon">⚙️</div>
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">工具、技能还是子智能体？拆解一个过度膨胀的 Agent</h2>
+          <div class="card-icon">⚙️</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">45 分钟</span>
+          <span class="badge">5 图</span>
+          <span class="badge">8 表</span>
+        </div>
+        <p class="card-desc">深入分析 StockPilot Agent 如何从单一提示词膨胀为失控系统，以及如何通过 Skill、子智能体等模式重构，使其从 62% 提升至 92% 成功率。</p>
+        <a href="mWvtOHlZM-I.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-      <div class="badges">
-        <span class="badge badge-time">45 分钟</span>
-        <span class="badge">5 图</span>
-        <span class="badge">8 表</span>
-      </div>
-      <p class="card-desc">深入分析 StockPilot Agent 如何从单一提示词膨胀为失控系统，以及如何通过 Skill、子智能体等模式重构，使其从 62% 提升至 92% 成功率。</p>
-      <a href="mWvtOHlZM-I.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
+  </section>
 
-    <div class="video-card" data-category="tool-practice">
-      <div class="card-header">
-        <h2 class="card-title">Claude Code 最佳实践</h2>
-        <div class="card-icon">💻</div>
-      </div>
-      <div class="badges">
-        <span class="badge badge-time">~30 分钟</span>
-        <span class="badge badge-source">Anthropic 官方</span>
-      </div>
-      <p class="card-desc">Anthropic 官方工程师分享如何在生产环境中高效使用 Claude Code，涵盖工程实践、调试技巧和团队协作模式。</p>
-      <a href="gv0WHhKelSE.html" class="card-link">阅读 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  <!-- 工具实践 -->
+  <section class="category-section">
+    <div class="section-header">
+      <span class="section-emoji">🔧</span>
+      <h2 class="section-title">工具实践</h2>
+      <span class="section-count">3 个视频</span>
     </div>
+    <p class="section-desc">Claude Code、MCP 协议、Vibe Coding 实战</p>
+    <div class="cards-grid">
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">Claude Code 最佳实践</h2>
+          <div class="card-icon">💻</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">~30 分钟</span>
+          <span class="badge badge-source">Anthropic 官方</span>
+        </div>
+        <p class="card-desc">Anthropic 官方工程师分享如何在生产环境中高效使用 Claude Code，涵盖工程实践、调试技巧和团队协作模式。</p>
+        <a href="gv0WHhKelSE.html" class="card-link">阅读 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
 
-    <div class="video-card" data-category="tool-practice">
-      <div class="card-header">
-        <h2 class="card-title">MCP 201：模型上下文协议进阶</h2>
-        <div class="card-icon">🔗</div>
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">MCP 201：模型上下文协议进阶</h2>
+          <div class="card-icon">🔗</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">~25 分钟</span>
+          <span class="badge badge-source">Anthropic 官方</span>
+        </div>
+        <p class="card-desc">深入讲解 MCP（Model Context Protocol）的架构设计与进阶用法，探讨如何构建多 Agent 共享治理机制。</p>
+        <a href="HNzH5Us1Rvg.html" class="card-link">阅读 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-      <div class="badges">
-        <span class="badge badge-time">~25 分钟</span>
-        <span class="badge badge-source">Anthropic 官方</span>
-      </div>
-      <p class="card-desc">深入讲解 MCP（Model Context Protocol）的架构设计与进阶用法，探讨如何构建多 Agent 共享治理机制。</p>
-      <a href="HNzH5Us1Rvg.html" class="card-link">阅读 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-    </div>
 
-    <div class="video-card" data-category="tool-practice">
-      <div class="card-header">
-        <h2 class="card-title">Vibe Coding in Production</h2>
-        <div class="card-icon">🚀</div>
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">Vibe Coding in Production</h2>
+          <div class="card-icon">🚀</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">~30 分钟</span>
+          <span class="badge badge-source">Anthropic 官方</span>
+        </div>
+        <p class="card-desc">探讨在生产环境中实践 Vibe Coding 的经验与避坑指南，兼顾开发效率与代码质量。</p>
+        <a href="fHWFF_pnqDk.html" class="card-link">阅读 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-      <div class="badges">
-        <span class="badge badge-time">~30 分钟</span>
-        <span class="badge badge-source">Anthropic 官方</span>
-      </div>
-      <p class="card-desc">探讨在生产环境中实践 Vibe Coding 的经验与避坑指南，兼顾开发效率与代码质量。</p>
-      <a href="fHWFF_pnqDk.html" class="card-link">阅读 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
-  </div>
+  </section>
 
   <footer>
     由 AI 自动整理字幕并生成 · 
     <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a>
   </footer>
-
-  <script>
-    const tabs = document.querySelectorAll('.tab-btn');
-    const cards = document.querySelectorAll('.video-card');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        const target = tab.dataset.tab;
-        cards.forEach(card => {
-          if (target === 'all' || card.dataset.category === target) {
-            card.style.display = 'block';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-  </script>
 </body>
 </html>
