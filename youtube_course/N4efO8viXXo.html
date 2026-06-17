@@ -4,116 +4,318 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code with Claude Tokyo 2026: Opening Keynote — Claude 东京 2026 开幕演讲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #0f0f0f; color: #eee; }
-    h1 { color: #ff4444; border-bottom: 1px solid #333; padding-bottom: 12px; font-size: 1.5em; }
-    .back-link { display: inline-block; margin-bottom: 20px; color: #ff4444; text-decoration: none; font-size: 0.9em; }
-    .back-link:hover { text-decoration: underline; }
-    .meta { color: #888; font-size: 0.85em; margin: 8px 0 16px; }
-    .meta span { margin-right: 16px; }
-    .desc { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 16px; margin: 16px 0; color: #ccc; line-height: 1.6; }
-    .section { margin: 32px 0; }
-    .section h2 { color: #fff; font-size: 1.1em; border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 16px; }
-    .section p { color: #bbb; line-height: 1.7; margin: 0 0 14px; }
-    .timestamp { color: #ff4444; font-size: 0.85em; margin-right: 8px; }
-    .key-point { background: #1a1a1a; border-left: 3px solid #ff4444; padding: 12px 16px; margin: 16px 0; color: #ccc; }
-    footer { margin-top: 48px; text-align: center; color: #555; font-size: 0.8em; border-top: 1px solid #333; padding-top: 20px; }
-    footer a { color: #888; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header */
+    .page-header {
+      padding: 40px 0 32px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    /* Content */
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .content-card:hover::before { opacity: 1; }
+
+    /* Section styles */
+    .section { margin: 36px 0; }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    .timestamp {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      margin-right: 6px;
+    }
+
+    .key-point {
+      background: rgba(99, 179, 237, 0.06);
+      border: 1px solid rgba(99, 179, 237, 0.15);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 14px 18px;
+      margin: 18px 0;
+      color: var(--text-secondary);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .highlight { color: #ff8866; font-weight: 500; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+    }
   </style>
 </head>
 <body>
-  <a href="index.html" class="back-link">← 返回课程列表</a>
-  
-  <h1>Code with Claude Tokyo 2026: Opening Keynote</h1>
-  <div class="meta">
-    <span>⏱ 42 分钟</span>
-    <span>📺 Anthropic 官方</span>
-    <span>📅 2026-06-12</span>
-  </div>
-  
-  <div class="desc">
-    <strong>内容简介</strong><br>
-    Anthropic 在东京举办的首届 Code with Claude 活动开幕演讲。Caitlyn Les（Anthropic 云平台工程负责人）宣布 Claude 5 系列模型发布（Diane 主持模型发布）、Angela Jen 介绍 Cloud Managed Agents 平台能力、Caitlyn Woo 展示 Claude Code 最新功能。核心主题：AI 模型能力正以指数级增长，而商业落地仍在线性爬坡——缩小这个差距是整个生态的共同机遇。
-  </div>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">Code with Claude Tokyo 2026: Opening Keynote</h1>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ 42 分钟</span>
+      <span class="meta-badge source">📺 Anthropic 官方</span>
+      <span class="meta-badge">📅 2026-06-12</span>
+    </div>
+  </header>
 
-  <div class="section">
-    <h2>一、开场 & Claude 5 模型发布</h2>
-    <p><span class="timestamp">[0:16]</span>欢迎致辞：这是 Code with Claude 首次来到日本，接下来两天将围绕模型、平台和产品展开分享。</p>
-    <p><span class="timestamp">[2:28]</span><strong>重磅发布</strong>：就在几小时前，Anthropic 发布了第五代 Claude 模型——<strong>Claude Mythos 5</strong> 和 <strong>Claude Fable 5</strong>，这是 Anthropic 历史上最强大的两款模型。Diane（研究产品负责人）随后进行了详细解读。</p>
-    <p><span class="timestamp">[3:13]</span>Anthropic 的定位是<strong>平台公司</strong>：全球开发者基于平台创造的价值，远超 Anthropic 自身能构建的东西。Rakuten 是典型案例——从使用 Claude Code 加速开发，进化到用 Cloud Managed Agents 构建跨工程、产品、销售、财务的内部 Agent 系统，发布周期从每季度一次缩短到每两周一次。</p>
-    <div class="key-point">Fable 5 在 SWE-Bench Pro 等基准测试中创下行业最高分，且这个差距在任务越复杂、越长期时越明显。</div>
-  </div>
+  <main style="position: relative; z-index: 1;">
+    <div class="content-card">
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>开场 &amp; Claude 5 模型发布</h2>
+        <p><span class="timestamp">[0:16]</span>欢迎致辞：这是 Code with Claude 首次来到日本，接下来两天将围绕模型、平台和产品展开分享。</p>
+        <p><span class="timestamp">[2:28]</span><strong>重磅发布</strong>：就在几小时前，Anthropic 发布了第五代 Claude 模型——<strong>Claude Mythos 5</strong> 和 <strong>Claude Fable 5</strong>，这是 Anthropic 历史上最强大的两款模型。Diane（研究产品负责人）随后进行了详细解读。</p>
+        <p><span class="timestamp">[3:13]</span>Anthropic 的定位是<strong>平台公司</strong>：全球开发者基于平台创造的价值，远超 Anthropic 自身能构建的东西。Rakuten 是典型案例——从使用 Claude Code 加速开发，进化到用 Cloud Managed Agents 构建跨工程、产品、销售、财务的内部 Agent 系统，发布周期从每季度一次缩短到每两周一次。</p>
+        <div class="key-point">Fable 5 在 SWE-Bench Pro 等基准测试中创下行业最高分，且这个差距在任务越复杂、越长期时越明显。</div>
+      </div>
 
-  <div class="section">
-    <h2>二、Fable 5 的两大核心能力</h2>
-    <p><span class="timestamp">[10:56]</span><strong>单次正确性（Single-shot Correctness）</strong>：给 Fable 5 一个复杂的、描述清晰的问题，它往往在第一次就能做对。早期的测试者反馈，曾有单个 prompt 完成了过去需要团队花数天甚至数周才能完成的工作。</p>
-    <p><span class="timestamp">[11:23]</span><strong>长时程自主性（Long Horizon Autonomy）</strong>：Fable 5 可以在一个目标上连续运行数天仍保持连贯性。它能记住跨越数百万 token 上下文窗口的规格说明，并能调度子 Agent、保持它们在轨道上运行——比其他模型更可靠、更具成本意识。</p>
-    <p><span class="timestamp">[12:33]</span>Fable 5 不仅擅长写代码，<strong>更擅长读代码</strong>：它能梳理代码库排查线上故障、挖掘 git 历史定位问题根源，还能主动提出改进建议。同时它也能处理财务报表、文档、幻灯片等"企业实际运行的工作"，端到端完成。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>Fable 5 的两大核心能力</h2>
+        <p><span class="timestamp">[10:56]</span><strong>单次正确性（Single-shot Correctness）</strong>：给 Fable 5 一个复杂的、描述清晰的问题，它往往在第一次就能做对。早期的测试者反馈，曾有单个 prompt 完成了过去需要团队花数天甚至数周才能完成的工作。</p>
+        <p><span class="timestamp">[11:23]</span><strong>长时程自主性（Long Horizon Autonomy）</strong>：Fable 5 可以在一个目标上连续运行数天仍保持连贯性。它能记住跨越数百万 token 上下文窗口的规格说明，并能调度子 Agent、保持它们在轨道上运行——比其他模型更可靠、更具成本意识。</p>
+        <p><span class="timestamp">[12:33]</span>Fable 5 不仅擅长写代码，<strong>更擅长读代码</strong>：它能梳理代码库排查线上故障、挖掘 git 历史定位问题根源，还能主动提出改进建议。同时它也能处理财务报表、文档、幻灯片等"企业实际运行的工作"，端到端完成。</p>
+      </div>
 
-  <div class="section">
-    <h2>三、Project Glass Wing 与安全护栏</h2>
-    <p><span class="timestamp">[14:02]</span>Fable 5 的智能程度如此之高，带来了双刃剑效应。两个月前 Anthropic 推出了 Project Glass Wing，向少数合作伙伴开放 Mythos Preview——因为它在网络安全领域的强大能力存在潜在滥用风险。</p>
-    <p><span class="timestamp">[14:42]</span>随后 Anthropic 构建了新的安全护栏系统：当请求涉及网络安全、生物或化学主题时，Fable 会自动路由到 Opus 4.8，响应带有明确标签并按 Opus 价格计费。这是权衡后的方案——让最强大的模型尽早到达用户手中，而非等待数月。</p>
-    <p><span class="timestamp">[16:05]</span>Mythos 5 与 Fable 5 底层相同，但解除网络和生物安全护栏。本月晚些时候将开始向生命科学领域的研究者开放，因为"对生物学有风险的能力，恰恰是对 AI 向善影响最大的能力"。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>Project Glass Wing 与安全护栏</h2>
+        <p><span class="timestamp">[14:02]</span>Fable 5 的智能程度如此之高，带来了双刃剑效应。两个月前 Anthropic 推出了 Project Glass Wing，向少数合作伙伴开放 Mythos Preview——因为它在网络安全领域的强大能力存在潜在滥用风险。</p>
+        <p><span class="timestamp">[14:42]</span>随后 Anthropic 构建了新的安全护栏系统：当请求涉及网络安全、生物或化学主题时，Fable 会自动路由到 Opus 4.8，响应带有明确标签并按 Opus 价格计费。这是权衡后的方案——让最强大的模型尽早到达用户手中，而非等待数月。</p>
+        <p><span class="timestamp">[16:05]</span>Mythos 5 与 Fable 5 底层相同，但解除网络和生物安全护栏。本月晚些时候将开始向生命科学领域的研究者开放，因为"对生物学有风险的能力，恰恰是对 AI 向善影响最大的能力"。</p>
+      </div>
 
-  <div class="section">
-    <h2>四、给开发者的建议：面向未来模型构建</h2>
-    <p><span class="timestamp">[17:44]</span>未来版本的 Claude 将比今天发布的更强。开发者应该<strong>为下一代模型设计架构</strong>，而非仅适配当前版本。</p>
-    <p><span class="timestamp">[18:16]</span>反复出现的规律是：<strong>那些能吸收下一次智能跃升的架构、工具链和产品体验的开发者，往往是最终的赢家</strong>。随着模型越来越智能，它们可以用更基础的原始工具（如文件系统、沙箱计算环境）完成更深的工作——过于复杂的工具链反而成为瓶颈。</p>
-    <p><span class="timestamp">[19:06]</span>当某个之前不太奏效的原型或产品体验突然开始工作了——这就是智能在底层发生跃升的信号。团队要把模型升级视为业务机会，配合自动化评测、测试流程，持续用新版本 Claude 创造新体验。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>给开发者的建议：面向未来模型构建</h2>
+        <p><span class="timestamp">[17:44]</span>未来版本的 Claude 将比今天发布的更强。开发者应该<strong>为下一代模型设计架构</strong>，而非仅适配当前版本。</p>
+        <p><span class="timestamp">[18:16]</span>反复出现的规律是：<strong>那些能吸收下一次智能跃升的架构、工具链和产品体验的开发者，往往是最终的赢家</strong>。随着模型越来越智能，它们可以用更基础的原始工具（如文件系统、沙箱计算环境）完成更深的工作——过于复杂的工具链反而成为瓶颈。</p>
+        <p><span class="timestamp">[19:06]</span>当某个之前不太奏效的原型或产品体验突然开始工作了——这就是智能在底层发生跃升的信号。团队要把模型升级视为业务机会，配合自动化评测、测试流程，持续用新版本 Claude 创造新体验。</p>
+      </div>
 
-  <div class="section">
-    <h2>五、AI 原生公司：三个关键要素</h2>
-    <p><span class="timestamp">[21:08]</span>Angela Jen 描述了一个"AI 原生公司"的场景：某款产品夜里自动发现了自己的错误，读取错误报告、找到 bug、写出修复方案并向所有用户推送——团队醒来时问题已消失，连 changelog 都写好了。没有 standup，没有 ticket，这是 AI 原生公司的样子。</p>
-    <p><span class="timestamp">[21:51]</span>实现这一愿景需要三个关键要素：<strong>Harness（工具链）</strong>、<strong>Context（上下文）</strong>、<strong>Infrastructure（基础设施）</strong>。Claude Managed Agents 正是将三者打包在一起的产品化方案。</p>
-    <div class="key-point">Fable 5 是构建长时程 Agent 的最佳模型，Managed Agents 是专为 Claude 打造的 Agent 运行平台——二者结合，可以用显著更少的努力获得更好的 Agent 成果。</div>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>AI 原生公司：三个关键要素</h2>
+        <p><span class="timestamp">[21:08]</span>Angela Jen 描述了一个"AI 原生公司"的场景：某款产品夜里自动发现了自己的错误，读取错误报告、找到 bug、写出修复方案并向所有用户推送——团队醒来时问题已消失，连 changelog 都写好了。没有 standup，没有 ticket，这是 AI 原生公司的样子。</p>
+        <p><span class="timestamp">[21:51]</span>实现这一愿景需要三个关键要素：<strong>Harness（工具链）</strong>、<strong>Context（上下文）</strong>、<strong>Infrastructure（基础设施）</strong>。Claude Managed Agents 正是将三者打包在一起的产品化方案。</p>
+        <div class="key-point">Fable 5 是构建长时程 Agent 的最佳模型，Managed Agents 是专为 Claude 打造的 Agent 运行平台——二者结合，可以用显著更少的努力获得更好的 Agent 成果。</div>
+      </div>
 
-  <div class="section">
-    <h2>六、Cloud Managed Agents 核心功能</h2>
-    <p><span class="timestamp">[22:19]</span><strong>Harness（工具链）</strong>：赋予 Claude 模型实际执行工作的能力，包括工具、环境和行动权限。Managed Agents 将"大脑"（决策）和"手"（执行/沙箱）分离。</p>
-    <p><span class="timestamp">[23:05]</span><strong>Context（上下文）</strong>：提供 100 万 token 上下文窗口、Agent 记忆系统（Memory）、Agent 自主读写技能（Skills）以及"做梦"（Dreaming）能力——Agent 可以回顾自身的历史轨迹并识别自我改进方向。</p>
-    <p><span class="timestamp">[23:58]</span><strong>Infrastructure（基础设施）</strong>：构建长时间运行的自主任 Agent 需要极致的规模和可靠性。Managed Agents 自动扩缩容沙箱，并能生成多 Agent 舰队来保障可靠性和持久性。</p>
-    <p><span class="timestamp">[26:44]</span>支持<strong>定时部署</strong>（schedule deployments）和<strong>Vault</strong>（环境变量安全存储，Agent 可在不接触密钥的情况下进行经过身份验证的 API 调用）。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>Cloud Managed Agents 核心功能</h2>
+        <p><span class="timestamp">[22:19]</span><strong>Harness（工具链）</strong>：赋予 Claude 模型实际执行工作的能力，包括工具、环境和行动权限。Managed Agents 将"大脑"（决策）和"手"（执行/沙箱）分离。</p>
+        <p><span class="timestamp">[23:05]</span><strong>Context（上下文）</strong>：提供 100 万 token 上下文窗口、Agent 记忆系统（Memory）、Agent 自主读写技能（Skills）以及"做梦"（Dreaming）能力——Agent 可以回顾自身的历史轨迹并识别自我改进方向。</p>
+        <p><span class="timestamp">[23:58]</span><strong>Infrastructure（基础设施）</strong>：构建长时间运行的自主任 Agent 需要极致的规模和可靠性。Managed Agents 自动扩缩容沙箱，并能生成多 Agent 舰队来保障可靠性和持久性。</p>
+        <p><span class="timestamp">[26:44]</span>支持<strong>定时部署</strong>（schedule deployments）和<strong>Vault</strong>（环境变量安全存储，Agent 可在不接触密钥的情况下进行经过身份验证的 API 调用）。</p>
+      </div>
 
-  <div class="section">
-    <h2>七、Dreaming：Agent 的自我反思能力</h2>
-    <p><span class="timestamp">[28:51]</span>"做梦"（Dreaming）功能让 Agent 可以回顾所有历史会话，将发现写入记忆和技能，以便下次表现得更好。这是让 Agent 真正实现自我改进的关键特性。</p>
-    <p>在 Shankiro Racing 团队的演示中：四个研究项目（空气动力学、轮胎温度、动力单元、驾驶安全）各自由一个 Claude Managed Agent 负责，Agent 可以根据预定义的评分标准（rubric）自主迭代，直到输出达到"好"的标准。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">七</span>Dreaming：Agent 的自我反思能力</h2>
+        <p><span class="timestamp">[28:51]</span>"做梦"（Dreaming）功能让 Agent 可以回顾所有历史会话，将发现写入记忆和技能，以便下次表现得更好。这是让 Agent 真正实现自我改进的关键特性。</p>
+        <p>在 Shankiro Racing 团队的演示中：四个研究项目（空气动力学、轮胎温度、动力单元、驾驶安全）各自由一个 Claude Managed Agent 负责，Agent 可以根据预定义的评分标准（rubric）自主迭代，直到输出达到"好"的标准。</p>
+      </div>
 
-  <div class="section">
-    <h2>八、Claude Code 最新进展</h2>
-    <p><span class="timestamp">[30:41]</span>Claude Code 的使命是弥合"想法"与"已发布产品"之间的鸿沟。借助 Claude Frontier 智能，让每个构建者都能用上最强大的 AI 能力。</p>
-    <p><span class="timestamp">[32:11]</span>Claude Code 从 CLI 起步，逐步扩展到 IDE（图形化跟进所有代码变更），再到<strong>多会话并行</strong>（multi-clotting），以及最新的两个界面：<strong>Cloud Desktop</strong>（全屏图形界面，内置预览、侧边控制台）和 <strong>Agent View in CLI</strong>（不离开终端也能看到所有 Agent 的等待/运行/完成状态）。</p>
-    <p><span class="timestamp">[33:42]</span>在 Anthropic 内部，工程师平均代码产出是去年的 <strong>8 倍</strong>，与此同时工程团队规模还在显著增长。</p>
-    <div class="key-point">企业大规模采用：Spotify 用 Claude 迁移数千个代码库，每月合并超过 1000 个 PR，迁移时间减少 90%；日本 Mercari 整个工程团队跑在 Claude Code 上，产出同比提升 90%。</div>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">八</span>Claude Code 最新进展</h2>
+        <p><span class="timestamp">[30:41]</span>Claude Code 的使命是弥合"想法"与"已发布产品"之间的鸿沟。借助 Claude Frontier 智能，让每个构建者都能用上最强大的 AI 能力。</p>
+        <p><span class="timestamp">[32:11]</span>Claude Code 从 CLI 起步，逐步扩展到 IDE（图形化跟进所有代码变更），再到<strong>多会话并行</strong>（multi-clotting），以及最新的两个界面：<strong>Cloud Desktop</strong>（全屏图形界面，内置预览、侧边控制台）和 <strong>Agent View in CLI</strong>（不离开终端也能看到所有 Agent 的等待/运行/完成状态）。</p>
+        <p><span class="timestamp">[33:42]</span>在 Anthropic 内部，工程师平均代码产出是去年的 <strong>8 倍</strong>，与此同时工程团队规模还在显著增长。</p>
+        <div class="key-point">企业大规模采用：Spotify 用 Claude 迁移数千个代码库，每月合并超过 1000 个 PR，迁移时间减少 90%；日本 Mercari 整个工程团队跑在 Claude Code 上，产出同比提升 90%。</div>
+      </div>
 
-  <div class="section">
-    <h2>九、Claude Code 新功能一览</h2>
-    <p><span class="timestamp">[34:27]</span><strong>Code Review 产品</strong>：部署一组 Agent 团队来捕获 PR 中的关键 bug，目前数千家公司每天都在使用，包括所有 Anthropic 内部团队。</p>
-    <p><span class="timestamp">[35:02]</span><strong>Claude Code 移动端</strong>（iOS/Android）：不在办公室也能处理编码任务，真正实现"走向公园、触摸草地、顺便把代码写了"。</p>
-    <p><span class="timestamp">[35:02]</span><strong>Routines</strong>：配置一次，就能在 schedule、webhook 或 API 调用时自动触发 Claude Code 处理相应任务。</p>
-    <p><span class="timestamp">[36:23]</span><strong>Dynamic Workflows</strong>：支持跨代码库的大规模重构和迁移任务，可以同时调度数十甚至数百个 Claude Code Agent 并行运行，以确定性结构完成最雄心勃勃的任务。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">九</span>Claude Code 新功能一览</h2>
+        <p><span class="timestamp">[34:27]</span><strong>Code Review 产品</strong>：部署一组 Agent 团队来捕获 PR 中的关键 bug，目前数千家公司每天都在使用，包括所有 Anthropic 内部团队。</p>
+        <p><span class="timestamp">[35:02]</span><strong>Claude Code 移动端</strong>（iOS/Android）：不在办公室也能处理编码任务，真正实现"走向公园、触摸草地、顺便把代码写了"。</p>
+        <p><span class="timestamp">[35:02]</span><strong>Routines</strong>：配置一次，就能在 schedule、webhook 或 API 调用时自动触发 Claude Code 处理相应任务。</p>
+        <p><span class="timestamp">[36:23]</span><strong>Dynamic Workflows</strong>：支持跨代码库的大规模重构和迁移任务，可以同时调度数十甚至数百个 Claude Code Agent 并行运行，以确定性结构完成最雄心勃勃的任务。</p>
+      </div>
 
-  <div class="section">
-    <h2>十、演示：Dynamic Workflows 多语言本地化</h2>
-    <p><span class="timestamp">[38:10]</span>演示场景：将一个仅支持英文的营销网站本地化到 13 个新市场。用单个 Claude Code Agent 处理日文翻译需要约 3 分钟，13 个语言若顺序执行需要近一小时。</p>
-    <p><span class="timestamp">[39:13]</span>使用 Dynamic Workflows：一个 prompt 触发 12 个并行的翻译 Agent，同时运行；翻译完成后自动触发 12 个验证 Agent 检查结果。整个工作流可以保存为 JavaScript 代码供未来复用。</p>
-    <p><span class="timestamp">[40:24]</span>最终：一个动作生成了 12 个本地化版本的网站，下拉菜单里可以查看所有语言版本。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">十</span>演示：Dynamic Workflows 多语言本地化</h2>
+        <p><span class="timestamp">[38:10]</span>演示场景：将一个仅支持英文的营销网站本地化到 13 个新市场。用单个 Claude Code Agent 处理日文翻译需要约 3 分钟，13 个语言若顺序执行需要近一小时。</p>
+        <p><span class="timestamp">[39:13]</span>使用 Dynamic Workflows：一个 prompt 触发 12 个并行的翻译 Agent，同时运行；翻译完成后自动触发 12 个验证 Agent 检查结果。整个工作流可以保存为 JavaScript 代码供未来复用。</p>
+        <p><span class="timestamp">[40:24]</span>最终：一个动作生成了 12 个本地化版本的网站，下拉菜单里可以查看所有语言版本。</p>
+      </div>
 
-  <div class="section">
-    <h2>结语：三层次叠加，缩小 AI 潜力差距</h2>
-    <p><span class="timestamp">[41:25]</span>Diane 的能力曲线、Angela 的 Agent 基础设施、Caitlyn 的 Claude Code 新功能——这是同一个故事的三层叠加。当前的剩余差距，取决于我们能以多快的速度把这些强大能力转化为实际生产力。</p>
-    <p><span class="timestamp">[41:55]</span>所有这些都运行在 <strong>Claude Fable 5</strong> 之上——Anthropic 历史上发布的最佳 Agent 工作模型，今天已经上线。Enjoy Code with Claude!</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">结语</span>三层次叠加，缩小 AI 潜力差距</h2>
+        <p><span class="timestamp">[41:25]</span>Diane 的能力曲线、Angela 的 Agent 基础设施、Caitlyn 的 Claude Code 新功能——这是同一个故事的三层叠加。当前的剩余差距，取决于我们能以多快的速度把这些强大能力转化为实际生产力。</p>
+        <p><span class="timestamp">[41:55]</span>所有这些都运行在 <strong>Claude Fable 5</strong> 之上——Anthropic 历史上发布的最佳 Agent 工作模型，今天已经上线。Enjoy Code with Claude!</p>
+      </div>
+    </div>
+  </main>
 
   <footer>
     由 AI 自动整理字幕并生成 ·

@@ -4,79 +4,261 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Problem Solvers | Michael Truell at Cursor — Cursor 创始人访谈</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; background: #0f0f0f; color: #eee; }
-    h1 { color: #ff4444; border-bottom: 1px solid #333; padding-bottom: 12px; font-size: 1.5em; }
-    .back-link { display: inline-block; margin-bottom: 20px; color: #ff4444; text-decoration: none; font-size: 0.9em; }
-    .back-link:hover { text-decoration: underline; }
-    .meta { color: #888; font-size: 0.85em; margin: 8px 0 16px; }
-    .meta span { margin-right: 16px; }
-    .desc { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 16px; margin: 16px 0; color: #ccc; line-height: 1.6; }
-    .section { margin: 32px 0; }
-    .section h2 { color: #fff; font-size: 1.1em; border-bottom: 1px solid #333; padding-bottom: 8px; margin-bottom: 16px; }
-    .section p { color: #bbb; line-height: 1.7; margin: 0 0 14px; }
-    .timestamp { color: #ff4444; font-size: 0.85em; margin-right: 8px; }
-    .key-point { background: #1a1a1a; border-left: 3px solid #ff4444; padding: 12px 16px; margin: 16px 0; color: #ccc; }
-    .highlight { color: #ff6644; font-weight: 500; }
-    footer { margin-top: 48px; text-align: center; color: #555; font-size: 0.8em; border-top: 1px solid #333; padding-top: 20px; }
-    footer a { color: #888; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .content-card:hover::before { opacity: 1; }
+
+    .section { margin: 36px 0; }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    .timestamp {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      margin-right: 6px;
+    }
+
+    .key-point {
+      background: rgba(99, 179, 237, 0.06);
+      border: 1px solid rgba(99, 179, 237, 0.15);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 14px 18px;
+      margin: 18px 0;
+      color: var(--text-secondary);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .highlight { color: #ff8866; font-weight: 500; }
+
+    ul { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+    }
   </style>
 </head>
 <body>
-  <a href="index.html" class="back-link">← 返回课程列表</a>
-  
-  <h1>The Problem Solvers | Michael Truell at Cursor</h1>
-  <div class="meta">
-    <span>⏱ ~3 分钟</span>
-    <span>📺 Cursor</span>
-    <span>📅 2026-06-10</span>
-  </div>
-  
-  <div class="desc">
-    <strong>内容简介</strong><br>
-    Cursor CEO Michael Truell 分享他的编程启蒙、Cursor 的产品理念以及与 Anthropic 的深度合作关系。核心观点：编程的本质是"消除壁垒的构建能力"；Cursor 致力于打造最强大的 AI 编程工具，让专业工程师和编程小白都能更高效地产出；AI 模型能力的飞跃是 Cursor 这类产品得以存在的根本前提。
-  </div>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">The Problem Solvers | Michael Truell at Cursor</h1>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ ~3 分钟</span>
+      <span class="meta-badge source">📺 Cursor</span>
+      <span class="meta-badge">📅 2026-06-10</span>
+    </div>
+  </header>
 
-  <div class="section">
-    <h2>一、编程的起点：从 12 岁开始的热爱</h2>
-    <p><span class="timestamp">[0:04]</span><strong>Michael Truell：</strong>"我 12 岁开始写代码，很快就成了疯狂的代码爱好者。这种热情来自于一种感受——<span class="highlight">能够毫无障碍地构建东西</span>。这就是编程最特别的地方：你只需要一台电脑，就能把脑子里设想的东西变成现实。"</p>
-    <div class="key-point">编程的核心价值不是"写代码"本身，而是<strong>消除壁垒的构建能力</strong>——这是 Cursor 整个产品哲学的起点。</div>
-  </div>
+  <main style="position: relative; z-index: 1;">
+    <div class="content-card">
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>编程的起点：从 12 岁开始的热爱</h2>
+        <p><span class="timestamp">[0:04]</span><strong>Michael Truell：</strong>"我 12 岁开始写代码，很快就成了疯狂的代码爱好者。这种热情来自于一种感受——<span class="highlight">能够毫无障碍地构建东西</span>。这就是编程最特别的地方：你只需要一台电脑，就能把脑子里设想的东西变成现实。"</p>
+        <div class="key-point">编程的核心价值不是"写代码"本身，而是<strong>消除壁垒的构建能力</strong>——这是 Cursor 整个产品哲学的起点。</div>
+      </div>
 
-  <div class="section">
-    <h2>二、Cursor 的使命：让所有人用 AI 构建软件</h2>
-    <p><span class="timestamp">[0:27]</span><strong>Cursor 是什么？</strong>一款帮助专业人士用 AI 更快速地构建软件的工具。核心理念：</p>
-    <ul>
-      <li>成为使用编程 Agent 的<span class="highlight">最佳场所</span>——无论是对专业工程师还是没有任何工程背景的人</li>
-      <li>既要工具易于上手，又要真正强大：<strong>有亲和力 + 有深度</strong></li>
-    </ul>
-    <p><span class="timestamp">[1:04]</span><strong>Michael Truell：</strong>"Anthropic 和 Cursor 有非常紧密的合作关系。我们非常欣赏 Anthropic 的一点是——这家公司对<strong>原则（principles）</strong>的坚守。这不仅是公司创始的核心使命，也延伸到了他们如何服务客户。"</p>
-    <p><span class="timestamp">[1:48]</span>从公司创立之初，Anthropic 就承诺做真正的<strong>平台公司</strong>——让合作伙伴能在其上构建持久的事业，而不只是提供一时的工具。</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>Cursor 的使命：让所有人用 AI 构建软件</h2>
+        <p><span class="timestamp">[0:27]</span><strong>Cursor 是什么？</strong>一款帮助专业人士用 AI 更快速地构建软件的工具。核心理念：</p>
+        <ul>
+          <li>成为使用编程 Agent 的<span class="highlight">最佳场所</span>——无论是对专业工程师还是没有任何工程背景的人</li>
+          <li>既要工具易于上手，又要真正强大：<strong>有亲和力 + 有深度</strong></li>
+        </ul>
+        <p><span class="timestamp">[1:04]</span><strong>Michael Truell：</strong>"Anthropic 和 Cursor 有非常紧密的合作关系。我们非常欣赏 Anthropic 的一点是——这家公司对<strong>原则（principles）</strong>的坚守。这不仅是公司创始的核心使命，也延伸到了他们如何服务客户。"</p>
+        <p><span class="timestamp">[1:48]</span>从公司创立之初，Anthropic 就承诺做真正的<strong>平台公司</strong>——让合作伙伴能在其上构建持久的事业，而不只是提供一时的工具。</p>
+      </div>
 
-  <div class="section">
-    <h2>三、AI 模型革命与 Cursor 的诞生</h2>
-    <p><span class="timestamp">[1:04]</span>回顾合作历史，Michael 提到："这是一种深度合作关系，我们非常感激。我还记得那时候 Cursor 还是一个非常简陋的团队，Anthropic 也比现在小得多。但 Cursor 能存在，很大程度上归功于 <span class="highlight">AI 模型的那场革命</span>。"</p>
-    <p><span class="timestamp">[1:48]</span>"Anthropic 在模型能力上的提升，和 Cursor 在产品侧的探索，有着非常好的正向对齐关系——产品进步和模型进步相互促进，形成了良性循环。"</p>
-    <div class="key-point">Cursor 的存在前提是 AI 模型能力的飞跃——没有近年来模型能力的大幅提升，就不会有 AI 编程工具的今天。</div>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>AI 模型革命与 Cursor 的诞生</h2>
+        <p><span class="timestamp">[1:04]</span>回顾合作历史，Michael 提到："这是一种深度合作关系，我们非常感激。我还记得那时候 Cursor 还是一个非常简陋的团队，Anthropic 也比现在小得多。但 Cursor 能存在，很大程度上归功于 <span class="highlight">AI 模型的那场革命</span>。"</p>
+        <p><span class="timestamp">[1:48]</span>"Anthropic 在模型能力上的提升，和 Cursor 在产品侧的探索，有着非常好的正向对齐关系——产品进步和模型进步相互促进，形成了良性循环。"</p>
+        <div class="key-point">Cursor 的存在前提是 AI 模型能力的飞跃——没有近年来模型能力的大幅提升，就不会有 AI 编程工具的今天。</div>
+      </div>
 
-  <div class="section">
-    <h2>四、Cursor 的差异化：极致产品导向</h2>
-    <p><span class="timestamp">[1:48]</span><strong>是什么让 Cursor 与众不同？</strong></p>
-    <ul>
-      <li>从公司成立的第一天起，就有<span class="highlight">深度的产品导向</span></li>
-      <li>目标是赋予用户更多的<strong>自主性（autonomy）</strong>，帮助他们成为更强大的构建者</li>
-    </ul>
-    <p><span class="timestamp">[1:48]</span>Michael 感叹："这确实是一个做公司的绝佳时机。一批全新的公司正在被创造出来，它们的<strong>商业逻辑（business physics）</strong>与传统公司完全不同。"</p>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>Cursor 的差异化：极致产品导向</h2>
+        <p><span class="timestamp">[1:48]</span><strong>是什么让 Cursor 与众不同？</strong></p>
+        <ul>
+          <li>从公司成立的第一天起，就有<span class="highlight">深度的产品导向</span></li>
+          <li>目标是赋予用户更多的<strong>自主性（autonomy）</strong>，帮助他们成为更强大的构建者</li>
+        </ul>
+        <p><span class="timestamp">[1:48]</span>Michael 感叹："这确实是一个做公司的绝佳时机。一批全新的公司正在被创造出来，它们的<strong>商业逻辑（business physics）</strong>与传统公司完全不同。"</p>
+      </div>
 
-  <div class="section">
-    <h2>五、规模与影响：15 人到 700 人，60% 财富 500 强</h2>
-    <p><span class="timestamp">[1:48]</span><strong>Michael Truell：</strong>"两年前，Cursor 只有 15 个人在小小的房间里。现在我们有 <span class="highlight">700 名员工</span>，服务超过 <span class="highlight">60% 的财富 500 强企业</span>，软件业务规模已经可以与最大的上市软件公司相媲美。"</p>
-    <p><span class="timestamp">[1:48]</span>"这确实让人感到不可思议。从历史上看，这也是前所未有的——我们非常清楚这是多么特殊、多么难得。我们很幸运能为这个时代做出一点贡献。"</p>
-    <div class="key-point">Cursor 的高速增长印证了一个事实：AI 编程工具正在从根本上改变软件构建的方式——更少的人、更高的产出、更快的迭代。</div>
-  </div>
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>规模与影响：15 人到 700 人，60% 财富 500 强</h2>
+        <p><span class="timestamp">[1:48]</span><strong>Michael Truell：</strong>"两年前，Cursor 只有 15 个人在小小的房间里。现在我们有 <span class="highlight">700 名员工</span>，服务超过 <span class="highlight">60% 的财富 500 强企业</span>，软件业务规模已经可以与最大的上市软件公司相媲美。"</p>
+        <p><span class="timestamp">[1:48]</span>"这确实让人感到不可思议。从历史上看，这也是前所未有的——我们非常清楚这是多么特殊、多么难得。我们很幸运能为这个时代做出一点贡献。"</p>
+        <div class="key-point">Cursor 的高速增长印证了一个事实：AI 编程工具正在从根本上改变软件构建的方式——更少的人、更高的产出、更快的迭代。</div>
+      </div>
+    </div>
+  </main>
 
   <footer>
     由 AI 自动整理字幕并生成 ·
