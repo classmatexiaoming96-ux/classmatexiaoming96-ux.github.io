@@ -358,67 +358,32 @@ a {
 /* 📂 项目索引 */
 .project-index {
   display: flex;
-  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 16px;
-  padding: 14px 20px;
-  margin-bottom: 28px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: border-color 0.3s, background 0.3s;
-}
-.project-index:hover {
-  border-color: var(--border-light);
-  background: rgba(255, 255, 255, 0.055);
-}
-
-.project-index-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.project-index-icon {
-  font-size: 1.05rem;
-  line-height: 1;
-}
-.project-index-title {
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-  white-space: nowrap;
-}
-
-.project-index-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
 .index-link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 16px;
-  background: var(--bg-card);
+  gap: 8px;
+  padding: 8px 18px;
+  background: transparent;
   border: 1px solid var(--border);
-  border-radius: 100px;
-  color: var(--text-primary);
-  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  transition: all 0.2s;
 }
 .index-link:hover {
-  border-color: var(--accent);
-  background: var(--accent-dim);
+  border-color: var(--border-light);
   color: var(--text-primary);
+  background: var(--bg-card);
   transform: translateY(-1px);
 }
 .index-link-icon {
-  font-size: 0.95rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
