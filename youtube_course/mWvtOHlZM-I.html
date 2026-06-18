@@ -1,455 +1,589 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>工具、技能还是子智能体？拆解一个过度膨胀的 Agent — Will (Anthropic)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="utf-8">
+<title>工具、技能还是子智能体？拆解一个过度膨胀的 Agent</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #c96442;
+    --accent-bg: #f6e8e0;
+    --border: #e3e3df;
+    --code-bg: #f3f1ec;
+    --sidebar-w: 280px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-    :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --bg-card: #16161f;
-      --bg-card-hover: #1c1c28;
-      --border-color: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(99, 179, 237, 0.3);
-      --text-primary: #f0f0f5;
-      --text-secondary: #8888a0;
-      --text-muted: #55556a;
-      --accent-cyan: #63b3ed;
-      --accent-blue: #4299e1;
-      --accent-purple: #9f7aea;
-      --gradient-start: #1a1a2e;
-      --gradient-end: #0a0a0f;
+  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+  aside.toc {
+    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
+    font-size: 14px;
+  }
+  aside.toc h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 12px;
+  }
+  aside.toc ol { list-style: none; margin: 0; padding: 0; }
+  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
+  aside.toc a { color: var(--fg); display: block; }
+  aside.toc a:hover { color: var(--accent); }
+
+  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
+  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
+
+  h2 {
+    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
+
+  p { margin: 0 0 18px; }
+
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); color: #4a3320; font-size: 15px;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 18px; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li > p { margin: 0 0 8px; }
+
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  /* Mermaid containers — let mermaid.js render inside, white bg */
+  .mermaid {
+    background: #fff; padding: 18px; border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; text-align: center;
+  }
+
+  table {
+    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    vertical-align: top; line-height: 1.55;
+  }
+  th { background: #f1ede6; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbf9f4; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  em { color: var(--muted); }
+
+  footer.meta {
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
+    color: var(--muted); font-size: 13px;
+  }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc {
+      position: static; max-height: none; border-right: none;
+      border-bottom: 1px solid var(--border);
     }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.7;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      margin-bottom: 24px;
-    }
-
-    .back-link:hover {
-      color: var(--accent-cyan);
-      border-color: var(--border-hover);
-      background: rgba(99, 179, 237, 0.08);
-      transform: translateX(-2px);
-    }
-
-    .back-link svg { width: 14px; height: 14px; }
-
-    .page-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
-
-    .meta-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
-    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
-
-    .content-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 32px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .content-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-    .content-card:hover::before { opacity: 1; }
-
-    .section { margin: 36px 0; }
-
-    .section-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-title .num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--accent-cyan);
-      background: rgba(99, 179, 237, 0.1);
-      border: 1px solid rgba(99, 179, 237, 0.2);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
-
-    blockquote {
-      margin: 18px 0;
-      padding: 14px 18px;
-      border-left: 3px solid var(--accent-purple);
-      background: rgba(159, 122, 234, 0.06);
-      border-radius: 0 8px 8px 0;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    blockquote p:last-child { margin-bottom: 0; }
-
-    h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin: 32px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 24px 0 12px;
-    }
-
-    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
-    li { margin: 0 0 8px; line-height: 1.7; }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 18px 0;
-      font-size: 0.875rem;
-    }
-
-    th, td {
-      border: 1px solid var(--border-color);
-      padding: 10px 14px;
-      text-align: left;
-      vertical-align: top;
-      line-height: 1.55;
-    }
-
-    th {
-      background: rgba(255, 255, 255, 0.03);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
-
-    code {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875em;
-      color: var(--accent-cyan);
-    }
-
-    pre {
-      background: rgba(255, 255, 255, 0.04);
-      padding: 14px 16px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-size: 0.875rem;
-      border: 1px solid var(--border-color);
-      margin: 18px 0;
-    }
-
-    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
-
-    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
-
-    footer {
-      text-align: center;
-      padding: 40px 0 50px;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      border-top: 1px solid var(--border-color);
-      margin-top: 20px;
-    }
-
-    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
-    footer a:hover { color: var(--accent-cyan); }
-
-    @media (max-width: 768px) {
-      body { padding: 0 16px; }
-      .page-title { font-size: 1.4rem; }
-      .content-card { padding: 20px; border-radius: 12px; }
-      .section { margin: 28px 0; }
-      table { font-size: 0.8rem; }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header class="page-header">
-    <a href="index.html" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      返回课程列表
-    </a>
-    <h1 class="page-title">工具、技能还是子智能体？拆解一个过度膨胀的 Agent</h1>
-    <div class="page-meta">
-      <span class="meta-badge time">⏱ ~45 分钟</span>
-      <span class="meta-badge source">📺 Code with Claude London</span>
-      <span class="meta-badge">🤖 Will (Anthropic)</span>
-    </div>
-  </header>
+<div class="layout">
+  <aside class="toc">
+    <h2>目录</h2>
+    <ol><li><a href="#一-问题-agent-长着长着就崩了">一、问题：Agent 长着长着就崩了</a></li>
+<li><a href="#二-主角-stockpilot-一个-400-行系统提示的库存-agent">二、主角：StockPilot——一个 400 行系统提示的库存 Agent</a></li>
+<li><a href="#三-怎么知道它病了-评估体系">三、怎么知道它病了？评估体系</a></li>
+<li><a href="#四-工作法-在-eval-上-爬坡">四、工作法：在 Eval 上"爬坡"</a></li>
+<li><a href="#五-fix-1-把系统提示压短-业务知识下沉为-skill">五、Fix #1：把系统提示压短，业务知识下沉为 Skill</a></li>
+<li><a href="#六-fix-2-拒绝写一堆自定义工具-先用类人原语">六、Fix #2：拒绝写一堆自定义工具，先用类人原语</a></li>
+<li><a href="#七-mcp-的位置-能不上就不上">七、MCP 的位置：能不上就不上</a></li>
+<li><a href="#八-fix-3-子智能体-什么情况下值得保留">八、Fix #3：子智能体——什么情况下值得保留？</a></li>
+<li><a href="#九-改造结果-从-62-92">九、改造结果：从 62% → 92%</a></li>
+<li><a href="#十-工作总结">十、工作总结</a></li>
+<li><a href="#附-相关概念速查">附：相关概念速查</a></li></ol>
+  </aside>
+  <main>
+<h1>工具、技能还是子智能体？拆解一个过度膨胀的 Agent</h1>
+<blockquote>
+<p>作者：<strong>Will</strong>（Anthropic 应用 AI 团队） · 演讲场合：Code with Claude · London · 时长：45 分钟 · <a href="https://www.youtube.com/watch?v=mWvtOHlZM-I">▶ 原视频</a></p>
+<p><strong>本文是中文整理版</strong>：在视频内容的基础上重新组织、补充图表，方便快速阅读。文中关键节点附 YouTube 时间戳链接，可点击跳到原视频对应位置核对。</p>
+</blockquote>
+<hr />
+<h2 id="一-问题-agent-长着长着就崩了">一、问题：Agent 长着长着就崩了</h2>
 
-  <main style="position: relative; z-index: 1;">
-    <div class="content-card">
+<p>你给业务上线了一个 Agent，第一版小巧、好用。两周后，业务方说："能不能再加点能力？"——你加上了。再过几周，又来一波需求，你又加。</p>
+<p>如此反复，等你回头看时，发现：</p>
+<ul>
+<li>系统提示（system prompt）已经膨胀到几百行；</li>
+<li>工具数量翻倍，甚至嵌套了好几个子智能体；</li>
+<li>而那些<strong>原本表现很好的功能</strong>，开始出现 regression（性能回归）。</li>
+</ul>
+<p>Will 在演讲开头 <a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=48s">0:48</a> 强调：这是 Anthropic 在客户和自家内部都反复看到的模式——<strong>把功能"粘"到现有 Agent 上是最快的路径，但也是最伤架构的路径</strong>。</p>
+<p>这次 workshop 的目标就是：拿一个真实变臃肿的 Agent，演示如何用<strong>正确的 agentic primitive</strong>（工具 / 技能 / 子智能体）把它拆回去，并通过 eval 验证每一步是不是真的有改进。</p>
+<hr />
+<h2 id="二-主角-stockpilot-一个-400-行系统提示的库存-agent">二、主角：StockPilot——一个 400 行系统提示的库存 Agent</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">一</span>问题：Agent 长着长着就崩了</h2>
-        <p>你给业务上线了一个 Agent，第一版小巧、好用。两周后，业务方说："能不能再加点能力？"——你加上了。再过几周，又来一波需求，你又加。</p>
-        <p>如此反复，等你回头看时，发现：</p>
-        <ul>
-          <li>系统提示（system prompt）已经膨胀到几百行；</li>
-          <li>工具数量翻倍，甚至嵌套了好几个子智能体；</li>
-          <li>而那些<strong>原本表现很好的功能</strong>，开始出现 regression（性能回归）。</li>
-        </ul>
-        <p>这是 Anthropic 在客户和自家内部都反复看到的模式——<strong>把功能"粘"到现有 Agent 上是最快的路径，但也是最伤架构的路径。</strong></p>
-        <blockquote>这次 workshop 的目标：拿一个真实变臃肿的 Agent，演示如何用<strong>正确的 agentic primitive</strong>（工具 / 技能 / 子智能体）把它拆回去，并通过 eval 验证每一步是不是真的有改进。</blockquote>
-      </div>
+<p>StockPilot 是一个虚构的中型零售商内部的<strong>库存管理 Agent</strong>。它的能力（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=180s">3:00</a>）：</p>
+<ul>
+<li>标记库存不足；</li>
+<li>预测需求；</li>
+<li>挑选供应商；</li>
+<li>提交采购订单（PO）；</li>
+<li>给员工生成周报。</li>
+</ul>
+<p>每一项单独看都不复杂。问题在于<strong>架构</strong>：</p>
+<div class="mermaid">flowchart TD
+    User([用户]) --> Orch[StockPilot Orchestrator<br/>系统提示约 400 行]
+    Orch --> T1[12 个工具]
+    T1 --> dot1[...] & dot2[...]
+    T1 --> Wrap1[wrapper tool 1]
+    T1 --> Wrap2[wrapper tool 2]
+    T1 --> Wrap3[wrapper tool 3]
+    Wrap1 --> Sub1[Forecaster<br/>子智能体]
+    Wrap2 --> Sub2[Report Writer<br/>子智能体]
+    Wrap3 --> Sub3[Procurement<br/>子智能体]
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">二</span>主角：StockPilot——一个 400 行系统提示的库存 Agent</h2>
-        <p>StockPilot 是一个虚构的中型零售商内部的<strong>库存管理 Agent</strong>。它的能力：</p>
-        <ul>
-          <li>标记库存不足；</li>
-          <li>预测需求；</li>
-          <li>挑选供应商；</li>
-          <li>提交采购订单（PO）；</li>
-          <li>给员工生成周报。</li>
-        </ul>
-        <p>每一项单独看都不复杂。问题在于<strong>架构</strong>：一个 orchestrator + 12 个工具 + 3 个被工具包装的子智能体，全部由一份膨胀的系统提示统筹。</p>
-        <blockquote>每次新需求来，开发都倾向于"再加一个工具"或"再加一个子智能体"。久而久之就成了这副样子。</blockquote>
-      </div>
+    classDef bad fill:#fde8e0,stroke:#c96442,color:#1a1a1a
+    class Orch,T1 bad
+</div>
+<p><strong>图 1：StockPilot 改造前的架构</strong>——一个 orchestrator + 12 个工具 + 3 个被工具包装的子智能体，全部由一份膨胀的系统提示统筹。</p>
+<p>每次新需求来，开发都倾向于"再加一个工具"或"再加一个子智能体"。久而久之就成了这副样子。Will 说他们见过非常多客户的系统都是这种结构（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=250s">4:10</a>）。</p>
+<hr />
+<h2 id="三-怎么知道它病了-评估体系">三、怎么知道它病了？评估体系</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">三</span>怎么知道它病了？评估体系</h2>
-        <p>StockPilot 的评估套件有 <strong>12 个 eval 任务</strong>，分两类：</p>
-        <table>
-          <thead><tr><th>类别</th><th>前缀</th><th>性质</th><th>任务复杂度</th></tr></thead>
-          <tbody>
-            <tr><td><strong>回归测试</strong></td><td><code>R*</code></td><td>单轮、相对简单</td><td>真实使用场景的代表</td></tr>
-            <tr><td><strong>失败模式测试</strong></td><td><code>F*</code></td><td>多轮、刻意构造</td><td>复杂、模拟极端情况</td></tr>
-          </tbody>
-        </table>
-        <p>评估同时用两种 grader：</p>
-        <ul>
-          <li><strong>确定性指标：</strong>token 使用量、延迟、turn 数；</li>
-          <li><strong>非确定性指标：</strong>用 LLM-as-judge 评估输出风格、语气、质量。</li>
-        </ul>
-        <h3>三个典型失败案例</h3>
-        <table>
-          <thead><tr><th>Eval</th><th>模拟场景</th><th>失败根因</th></tr></thead>
-          <tbody>
-            <tr><td><strong>F1</strong>：日常低库存扫描</td><td>给定库存数据，挑出告急 SKU</td><td>Agent 走了一条"绕远的路"——结果正确，但<strong>路径过低效</strong>，达不到效率阈值。</td></tr>
-            <tr><td><strong>F2</strong>：促销期采购流程</td><td>在促销包条件下下采购单</td><td><strong>Orchestrator 与子智能体之间通信失真</strong>——子智能体计算对了，但传回 orchestrator 时信息丢失。</td></tr>
-            <tr><td><strong>R8</strong>：促销月预测</td><td>计算某促销月的销售预测</td><td><strong>系统提示里有两条互相矛盾的策略</strong>，模型读到后混乱：拿到了正确的 baseline（12 units/day）和正确的 multiplier（3.1x），但<strong>计算时用成了 1.35x</strong>——上下文污染导致幻觉。</td></tr>
-          </tbody>
-        </table>
-        <blockquote>R8 是个典型的<strong>"上下文问题不是模型问题"</strong>——模型周围的信息有矛盾，再聪明的模型也会蒙。</blockquote>
-      </div>
+<p>StockPilot 的评估套件有 <strong>12 个 eval 任务</strong>，分两类：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>前缀</th>
+<th>性质</th>
+<th>任务复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>回归测试</strong></td>
+<td><code>R*</code></td>
+<td>单轮、相对简单</td>
+<td>真实使用场景的代表</td>
+</tr>
+<tr>
+<td><strong>失败模式测试</strong></td>
+<td><code>F*</code></td>
+<td>多轮、刻意构造</td>
+<td>复杂、模拟极端情况</td>
+</tr>
+</tbody>
+</table>
+<p>评估同时用两种 grader：</p>
+<ul>
+<li><strong>确定性指标</strong>：token 使用量、延迟、turn 数；</li>
+<li><strong>非确定性指标</strong>：用 LLM-as-judge 评估输出风格、语气、质量。</li>
+</ul>
+<h3>三个典型失败案例</h3>
+<p>Will 重点拆了三个会失败的 eval（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=426s">7:06</a> 起）：</p>
+<table>
+<thead>
+<tr>
+<th>Eval</th>
+<th>模拟场景</th>
+<th>失败根因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>F1</strong>：日常低库存扫描</td>
+<td>给定库存数据，挑出告急 SKU</td>
+<td>Agent 走了一条"绕远的路"——结果正确，但<strong>路径过低效</strong>，达不到效率阈值。</td>
+</tr>
+<tr>
+<td><strong>F2</strong>：促销期采购流程</td>
+<td>在促销包条件下下采购单</td>
+<td><strong>Orchestrator 与子智能体之间通信失真</strong>——子智能体计算对了，但传回 orchestrator 时信息丢失。</td>
+</tr>
+<tr>
+<td><strong>R8</strong>：促销月预测</td>
+<td>计算某促销月的销售预测</td>
+<td><strong>系统提示里有两条互相矛盾的策略</strong>，模型读到后混乱：拿到了正确的 baseline（12 units/day）和正确的 multiplier（3.1x），但<strong>计算时用成了 1.35x</strong>——上下文污染导致幻觉。</td>
+</tr>
+</tbody>
+</table>
+<p>R8 是个典型的<strong>"上下文问题不是模型问题"</strong>——模型周围的信息有矛盾，再聪明的模型也会蒙。</p>
+<hr />
+<h2 id="四-工作法-在-eval-上-爬坡">四、工作法：在 Eval 上"爬坡"</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">四</span>工作法：在 Eval 上"爬坡"</h2>
-        <p>整个 workshop 的方法论叫 <strong>hill climbing</strong>——每次只改一点，每次都回归 eval，看 pass rate 有没有真的往上爬。</p>
-        <blockquote>关键：每改一次都用 eval 把改动锁住，避免靠"感觉"判断改进。</blockquote>
-        <h3>Workshop 上手要点</h3>
-        <ul>
-          <li>Repo 里有 <code>before/</code> 和 <code>starter/</code> 两个目录。<code>before</code> 是基于 Messages API 自建的 agent loop；<code>starter</code> 是同样的 agent 跑在 <strong>Claude Managed Agents (CMA)</strong> 上的版本。</li>
-          <li>先 <code>uv run evals --agent before</code> 拿基线（理论 83%，实际 Will 现场跑出 62%）。</li>
-          <li>改造目标是把 agent 迁到 <strong>CMA</strong>：自己只关心 agent 设计，scaling / 内存 / 安全 / 沙箱这些都交给 CMA。</li>
-        </ul>
-      </div>
+<p>整个 workshop 的方法论叫 <strong>hill climbing</strong>——每次只改一点，每次都回归 eval，看 pass rate 有没有真的往上爬。</p>
+<div class="mermaid">flowchart LR
+    A[运行 baseline eval] --> B[用 Claude Code 三角化失败]
+    B --> C[挑一个 fix]
+    C --> D[实施改动]
+    D --> E[重跑 eval]
+    E --> F{pass rate<br/>有上升吗?}
+    F -->|是| C
+    F -->|否| G[回退 / 重新设计]
+    G --> C
+</div>
+<p><strong>图 2：Eval 爬坡的工作流</strong>——每改一次都用 eval 把改动锁住，避免靠"感觉"判断改进。</p>
+<h3>Workshop 上手要点</h3>
+<ul>
+<li>Repo 里有 <code>before/</code> 和 <code>starter/</code> 两个目录。<code>before</code> 是基于 Messages API 自建的 agent loop；<code>starter</code> 是同样的 agent 跑在 <strong>Claude Managed Agents (CMA)</strong> 上的版本（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=650s">10:50</a>）。</li>
+<li>先 <code>uv run evals --agent before</code> 拿基线（理论 83%，实际 Will 现场跑出 62%）。</li>
+<li>改造目标是把 agent 迁到 <strong>CMA</strong>：自己只关心 agent 设计，scaling / 内存 / 安全 / 沙箱这些都交给 CMA。</li>
+</ul>
+<h3>用 Claude Code 帮忙三角化</h3>
+<p>Will 现场打开 Claude Code（Opus 4.7，effort 调到 extra high），让 Claude 帮他诊断为啥 eval 跌到 62%（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1033s">17:13</a>）。Claude 总结出几条主因：</p>
+<ol>
+<li>模型在做<strong>本该用工具完成的推理</strong>——没工具能调，只能硬算；</li>
+<li><strong>输出结构没强约束</strong>，子智能体回传的格式与 orchestrator 期望对不上；</li>
+<li><strong>系统提示自相矛盾</strong>（如 R8 的两条策略冲突）。</li>
+</ol>
+<p>这一步关键不是诊断结论本身，而是用 Claude <strong>从 eval 失败回推架构问题</strong>的方法。</p>
+<hr />
+<h2 id="五-fix-1-把系统提示压短-业务知识下沉为-skill">五、Fix #1：把系统提示压短，业务知识下沉为 Skill</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">五</span>Fix #1：把系统提示压短，业务知识下沉为 Skill</h2>
-        <p><strong>Skill</strong> 是 Claude 可以在需要时<strong>按需调入上下文</strong>的"打包知识"。可以理解为：一份 markdown + 元数据，描述某领域知识或操作规程；Claude 判断当前任务相关就读，不相关就不读。</p>
-        <h3>关键原则</h3>
-        <ul>
-          <li><strong>系统提示只留"Claude 无论做什么任务都必须知道"的内容</strong>——身份、整体目标、安全约束。</li>
-          <li><strong>业务规则、流程手册、品牌指南</strong> → 全部下沉为 skill。</li>
-          <li>当 Claude 接到任务时，它自己判断需要哪些 skill 召入，不需要就不污染上下文。</li>
-        </ul>
-        <h3>效果</h3>
-        <p>StockPilot 的系统提示从 <strong>400 行压到 ~50 行</strong>（后期最终版本进一步缩到 <strong>15 行</strong>）。业务知识完整保留，只是从"全量塞"改成"按需取"。</p>
-      </div>
+<p><strong>Skill</strong> 是 Claude 可以在需要时<strong>按需调入上下文</strong>的"打包知识"。可以理解为：一份 markdown + 元数据，描述某领域知识或操作规程；Claude 判断当前任务相关就读，不相关就不读。</p>
+<div class="mermaid">flowchart LR
+    SP_Before[系统提示<br/>400 行<br/>全塞业务规则] -.含混乱+冲突.-> M1[模型]
+    SP_After[系统提示<br/>15 行<br/>只含「恒久要点」] -->|按需召入| S1[forecasting<br/>skill]
+    SP_After -->|按需召入| S2[procurement<br/>skill]
+    SP_After -->|按需召入| S3[promotion<br/>policy skill]
+    SP_After --> M2[模型]
+    S1 -.-> M2
+    S2 -.-> M2
+    S3 -.-> M2
+</div>
+<p><strong>图 3：从"全塞系统提示" → "渐进式披露（progressive disclosure）"</strong></p>
+<h3>关键原则（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1230s">20:30</a> 起）</h3>
+<ul>
+<li><strong>系统提示只留"Claude 无论做什么任务都必须知道"的内容</strong>——身份、整体目标、安全约束。</li>
+<li><strong>业务规则、流程手册、品牌指南</strong> → 全部下沉为 skill。</li>
+<li>当 Claude 接到任务时，它自己判断需要哪些 skill 召入，不需要就不污染上下文。</li>
+</ul>
+<h3>效果</h3>
+<p>StockPilot 的系统提示从 <strong>400 行压到 ~50 行</strong>（后期最终版本进一步缩到 <strong>15 行</strong>）。业务知识完整保留，只是从"全量塞"改成"按需取"。</p>
+<hr />
+<h2 id="六-fix-2-拒绝写一堆自定义工具-先用类人原语">六、Fix #2：拒绝写一堆自定义工具，先用类人原语</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">六</span>Fix #2：拒绝写一堆自定义工具，先用类人原语</h2>
-        <p>Anthropic 内部和给客户做 Agent 时遵循一条原则：<strong>先用类人原语，自定义工具留到最后。</strong></p>
-        <p>类人原语指的是：人类员工每天到工位上有什么，就给 Claude 什么——</p>
-        <table>
-          <thead><tr><th>原语</th><th>对应人类能力</th><th>在 Claude Code / CMA 里的体现</th></tr></thead>
-          <tbody>
-            <tr><td><strong>bash</strong></td><td>在终端跑命令</td><td>执行任意 shell</td></tr>
-            <tr><td><strong>file system (read/write)</strong></td><td>翻文件、写文件</td><td>读写沙箱内文件</td></tr>
-            <tr><td><strong>代码执行</strong></td><td>写脚本算东西</td><td>Python / 其他语言</td></tr>
-            <tr><td><strong>web search</strong></td><td>浏览器查资料</td><td>内置搜索工具</td></tr>
-            <tr><td><strong>TODO list</strong></td><td>自己列待办</td><td>内置 to-do 跟踪</td></tr>
-          </tbody>
-        </table>
-        <blockquote><strong>Claude Code 之所以强，不是因为它特别会写代码，而是因为它拥有人类工程师在岗一天能用到的全部基础工具。</strong> 每次模型升级，这套原语会自然变得更厉害——就像同一个人多读了几本书后，用同一台电脑也能产出更多。</blockquote>
-        <h3>决策矩阵</h3>
-        <table>
-          <thead><tr><th>选项</th><th>何时优先</th><th>何时不用</th><th>例子</th></tr></thead>
-          <tbody>
-            <tr><td><strong>CMA 内置原语</strong>（bash / 文件系统 / 代码执行 / web search）</td><td>任务可以用"通用计算"解决；想要随模型升级自然变强</td><td>几乎没有"不用"的场景，先用了再说</td><td>用 bash 跑 Python 处理 CSV，比把 CSV 全塞进上下文便宜得多</td></tr>
-            <tr><td><strong>自定义 tool</strong></td><td>上面原语不够，要接特定 API / SDK / 内部系统</td><td>能用代码执行直接调 CLI/API 时</td><td>调内部审批系统、专用算法</td></tr>
-            <tr><td><strong>MCP server</strong></td><td>多个 Agent / 多个 Claude Code 实例<strong>共享同一套受治理的工具</strong></td><td>单 Agent 自用、临时需要</td><td>公司级的工具中心</td></tr>
-          </tbody>
-        </table>
-        <h3>StockPilot 的工具大瘦身</h3>
-        <p>StockPilot 原有 12 个自定义工具，大部分是"读数据"、"分析数据"、"写报表"——这些都可以用 <strong>bash + 代码执行</strong>统一替代。</p>
-        <p>Will 让 Claude 重构后，工具数从 12 → <strong>3</strong>（bash + read + write）。其余能力交给代码执行。</p>
-      </div>
+<p>Anthropic 内部和给客户做 Agent 时遵循一条原则：<strong>先用类人原语，自定义工具留到最后</strong>（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1560s">26:00</a> 起）。</p>
+<p>类人原语指的是：人类员工每天到工位上有什么，就给 Claude 什么——</p>
+<table>
+<thead>
+<tr>
+<th>原语</th>
+<th>对应人类能力</th>
+<th>在 Claude Code / CMA 里的体现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>bash</strong></td>
+<td>在终端跑命令</td>
+<td>执行任意 shell</td>
+</tr>
+<tr>
+<td><strong>file system (read/write)</strong></td>
+<td>翻文件、写文件</td>
+<td>读写沙箱内文件</td>
+</tr>
+<tr>
+<td><strong>代码执行</strong></td>
+<td>写脚本算东西</td>
+<td>Python / 其他语言</td>
+</tr>
+<tr>
+<td><strong>web search</strong></td>
+<td>浏览器查资料</td>
+<td>内置搜索工具</td>
+</tr>
+<tr>
+<td><strong>TODO list</strong></td>
+<td>自己列待办</td>
+<td>内置 to-do 跟踪</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Claude Code 之所以强，不是因为它特别会写代码，而是因为它拥有人类工程师在岗一天能用到的全部基础工具</strong>（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1590s">26:30</a>）。每次模型升级，这套原语会自然变得更厉害——就像同一个人多读了几本书后，用同一台电脑也能产出更多。</p>
+<h3>决策矩阵</h3>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>何时优先</th>
+<th>何时不用</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CMA 内置原语</strong>（bash / 文件系统 / 代码执行 / web search）</td>
+<td>任务可以用"通用计算"解决；想要随模型升级自然变强</td>
+<td>几乎没有"不用"的场景，先用了再说</td>
+<td>用 bash 跑 Python 处理 CSV，比把 CSV 全塞进上下文便宜得多</td>
+</tr>
+<tr>
+<td><strong>自定义 tool</strong></td>
+<td>上面原语不够，要接特定 API / SDK / 内部系统</td>
+<td>能用代码执行直接调 CLI/API 时</td>
+<td>调内部审批系统、专用算法</td>
+</tr>
+<tr>
+<td><strong>MCP server</strong></td>
+<td>多个 Agent / 多个 Claude Code 实例<strong>共享同一套受治理的工具</strong></td>
+<td>单 Agent 自用、临时需要</td>
+<td>公司级的工具中心</td>
+</tr>
+</tbody>
+</table>
+<h3>实操：StockPilot 的工具大瘦身</h3>
+<p>StockPilot 原有 12 个自定义工具，大部分是"读数据"、"分析数据"、"写报表"——这些都可以用 <strong>bash + 代码执行</strong>统一替代。</p>
+<p>Will 让 Claude 重构后，工具数从 12 → <strong>3</strong>（bash + read + write）。其余能力交给代码执行（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1755s">29:15</a>）。</p>
+<h3>立竿见影的指标改善</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>改造前</th>
+<th>改造后（仅完成 Fix #1+#2 时）</th>
+<th>改进</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单任务 token 用量</td>
+<td>&gt; 200,000</td>
+<td>大幅下降</td>
+<td>因为用代码"按需取数据"而非把 CSV 整个塞进上下文</td>
+</tr>
+<tr>
+<td>单任务费用</td>
+<td>高</td>
+<td>显著下降</td>
+<td>token 减少的直接结果</td>
+</tr>
+<tr>
+<td>执行延迟</td>
+<td>—</td>
+<td>下降</td>
+<td>简化工具 + 减少 turn</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七-mcp-的位置-能不上就不上">七、MCP 的位置：能不上就不上</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">七</span>MCP 的位置：能不上就不上</h2>
-        <p>很多客户的现状是：<strong>先冲去搞 MCP</strong>，结果一堆零散、能力重叠的 MCP server 跑在系统里，反而把上下文搞乱。</p>
-        <blockquote><strong>MCP 不是首选，是多 Agent 共享治理</strong>才该上的最后一档。</blockquote>
-        <p>另外，<strong>代码执行也能直接调 CLI/API</strong>——很多本来想用 MCP 解决的能力，让 Claude 直接写代码调外部接口，反而更灵活、更省上下文。</p>
-      </div>
+<p>很多客户的现状是：<strong>先冲去搞 MCP</strong>，结果一堆零散、能力重叠的 MCP server 跑在系统里，反而把上下文搞乱（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1891s">31:31</a>）。</p>
+<div class="mermaid">flowchart TD
+    Need[需要新能力] --> Q1{CMA 内置原语<br/>能搞定吗?}
+    Q1 -->|能| Use1[用原语<br/>bash / 代码执行 / 文件系统]
+    Q1 -->|不能| Q2{是这个 Agent<br/>专用吗?}
+    Q2 -->|是| Use2[写自定义 tool<br/>本地用]
+    Q2 -->|否，多 Agent 共享| Use3[发布为<br/>MCP server]
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">八</span>Fix #3：子智能体——什么情况下值得保留？</h2>
-        <p>StockPilot 原有 3 个子智能体（forecaster / report writer / procurement）。改造后只<strong>保留 forecaster</strong>，其他全部去掉。</p>
-        <h3>子智能体的两个合理用例</h3>
-        <table>
-          <thead><tr><th>用例</th><th>说明</th><th>例子</th></tr></thead>
-          <tbody>
-            <tr><td><strong>并行性：</strong>把一份大问题拆给多个 Claude 同时啃</td><td>单 Claude 顺序做太慢；任务可并发</td><td>跨大代码库探索、deep research、多源 web search</td></tr>
-            <tr><td><strong>新鲜视角：</strong>需要一个不带先前上下文的 Claude 来评审 / 处理</td><td>同一份上下文里的 Claude 容易自洽地走偏</td><td>code review、写代码 + 评审分离</td></tr>
-          </tbody>
-        </table>
-        <h3>StockPilot 保留 forecaster 的理由</h3>
-        <p>预测模块属于第二种用例——主 Claude 在和用户对话过程中积累了大量上下文，<strong>如果让同一个 Claude 同时写预测会被对话历史污染。</strong> 所以独立一个 forecaster sub-agent，干净的上下文里跑预测，结果回主 Claude。</p>
-        <h3>CMA 的原生 sub-agent 能力（Callable Agents）</h3>
-        <p>CMA 原生支持把 sub-agent 注册为一等公民（不是"工具包装"），好处：</p>
-        <ul>
-          <li><strong>可观测性：</strong>每个 sub-agent 的 transcript、token、turn 数自动归到 session 元信息里；</li>
-          <li><strong>通信契约：</strong>orchestrator ↔ sub-agent 的 message schema 更规范，不容易"传话失真"；</li>
-          <li><strong>调试简单：</strong>不用自己跨 agent 拼日志。</li>
-        </ul>
-        <h3>一个反直觉的趋势</h3>
-        <blockquote>随着前沿模型（如 Claude 4.x）变得更聪明，<strong>主 Agent 能管的复杂度变大了</strong>——很多过去拆给子智能体做的事，现在让主 Agent 自己做反而更好。Will 说他们看到的趋势是：<strong>客户在主动减少 sub-agent 数量</strong>，把能力收回到 orchestrator。</blockquote>
-      </div>
+    classDef rec fill:#e0f0e0,stroke:#3a6a3a,color:#1a1a1a
+    class Use1 rec
+</div>
+<p><strong>图 4：工具引入决策</strong>——MCP 不是首选，是<strong>多 Agent 共享治理</strong>才该上的最后一档。</p>
+<p>另外，<strong>代码执行也能直接调 CLI/API</strong>——很多本来想用 MCP 解决的能力，让 Claude 直接写代码调外部接口，反而更灵活、更省上下文（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=1951s">32:31</a>）。</p>
+<hr />
+<h2 id="八-fix-3-子智能体-什么情况下值得保留">八、Fix #3：子智能体——什么情况下值得保留？</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">九</span>改造结果：从 62% → 92%</h2>
-        <table>
-          <thead><tr><th>维度</th><th>改造前</th><th>改造后</th></tr></thead>
-          <tbody>
-            <tr><td>部署</td><td>Messages API 自建 agent loop</td><td>Claude Managed Agents（CMA）</td></tr>
-            <tr><td>系统提示</td><td>~400 行（业务规则塞满）</td><td><strong>~15 行</strong>（只留恒久要点）</td></tr>
-            <tr><td>工具数量</td><td>12 个（含 3 个 sub-agent 工具包装）</td><td><strong>3 个</strong>（bash / read / write）</td></tr>
-            <tr><td>业务知识载体</td><td>系统提示</td><td><strong>Skills</strong>（progressive disclosure）</td></tr>
-            <tr><td>子智能体</td><td>3 个，工具包装</td><td><strong>1 个</strong>（forecaster），CMA callable agent</td></tr>
-            <tr><td>Eval pass rate</td><td>62%（Will 现场基线）</td><td><strong>92%</strong></td></tr>
-          </tbody>
-        </table>
-        <blockquote>核心收获：Agent 膨胀的根本原因是把<strong>业务知识塞进系统提示</strong>和<strong>用自定义工具替代类人原语</strong>。解决方案分别是 <strong>Skills 渐进式披露</strong> 和 <strong>优先用 bash/文件/代码执行</strong>。</blockquote>
-      </div>
+<p>StockPilot 原有 3 个子智能体（forecaster / report writer / procurement）。改造后只<strong>保留 forecaster</strong>，其他全部去掉。判断依据：</p>
+<h3>子智能体的两个合理用例</h3>
+<table>
+<thead>
+<tr>
+<th>用例</th>
+<th>说明</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>并行性</strong>：把一份大问题拆给多个 Claude 同时啃</td>
+<td>单 Claude 顺序做太慢；任务可并发</td>
+<td>跨大代码库探索、deep research、多源 web search</td>
+</tr>
+<tr>
+<td><strong>新鲜视角</strong>：需要一个不带先前上下文的 Claude 来评审 / 处理</td>
+<td>同一份上下文里的 Claude 容易自洽地走偏</td>
+<td>code review、写代码 + 评审分离</td>
+</tr>
+</tbody>
+</table>
+<h3>StockPilot 保留 forecaster 的理由</h3>
+<p>预测模块属于第二种用例——主 Claude 在和用户对话过程中积累了大量上下文，<strong>如果让同一个 Claude 同时写预测会被对话历史污染</strong>。所以独立一个 forecaster sub-agent，干净的上下文里跑预测，结果回主 Claude（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=2271s">37:51</a>）。</p>
+<h3>CMA 的原生 sub-agent 能力（Callable Agents）</h3>
+<p>CMA 原生支持把 sub-agent 注册为一等公民（不是"工具包装"），好处：</p>
+<ul>
+<li><strong>可观测性</strong>：每个 sub-agent 的 transcript、token、turn 数自动归到 session 元信息里；</li>
+<li><strong>通信契约</strong>：orchestrator ↔ sub-agent 的 message schema 更规范，不容易"传话失真"（前面 F2 失败的根因之一）；</li>
+<li><strong>调试简单</strong>：不用自己跨 agent 拼日志。</li>
+</ul>
+<p>所以 StockPilot 最终版把 forecaster 从"工具包装"改成 <strong>callable agent</strong>。</p>
+<h3>一个反直觉的趋势</h3>
+<p>随着前沿模型（如 Claude 4.x）变得更聪明，<strong>主 Agent 能管的复杂度变大了</strong>——很多过去拆给子智能体做的事，现在让主 Agent 自己做反而更好。Will 说他们看到的趋势是：<strong>客户在主动减少 sub-agent 数量</strong>，把能力收回到 orchestrator（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=2440s">40:50</a>）。</p>
+<hr />
+<h2 id="九-改造结果-从-62-92">九、改造结果：从 62% → 92%</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">十</span>附：相关概念速查</h2>
-        <table>
-          <thead><tr><th>概念</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Skill</strong></td><td>按需召入的打包知识，Claude 判断是否相关再读，不污染上下文</td></tr>
-            <tr><td><strong>Callable Agent</strong></td><td>CMA 原生支持的子 Agent 形态，比工具包装更规范，有独立 transcript</td></tr>
-            <tr><td><strong>类人原语</strong></td><td>人类工程师在岗用到的能力（bash/文件/代码执行/search），优先于自定义工具</td></tr>
-            <tr><td><strong>Hill Climbing</strong></td><td>每次只改一点，每次回归 eval，用数据而非感觉判断改进</td></tr>
-            <tr><td><strong>Progressive Disclosure</strong></td><td>知识不在系统提示里全量塞入，而是按需召入，减少上下文污染</td></tr>
-          </tbody>
-        </table>
-      </div>
+<div class="mermaid">flowchart TD
+    User([用户]) --> Orch[Orchestrator on CMA<br/>系统提示 15 行]
 
-    </div>
+    Orch --> Prim[3 个内置原语<br/>bash / read / write]
+    Orch --> Skills[Skills<br/>按需召入]
+    Orch --> Sub[Forecaster<br/>Callable Agent]
+
+    Skills --> S1[forecasting<br/>policy]
+    Skills --> S2[procurement<br/>policy]
+    Skills --> S3[reporting<br/>policy]
+
+    classDef good fill:#e0f0e0,stroke:#3a6a3a,color:#1a1a1a
+    class Orch,Prim,Skills,Sub good
+</div>
+<p><strong>图 5：StockPilot 改造后的架构</strong>——orchestrator 部署在 CMA 上，3 个内置原语 + skills 渐进式披露 + 1 个保留的 callable agent。</p>
+<h3>改造前后对比</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>改造前</th>
+<th>改造后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>部署</td>
+<td>Messages API 自建 agent loop</td>
+<td>Claude Managed Agents（CMA）</td>
+</tr>
+<tr>
+<td>系统提示</td>
+<td>~400 行（业务规则塞满）</td>
+<td><strong>~15 行</strong>（只留恒久要点）</td>
+</tr>
+<tr>
+<td>工具数量</td>
+<td>12 个（含 3 个 sub-agent 工具包装）</td>
+<td><strong>3 个</strong>（bash / read / write）</td>
+</tr>
+<tr>
+<td>业务知识载体</td>
+<td>系统提示</td>
+<td><strong>Skills</strong>（progressive disclosure）</td>
+</tr>
+<tr>
+<td>子智能体</td>
+<td>3 个，工具包装</td>
+<td><strong>1 个</strong>（forecaster），CMA callable agent</td>
+</tr>
+<tr>
+<td>Eval pass rate</td>
+<td>62%（Will 现场基线）</td>
+<td><strong>92%</strong></td>
+</tr>
+<tr>
+<td>单任务 token</td>
+<td>&gt; 200,000</td>
+<td>显著下降</td>
+</tr>
+<tr>
+<td>单任务成本</td>
+<td>高</td>
+<td>显著下降</td>
+</tr>
+</tbody>
+</table>
+<h3>注意 trade-off</h3>
+<p>不是所有指标都"全胜"：</p>
+<ul>
+<li><strong>Turn 数</strong>没明显减少——但因为 token 单价下来了，turn 数本身就不那么敏感；</li>
+<li><strong>延迟</strong>在某些 forecasting 类高密度任务上没怎么降，<strong>但这是值得付的代价</strong>——准确性和成本是主线，延迟是副线。</li>
+</ul>
+<hr />
+<h2 id="十-工作总结">十、工作总结</h2>
+
+<p>Will 给的三条 takeaway（<a href="https://www.youtube.com/watch?v=mWvtOHlZM-I&amp;t=2616s">43:36</a>）：</p>
+<h3>1. 起步永远是「单 Agent + 类人原语」</h3>
+<p>不要一上来就堆子智能体或 MCP。先给 Claude 一台"电脑"——bash、文件系统、代码执行、web search、TODO list——能解决就解决。</p>
+<h3>2. 用 Skill 做渐进式披露</h3>
+<p>业务知识、流程规范、品牌指南——<strong>不要塞进系统提示</strong>。打包成 skill，Claude 自己判断什么时候调入。</p>
+<p>好处：上下文不被污染、Claude 在不需要的时候不知道这些规则反而决策更自由。</p>
+<h3>3. 用 Eval"爬坡"，不要靠感觉</h3>
+<p>任何一次架构改动都要落到一个能量化的 eval 上：</p>
+<ul>
+<li><strong>没在 eval 上验证的改动不算改进</strong>——可能在你没盯到的角落引入了 regression；</li>
+<li><strong>eval 要覆盖你真正关心的事</strong>（准确性 / 成本 / 延迟 / 用户体验维度，按重要性都要有）；</li>
+<li>改 → 跑 eval → 看分数 → 决定下一步 → 改……持续 hill climbing。</li>
+</ul>
+<hr />
+<h2 id="附-相关概念速查">附：相关概念速查</h2>
+
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话定义</th>
+<th>何时引入</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tool</strong></td>
+<td>给 Agent 暴露一个特定 API/能力</td>
+<td>内置原语 + 代码执行解决不了时</td>
+</tr>
+<tr>
+<td><strong>Skill</strong></td>
+<td>按需召入的领域知识/规程包</td>
+<td>知识只在某些任务里需要时</td>
+</tr>
+<tr>
+<td><strong>Sub-agent</strong></td>
+<td>独立上下文的二级 Claude</td>
+<td>需要并行 / 需要新鲜视角时</td>
+</tr>
+<tr>
+<td><strong>Claude Managed Agents (CMA)</strong></td>
+<td>Anthropic 托管的 Agent 运行环境，自带 scaling / 沙箱 / observability</td>
+<td>要上生产、不想自己维护 agent harness 时</td>
+</tr>
+<tr>
+<td><strong>Hill climbing</strong></td>
+<td>改一点 → 跑 eval → 看是否真改进 → 决定下一步的迭代方法</td>
+<td>任何 Agent 优化流程</td>
+</tr>
+<tr>
+<td><strong>Progressive disclosure</strong></td>
+<td>信息按需暴露而非全量塞入，对应 Skill 的设计哲学</td>
+<td>系统提示开始超过 50 行时</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>本文基于 YouTube 自动字幕 + 人工章节整理 + 中文重新组织。时间戳链接点击可跳到 YouTube 对应位置核对原话。</em></p>
   </main>
-
-  <footer>
-    由 AI 自动整理字幕并生成 ·
-    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
-    <a href="https://www.youtube.com/watch?v=mWvtOHlZM-I" target="_blank">▶ 原视频</a>
-  </footer>
+</div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
 </body>
 </html>

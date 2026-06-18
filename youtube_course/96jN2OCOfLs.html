@@ -1,402 +1,332 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>从 Vibe Coding 到 Agentic Engineering — Andrej Karpathy</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="utf-8">
+<title>从 Vibe Coding 到 Agentic Engineering — Andrej Karpathy</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #c96442;
+    --accent-bg: #f6e8e0;
+    --border: #e3e3df;
+    --code-bg: #f3f1ec;
+    --sidebar-w: 280px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-    :root {
-      --bg-primary: #0a0a0f;
-      --bg-card: #16161f;
-      --bg-card-hover: #1c1c28;
-      --border-color: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(99, 179, 237, 0.3);
-      --text-primary: #f0f0f5;
-      --text-secondary: #8888a0;
-      --text-muted: #55556a;
-      --accent-cyan: #63b3ed;
-      --accent-purple: #9f7aea;
-      --accent-green: #68d391;
-      --accent-orange: #f6ad55;
-      --gradient-start: #1a1a2e;
-      --gradient-end: #0a0a0f;
+  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+  aside.toc {
+    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
+    font-size: 14px;
+  }
+  aside.toc h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 12px;
+  }
+  aside.toc ol { list-style: none; margin: 0; padding: 0; }
+  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
+  aside.toc a { color: var(--fg); display: block; }
+  aside.toc a:hover { color: var(--accent); }
+
+  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
+  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
+
+  h2 {
+    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
+
+  p { margin: 0 0 18px; }
+
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); color: #4a3320; font-size: 15px;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 18px; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li > p { margin: 0 0 8px; }
+
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  .mermaid {
+    background: #fff; padding: 18px; border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; text-align: center;
+  }
+
+  table {
+    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    vertical-align: top; line-height: 1.55;
+  }
+  th { background: #f1ede6; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbf9f4; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  em { color: var(--muted); }
+
+  footer.meta {
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
+    color: var(--muted); font-size: 13px;
+  }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc {
+      position: static; max-height: none; border-right: none;
+      border-bottom: 1px solid var(--border);
     }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.7;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      margin-bottom: 24px;
-    }
-
-    .back-link:hover {
-      color: var(--accent-cyan);
-      border-color: var(--border-hover);
-      background: rgba(99, 179, 237, 0.08);
-      transform: translateX(-2px);
-    }
-
-    .back-link svg { width: 14px; height: 14px; }
-
-    .page-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
-
-    .meta-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
-    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
-
-    .content-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 32px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .content-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-    .content-card:hover::before { opacity: 1; }
-
-    .section { margin: 36px 0; }
-    .section-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-title .num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--accent-cyan);
-      background: rgba(99, 179, 237, 0.1);
-      border: 1px solid rgba(99, 179, 237, 0.2);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
-
-    blockquote {
-      margin: 18px 0;
-      padding: 14px 18px;
-      border-left: 3px solid var(--accent-purple);
-      background: rgba(159, 122, 234, 0.06);
-      border-radius: 0 8px 8px 0;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    blockquote p:last-child { margin-bottom: 0; }
-
-    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
-    li { margin: 0 0 8px; line-height: 1.7; }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 18px 0;
-      font-size: 0.875rem;
-    }
-
-    th, td {
-      border: 1px solid var(--border-color);
-      padding: 10px 14px;
-      text-align: left;
-      vertical-align: top;
-      line-height: 1.55;
-    }
-
-    th {
-      background: rgba(255, 255, 255, 0.03);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
-
-    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
-
-    code {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875em;
-      color: var(--accent-cyan);
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 0 50px;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      border-top: 1px solid var(--border-color);
-      margin-top: 20px;
-    }
-
-    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
-    footer a:hover { color: var(--accent-cyan); }
-
-    @media (max-width: 768px) {
-      body { padding: 0 16px; }
-      .page-title { font-size: 1.4rem; }
-      .content-card { padding: 20px; border-radius: 12px; }
-      .section { margin: 28px 0; }
-      table { font-size: 0.8rem; }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header class="page-header">
-    <a href="index.html" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      返回课程列表
-    </a>
-    <h1 class="page-title">从 Vibe Coding 到 Agentic Engineering</h1>
-    <div class="page-meta">
-      <span class="meta-badge time">⏱ ~30 分钟</span>
-      <span class="meta-badge source">📺 Sequoia AI Ascent 2026</span>
-      <span class="meta-badge">🎙️ Andrej Karpathy</span>
-    </div>
-  </header>
+<div class="layout">
+  <aside class="toc">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="#一-连-karpathy-都觉得自己落后了">一、连 Karpathy 都觉得自己"落后了"</a></li>
+      <li><a href="#二-software-30-llm-是一种新计算机">二、Software 3.0：LLM 是一种新计算机</a></li>
+      <li><a href="#三-三个让他顿悟的例子">三、三个让他"顿悟"的例子</a></li>
+      <li><a href="#四-神经计算机-最极端的外推">四、神经计算机：最极端的外推</a></li>
+      <li><a href="#五-可验证性-决定了什么先被自动化">五、可验证性：决定了什么先被自动化</a></li>
+      <li><a href="#六-锯齿状智能-洗车场悖论">六、锯齿状智能：洗车场悖论</a></li>
+      <li><a href="#七-给创业者的建议">七、给创业者的建议</a></li>
+      <li><a href="#八-vibe-coding-vs-agentic-engineering">八、Vibe Coding vs Agentic Engineering</a></li>
+      <li><a href="#九-ai-原生工程师长什么样">九、AI 原生工程师长什么样</a></li>
+      <li><a href="#十-人类的新价值-品味-判断-规格">十、人类的新价值：品味、判断、规格</a></li>
+      <li><a href="#十一-动物-vs-幽灵">十一、动物 vs 幽灵</a></li>
+      <li><a href="#十二-走向-agent-原生的世界">十二、走向 Agent 原生的世界</a></li>
+      <li><a href="#十三-智能廉价时-什么仍值得深学">十三、智能廉价时，什么仍值得深学</a></li>
+      <li><a href="#附-核心术语速查">附：核心术语速查</a></li>
+    </ol>
+  </aside>
+  <main>
+<h1>从 Vibe Coding 到 Agentic Engineering</h1>
+<blockquote>
+<p>嘉宾：<strong>Andrej Karpathy</strong>（前 OpenAI 创始成员、前 Tesla AI 高级总监） · 对谈：<strong>Stephanie Zhan</strong>（Sequoia Capital） · 场合：Sequoia <strong>AI Ascent 2026</strong> · 频道：Sequoia Capital · 时长：约 30 分钟 · 发布：2026-04-29 · <a href="https://www.youtube.com/watch?v=96jN2OCOfLs">▶ 原视频</a></p>
+<p><strong>本文是中文整理版</strong>：在对谈内容的基础上重新组织、补充图表，方便快速阅读。关键节点附 YouTube 时间戳链接，可点击跳到原视频对应位置核对原话。</p>
+</blockquote>
+<hr />
 
-  <main style="position: relative; z-index: 1;">
-    <div class="content-card">
-      <div class="section">
-        <h2 class="section-title"><span class="num">一</span>连 Karpathy 都觉得自己"落后了"</h2>
-        <p>开场主持人介绍 Karpathy：他帮忙<strong>构建</strong>了现代 AI（OpenAI 创始成员），又擅长<strong>讲清楚</strong>现代 AI，偶尔还顺手给现代 AI<strong>改个名</strong>——去年正是他造了 "vibe coding" 这个词。但就在几个月前，他说了一句更让人意外的话：<strong>"我作为程序员从未像现在这样感到落后。"</strong></p>
-        <p>他解释这种"落后感"是<strong>兴奋与不安的混合</strong>。过去一年他一直在用 agentic 编码工具，它们能写出"一块块"代码，时不时出错、需要你去改，算是帮上忙。但<strong>转折点出现在去年 12 月</strong>：</p>
-        <ul>
-          <li>最新一代模型给出的代码块"就是对的"；</li>
-          <li>他不断要更多，结果<strong>一直都对</strong>；</li>
-          <li>他想不起来上一次动手纠正它是什么时候了——于是越来越信任系统，<strong>真正进入了 vibe coding 状态</strong>。</li>
-        </ul>
-        <p>他在 X 上反复强调：很多人对 AI 的印象还停留在去年的"ChatGPT 类聊天工具"，<strong>但你必须在 12 月后重新看一次</strong>——这套"agentic 连贯工作流"真正开始 work 了，是一次<strong>陡峭的、根本性的转变</strong>。从那以后他的 side project 文件夹塞满了各种东西，一直在写代码。</p>
-      </div>
+<h2 id="一-连-karpathy-都觉得自己落后了">一、连 Karpathy 都觉得自己"落后了"</h2>
+<p>开场主持人介绍 Karpathy：他帮忙<strong>构建</strong>了现代 AI（OpenAI 创始成员），又擅长<strong>讲清楚</strong>现代 AI，偶尔还顺手给现代 AI<strong>改个名</strong>——去年正是他造了 "vibe coding" 这个词。但就在几个月前，他说了一句更让人意外的话：<strong>"我作为程序员从未像现在这样感到落后。"</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=20s">0:20</a>）</p>
+<p>他解释这种"落后感"是<strong>兴奋与不安的混合</strong>。过去一年他一直在用 agentic 编码工具，它们能写出"一块块"代码，时不时出错、需要你去改，算是帮上忙。但<strong>转折点出现在去年 12 月</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=62s">1:02</a>）：</p>
+<ul>
+<li>最新一代模型给出的代码块"就是对的"；</li>
+<li>他不断要更多，结果<strong>一直都对</strong>；</li>
+<li>他想不起来上一次动手纠正它是什么时候了——于是越来越信任系统，<strong>真正进入了 vibe coding 状态</strong>。</li>
+</ul>
+<p>他在 X 上反复强调：很多人对 AI 的印象还停留在去年的"ChatGPT 类聊天工具"，<strong>但你必须在 12 月后重新看一次</strong>——这套"agentic 连贯工作流"真正开始 work 了，是一次<strong>陡峭的、根本性的转变</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=104s">1:44</a>）。从那以后他的 side project 文件夹塞满了各种东西，一直在写代码。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">二</span>Software 3.0：LLM 是一种新计算机</h2>
-        <p>Karpathy 的核心框架是：<strong>LLM 不只是"更好的软件"，而是一种全新的计算范式</strong>。</p>
-        <table>
-          <thead><tr><th>范式</th><th>"编程"的含义</th><th>程序的载体</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Software 1.0</strong></td><td>人写显式规则</td><td>代码</td></tr>
-            <tr><td><strong>Software 2.0</strong></td><td>整理数据集、设定目标、设计网络结构去"训练"</td><td>学到的权重（neural net）</td></tr>
-            <tr><td><strong>Software 3.0</strong></td><td>写提示词 / 组织上下文窗口</td><td>把 LLM 当作"可编程的解释器"</td></tr>
-          </tbody>
-        </table>
-        <p>他指出：当你在足够大、足够多任务的互联网数据上训练一个 GPT/LLM，模型其实被迫"隐式地多任务学习"了数据里的一切——于是它<strong>变成了某种意义上可编程的计算机</strong>。在 Software 3.0 里，<strong>上下文窗口就是你操纵这台"解释器"的杠杆</strong>，模型在数字信息空间里执行计算。</p>
-        <blockquote><p><strong>核心洞察：</strong>编程的"动作"从写代码，变成整理数据，再变成组织上下文。LLM 不是"更快的旧软件"，而是一种新计算范式。</p></blockquote>
-      </div>
+<h2 id="二-software-30-llm-是一种新计算机">二、Software 3.0：LLM 是一种新计算机</h2>
+<p>Karpathy 的核心框架是：<strong>LLM 不只是"更好的软件"，而是一种全新的计算范式</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=148s">2:28</a>）。</p>
+<table>
+<thead><tr><th>范式</th><th>"编程"的含义</th><th>程序的载体</th></tr></thead>
+<tbody>
+<tr><td><strong>Software 1.0</strong></td><td>人写显式规则</td><td>代码</td></tr>
+<tr><td><strong>Software 2.0</strong></td><td>整理数据集、设定目标、设计网络结构去"训练"</td><td>学到的权重（neural net）</td></tr>
+<tr><td><strong>Software 3.0</strong></td><td>写提示词 / 组织上下文窗口</td><td>把 LLM 当作"可编程的解释器"</td></tr>
+</tbody>
+</table>
+<p>他指出：当你在足够大、足够多任务的互联网数据上训练一个 GPT/LLM，模型其实被迫"隐式地多任务学习"了数据里的一切——于是它<strong>变成了某种意义上可编程的计算机</strong>。在 Software 3.0 里，<strong>上下文窗口就是你操纵这台"解释器"的杠杆</strong>，模型在数字信息空间里执行计算（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=189s">3:09</a>）。</p>
+<div class="mermaid">flowchart LR
+    subgraph S1[Software 1.0]
+      A1[人写显式规则] --> B1[CPU 执行确定性代码]
+    end
+    subgraph S2[Software 2.0]
+      A2[整理数据集 + 目标] --> B2[训练得到权重]
+    end
+    subgraph S3[Software 3.0]
+      A3[提示词 / 上下文窗口] --> B3[LLM 作为解释器执行计算]
+    end
+    S1 --> S2 --> S3
+</div>
+<p><strong>图 1：三代软件范式</strong>——编程的"动作"从写代码，变成整理数据，再变成组织上下文。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">三</span>三个让他"顿悟"的例子</h2>
-        <p><strong>例子 1：OpenClaw 的安装方式</strong></p>
-        <p>过去安装一个跨平台软件，要写 shell 脚本；为了适配各种平台，这些脚本会膨胀得极其复杂。而 OpenClaw 的安装，其实是<strong>一段让你复制粘贴给 agent 的文本</strong>。这段"小技能"更强大，因为你不再需要事无巨细地拼出每个安装细节：agent 自带智能，会看你的环境、执行智能操作、在循环里自己 debug。<strong>"该复制粘贴给 agent 的那段文本"——这就是现在的编程范式。</strong></p>
+<h2 id="三-三个让他顿悟的例子">三、三个让他"顿悟"的例子</h2>
 
-        <p><strong>例子 2：MenuGen 的"消失"</strong></p>
-        <p>MenuGen 是他做的一个 App：餐厅菜单常常没有配图，你拍张菜单照片，它就帮你 OCR 出每道菜名、再用图像生成模型给出每道菜大概长啥样的图片。但后来他看到了"Software 3.0 版本"，<strong>直接把他整个人惊到</strong>：把照片丢给 Gemini，说"用 Nano Banana 把这些菜的图片叠到菜单上"——返回的就是一张和你拍的菜单一模一样、但像素里已经渲染好各道菜配图的图片。</p>
-        <blockquote><p>"我整个 MenuGen 都是多余的，它活在旧范式里——<strong>这个 App 本就不该存在。</strong>"</p></blockquote>
+<h3>例子 1：OpenClaw 的安装方式</h3>
+<p>过去安装一个跨平台软件，要写 shell 脚本；为了适配各种平台，这些脚本会膨胀得极其复杂——<strong>你仍然困在 Software 1.0 里，想着"把代码写精确"</strong>。而 OpenClaw 的安装，其实是<strong>一段让你复制粘贴给 agent 的文本</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=230s">3:50</a>）。这段"小技能"更强大，因为你不再需要事无巨细地拼出每个安装细节：agent 自带智能，会看你的环境、执行智能操作、在循环里自己 debug。<strong>"该复制粘贴给 agent 的那段文本"——这就是现在的编程范式。</strong></p>
 
-        <p><strong>例子 3：知识库（不只是"编程变快"）</strong></p>
-        <p>他强调一个更大的点：<strong>这不只是"编程"，而是"信息处理"整体变得可自动化了</strong>。传统代码作用于结构化数据；而他的 "LLM 知识库" 项目——让 LLM 为组织或个人生成 wiki——根本不是一个"程序"，因为以前不存在"能根据一堆事实生成知识库的代码"。现在你可以把文档"重新编译"、重排、生成全新的信息视角。</p>
-        <blockquote><p>"不要只问什么事现在更快了，要问什么事以前根本不可能、现在才可能。后者更令人兴奋。"</p></blockquote>
-      </div>
+<h3>例子 2：MenuGen 的"消失"</h3>
+<p>MenuGen 是他做的一个 App：餐厅菜单常常没有配图，你拍张菜单照片，它就帮你 OCR 出每道菜名、再用图像生成模型给出每道菜大概长啥样的图片，跑在 Vercel 上（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=275s">4:35</a>）。</p>
+<p>然后他看到了"Software 3.0 版本"，<strong>直接把他整个人惊到</strong>：把照片丢给 Gemini，说"用 Nano Banana 把这些菜的图片叠到菜单上"——返回的就是一张和你拍的菜单一模一样、但像素里已经渲染好各道菜配图的图片（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=339s">5:39</a>）。</p>
+<blockquote><p>"我整个 MenuGen 都是多余的，它活在旧范式里——<strong>这个 App 本就不该存在。</strong>" Software 3.0 更"生"：神经网络承担越来越多的工作，输入只是图片、输出也只是图片，中间不需要任何 App。</p></blockquote>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">四</span>神经计算机：最极端的外推</h2>
-        <p>Stephanie 问：如果继续外推，<strong>2026 年那个"事后看来理所当然、但今天大多还没被造出来"的东西会是什么？</strong></p>
-        <p>Karpathy 的外推很"怪"：可以想象<strong>完全的"神经计算机"</strong>——一个设备直接吃进原始视频/音频喂给神经网络，用扩散模型<strong>当场渲染出一个为此刻独一无二定制的 UI</strong>。</p>
-        <blockquote><p>50、60 年代，人们其实搞不清计算机会长得像"计算器"还是像"神经网络"。我们走了计算器（经典计算）的路，神经网络如今是<strong>虚拟跑在经典计算机之上</strong>的。但这个关系可能会翻转：<strong>神经网络成为主进程（host），CPU 变成协处理器</strong>，只在某些确定性任务上作为"历史遗留的附件"被调用。</p></blockquote>
-        <p>他强调这只是"极端外推"，真实路径是 TBD，会一块一块拼出来。</p>
-      </div>
+<h3>例子 3：知识库（不只是"编程变快"）</h3>
+<p>他强调一个更大的点：<strong>这不只是"编程"，而是"信息处理"整体变得可自动化了</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=384s">6:24</a>）。传统代码作用于结构化数据；而他的 "LLM 知识库" 项目——让 LLM 为组织或个人生成 wiki——根本不是一个"程序"，因为以前不存在"能根据一堆事实生成知识库的代码"。现在你可以把文档"重新编译"、重排、生成全新的信息视角。<strong>"不要只问什么事现在更快了，要问什么事以前根本不可能、现在才可能。后者更令人兴奋。"</strong></p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">五</span>可验证性：决定了什么先被自动化</h2>
-        <p>Karpathy 花了很多笔墨写"可验证性（verifiability）"。核心论断：</p>
-        <table>
-          <thead><tr><th></th><th>传统计算机能自动化的</th><th>这一代 LLM 能自动化的</th></tr></thead>
-          <tbody>
-            <tr><td>边界</td><td>你能用<strong>代码精确指定</strong>的事</td><td>你能<strong>验证</strong>的事</td></tr>
-          </tbody>
-        </table>
-        <p>原因在于训练机制：前沿实验室用<strong>巨大的强化学习环境</strong>训练 LLM，给的是"可验证的奖励"。于是模型变成了"<strong>锯齿状的实体（jagged entities）</strong>"——在数学、代码这类<strong>可验证领域能力陡峰</strong>，而在难以验证的地方则停滞、边缘粗糙。</p>
-        <p>他认为锯齿来自两个因素的组合：<strong>① 是否可验证 + ② 实验室是否在意</strong>。有些可验证环境只是因为"经济价值不够高"而没被放进数据分布。</p>
-        <blockquote><p>结论：我们<strong>多少受制于实验室往数据里放了什么</strong>。模型给你的是一台"没有说明书"的机器，在某些设定下灵、在某些设定下不灵。<strong>你得探索自己处在哪个"电路（circuit）"里</strong>：在 RL 覆盖的电路里你就飞起来，在数据分布之外你就挣扎——这时只能靠自己微调（fine-tuning）。</p></blockquote>
-      </div>
+<h2 id="四-神经计算机-最极端的外推">四、神经计算机：最极端的外推</h2>
+<p>Stephanie 问：如果继续外推（像 90 年代建网站、2010 年代做 App、上个云时代做 SaaS 那样），<strong>2026 年那个"事后看来理所当然、但今天大多还没被造出来"的东西会是什么？</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=447s">7:45</a>）</p>
+<p>Karpathy 的外推很"怪"：可以想象<strong>完全的"神经计算机"</strong>——一个设备直接吃进原始视频/音频喂给神经网络，用扩散模型<strong>当场渲染出一个为此刻独一无二定制的 UI</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=508s">8:28</a>）。</p>
+<blockquote><p>50、60 年代，人们其实搞不清计算机会长得像"计算器"还是像"神经网络"。我们走了计算器（经典计算）的路，神经网络如今是<strong>虚拟跑在经典计算机之上</strong>的。但这个关系可能会翻转：<strong>神经网络成为主进程（host），CPU 变成协处理器</strong>，只在某些确定性任务上作为"历史遗留的附件"被调用。（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=528s">8:48</a>）</p></blockquote>
+<div class="mermaid">flowchart TD
+    subgraph Now[今天]
+      CPU1[经典计算机 / CPU 为主] --> NN1[神经网络虚拟运行其上]
+    end
+    subgraph Future[可能的未来]
+      NN2[神经网络成为主进程 host] --> CPU2[CPU 作为协处理器]
+      NN2 -.工具调用.-> Det[确定性任务的历史遗留附件]
+    end
+    Now ==翻转==> Future
+</div>
+<p><strong>图 2：主从关系的翻转设想</strong>——他强调这只是"极端外推"，真实路径是 TBD，会一块一块拼出来。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">六</span>锯齿状智能：洗车场悖论</h2>
-        <p>关于"锯齿状智能（jagged intelligence）"，他给了一个经典新例子：</p>
-        <blockquote><p>"我要去 50 米外的洗车场洗车，我应该<strong>开车</strong>去还是<strong>走</strong>去？" 当今 SOTA 模型会告诉你"走着去，太近了"。可同一个 Opus 4.7 却能重构一个 10 万行的代码库、找出零日漏洞——<strong>这太荒诞了。</strong></p></blockquote>
-        <p>洗车这件事的关键当然是"你得把车开过去"。这种锯齿说明：<strong>① 模型可能哪里有点不对；② 你需要留在循环里，把它们当工具用，时刻了解它们在干什么。</strong></p>
-        <p>他补充：理论上<strong>几乎一切最终都能在某种程度上变得可验证</strong>——哪怕是写作这类，也可以搞一个"LLM 评审团（council of judges）"来给出合理评分。所以问题更多是"容易还是难"，而非"能不能"。被问到"什么终将可自动化"时，他笑答：<strong>"一切。"</strong></p>
-      </div>
+<h2 id="五-可验证性-决定了什么先被自动化">五、可验证性：决定了什么先被自动化</h2>
+<p>Karpathy 花了很多笔墨写"可验证性（verifiability）"。核心论断（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=591s">9:51</a>）：</p>
+<table>
+<thead><tr><th></th><th>传统计算机能自动化的</th><th>这一代 LLM 能自动化的</th></tr></thead>
+<tbody>
+<tr><td>边界</td><td>你能用<strong>代码精确指定</strong>的事</td><td>你能<strong>验证</strong>的事</td></tr>
+</tbody>
+</table>
+<p>原因在于训练机制：前沿实验室用<strong>巨大的强化学习环境</strong>训练 LLM，给的是"可验证的奖励"。于是模型变成了"<strong>锯齿状的实体（jagged entities）</strong>"——在数学、代码这类<strong>可验证领域能力陡峰</strong>，而在难以验证的地方则停滞、边缘粗糙（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=612s">10:12</a>）。</p>
+<p>他认为锯齿来自两个因素的组合：<strong>① 是否可验证 + ② 实验室是否在意</strong>。有些可验证环境只是因为"经济价值不够高"而没被放进数据分布。一个有启发性的轶事（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=732s">12:12</a>）：从 GPT-3.5 到 GPT-4，下棋能力大涨，很多人以为是"能力自然进步"，其实是<strong>有人在 OpenAI 把大量棋谱数据塞进了预训练集</strong>——只因为它进了数据分布，能力就显著拔高。</p>
+<blockquote><p>结论：我们<strong>多少受制于实验室往数据里放了什么</strong>。模型给你的是一台"没有说明书"的机器，在某些设定下灵、在某些设定下不灵。<strong>你得探索自己处在哪个"电路（circuit）"里</strong>：在 RL 覆盖的电路里你就飞起来，在数据分布之外你就挣扎——这时只能靠自己微调（fine-tuning）。（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=779s">12:59</a>）</p></blockquote>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">七</span>给创业者的建议</h2>
-        <p>问题：如果你是创业者，想解决一个<strong>可处理（tractable）且可验证</strong>的问题，却发现实验室在数学、编码这些"最显眼"的方向已经接近逃逸速度，怎么办？</p>
-        <p>Karpathy 的思路：</p>
-        <ul>
-          <li><strong>可验证性让问题"可处理"</strong>，因为你能往上砸海量 RL；而这一点<strong>即便实验室没直接盯着，也依然成立</strong>。</li>
-          <li>如果你处在一个可验证的设定里、能造出 RL 环境或样本，那你就具备了<strong>自己做微调</strong>的条件，并能从中获益。</li>
-          <li>这是"<strong>一拉就灵</strong>"的成熟技术：只要你有大量多样的 RL 环境/数据集，用你喜欢的微调框架"拉一下杠杆"，就能得到效果不错的东西。</li>
-        </ul>
-        <p>他希望创业者去找那些"可验证、价值高、却还没进实验室数据分布"的 RL 环境——这是方法论的核心。</p>
-      </div>
+<h2 id="六-锯齿状智能-洗车场悖论">六、锯齿状智能：洗车场悖论</h2>
+<p>关于"锯齿状智能（jagged intelligence）"，他给了一个经典新例子（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=694s">11:34</a>）：</p>
+<blockquote><p>"我要去 50 米外的洗车场洗车，我应该<strong>开车</strong>去还是<strong>走</strong>去？" 当今 SOTA 模型会告诉你"走着去，太近了"。可同一个 Opus 4.7 却能重构一个 10 万行的代码库、找出零日漏洞——<strong>这太荒诞了。</strong></p></blockquote>
+<p>洗车这件事的关键当然是"你得把车开过去"。这种锯齿说明：<strong>① 模型可能哪里有点不对；② 你需要留在循环里，把它们当工具用，时刻了解它们在干什么。</strong></p>
+<p>他补充（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=915s">15:15</a>）：理论上<strong>几乎一切最终都能在某种程度上变得可验证</strong>——哪怕是写作这类，也可以搞一个"LLM 评审团（council of judges）"来给出合理评分。所以问题更多是"容易还是难"，而非"能不能"。被问到"什么终将可自动化"时，他笑答：<strong>"一切。"</strong></p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">八</span>Vibe Coding vs Agentic Engineering</h2>
-        <p>这是本场的"标题问题"：去年他造了 vibe coding，今天世界更"严肃"、更 agentic 了，两者区别是什么？</p>
-        <table>
-          <thead><tr><th>维度</th><th>Vibe Coding</th><th>Agentic Engineering</th></tr></thead>
-          <tbody>
-            <tr><td>本质</td><td><strong>抬高地板</strong>：让所有人都能做出软件</td><td><strong>守住天花板</strong>：保住专业软件原有的质量标准</td></tr>
-            <tr><td>对象</td><td>人人皆可"凭感觉"造任何东西</td><td>专业工程师在不牺牲质量的前提下提速</td></tr>
-            <tr><td>责任</td><td>—</td><td>不允许因 vibe coding 引入漏洞，你<strong>仍要对软件负责</strong></td></tr>
-            <tr><td>定位</td><td>降低门槛</td><td>一门<strong>工程学科</strong>：协调一群"尖锐、易错、随机但极强"的 agent</td></tr>
-          </tbody>
-        </table>
-        <p>他之所以叫它"agentic engineering"，是因为它确实像一门工程学科：这些 agent 是"尖刺状的实体"，有点不可靠、有点随机，但极其强大；<strong>如何协调它们在不牺牲质量标准的前提下提速，正是 agentic engineering 的领域</strong>。</p>
-        <blockquote><p>关于 "10x 工程师"：他认为这个倍数被大幅放大了。<strong>"10x 已经不足以形容你能获得的加速"</strong>——真正擅长此道的人，峰值远超 10x。</p></blockquote>
-      </div>
+<h2 id="七-给创业者的建议">七、给创业者的建议</h2>
+<p>问题：如果你是创业者，想解决一个<strong>可处理（tractable）且可验证</strong>的问题，却发现实验室在数学、编码这些"最显眼"的方向已经接近逃逸速度，怎么办？（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=822s">13:42</a>）</p>
+<p>Karpathy 的思路（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=864s">14:25</a>）：</p>
+<ul>
+<li><strong>可验证性让问题"可处理"</strong>，因为你能往上砸海量 RL；而这一点<strong>即便实验室没直接盯着，也依然成立</strong>。</li>
+<li>如果你处在一个可验证的设定里、能造出 RL 环境或样本，那你就具备了<strong>自己做微调</strong>的条件，并能从中获益。</li>
+<li>这是"<strong>一拉就灵</strong>"的成熟技术：只要你有大量多样的 RL 环境/数据集，用你喜欢的微调框架"拉一下杠杆"，就能得到效果不错的东西。</li>
+</ul>
+<p>他半开玩笑地说，<strong>有一个领域他觉得很有价值，但不想在台上"剧透答案"</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=894s">14:54</a>）——重点是方法论：去找那些"可验证、价值高、却还没进实验室数据分布"的 RL 环境。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">九</span>AI 原生工程师长什么样</h2>
-        <p>引用 Sam Altman 去年在 AI Ascent 的话：不同代际用 ChatGPT 的方式不同。Karpathy 的回答：本质和过去一样——<strong>把工具用到极致、用上它的全部特性、投资自己的配置（setup）</strong>。就像以前工程师把 Vim / VS Code 用到飞起，现在是把 cloud code / codex 用到飞起。</p>
+<h2 id="八-vibe-coding-vs-agentic-engineering">八、Vibe Coding vs Agentic Engineering</h2>
+<p>这是本场的"标题问题"：去年他造了 vibe coding，今天世界更"严肃"、更 agentic 了，两者区别是什么？（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=949s">15:49</a>）</p>
+<table>
+<thead><tr><th>维度</th><th>Vibe Coding</th><th>Agentic Engineering</th></tr></thead>
+<tbody>
+<tr><td>本质</td><td><strong>抬高地板</strong>：让所有人都能做出软件</td><td><strong>守住天花板</strong>：保住专业软件原有的质量标准</td></tr>
+<tr><td>对象</td><td>人人皆可"凭感觉"造任何东西</td><td>专业工程师在不牺牲质量的前提下提速</td></tr>
+<tr><td>责任</td><td>—</td><td>不允许因 vibe coding 引入漏洞，你<strong>仍要对软件负责</strong></td></tr>
+<tr><td>定位</td><td>降低门槛</td><td>一门<strong>工程学科</strong>：协调一群"尖锐、易错、随机但极强"的 agent</td></tr>
+</tbody>
+</table>
+<p>他之所以叫它"agentic engineering"，是因为它确实像一门工程学科：这些 agent 是"尖刺状的实体"，有点不可靠、有点随机，但极其强大；<strong>如何协调它们在不牺牲质量标准的前提下提速，正是 agentic engineering 的领域</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=990s">16:30</a>）。</p>
+<blockquote><p>关于 "10x 工程师"：他认为这个倍数被大幅放大了。<strong>"10x 已经不足以形容你能获得的加速"</strong>——真正擅长此道的人，峰值远超 10x（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1010s">16:50</a>）。</p></blockquote>
+<hr />
 
-        <h3 style="color: var(--text-primary); font-size: 0.95rem; margin: 18px 0 10px;">招聘范式必须升级</h3>
-        <p><strong>大多数公司还没为"agentic 工程能力"重构招聘流程</strong>——如果你还在出"解谜题"，那还是旧范式。新的考法应该是<strong>给一个很大的真实项目，看人怎么实现</strong>：</p>
-        <blockquote><p>"比如写一个给 agent 用的 Twitter 克隆，把它做好、做安全，让一些 agent 在上面模拟活动；然后我用 <strong>10 个 codex 5.4 高强度实例</strong>去尝试攻破你部署的网站，而它们<strong>不应该</strong>能攻破。"</p></blockquote>
-      </div>
+<h2 id="九-ai-原生工程师长什么样">九、AI 原生工程师长什么样</h2>
+<p>引用 Sam Altman 去年在 AI Ascent 的话：不同代际用 ChatGPT 的方式不同——30 多岁的人当 Google 搜索替代品，青少年则把 ChatGPT 当成"上网的入口"。那么在编码里，<strong>一个"平庸者"和一个"完全 AI 原生者"用 cloud code / codex 时，差别是什么？</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1032s">17:12</a>）</p>
+<p>Karpathy 的回答：本质和过去一样——<strong>把工具用到极致、用上它的全部特性、投资自己的配置（setup）</strong>。就像以前工程师把 Vim / VS Code 用到飞起，现在是把 cloud code / codex 用到飞起（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1076s">17:56</a>）。</p>
+<h3>招聘范式必须升级</h3>
+<p>他观察到：<strong>大多数公司还没为"agentic 工程能力"重构招聘流程</strong>——如果你还在出"解谜题"，那还是旧范式（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1117s">18:37</a>）。新的考法应该是<strong>给一个很大的真实项目，看人怎么实现</strong>：</p>
+<blockquote><p>"比如写一个给 agent 用的 Twitter 克隆，把它做好、做安全，让一些 agent 在上面模拟活动；然后我用 <strong>10 个 codex 5.4 高强度实例</strong>去尝试攻破你部署的网站，而它们<strong>不应该</strong>能攻破。"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1138s">18:58</a>）观察人在这种"造大项目 + 善用工具链"场景下的表现。</p></blockquote>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">十</span>人类的新价值：品味、判断、规格</h2>
-        <p>问：当 agent 做得越来越多，<strong>什么人类技能反而更值钱？</strong></p>
-        <p>答：你仍然要掌管<strong>审美、判断、品味与监督</strong>。他举了 MenuGen 的"诡异 bug"：用户用 Google 账号登录、用 Stripe 账号买额度，两边各有邮箱；agent 竟用 <strong>邮箱地址去跨账号匹配资金</strong>，而不是用持久的 user ID——可两边邮箱完全可以不同，于是资金对不上。<strong>"用邮箱来交叉关联资金，这事儿太怪了。"</strong></p>
-        <p>所以人要掌管<strong>spec（规格）、计划与顶层分类</strong>。更普遍的做法是：<strong>和 agent 一起设计一份非常详细的 spec（本质就是文档），再让 agent 去实现</strong>，你负责监督和顶层结构，细节交给它。</p>
-        <blockquote><p>人定方向与约束，agent 填细节。就像 PyTorch/NumPy 里 keepdim、dim/axis、reshape/permute 这些 API 细节，现在交给"记性很好的实习生"，但你<strong>仍需理解底层原理</strong>。</p></blockquote>
-      </div>
+<h2 id="十-人类的新价值-品味-判断-规格">十、人类的新价值：品味、判断、规格</h2>
+<p>问：当 agent 做得越来越多，<strong>什么人类技能反而更值钱？</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1158s">19:18</a>）</p>
+<p>答：你仍然要掌管<strong>审美、判断、品味与监督</strong>。他举了 MenuGen 的"诡异 bug"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1179s">19:39</a>）：用户用 Google 账号登录、用 Stripe 账号买额度，两边各有邮箱；agent 竟用 <strong>邮箱地址去跨账号匹配资金</strong>，而不是用持久的 user ID——可两边邮箱完全可以不同，于是资金对不上。<strong>"用邮箱来交叉关联资金，这事儿太怪了。"</strong></p>
+<p>所以人要掌管<strong>spec（规格）、计划与顶层分类</strong>。他甚至说自己不太喜欢"plan mode"——虽然有用，但更普遍的做法是：<strong>和 agent 一起设计一份非常详细的 spec（本质就是文档），再让 agent 去实现</strong>，你负责监督和顶层结构，细节交给它（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1243s">20:43</a>）。</p>
+<div class="mermaid">flowchart LR
+    Human[人类: 品味 / 判断 / spec / 监督] -->|设计详细 spec 文档| Agent[Agent: 填空式实现细节]
+    Agent -->|产出| Code[软件]
+    Human -->|审查 关键约束<br/>如必须用唯一 user ID| Code
+    Code -.反馈.-> Human
+</div>
+<p><strong>图 3：人机分工</strong>——人定方向与约束，agent 填细节。就像 PyTorch/NumPy 里 keepdim、dim/axis、reshape/permute 这些 API 细节，现在交给"记性很好的实习生"，但你<strong>仍需理解底层原理</strong>（如 tensor 的 view 与底层 storage 是否共享，避免不必要的内存拷贝）（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1264s">21:04</a>）。</p>
+<h3>品味会随时间贬值吗？</h3>
+<p>他希望模型的"代码品味"能改善，但目前不行——<strong>因为它不在 RL 里，没有审美的奖励信号</strong>。他坦言看 agent 写的代码时常"心脏一紧"：能跑，但臃肿、大量复制粘贴、抽象别扭脆弱、"很恶心"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1366s">22:47</a>）。又如他的 <strong>micro GPT</strong> 项目，想把 LLM 训练简化到极致，模型"恨这件事"、做不到，怎么提示"再简化"都不行——<strong>那是你在 RL 电路之外的明显信号，像拔牙一样费劲</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1388s">23:08</a>）。但他认为这没有根本障碍，只是实验室还没做。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">十一</span>动物 vs 幽灵</h2>
-        <p>他写过一篇引发热议的文章："我们不是在<strong>制造动物（animals）</strong>，而是在<strong>召唤幽灵（ghosts）</strong>。"</p>
-        <table>
-          <thead><tr><th></th><th>动物（生物智能）</th><th>幽灵（当前 LLM）</th></tr></thead>
-          <tbody>
-            <tr><td>塑造来源</td><td>进化：内在动机、乐趣、好奇、赋能</td><td>数据 + 奖励函数</td></tr>
-            <tr><td>底层</td><td>有机体</td><td>预训练的统计电路 + RL "栓"在其上</td></tr>
-            <tr><td>对"训斥"的反应</td><td>可能影响表现</td><td><strong>毫无影响</strong>——你冲它吼，它不会做得更好或更差</td></tr>
-          </tbody>
-        </table>
-        <p>他坦诚这篇更像"哲学化思考"，不确定有没有"实际威力"。写它是为了<strong>给"这些东西到底是什么"建一个心智模型</strong>——模型越准，你用起来越称职。</p>
-      </div>
+<h2 id="十一-动物-vs-幽灵">十一、动物 vs 幽灵</h2>
+<p>他写过一篇引发热议的文章："我们不是在<strong>制造动物（animals）</strong>，而是在<strong>召唤幽灵（ghosts）</strong>。"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1408s">23:28</a>）</p>
+<table>
+<thead><tr><th></th><th>动物（生物智能）</th><th>幽灵（当前 LLM）</th></tr></thead>
+<tbody>
+<tr><td>塑造来源</td><td>进化：内在动机、乐趣、好奇、赋能</td><td>数据 + 奖励函数</td></tr>
+<tr><td>底层</td><td>有机体</td><td>预训练的统计电路 + RL "栓"在其上</td></tr>
+<tr><td>对"训斥"的反应</td><td>可能影响表现</td><td><strong>毫无影响</strong>——你冲它吼，它不会做得更好或更差</td></tr>
+</tbody>
+</table>
+<p>他坦诚这篇更像"哲学化思考"，不确定有没有"实际威力"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1474s">24:34</a>）。写它是为了<strong>给"这些东西到底是什么"建一个心智模型</strong>——模型越准，你用起来越称职。结论偏向"<strong>对它保持怀疑、随时间摸索</strong>"，而非给出五条万能改进法。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">十二</span>走向 Agent 原生的世界</h2>
-        <p>当 agent 拥有真实权限、本地上下文、能代你行动时，世界会变成什么样？</p>
-        <p>他的"最爱吐槽"：如今的框架/库文档<strong>仍然是写给人看的</strong>——"为什么还在告诉<strong>我</strong>该怎么做？我什么都不想做。<strong>我该复制粘贴给 agent 的那段东西在哪？</strong>"</p>
-        <p>大家兴奋的方向是把工作负载分解为<strong>对世界的传感器（sensors）与执行器（actuators）</strong>，做到 <strong>agent native</strong>：优先用 agent 能读懂的数据结构来描述一切。</p>
-        <blockquote><p>最终走向：<strong>人和组织都有 agent 代表</strong>——"我的 agent 会和你的 agent 去敲定我们开会的细节。"</p></blockquote>
-      </div>
+<h2 id="十二-走向-agent-原生的世界">十二、走向 Agent 原生的世界</h2>
+<p>当 agent 拥有真实权限、本地上下文、能代你行动时，世界会变成什么样？（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1516s">25:16</a>）</p>
+<p>他的"最爱吐槽"：如今的框架/库文档<strong>仍然是写给人看的</strong>——"为什么还在告诉<strong>我</strong>该怎么做？我什么都不想做。<strong>我该复制粘贴给 agent 的那段东西在哪？</strong>"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1538s">25:38</a>）</p>
+<p>大家兴奋的方向是把工作负载分解为<strong>对世界的传感器（sensors）与执行器（actuators）</strong>，做到 <strong>agent native</strong>：优先用 agent 能读懂的数据结构来描述一切（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1559s">25:59</a>）。他再举 MenuGen：写代码不难，<strong>难在部署</strong>——在 Vercel 上对接各种服务、配 DNS、点各种设置菜单，烦得要死。理想状态是：给 LLM 一个 prompt "构建并部署 MenuGen"，他不用碰任何东西就上线了——<strong>这可以作为"基础设施是否变得 agent native"的一个测试</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1601s">26:41</a>）。</p>
+<blockquote><p>最终走向：<strong>人和组织都有 agent 代表</strong>——"我的 agent 会和你的 agent 去敲定我们开会的细节。"（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1645s">27:25</a>）</p></blockquote>
+<div class="mermaid">flowchart TD
+    World[世界] --> Sensors[传感器 sensors]
+    Sensors --> AgentNative[agent native 数据结构<br/>对 LLM 高度可读]
+    AgentNative --> Actuators[执行器 actuators]
+    Actuators --> World
+    AgentNative -.代理.-> Rep[人 / 组织的 agent 代表]
+    Rep <-.agent 对 agent.-> Rep2[对方的 agent 代表]
+</div>
+<p><strong>图 4：agent native 的世界</strong>——把一切分解为"传感器→agent 可读数据→执行器"，并由 agent 代表彼此协商。</p>
+<hr />
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">十三</span>智能廉价时，什么仍值得深学</h2>
-        <p>收尾落在教育。当智能变得廉价，什么仍值得"深入学习"？</p>
-        <p>他引用一条最近让他反复回味的推文：</p>
-        <blockquote><p><strong>"You can outsource your thinking, but you can't outsource your understanding."</strong></p></blockquote>
-        <p>他说自己<strong>正在成为系统的瓶颈</strong>：信息仍要进入他的大脑，他要知道"我们到底想造什么、为什么值得做、如何指挥我的 agent"。最终总得有东西去<strong>指挥思考与处理</strong>，而这从根本上受"理解"约束。</p>
-        <p>这也是他对知识库兴奋的原因：每当他看到信息的一种"新投影（projection）"，就会获得洞见。他把读到的文章喂进自己不断生长的 wiki，再围绕它做大量"合成数据生成"式的提问——<strong>这些工具本质是在增强"理解"</strong>。而理解恰恰是 LLM 不擅长、人类仍独占的环节：<strong>你无法在自己不理解的情况下当好一个"导演（director）"</strong>。</p>
-      </div>
-    </div>
+<h2 id="十三-智能廉价时-什么仍值得深学">十三、智能廉价时，什么仍值得深学</h2>
+<p>收尾落在教育。当智能变得廉价，什么仍值得"深入学习"？（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1666s">27:46</a>）</p>
+<p>他引用一条最近让他反复回味的推文：</p>
+<blockquote><p><strong>"你可以外包你的思考，但你无法外包你的理解（You can outsource your thinking, but you can't outsource your understanding）。"</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1688s">28:08</a>）</p></blockquote>
+<p>他说自己<strong>正在成为系统的瓶颈</strong>：信息仍要进入他的大脑，他要知道"我们到底想造什么、为什么值得做、如何指挥我的 agent"。最终总得有东西去<strong>指挥思考与处理</strong>，而这从根本上受"理解"约束（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1709s">28:29</a>）。</p>
+<p>这也是他对知识库兴奋的原因：每当他看到信息的一种"新投影（projection）"，就会获得洞见。他把读到的文章喂进自己不断生长的 wiki，再围绕它做大量"合成数据生成"式的提问——<strong>这些工具本质是在增强"理解"</strong>。而理解恰恰是 LLM 不擅长、人类仍独占的环节：<strong>你无法在自己不理解的情况下当好一个"导演（director）"</strong>（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1751s">29:11</a>）。他笑说期待几年后再来，看看我们是否已被彻底"自动化出局"，连理解都被接管了（<a href="https://www.youtube.com/watch?v=96jN2OCOfLs&amp;t=1772s">29:32</a>）。</p>
+<hr />
+
+<h2 id="附-核心术语速查">附：核心术语速查</h2>
+<table>
+<thead><tr><th>术语</th><th>一句话定义</th><th>本场语境</th></tr></thead>
+<tbody>
+<tr><td><strong>Software 3.0</strong></td><td>用提示词/上下文编程，把 LLM 当可编程解释器</td><td>新计算范式，非"更快的旧软件"</td></tr>
+<tr><td><strong>Vibe coding</strong></td><td>凭感觉让 AI 把软件做出来</td><td>抬高地板，人人能造</td></tr>
+<tr><td><strong>Agentic engineering</strong></td><td>在不牺牲质量的前提下协调 agent 提速的工程学科</td><td>守住天花板，对软件负责</td></tr>
+<tr><td><strong>Verifiability（可验证性）</strong></td><td>能否被验证，决定 LLM 能否轻易自动化它</td><td>RL 奖励的来源，造就锯齿</td></tr>
+<tr><td><strong>Jagged intelligence（锯齿状智能）</strong></td><td>在可验证领域陡峰、别处粗糙</td><td>洗车场悖论；要留在循环里</td></tr>
+<tr><td><strong>Animals vs Ghosts</strong></td><td>不是进化出的动物，而是数据+奖励召唤的幽灵</td><td>建立"它是什么"的心智模型</td></tr>
+<tr><td><strong>Agent native</strong></td><td>优先用 agent 可读的方式描述世界（sensors/actuators）</td><td>基础设施的下一步</td></tr>
+<tr><td><strong>Spec</strong></td><td>人与 agent 共同设计的详细文档/规格</td><td>人掌管方向，agent 填细节</td></tr>
+</tbody>
+</table>
+<hr />
+<p><em>本文基于 YouTube 自动字幕 + 人工整理 + 中文重新组织。时间戳链接点击可跳到 YouTube 对应位置核对原话。</em></p>
   </main>
-
-  <footer>
-    由 AI 自动整理字幕并生成 ·
-    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
-    <a href="https://www.youtube.com/watch?v=96jN2OCOfLs" target="_blank">▶ 原视频</a>
-  </footer>
+</div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
 </body>
 </html>

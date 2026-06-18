@@ -1,458 +1,432 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Code 最佳实践：从入门到熟练 — Cal (Anthropic)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="utf-8">
+<title>Claude Code 最佳实践：从入门到熟练</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #c96442;
+    --accent-bg: #f6e8e0;
+    --border: #e3e3df;
+    --code-bg: #f3f1ec;
+    --sidebar-w: 280px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-    :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --bg-card: #16161f;
-      --bg-card-hover: #1c1c28;
-      --border-color: rgba(255, 255, 255, 0.06);
-      --border-hover: rgba(99, 179, 237, 0.3);
-      --text-primary: #f0f0f5;
-      --text-secondary: #8888a0;
-      --text-muted: #55556a;
-      --accent-cyan: #63b3ed;
-      --accent-blue: #4299e1;
-      --accent-purple: #9f7aea;
-      --gradient-start: #1a1a2e;
-      --gradient-end: #0a0a0f;
+  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+  aside.toc {
+    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
+    font-size: 14px;
+  }
+  aside.toc h2 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 12px;
+  }
+  aside.toc ol { list-style: none; margin: 0; padding: 0; }
+  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
+  aside.toc a { color: var(--fg); display: block; }
+  aside.toc a:hover { color: var(--accent); }
+
+  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
+  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
+
+  h2 {
+    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
+
+  p { margin: 0 0 18px; }
+
+  blockquote {
+    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
+    background: var(--accent-bg); color: #4a3320; font-size: 15px;
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 18px; padding-left: 28px; }
+  li { margin: 0 0 8px; }
+  li > p { margin: 0 0 8px; }
+
+  code {
+    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
+    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  pre {
+    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px;
+  }
+  pre code { background: transparent; padding: 0; }
+
+  /* Mermaid containers — let mermaid.js render inside, white bg */
+  .mermaid {
+    background: #fff; padding: 18px; border: 1px solid var(--border);
+    border-radius: 6px; margin: 20px 0; text-align: center;
+  }
+
+  table {
+    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
+  }
+  th, td {
+    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
+    vertical-align: top; line-height: 1.55;
+  }
+  th { background: #f1ede6; font-weight: 600; }
+  tr:nth-child(even) td { background: #fbf9f4; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  em { color: var(--muted); }
+
+  footer.meta {
+    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
+    color: var(--muted); font-size: 13px;
+  }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+    aside.toc {
+      position: static; max-height: none; border-right: none;
+      border-bottom: 1px solid var(--border);
     }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
-      background-attachment: fixed;
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.7;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-      padding: 8px 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      margin-bottom: 24px;
-    }
-
-    .back-link:hover {
-      color: var(--accent-cyan);
-      border-color: var(--border-hover);
-      background: rgba(99, 179, 237, 0.08);
-      transform: translateX(-2px);
-    }
-
-    .back-link svg { width: 14px; height: 14px; }
-
-    .page-title {
-      font-size: 1.75rem;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
-
-    .meta-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
-    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
-
-    .content-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 32px;
-      margin-bottom: 32px;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .content-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
-    .content-card:hover::before { opacity: 1; }
-
-    .section { margin: 36px 0; }
-
-    .section-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-title .num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--accent-cyan);
-      background: rgba(99, 179, 237, 0.1);
-      border: 1px solid rgba(99, 179, 237, 0.2);
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
-
-    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
-
-    blockquote {
-      margin: 18px 0;
-      padding: 14px 18px;
-      border-left: 3px solid var(--accent-purple);
-      background: rgba(159, 122, 234, 0.06);
-      border-radius: 0 8px 8px 0;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    blockquote p:last-child { margin-bottom: 0; }
-
-    h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin: 32px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin: 24px 0 12px;
-    }
-
-    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
-    li { margin: 0 0 8px; line-height: 1.7; }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 18px 0;
-      font-size: 0.875rem;
-    }
-
-    th, td {
-      border: 1px solid var(--border-color);
-      padding: 10px 14px;
-      text-align: left;
-      vertical-align: top;
-      line-height: 1.55;
-    }
-
-    th {
-      background: rgba(255, 255, 255, 0.03);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
-
-    code {
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2px 6px;
-      border-radius: 3px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.875em;
-      color: var(--accent-cyan);
-    }
-
-    pre {
-      background: rgba(255, 255, 255, 0.04);
-      padding: 14px 16px;
-      border-radius: 8px;
-      overflow-x: auto;
-      font-size: 0.875rem;
-      border: 1px solid var(--border-color);
-      margin: 18px 0;
-    }
-
-    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
-
-    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
-
-    footer {
-      text-align: center;
-      padding: 40px 0 50px;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      border-top: 1px solid var(--border-color);
-      margin-top: 20px;
-    }
-
-    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
-    footer a:hover { color: var(--accent-cyan); }
-
-    @media (max-width: 768px) {
-      body { padding: 0 16px; }
-      .page-title { font-size: 1.4rem; }
-      .content-card { padding: 20px; border-radius: 12px; }
-      .section { margin: 28px 0; }
-      table { font-size: 0.8rem; }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
-  <header class="page-header">
-    <a href="index.html" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      返回课程列表
-    </a>
-    <h1 class="page-title">Claude Code 最佳实践：从入门到熟练</h1>
-    <div class="page-meta">
-      <span class="meta-badge time">⏱ ~26 分钟</span>
-      <span class="meta-badge source">📺 Code with Claude</span>
-      <span class="meta-badge">🤖 Cal (Anthropic)</span>
-    </div>
-  </header>
+<div class="layout">
+  <aside class="toc">
+    <h2>目录</h2>
+    <ol><li><a href="#一-claude-code-到底是什么">一、Claude Code 到底是什么？</a></li>
+<li><a href="#二-claude-code-适合做哪些事">二、Claude Code 适合做哪些事？</a></li>
+<li><a href="#三-最佳实践-1-claude-md-文件">三、最佳实践 #1：CLAUDE.md 文件</a></li>
+<li><a href="#四-最佳实践-2-权限管理与速度的取舍">四、最佳实践 #2：权限管理与速度的取舍</a></li>
+<li><a href="#五-最佳实践-3-context-管理">五、最佳实践 #3：context 管理</a></li>
+<li><a href="#六-最佳实践-4-先-plan-再做-看着-todo-不对就拍-escape">六、最佳实践 #4：先 plan 再做，看着 todo 不对就拍 escape</a></li>
+<li><a href="#七-进阶玩法">七、进阶玩法</a></li>
+<li><a href="#八-claude-4-最新版本带来的新东西">八、Claude 4 / 最新版本带来的新东西</a></li>
+<li><a href="#九-q-a-精华">九、Q&A 精华</a></li>
+<li><a href="#十-总结-从入门到熟练的清单">十、总结：从入门到熟练的清单</a></li></ol>
+  </aside>
+  <main>
+<h1>Claude Code 最佳实践：从入门到熟练</h1>
+<blockquote>
+<p>作者：<strong>Cal</strong>（Anthropic 应用 AI 团队 / Claude Code 核心贡献者） · 演讲场合：Code with Claude · 时长：约 26 分钟 · <a href="https://www.youtube.com/watch?v=gv0WHhKelSE">▶ 原视频</a></p>
+<p><strong>本文是中文整理版</strong>：在视频内容的基础上重新组织、补图表，方便快速阅读。关键节点附 YouTube 时间戳链接，可点击跳回原视频对应位置核对。</p>
+</blockquote>
+<hr />
+<h2 id="一-claude-code-到底是什么">一、Claude Code 到底是什么？</h2>
 
-  <main style="position: relative; z-index: 1;">
-    <div class="content-card">
+<p>Cal 在 <a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=182s">3:02</a> 给出的心智模型很简单：</p>
+<blockquote>
+<p><strong>Claude Code 就像一个"什么都在终端里完成"的同事</strong>——从不开 GUI，所有操作都靠 bash、Vim、CLI。</p>
+</blockquote>
+<p>他举了个例子：作为初级工程师时，他常去找同事 Tony 帮忙调 bug。Tony 会"啪"地打开终端，一通 bash + Vim 操作，问题就解决了。<strong>Claude Code 就相当于把 Tony 永远摆在你电脑旁边。</strong></p>
+<h3>Anthropic 的工程哲学：do the simple thing that works</h3>
+<p>Anthropic 自己定义的 <strong>Agent</strong> = 一份指令 + 一组强大的工具 + 让模型在循环里跑到它自己觉得"做完了"。Claude Code 就是这个定义的极简实现（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=243s">4:03</a>）。</p>
+<div class="mermaid">flowchart TD
+    User[用户] --> Loop[Claude 模型]
+    Loop --> Tools[强大的工具集]
+    Tools --> Edit[读/写文件]
+    Tools --> Bash[执行 bash 命令]
+    Tools --> Search[agentic search<br/>glob / grep / find]
+    Tools --> MCP[MCP 服务<br/>按需挂载]
+    Tools -.结果回流.-> Loop
+    Loop -.检查是否完成.-> Loop
+    Loop --> UI[轻 UI 层 + 权限系统]
+    UI --> User
+</div>
+<p><strong>图 1：Claude Code 的"纯 Agent"架构</strong>——没有花哨的中间层，模型 + 工具 + loop。</p>
+<h3>关键澄清：<strong>不做 codebase 索引、不做 embedding RAG</strong></h3>
+<p>一年前如果让你设计代码 Agent，常见思路是：把整个 codebase embed 进向量库，靠 RAG 召回相关文件。</p>
+<p><strong>Claude Code 完全不是这种思路。</strong> Claude 像一个新入职的工程师一样<strong>主动探索</strong>——用 <code>glob</code> / <code>grep</code> / <code>find</code> 这种你我都会用的搜索工具，搜一轮、读一段、判断"还需要看什么"，再搜一轮（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=275s">4:35</a>）。这就是 <strong>agentic search</strong>：搜索本身是模型驱动的迭代过程。</p>
+<hr />
+<h2 id="二-claude-code-适合做哪些事">二、Claude Code 适合做哪些事？</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">一</span>Claude Code 到底是什么？</h2>
-        <p><strong>Cal 给出的心智模型：</strong>Claude Code 就像一个"什么都在终端里完成"的同事——从不开 GUI，所有操作都靠 bash、Vim、CLI。他举了个例子：作为初级工程师时，他常去找同事 Tony 帮忙调 bug。Tony 会"啪"地打开终端，一通 bash + Vim 操作，问题就解决了。<strong>Claude Code 就相当于把 Tony 永远摆在你电脑旁边。</strong></p>
-        <h3>Anthropic 的工程哲学：do the simple thing that works</h3>
-        <p><strong>Anthropic 自己定义的 Agent</strong> = 一份指令 + 一组强大的工具 + 让模型在循环里跑到它自己觉得"做完了"。Claude Code 就是这个定义的极简实现。</p>
-        <blockquote>关键澄清：<strong>不做 codebase 索引、不做 embedding RAG。</strong> Claude 像一个新入职的工程师一样<strong>主动探索</strong>——用 <code>glob</code> / <code>grep</code> / <code>find</code> 这种你我都会用的搜索工具，搜一轮、读一段、判断"还需要看什么"，再搜一轮。这就是 <strong>agentic search</strong>：搜索本身是模型驱动的迭代过程。</blockquote>
-      </div>
+<p>Cal 用一句话总结：<strong>几乎什么都能干</strong>（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=379s">6:19</a>）。展开看，至少这五个场景特别合身：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>怎么用</th>
+<th>为什么有效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>探索陌生代码库</strong></td>
+<td>"这个 feature 在哪里实现的？""结合 git 历史告诉我这段代码最近几周的演化故事"</td>
+<td>agentic search + bash 同时具备</td>
+</tr>
+<tr>
+<td><strong>当思考伙伴</strong></td>
+<td>"我想加这个 feature，<strong>别动手</strong>，先帮我搜一搜、给出 2~3 个方案"</td>
+<td>让 Claude 先 plan 再执行，便于人工审计</td>
+</tr>
+<tr>
+<td><strong>写新功能 / 维护老代码</strong></td>
+<td>在已有代码库里加测试、写 commit / PR message、修 bug</td>
+<td>单元测试覆盖率自然变高</td>
+</tr>
+<tr>
+<td><strong>CI/CD 与运维</strong></td>
+<td>通过 Claude Code SDK 程序化集成进 GitHub Actions、内部脚本</td>
+<td>headless / non-interactive 模式</td>
+</tr>
+<tr>
+<td><strong>大版本迁移 / 重构</strong></td>
+<td>Java 升级、PHP→React/Angular、大规模重命名</td>
+<td>让原本"难启动"的项目变得可消化</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Cal 补充（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=570s">9:30</a>）：很多客户来跟我们讲的不是"帮我们写新 feature"，而是"我们拖了好几年的老代码迁移，现在敢动了"。这是 Claude Code 给团队带来的<strong>心理预算</strong>层面的变化。</p>
+</blockquote>
+<h3>写代码以外，CLI 工具是它真正的超能力</h3>
+<p>因为 Claude 在终端里特别熟练，所以它顺手就能用 <code>git</code>、<code>docker</code>、<code>gh</code>、<code>bq</code>、<code>kubectl</code>——任何有 CLI 的工具它都会用。Cal 举了个例子：以前遇到棘手的 <code>git rebase</code> 冲突就头大，现在直接把情况描述给 Claude Code，让它收拾就行（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=622s">10:22</a>）。</p>
+<hr />
+<h2 id="三-最佳实践-1-claude-md-文件">三、最佳实践 #1：CLAUDE.md 文件</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">二</span>Claude Code 适合做哪些事？</h2>
-        <p>Cal 用一句话总结：<strong>几乎什么都能干。</strong> 展开看，至少这五个场景特别合身：</p>
-        <table>
-          <thead><tr><th>场景</th><th>怎么用</th><th>为什么有效</th></tr></thead>
-          <tbody>
-            <tr><td><strong>探索陌生代码库</strong></td><td>"这个 feature 在哪里实现的？""结合 git 历史告诉我这段代码最近几周的演化故事"</td><td>agentic search + bash 同时具备</td></tr>
-            <tr><td><strong>当思考伙伴</strong></td><td>"我想加这个 feature，<strong>别动手</strong>，先帮我搜一搜、给出 2~3 个方案"</td><td>让 Claude 先 plan 再执行，便于人工审计</td></tr>
-            <tr><td><strong>写新功能 / 维护老代码</strong></td><td>在已有代码库里加测试、写 commit / PR message、修 bug</td><td>单元测试覆盖率自然变高</td></tr>
-            <tr><td><strong>CI/CD 与运维</strong></td><td>通过 Claude Code SDK 程序化集成进 GitHub Actions、内部脚本</td><td>headless / non-interactive 模式</td></tr>
-            <tr><td><strong>大版本迁移 / 重构</strong></td><td>Java 升级、PHP→React/Angular、大规模重命名</td><td>让原本"难启动"的项目变得可消化</td></tr>
-          </tbody>
-        </table>
-        <blockquote>Cal 补充：很多客户来跟我们讲的不是"帮我们写新 feature"，而是"我们拖了好几年的老代码迁移，现在敢动了"。这是 Claude Code 给团队带来的<strong>心理预算</strong>层面的变化。</blockquote>
-        <h3>CLI 工具是它真正的超能力</h3>
-        <p>因为 Claude 在终端里特别熟练，所以它顺手就能用 <code>git</code>、<code>docker</code>、<code>gh</code>、<code>bq</code>、<code>kubectl</code>——任何有 CLI 的工具它都会用。以前遇到棘手的 <code>git rebase</code> 冲突就头大，现在直接把情况描述给 Claude Code，让它收拾就行。</p>
-      </div>
+<p>Claude Code 是个 agent，<strong>没有跨会话记忆</strong>。在同一个仓库里反复用、想让团队共享行为习惯——靠的就是 <code>CLAUDE.md</code>（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=622s">10:22</a>）。</p>
+<div class="mermaid">flowchart LR
+    Start[启动 claude] --> Check{当前目录<br/>有 CLAUDE.md ?}
+    Check -->|有| Inject[内容自动注入<br/>系统提示]
+    Check -->|无| Skip[只用默认提示]
+    Inject --> Run[Claude 开始工作]
+    Skip --> Run
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">三</span>最佳实践 #1：CLAUDE.md 文件</h2>
-        <p>Claude Code 是个 agent，<strong>没有跨会话记忆</strong>。在同一个仓库里反复用、想让团队共享行为习惯——靠的就是 <code>CLAUDE.md</code>。</p>
-        <h3>CLAUDE.md 里写什么</h3>
-        <table>
-          <thead><tr><th>类型</th><th>例子</th></tr></thead>
-          <tbody>
-            <tr><td>项目入口指引</td><td>"测试这样跑：<code>pnpm test -- --watch</code>"</td></tr>
-            <tr><td>代码地图</td><td>"测试在 <code>tests/</code>，业务模块在 <code>src/services/</code>"</td></tr>
-            <tr><td>风格 / 约定</td><td>"禁用 <code>any</code>，用 <code>unknown</code> 配合 narrowing"</td></tr>
-            <tr><td>内部 CLI 知识</td><td>"我们用内部工具 <code>coup</code> 做 X、Y、Z"</td></tr>
-          </tbody>
-        </table>
-        <p>可以<strong>慢慢长起来</strong>——每次 Claude 走错路、你纠正它一次，那一条规则就值得沉淀到 CLAUDE.md 里。</p>
-        <h3>关于多个 CLAUDE.md</h3>
-        <ul>
-          <li><strong>默认只读当前目录那一份</strong>——因为 Anthropic 是 monorepo，早期一次性加载全部子目录的 CLAUDE.md 会爆上下文；</li>
-          <li>子目录的 CLAUDE.md 是 Claude 自己探索到了、判断相关，才会读；</li>
-          <li>想强制注入额外文件？在 CLAUDE.md 里用 <code>@filename</code> 语法引用即可。</li>
-        </ul>
-      </div>
+    Home[~ 家目录<br/>CLAUDE.md] -.全局生效.-> Inject
+    Sub[子目录的<br/>CLAUDE.md] -.被 Claude<br/>按需读入.-> Inject
+</div>
+<p><strong>图 2：CLAUDE.md 注入时机</strong>——启动时自动读当前目录的，家目录的全局生效，子目录的由 Claude 探索代码库时按需读入。</p>
+<h3>CLAUDE.md 里写什么</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>项目入口指引</td>
+<td>"测试这样跑：<code>pnpm test -- --watch</code>"</td>
+</tr>
+<tr>
+<td>代码地图</td>
+<td>"测试在 <code>tests/</code>，业务模块在 <code>src/services/</code>"</td>
+</tr>
+<tr>
+<td>风格 / 约定</td>
+<td>"禁用 <code>any</code>，用 <code>unknown</code> 配合 narrowing"</td>
+</tr>
+<tr>
+<td>内部 CLI 知识</td>
+<td>"我们用内部工具 <code>coup</code> 做 X、Y、Z"</td>
+</tr>
+</tbody>
+</table>
+<p>可以<strong>慢慢长起来</strong>——每次 Claude 走错路、你纠正它一次，那一条规则就值得沉淀到 CLAUDE.md 里。</p>
+<h3>关于多个 CLAUDE.md</h3>
+<p>Cal 在 Q&amp;A 里专门澄清（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1293s">21:33</a>）：</p>
+<ul>
+<li><strong>默认只读当前目录那一份</strong>——因为 Anthropic 是 monorepo，早期一次性加载全部子目录的 CLAUDE.md 会爆上下文；</li>
+<li>子目录的 CLAUDE.md 是 Claude 自己探索到了、判断相关，才会读；</li>
+<li>想强制注入额外文件？在 CLAUDE.md 里用 <code>@filename</code> 语法引用即可。</li>
+</ul>
+<hr />
+<h2 id="四-最佳实践-2-权限管理与速度的取舍">四、最佳实践 #2：权限管理与速度的取舍</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">四</span>最佳实践 #2：权限管理与速度的取舍</h2>
-        <p>启动时 Claude Code 默认对工具行为分两档：</p>
-        <table>
-          <thead><tr><th>行为类型</th><th>默认权限</th><th>说明</th></tr></thead>
-          <tbody>
-            <tr><td>读 / 搜索</td><td>直接放行</td><td>不打扰你</td></tr>
-            <tr><td>写文件 / bash / 改环境</td><td>弹确认</td><td>"是 / 总是允许 / 否"</td></tr>
-          </tbody>
-        </table>
-        <h3>调出更顺手的权限策略</h3>
-        <ul>
-          <li><strong><code>Shift+Tab</code></strong>：进入 auto-accept 模式，让 Claude 一路自己走；</li>
-          <li><strong>settings 里加白名单：</strong>例如 <code>npm run test</code> 永久放行；</li>
-          <li>配合 <code>escape</code> 键，整个工作流可以做到"放手 + 关键节点拉回"的节奏。</li>
-        </ul>
-        <h3>工具接入：CLI 优先于 MCP</h3>
-        <blockquote><strong>如果一个工具既有成熟的 CLI 又有 MCP server，优先装 CLI。</strong> Claude 用 bash 调 CLI 比走 MCP 更直接、上下文也更省。</blockquote>
-        <p><code>gh</code>（GitHub CLI）就是经典代表。MCP 真正适合的是"内部没有 CLI、必须封装一层"或"多 Agent 共享治理"那种场景。</p>
-      </div>
+<p>启动时 Claude Code 默认对工具行为分两档（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=733s">12:13</a>）：</p>
+<table>
+<thead>
+<tr>
+<th>行为类型</th>
+<th>默认权限</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读 / 搜索</td>
+<td>直接放行</td>
+<td>不打扰你</td>
+</tr>
+<tr>
+<td>写文件 / bash / 改环境</td>
+<td>弹确认</td>
+<td>"是 / 总是允许 / 否"</td>
+</tr>
+</tbody>
+</table>
+<h3>调出更顺手的权限策略</h3>
+<ul>
+<li><strong><code>Shift+Tab</code></strong>：进入 auto-accept 模式，让 Claude 一路自己走；</li>
+<li><strong>settings 里加白名单</strong>：例如 <code>npm run test</code> 永久放行；</li>
+<li>配合 Cal 后面提到的 <code>escape</code> 键，整个工作流可以做到"放手 + 关键节点拉回"的节奏。</li>
+</ul>
+<h3>工具接入：CLI 优先于 MCP</h3>
+<p>Cal 给的经验值（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=781s">13:01</a>）：</p>
+<blockquote>
+<p><strong>如果一个工具既有成熟的 CLI 又有 MCP server，优先装 CLI。</strong> Claude 用 bash 调 CLI 比走 MCP 更直接、上下文也更省。</p>
+</blockquote>
+<p><code>gh</code>（GitHub CLI）就是经典代表。MCP 真正适合的是"内部没有 CLI、必须封装一层"或"多 Agent 共享治理"那种场景。</p>
+<hr />
+<h2 id="五-最佳实践-3-context-管理">五、最佳实践 #3：context 管理</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">五</span>最佳实践 #3：context 管理</h2>
-        <p>Claude 模型默认 <strong>200K token</strong> 的上下文窗口。长会话里随着 Claude 来回搜、读、写，上下文会持续吃满。窗口底部右下会出现警告。这时候有两条路：</p>
-        <table>
-          <thead><tr><th>命令</th><th>适用场景</th><th>效果</th></tr></thead>
-          <tbody>
-            <tr><td><code>/compact</code></td><td>任务还没做完，需要保留思路</td><td>Claude 自己总结「交接给下一个工程师」，新会话带着摘要继续</td></tr>
-            <tr><td><code>/clear</code></td><td>换个新任务</td><td>全清，但保留 CLAUDE.md</td></tr>
-          </tbody>
-        </table>
-        <blockquote>Cal 提到 Anthropic 团队<strong>专门花了很多精力调 <code>/compact</code> 的 prompt</strong>，目标是即使你把上下文用爆，compact 出来的摘要也能让下一段对话无缝继续。</blockquote>
-      </div>
+<p>Claude 模型默认 <strong>200K token</strong> 的上下文窗口。长会话里随着 Claude 来回搜、读、写，上下文会持续吃满。窗口底部右下会出现警告。这时候有两条路（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=836s">13:56</a>）：</p>
+<div class="mermaid">flowchart TD
+    Long[长会话<br/>上下文接近 200K] --> Choose{选哪条?}
+    Choose -->|"任务还没做完"| Compact[/compact/]
+    Choose -->|"换个新任务"| Clear[/clear/]
+    Compact --> Summary[Claude 自己总结<br/>「交接给下一个工程师」]
+    Summary --> Continue[新会话<br/>带着摘要继续]
+    Clear --> Fresh[全清<br/>但保留 CLAUDE.md]
+</div>
+<p><strong>图 3：<code>/compact</code> vs <code>/clear</code></strong>——任务在做、需要保留思路就 compact；要换主题就 clear。</p>
+<blockquote>
+<p>Cal 提到 Anthropic 团队<strong>专门花了很多精力调 <code>/compact</code> 的 prompt</strong>，目标是即使你把上下文用爆，compact 出来的摘要也能让下一段对话无缝继续（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=895s">14:55</a>）。</p>
+</blockquote>
+<hr />
+<h2 id="六-最佳实践-4-先-plan-再做-看着-todo-不对就拍-escape">六、最佳实践 #4：先 plan 再做，看着 todo 不对就拍 escape</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">六</span>最佳实践 #4：先 plan 再做，看着 todo 不对就拍 escape</h2>
-        <h3>让 Claude 先做计划</h3>
-        <p>打开 Claude Code，<strong>别</strong>说"修这个 bug"——先说：</p>
-        <blockquote><p>"我有个 bug，先 <strong>搜一下原因</strong>，给我一个修复计划，<strong>先别动代码</strong>。"</p></blockquote>
-        <p>这样你能审计它要做什么，比直接让它写完再 review 省事得多。</p>
-        <h3>利用 todo 列表的"可观测性"</h3>
-        <ul>
-          <li>看到不对的条目，立刻按 <code>Esc</code> 打断，让它改 todo；</li>
-          <li>不要等它把错的事都干完了再回滚。</li>
-        </ul>
-        <h3>「smart vibe coding」的几个小习惯</h3>
-        <table>
-          <thead><tr><th>做法</th><th>为什么有用</th></tr></thead>
-          <tbody>
-            <tr><td>TDD：让 Claude 改一点跑一遍测试</td><td>早期发现回归，避免一锅端</td></tr>
-            <tr><td>频繁 commit</td><td>走偏了能快速回退</td></tr>
-            <tr><td>让 Claude 自己跑 type check 和 lint</td><td>把"形式正确性"的负担甩给机器</td></tr>
-            <tr><td>喂截图 / 设计稿</td><td>Claude 4 多模态，可直接看 mock 实现 UI</td></tr>
-          </tbody>
-        </table>
-      </div>
+<h3>让 Claude 先做计划</h3>
+<p>打开 Claude Code，<strong>别</strong>说"修这个 bug"——先说：</p>
+<blockquote>
+<p>"我有个 bug，先 <strong>搜一下原因</strong>，给我一个修复计划，<strong>先别动代码</strong>。"</p>
+</blockquote>
+<p>这样你能审计它要做什么，比直接让它写完再 review 省事得多（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=916s">15:16</a>）。</p>
+<h3>利用 todo 列表的"可观测性"</h3>
+<p>Claude 接到大任务时会自己起一份 todo 列表。<strong>盯着这份列表</strong>：</p>
+<ul>
+<li>看到不对的条目，立刻按 <code>Esc</code> 打断，让它改 todo；</li>
+<li>不要等它把错的事都干完了再回滚。</li>
+</ul>
+<h3>「smart vibe coding」的几个小习惯（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=946s">15:46</a>）</h3>
+<table>
+<thead>
+<tr>
+<th>做法</th>
+<th>为什么有用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TDD：让 Claude 改一点跑一遍测试</td>
+<td>早期发现回归，避免一锅端</td>
+</tr>
+<tr>
+<td>频繁 commit</td>
+<td>走偏了能快速回退</td>
+</tr>
+<tr>
+<td>让 Claude 自己跑 type check 和 lint</td>
+<td>把"形式正确性"的负担甩给机器</td>
+</tr>
+<tr>
+<td>喂截图 / 设计稿</td>
+<td>Claude 4 多模态，可直接看 mock 实现 UI</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七-进阶玩法">七、进阶玩法</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">七</span>进阶玩法</h2>
-        <h3>多开 Claude 并行</h3>
-        <p>Cal 自己最多并行 2 个，他认识的客户开过 4 个 Claude Code 并行——用 tmux 或多个终端 tab。<strong>挑战自己 try 一下</strong>，他说很 fun。</p>
-        <h3>Escape 是你的好朋友</h3>
-        <ul>
-          <li>单按 <code>Esc</code>：打断当前操作，告诉 Claude 你要换方向；</li>
-          <li><strong>连按两下 <code>Esc</code></strong>：跳回会话历史的更早位置，从那儿开始 fork 新分支（很多人不知道的隐藏功能）。</li>
-        </ul>
-        <h3>什么时候才该上 MCP？</h3>
-        <p><strong>bash + 内置工具搞不定 + 真的需要外部能力的时候。</strong> 不要一上来就堆 MCP server。</p>
-        <h3>Headless / 程序化使用</h3>
-        <p>通过 Claude Code SDK 让它无 UI 跑——CI、内部脚本、batch 处理。Cal 说这是 Anthropic 内部都还在摸索的方向："<strong>希望你们也来试试，告诉我们能玩出什么花。</strong>"</p>
-      </div>
+<h3>多开 Claude 并行</h3>
+<p>Cal 自己最多并行 2 个，他认识的客户开过 4 个 Claude Code 并行——用 tmux 或多个终端 tab（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1022s">17:02</a>）。<strong>挑战自己 try 一下</strong>，他说很 fun。</p>
+<h3>Escape 是你的好朋友</h3>
+<ul>
+<li>单按 <code>Esc</code>：打断当前操作，告诉 Claude 你要换方向；</li>
+<li><strong>连按两下 <code>Esc</code></strong>：跳回会话历史的更早位置，从那儿开始 fork 新分支（很多人不知道的隐藏功能，<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1050s">17:30</a>）。</li>
+</ul>
+<h3>什么时候才该上 MCP？</h3>
+<p><strong>bash + 内置工具搞不定 + 真的需要外部能力的时候。</strong> 不要一上来就堆 MCP server。</p>
+<h3>Headless / 程序化使用</h3>
+<p>通过 Claude Code SDK 让它无 UI 跑——CI、内部脚本、batch 处理。Cal 说这是 Anthropic 内部都还在摸索的方向："<strong>希望你们也来试试，告诉我们能玩出什么花。</strong>"（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1099s">18:19</a>）</p>
+<hr />
+<h2 id="八-claude-4-最新版本带来的新东西">八、Claude 4 / 最新版本带来的新东西</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">八</span>Claude 4 / 最新版本带来的新东西</h2>
-        <table>
-          <thead><tr><th>新能力</th><th>怎么用</th><th>价值</th></tr></thead>
-          <tbody>
-            <tr><td><code>/model</code> 即时切换</td><td><code>default</code>（Sonnet）↔ <code>Opus</code></td><td>重活上 Opus，常规活省钱</td></tr>
-            <tr><td><strong>Tool call 之间能思考</strong></td><td>任务里加一句"think hard" 触发 extended thinking</td><td>Claude 4 之前的模型只在最末端思考，4 系列开始在工具调用<strong>中间</strong>也思考——这才是真正用得上的地方</td></tr>
-            <tr><td>VS Code / JetBrains 集成</td><td>编辑器知道你当前打开的文件，Claude 上下文里自然带上</td><td>减少手动指明文件</td></tr>
-          </tbody>
-        </table>
-        <h3>跟住更新</h3>
-        <p><code>anthropic/claude-code</code> 这个 GitHub 仓库的 <strong>changelog</strong> 是 Cal 自己每周必看的。Anthropic 出货很快，<strong>他本人都跟不上</strong>——所以养成每周扫一眼的习惯。</p>
-      </div>
+<table>
+<thead>
+<tr>
+<th>新能力</th>
+<th>怎么用</th>
+<th>价值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/model</code> 即时切换</td>
+<td><code>default</code>（Sonnet）↔ <code>Opus</code></td>
+<td>重活上 Opus，常规活省钱</td>
+</tr>
+<tr>
+<td><strong>Tool call 之间能思考</strong></td>
+<td>任务里加一句"think hard" 触发 extended thinking</td>
+<td>Claude 4 之前的模型只在最末端思考，4 系列开始在工具调用<strong>中间</strong>也思考——这才是真正用得上的地方（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1152s">19:12</a>）</td>
+</tr>
+<tr>
+<td>VS Code / JetBrains 集成</td>
+<td>编辑器知道你当前打开的文件，Claude 上下文里自然带上</td>
+<td>减少手动指明文件</td>
+</tr>
+</tbody>
+</table>
+<h3>跟住更新</h3>
+<p><code>anthropic/claude-code</code> 这个 GitHub 仓库的 <strong>changelog</strong> 是 Cal 自己每周必看的。Anthropic 出货很快，<strong>他本人都跟不上</strong>——所以养成每周扫一眼的习惯。</p>
+<hr />
+<h2 id="九-q-a-精华">九、Q&A 精华</h2>
 
-      <div class="section">
-        <h2 class="section-title"><span class="num">九</span>Q&A 精华</h2>
+<h3>Q：CLAUDE.md 里写的规则，Claude 当面违反怎么办？</h3>
+<p>Cal 的回答有两层（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1374s">22:54</a>）：</p>
+<ol>
+<li><strong>这其实是模型问题，不是 prompt 问题。</strong> 比如老模型特别爱写解释 "what" 的注释，3.7 在系统提示里写了一大段"别留注释"都压不住；</li>
+<li><strong>Claude 4 在"听话"这件事上明显变好。</strong> 早期 4 的测试者反馈是"我 CLAUDE.md 突然真的被认真执行了"。所以借升级 Claude 4 的机会，<strong>回头审视一下你 CLAUDE.md 里哪些规则可以删了</strong>——可能不再需要那么多防御式叮嘱。</li>
+</ol>
+<h3>Q：多 Agent 之间能不能共享上下文？比如 agent2、agent3 都用 agent1 的结果？</h3>
+<p>Cal 的现状判断（<a href="https://www.youtube.com/watch?v=gv0WHhKelSE&amp;t=1470s">24:30</a>）：</p>
+<ul>
+<li><strong>目前没有原生机制</strong>，团队还在想这件事；</li>
+<li>务实做法：<strong>让 Agent 之间通过共享 markdown 文件交流</strong>。比如让 A 写 <code>ticket.md</code>，再启动 B "读 <code>ticket.md</code>，另一位工程师给你留了 todo"；</li>
+<li>长期可能会有更原生的产品形态，但今天的最佳实践就是<strong>用文件当通信总线</strong>。</li>
+</ul>
+<h3>Q：TDD 和 Claude 怎么配？</h3>
+<p>总结 Eric 在另一场的回答可以补充这里（同一会场 vibe coding 演讲）：让 Claude 写 <strong>端到端、最简单的 3 个用例</strong>（happy path / 两种 error），别让它自己生成实现相关的细测——那种测试容易跑偏。<strong>只读 test 不读 implementation</strong> 就能给你足够信心。</p>
+<hr />
+<h2 id="十-总结-从入门到熟练的清单">十、总结：从入门到熟练的清单</h2>
 
-        <h3>Q：CLAUDE.md 里写的规则，Claude 当面违反怎么办？</h3>
-        <p>Cal 的回答有两层：</p>
-        <ol>
-          <li><strong>这其实是模型问题，不是 prompt 问题。</strong> 比如老模型特别爱写解释 "what" 的注释，3.7 在系统提示里写了一大段"别留注释"都压不住；</li>
-          <li><strong>Claude 4 在"听话"这件事上明显变好。</strong> 早期 4 的测试者反馈是"我 CLAUDE.md 突然真的被认真执行了"。所以借升级 Claude 4 的机会，<strong>回头审视一下你 CLAUDE.md 里哪些规则可以删了</strong>——可能不再需要那么多防御式叮嘱。</li>
-        </ol>
-
-        <h3>Q：多 Agent 之间能不能共享上下文？比如 agent2、agent3 都用 agent1 的结果？</h3>
-        <ul>
-          <li><strong>目前没有原生机制</strong>，团队还在想这件事；</li>
-          <li>务实做法：<strong>让 Agent 之间通过共享 markdown 文件交流。</strong> 比如让 A 写 <code>ticket.md</code>，再启动 B "读 <code>ticket.md</code>，另一位工程师给你留了 todo"；</li>
-          <li>长期可能会有更原生的产品形态，但今天的最佳实践就是<strong>用文件当通信总线。</strong></li>
-        </ul>
-
-        <h3>Q：TDD 和 Claude 怎么配？</h3>
-        <p>让 Claude 写 <strong>端到端、最简单的 3 个用例</strong>（happy path / 两种 error），别让它自己生成实现相关的细测——那种测试容易跑偏。<strong>只读 test 不读 implementation</strong> 就能给你足够信心。</p>
-      </div>
-
-      <div class="section">
-        <h2 class="section-title"><span class="num">十</span>总结：从入门到熟练的清单</h2>
-        <table>
-          <thead><tr><th>步骤</th><th>操作</th><th>关键点</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>用 CLAUDE.md 沉淀团队/项目知识</td><td>慢慢长，每次纠正一次就沉淀一条</td></tr>
-            <tr><td>2</td><td>调权限策略，允许常用命令</td><td><code>Shift+Tab</code> 自动通过，白名单常用操作</td></tr>
-            <tr><td>3</td><td>先 plan 再做，盯着 todo</td><td>不对就 <code>Esc</code>，别等做完再回滚</td></tr>
-            <tr><td>4</td><td>长会话用 /compact</td><td>压摘要继续，而不是开新会话从头来</td></tr>
-            <tr><td>5</td><td>加 CLI 工具，优先于 MCP</td><td>bash 能搞定的就不走 MCP</td></tr>
-            <tr><td>6</td><td>多开 / headless 进阶玩法</td><td>并行 + SDK 自动化</td></tr>
-            <tr><td>7</td><td>每周看 changelog</td><td>Anthropic 出货快，跟住更新</td></tr>
-          </tbody>
-        </table>
-        <blockquote>一句话外带：Claude Code 不是给你一段代码，而是给你<strong>一位永远在终端里干活的同事。</strong> 和它一起工作的核心姿势，不是"指挥它写代码"，而是"<strong>像带新人那样喂它上下文、定流程、看进度、关键节点拉回</strong>"。</blockquote>
-      </div>
-
-    </div>
+<div class="mermaid">flowchart LR
+    A[1. 用 CLAUDE.md<br/>沉淀团队/项目知识] --> B[2. 调权限策略<br/>允许常用命令]
+    B --> C[3. 先 plan 再做<br/>盯着 todo]
+    C --> D[4. 长会话用 /compact]
+    D --> E[5. 加 CLI 工具<br/>优先于 MCP]
+    E --> F[6. 多开 / headless<br/>进阶玩法]
+    F --> G[7. 每周看 changelog<br/>跟住更新]
+</div>
+<p><strong>图 4：熟练度阶梯</strong>——从基础卫生到进阶玩法，按顺序攒习惯。</p>
+<h3>一句话外带</h3>
+<blockquote>
+<p>Claude Code 不是给你一段代码，而是给你<strong>一位永远在终端里干活的同事</strong>。和它一起工作的核心姿势，不是"指挥它写代码"，而是"<strong>像带新人那样喂它上下文、定流程、看进度、关键节点拉回</strong>"。</p>
+</blockquote>
+<hr />
+<p><em>本文基于 YouTube 自动字幕 + 人工章节整理 + 中文重新组织。时间戳链接点击可跳回 YouTube 对应位置核对原话。</em></p>
   </main>
-
-  <footer>
-    由 AI 自动整理字幕并生成 ·
-    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
-    <a href="https://www.youtube.com/watch?v=gv0WHhKelSE" target="_blank">▶ 原视频</a>
-  </footer>
+</div>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
+</script>
 </body>
 </html>
