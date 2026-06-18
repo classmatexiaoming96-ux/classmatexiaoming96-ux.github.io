@@ -1,513 +1,475 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>生产环境的 Vibe Coding：怎么放手又不翻车</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  :root {
-    --bg: #fafaf7;
-    --fg: #1a1a1a;
-    --muted: #6b6b6b;
-    --accent: #c96442;
-    --accent-bg: #f6e8e0;
-    --border: #e3e3df;
-    --code-bg: #f3f1ec;
-    --sidebar-w: 280px;
-  }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
-    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
-  }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生产环境的 Vibe Coding：怎么放手又不翻车 — Eric (Anthropic)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
-  aside.toc {
-    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
-    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
-    font-size: 14px;
-  }
-  aside.toc h2 {
-    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--muted); margin: 0 0 12px;
-  }
-  aside.toc ol { list-style: none; margin: 0; padding: 0; }
-  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
-  aside.toc a { color: var(--fg); display: block; }
-  aside.toc a:hover { color: var(--accent); }
-
-  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
-  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
-
-  h2 {
-    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
-    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
-  }
-  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
-
-  p { margin: 0 0 18px; }
-
-  blockquote {
-    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
-    background: var(--accent-bg); color: #4a3320; font-size: 15px;
-  }
-  blockquote p:last-child { margin-bottom: 0; }
-
-  ul, ol { margin: 0 0 18px; padding-left: 28px; }
-  li { margin: 0 0 8px; }
-  li > p { margin: 0 0 8px; }
-
-  code {
-    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
-    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
-  }
-  pre {
-    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
-    overflow-x: auto; font-size: 13px;
-  }
-  pre code { background: transparent; padding: 0; }
-
-  /* Mermaid containers — let mermaid.js render inside, white bg */
-  .mermaid {
-    background: #fff; padding: 18px; border: 1px solid var(--border);
-    border-radius: 6px; margin: 20px 0; text-align: center;
-  }
-
-  table {
-    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
-  }
-  th, td {
-    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
-    vertical-align: top; line-height: 1.55;
-  }
-  th { background: #f1ede6; font-weight: 600; }
-  tr:nth-child(even) td { background: #fbf9f4; }
-
-  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-
-  em { color: var(--muted); }
-
-  footer.meta {
-    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
-    color: var(--muted); font-size: 13px;
-  }
-
-  @media (max-width: 760px) {
-    .layout { grid-template-columns: 1fr; }
-    aside.toc {
-      position: static; max-height: none; border-right: none;
-      border-bottom: 1px solid var(--border);
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
     }
-  }
-</style>
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .content-card:hover::before { opacity: 1; }
+
+    .section { margin: 36px 0; }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 24px 0 12px;
+    }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875em;
+      color: var(--accent-cyan);
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+      margin: 18px 0;
+    }
+
+    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
+
+    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="layout">
-  <aside class="toc">
-    <h2>目录</h2>
-    <ol><li><a href="#引子-作者为什么对这件事这么较真">引子：作者为什么对这件事这么较真</a></li>
-<li><a href="#一-什么才算-vibe-coding">一、什么才算 vibe coding？</a></li>
-<li><a href="#二-为什么必须现在严肃想-vibe-coding-指数曲线">二、为什么必须现在严肃想 vibe coding：指数曲线</a></li>
-<li><a href="#三-怎么管理你不懂的东西-老问题了">三、怎么管理你不懂的东西？老问题了</a></li>
-<li><a href="#四-有一件事今天-还不能-靠抽象层验证-技术债">四、有一件事今天**还不能**靠抽象层验证：技术债</a></li>
-<li><a href="#五-策略-只在-leaf-nodes-上-vibe-code">五、策略：只在 leaf nodes 上 vibe code</a></li>
-<li><a href="#六-姿势-1-be-claude-s-pm-做-claude-的产品经理">六、姿势 1：**Be Claude's PM**——做 Claude 的产品经理</a></li>
-<li><a href="#七-案例-22-000-行-rl-pr-怎么用-vibe-coding-合进去">七、案例：22,000 行 RL PR 怎么用 vibe coding 合进去</a></li>
-<li><a href="#八-放手的四条收纳-闭环原则">八、放手的四条收纳：闭环原则</a></li>
-<li><a href="#九-q-a-精华">九、Q&A 精华</a></li>
-<li><a href="#十-一页速查">十、一页速查</a></li></ol>
-  </aside>
-  <main>
-<h1>生产环境的 Vibe Coding：怎么放手又不翻车</h1>
-<blockquote>
-<p>作者：<strong>Eric</strong>（Anthropic 编码 Agent 研究员 / 《Building Effective Agents》合著者） · 演讲场合：Code with Claude · 时长：约 31 分钟 · <a href="https://www.youtube.com/watch?v=fHWFF_pnqDk">▶ 原视频</a></p>
-<p><strong>本文是中文整理版</strong>：在视频内容基础上重新组织、补图表、补对照表，方便快速阅读。关键节点附 YouTube 时间戳链接，可点击跳回原视频对应位置核对。</p>
-</blockquote>
-<hr />
-<h2 id="引子-作者为什么对这件事这么较真">引子：作者为什么对这件事这么较真</h2>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">生产环境的 Vibe Coding：怎么放手又不翻车</h1>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ ~31 分钟</span>
+      <span class="meta-badge source">📺 Code with Claude</span>
+      <span class="meta-badge">🤖 Eric (Anthropic)</span>
+    </div>
+  </header>
 
-<p>Eric 在演讲开头讲了个细节（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=24s">0:24</a>）：去年他骑车上班把手摔骨折了，<strong>整整两个月没法自己敲代码</strong>——所有代码都是 Claude 写的。"如何让 Agent 真的能替我把活干完"对他来说不是抽象问题，是当时的吃饭问题。这次演讲就是他这两年的方法论提炼。</p>
-<hr />
-<h2 id="一-什么才算-vibe-coding">一、什么才算 vibe coding？</h2>
+  <main style="position: relative; z-index: 1;">
+    <div class="content-card">
 
-<blockquote>
-<p>误区："只要大部分代码是 AI 生成的，就是 vibe coding。"</p>
-</blockquote>
-<p><strong>Eric 不同意这个定义。</strong> 用 Cursor / Copilot 把代码大部分让 AI 写——你还在<strong>紧反馈循环</strong>里：每段都看、每段都改。这不是 vibe coding。</p>
-<p>他坚持引用 <strong>Andrej Karpathy</strong> 的原始定义（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=84s">1:24</a>）：</p>
-<blockquote>
-<p>"<strong>Fully give into the vibes, embrace exponentials, and forget that the code even exists.</strong>"</p>
-</blockquote>
-<p><strong>关键短语</strong>：<code>forget that the code even exists</code>——<strong>忘掉代码本身的存在</strong>。</p>
-<div class="mermaid">flowchart LR
-    A[传统编码] -->|"AI 工具加持"| B[Copilot / Cursor<br/>紧反馈循环]
-    B -->|进一步放手| C[Vibe Coding<br/>不再读每行代码]
-    C -.风险.-> D[低 stake:<br/>个人小项目<br/>游戏 demo]
-    C -.挑战.-> E[高 stake:<br/>生产系统]
-</div>
-<p><strong>图 1：从紧反馈到放手的光谱</strong>——目前社会上跑出"vibe coding"概念的成功案例，大多停留在 D 这一档；这次演讲的核心问题就是：<strong>能不能往 E 走？</strong></p>
-<h3>为什么 vibe coding 火，又为什么风评两极</h3>
-<ul>
-<li><strong>正面</strong>：让非工程师也能造软件——这是 Cursor / Copilot 都没能解锁的人群；</li>
-<li><strong>负面</strong>：第一次写代码的人造出来的东西<strong>全是漏洞</strong>——API key 泄露、订阅绕过、数据库里乱写垃圾数据……</li>
-</ul>
-<p>所以"vibe coding 在 prod 用"听上去像伪命题，但 Eric 说：<strong>我们必须严肃想这个事</strong>。</p>
-<hr />
-<h2 id="二-为什么必须现在严肃想-vibe-coding-指数曲线">二、为什么必须现在严肃想 vibe coding：指数曲线</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">引</span>作者背景：为什么这个话题对 Eric 不是抽象问题</h2>
+        <p>Eric 在演讲开头讲了个细节：去年他骑车上班把手摔骨折了，<strong>整整两个月没法自己敲代码</strong>——所有代码都是 Claude 写的。"如何让 Agent 真的能替我把活干完"对他来说不是抽象问题，是当时的吃饭问题。这次演讲就是他这两年的方法论提炼。</p>
+        <blockquote>核心洞察：vibe coding 的本质不是"让 AI 写代码"，而是<strong>忘掉代码的存在，只盯产品行为</strong>——但这需要先建立一套可验证的抽象层。</blockquote>
+      </div>
 
-<div class="mermaid">flowchart LR
-    Year1[2025<br/>1 小时任务] --> Year2[2026<br/>4 小时]
-    Year2 --> Year3[2027<br/>16 小时]
-    Year3 --> Year4[2028<br/>2-3 天]
-    Year4 --> Year5[未来<br/>整周整月级]
-</div>
-<p><strong>图 2：AI 能独立完成的任务长度大约每 7 个月翻一倍</strong>（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=206s">3:26</a>）。</p>
-<p>Eric 的论点（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=226s">3:46</a>）：</p>
-<blockquote>
-<p>今天 Claude 一次能做 1 小时的活——你可以全看完，没问题。</p>
-<p>但下一年它能产出<strong>一整天</strong>的工作量；再下一年<strong>一整周</strong>。<strong>你不可能用紧反馈方式跟得上。</strong></p>
-<p>那时如果你还坚持「不把每行代码都过一遍我绝不放手」——<strong>你就成了瓶颈</strong>。</p>
-</blockquote>
-<h3>编译器类比</h3>
-<p>Eric 给的最好类比（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=262s">4:22</a>）：</p>
-<blockquote>
-<p>早期编译器刚出来的时候，工程师们也不信任它，会去<strong>读编译器生成的汇编</strong>，确认是不是和他们自己写的一样。这个习惯<strong>没办法 scale</strong>。</p>
-<p>后来大家放弃了。<strong>今天你我都还知道有汇编这回事，但我们不读它，照样能把软件做好。</strong></p>
-</blockquote>
-<p>软件工程在未来若干年要重复这个跨越。</p>
-<h3>但要小心定义：<strong>忘掉代码，不能忘掉产品</strong></h3>
-<p>这是 Eric 最核心的一句话（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=281s">4:41</a>）：</p>
-<blockquote>
-<p>"<strong>Forget that the code exists, but not that the product exists.</strong>"</p>
-</blockquote>
-<p>把"产品行为是否正确"这件事<strong>接得住</strong>——这是放手 vibe coding 的前提。</p>
-<hr />
-<h2 id="三-怎么管理你不懂的东西-老问题了">三、怎么管理你不懂的东西？老问题了</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>什么才算 vibe coding？</h2>
+        <p><strong>Eric 不同意这个误区：</strong>"只要大部分代码是 AI 生成的，就是 vibe coding。" 用 Cursor / Copilot 把代码大部分让 AI 写——你还在<strong>紧反馈循环</strong>里：每段都看、每段都改。这不是 vibe coding。</p>
+        <p>他坚持引用 <strong>Andrej Karpathy</strong> 的原始定义：</p>
+        <blockquote>"<strong>Fully give into the vibes, embrace exponentials, and forget that the code even exists.</strong>"</blockquote>
+        <p><strong>关键短语：</strong><code>forget that the code even exists</code>——<strong>忘掉代码本身的存在</strong>。</p>
+        <h3>为什么 vibe coding 火，又为什么风评两极</h3>
+        <ul>
+          <li><strong>正面：</strong>让非工程师也能造软件——这是 Cursor / Copilot 都没能解锁的人群；</li>
+          <li><strong>负面：</strong>第一次写代码的人造出来的东西<strong>全是漏洞</strong>——API key 泄露、订阅绕过、数据库里乱写垃圾数据……</li>
+        </ul>
+        <p>所以"vibe coding 在 prod 用"听上去像伪命题，但 Eric 说：<strong>我们必须严肃想这个事。</strong></p>
+      </div>
 
-<p>Eric 提醒大家：<strong>"放手让别人/某个系统替你干活"这件事，人类社会练了几千年</strong>（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=320s">5:20</a>）。</p>
-<table>
-<thead>
-<tr>
-<th>谁</th>
-<th>管什么自己不亲手做</th>
-<th>怎么管</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>CTO</td>
-<td>某专业领域的实现细节</td>
-<td><strong>验收测试</strong>——不读代码也能验是否过线</td>
-</tr>
-<tr>
-<td>PM</td>
-<td>工程团队怎么写代码</td>
-<td><strong>试用产品</strong>——直接当用户用，看体验对不对</td>
-</tr>
-<tr>
-<td>CEO</td>
-<td>财务总账</td>
-<td><strong>抽查关键数字 + 切片</strong>——对几个能验证的数自己心里有底</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>结论</strong>：管理"自己不懂深处的事情"是几千年来管理学的常态。<strong>只有软件工程师特别不习惯</strong>——因为我们到目前为止都是纯 IC（个人贡献者），习惯把整栈嚼透。<strong>做生产级 vibe coding 的第一步，就是放下这个执念。</strong></p>
-</blockquote>
-<div class="mermaid">flowchart LR
-    Self[亲手做<br/>每行代码都懂] --> PM[像 manager 那样<br/>定要求 + 验收]
-    Self -.必须放弃的执念.-> PM
-    PM --> Verify[找一个抽象层<br/>能验证就放手]
-</div>
-<p><strong>图 3：心智模式的迁移</strong>——从"自己嚼透"到"找一层能验证的抽象"。</p>
-<hr />
-<h2 id="四-有一件事今天-还不能-靠抽象层验证-技术债">四、有一件事今天**还不能**靠抽象层验证：技术债</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>为什么必须现在严肃想 vibe coding：指数曲线</h2>
+        <p><strong>AI 能独立完成的任务长度大约每 7 个月翻一倍。</strong></p>
+        <blockquote>
+          <p>今天 Claude 一次能做 1 小时的活——你可以全看完，没问题。</p>
+          <p>但下一年它能产出<strong>一整天</strong>的工作量；再下一年<strong>一整周</strong>。<strong>你不可能用紧反馈方式跟得上。</strong></p>
+          <p>那时如果你还坚持「不把每行代码都过一遍我绝不放手」——<strong>你就成了瓶颈。</strong></p>
+        </blockquote>
+        <h3>编译器类比</h3>
+        <blockquote>
+          <p>早期编译器刚出来的时候，工程师们也不信任它，会去<strong>读编译器生成的汇编</strong>，确认是不是和他们自己写的一样。这个习惯<strong>没办法 scale。</strong></p>
+          <p>后来大家放弃了。<strong>今天你我都还知道有汇编这回事，但我们不读它，照样能把软件做好。</strong></p>
+        </blockquote>
+        <h3>但要小心定义：忘掉代码，不能忘掉产品</h3>
+        <blockquote>"<strong>Forget that the code exists, but not that the product exists.</strong>"</blockquote>
+        <p>把"产品行为是否正确"这件事<strong>接得住</strong>——这是放手 vibe coding 的前提。</p>
+      </div>
 
-<p>Eric 诚实承认（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=438s">7:18</a>）：</p>
-<blockquote>
-<p>几乎所有"我不懂细节但能验证"的领域（财务、产品、运维），都能找到验收手段。</p>
-<p><strong>但技术债不行。</strong> 想知道一段代码会不会把未来扩展卡死、有没有埋暗坑——目前<strong>唯一靠谱的方法还是有人读这段代码</strong>。</p>
-</blockquote>
-<p><strong>怎么办？答案是只在"不重要"的代码上放手 vibe code。</strong></p>
-<hr />
-<h2 id="五-策略-只在-leaf-nodes-上-vibe-code">五、策略：只在 leaf nodes 上 vibe code</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>怎么管理你不懂的东西？老问题了</h2>
+        <p><strong>"放手让别人/某个系统替你干活"这件事，人类社会练了几千年。</strong></p>
+        <table>
+          <thead><tr><th>谁</th><th>管什么自己不亲手做</th><th>怎么管</th></tr></thead>
+          <tbody>
+            <tr><td>CTO</td><td>某专业领域的实现细节</td><td><strong>验收测试</strong>——不读代码也能验是否过线</td></tr>
+            <tr><td>PM</td><td>工程团队怎么写代码</td><td><strong>试用产品</strong>——直接当用户用，看体验对不对</td></tr>
+            <tr><td>CEO</td><td>财务总账</td><td><strong>抽查关键数字 + 切片</strong>——对几个能验证的数自己心里有底</td></tr>
+          </tbody>
+        </table>
+        <blockquote><strong>结论：</strong>管理"自己不懂深处的事情"是几千年来管理学的常态。<strong>只有软件工程师特别不习惯</strong>——因为我们到目前为止都是纯 IC（个人贡献者），习惯把整栈嚼透。<strong>做生产级 vibe coding 的第一步，就是放下这个执念。</strong></blockquote>
+      </div>
 
-<div class="mermaid">flowchart TD
-    Root[核心架构<br/>很多东西依赖它] --> B1[骨干 1<br/>关键扩展点]
-    Root --> B2[骨干 2]
-    B1 --> Leaf1[叶节点<br/>具体 feature]
-    B1 --> Leaf2[叶节点<br/>UI 细节]
-    B2 --> Leaf3[叶节点<br/>报表导出]
-    B2 --> Leaf4[叶节点<br/>钩子脚本]
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>有一件事今天还不能靠抽象层验证：技术债</h2>
+        <blockquote>
+          <p>几乎所有"我不懂细节但能验证"的领域（财务、产品、运维），都能找到验收手段。</p>
+          <p><strong>但技术债不行。</strong> 想知道一段代码会不会把未来扩展卡死、有没有埋暗坑——目前<strong>唯一靠谱的方法还是有人读这段代码</strong>。</p>
+        </blockquote>
+        <p><strong>怎么办？答案是只在"不重要"的代码上放手 vibe code。</strong></p>
+      </div>
 
-    classDef safe fill:#e0f0e0,stroke:#3a6a3a,color:#1a1a1a
-    classDef danger fill:#fde8e0,stroke:#c96442,color:#1a1a1a
-    class Leaf1,Leaf2,Leaf3,Leaf4 safe
-    class Root,B1,B2 danger
-</div>
-<p><strong>图 4：代码库当一棵树看——只在叶节点放手 vibe code</strong>（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=486s">8:06</a>）。</p>
-<table>
-<thead>
-<tr>
-<th>位置</th>
-<th>适不适合 vibe code</th>
-<th>理由</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>核心骨架 / 关键抽象</strong></td>
-<td><strong>不适合</strong>：保持人类深度审阅</td>
-<td>改这里会牵动一切，技术债代价高</td>
-</tr>
-<tr>
-<td><strong>叶节点：末端 feature、配套脚本、UI 细节</strong></td>
-<td><strong>适合</strong></td>
-<td>几乎没有东西依赖它，未来不太可能再改</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>Eric 顺手提一句趋势（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=552s">9:12</a>）：随着模型越来越好（Claude 4 比 3.7 明显成熟），"叶节点"的边界会<strong>向上推</strong>——未来可以放手 vibe 的位置会越多。</p>
-</blockquote>
-<hr />
-<h2 id="六-姿势-1-be-claude-s-pm-做-claude-的产品经理">六、姿势 1：**Be Claude's PM**——做 Claude 的产品经理</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>策略：只在 leaf nodes 上 vibe code</h2>
+        <p>把代码库当一棵树看——只在叶节点放手 vibe code：</p>
+        <table>
+          <thead><tr><th>位置</th><th>适不适合 vibe code</th><th>理由</th></tr></thead>
+          <tbody>
+            <tr><td><strong>核心骨架 / 关键抽象</strong></td><td><strong>不适合</strong>：保持人类深度审阅</td><td>改这里会牵动一切，技术债代价高</td></tr>
+            <tr><td><strong>叶节点：末端 feature、配套脚本、UI 细节</strong></td><td><strong>适合</strong></td><td>几乎没有东西依赖它，未来不太可能再改</td></tr>
+          </tbody>
+        </table>
+        <blockquote>随着模型越来越好（Claude 4 比 3.7 明显成熟），"叶节点"的边界会<strong>向上推</strong>——未来可以放手 vibe 的位置会越多。</blockquote>
+      </div>
 
-<p>Eric 的主梗（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=596s">9:56</a>）：</p>
-<blockquote>
-<p>"<strong>Ask not what Claude can do for you—ask what you can do for Claude.</strong>"</p>
-</blockquote>
-<p>要把自己当成 Claude 的 PM 而不是 Claude 的程序员。</p>
-<h3>给 Claude 的"入职 onboarding"</h3>
-<p>类比：一个工程师<strong>入职第一天</strong>，你直接说"实现某 feature"——他不可能交得出来。你得：</p>
-<ol>
-<li>带他过一遍代码库；</li>
-<li>给他需求 / 约束；</li>
-<li>告诉他风格、模式、已有同类例子。</li>
-</ol>
-<p><strong>给 Claude 也一样。</strong></p>
-<div class="mermaid">flowchart LR
-    Idea[一个 feature 想法] --> Explore[让 Claude 探索代码库]
-    Explore --> Plan[让 Claude 跟你<br/>共同制定 plan]
-    Plan --> Doc[plan 落成 artifact]
-    Doc --> Exec[新会话里执行<br/>一次写完]
-    Exec --> Test[跑测试 / 看产品]
-</div>
-<p><strong>图 5：Eric 的实际工作流——往往花 15~20 分钟准备 prompt，但准备完之后 Claude 一次性写对的概率非常高</strong>（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=635s">10:35</a>）。</p>
-<h3>谁不适合做生产级 vibe coding</h3>
-<p>Eric 直说（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=703s">11:43</a>）：</p>
-<blockquote>
-<p>完全不懂技术、不能问对问题的人，<strong>不应该</strong>全自动 vibe coding 一个生产业务。他们当不了 Claude 的 PM，整个流程就会失控。</p>
-</blockquote>
-<p>这不是劝退非技术人员——他们可以做游戏、做 demo、做艺术品；但<strong>真正上线服务、有用户数据</strong>的系统，需要会问对问题的人在旁边把舵。</p>
-<hr />
-<h2 id="七-案例-22-000-行-rl-pr-怎么用-vibe-coding-合进去">七、案例：22,000 行 RL PR 怎么用 vibe coding 合进去</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>姿势 1：Be Claude's PM——做 Claude 的产品经理</h2>
+        <blockquote>"<strong>Ask not what Claude can do for you—ask what you can do for Claude.</strong>"</blockquote>
+        <p>要把自己当成 Claude 的 PM 而不是 Claude 的程序员。</p>
+        <h3>给 Claude 的"入职 onboarding"</h3>
+        <p>类比：一个工程师<strong>入职第一天</strong>，你直接说"实现某 feature"——他不可能交得出来。你得：</p>
+        <ol>
+          <li>带他过一遍代码库；</li>
+          <li>给他需求 / 约束；</li>
+          <li>告诉他风格、模式、已有同类例子。</li>
+        </ol>
+        <p><strong>给 Claude 也一样。</strong></p>
+        <p>Eric 的实际工作流——往往花 15~20 分钟准备 prompt，但准备完之后 Claude 一次性写对的概率非常高。</p>
+        <h3>谁不适合做生产级 vibe coding</h3>
+        <blockquote>完全不懂技术、不能问对问题的人，<strong>不应该</strong>全自动 vibe coding 一个生产业务。他们当不了 Claude 的 PM，整个流程就会失控。</blockquote>
+        <p>这不是劝退非技术人员——他们可以做游戏、做 demo、做艺术品；但<strong>真正上线服务、有用户数据</strong>的系统，需要会问对问题的人在旁边把舵。</p>
+      </div>
 
-<p>Eric 拿出了 GitHub 上的截图——一次 <strong>22k 行</strong>的真实 PR，合进了 Anthropic 生产环境的强化学习代码库（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=737s">12:17</a>）。这不是单次 prompt 出来的，他们用了一套<strong>组合拳</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>步骤</th>
-<th>做了什么</th>
-<th>命中本演讲的哪条原则</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1. 数天的 PM 工作</td>
-<td>工程师<strong>手工</strong>把需求、约束、关键决策捋清楚，做 plan</td>
-<td>给 Claude 完整 onboarding</td>
-</tr>
-<tr>
-<td>2. 改动集中在叶节点</td>
-<td>主要落在"不会被频繁迭代"的部分</td>
-<td>leaf-node 策略</td>
-</tr>
-<tr>
-<td>3. 核心扩展点人工 review</td>
-<td>真正需要将来扩展的少量骨架，<strong>人逐行读</strong></td>
-<td>不在骨架上 vibe</td>
-</tr>
-<tr>
-<td>4. 压力测试</td>
-<td>长时间跑稳定性测试</td>
-<td>找到一个<strong>可验证的抽象层</strong>（稳定性指标）</td>
-</tr>
-<tr>
-<td>5. 设计可观察的输入输出</td>
-<td>整个系统在边界处就能验证对错</td>
-<td>不读代码也能验</td>
-</tr>
-</tbody>
-</table>
-<h3>结果不只是"省时间"</h3>
-<p>Eric 说真正震撼他们团队的是<strong>心智解放</strong>（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=844s">14:04</a>）：</p>
-<blockquote>
-<p>当一个原本两周的项目变成一天，我们意识到——<strong>之前那种"两周的项目"，现在我们会主动多做几个</strong>。</p>
-<p>软件的边际成本下来了，能消费的软件多了。</p>
-</blockquote>
-<p>这是 vibe coding 的真正回报：<strong>不是省人力，是让你敢做更大的事</strong>。</p>
-<hr />
-<h2 id="八-放手的四条收纳-闭环原则">八、放手的四条收纳：闭环原则</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">七</span>案例：22,000 行 RL PR 怎么用 vibe coding 合进去</h2>
+        <p>Eric 拿出了 GitHub 上的截图——一次 <strong>22k 行</strong>的真实 PR，合进了 Anthropic 生产环境的强化学习代码库。这是一个真实案例，不是概念演示。</p>
+        <table>
+          <thead><tr><th>步骤</th><th>做了什么</th><th>命中本演讲的哪条原则</th></tr></thead>
+          <tbody>
+            <tr><td>1. 数天的 PM 工作</td><td>工程师<strong>手工</strong>把需求、约束、关键决策捋清楚，做 plan</td><td>给 Claude 完整 onboarding</td></tr>
+            <tr><td>2. 改动集中在叶节点</td><td>主要落在"不会被频繁迭代"的部分</td><td>leaf-node 策略</td></tr>
+            <tr><td>3. 核心扩展点人工 review</td><td>真正需要将来扩展的少量骨架，<strong>人逐行读</strong></td><td>不在骨架上 vibe</td></tr>
+            <tr><td>4. 压力测试</td><td>长时间跑稳定性测试</td><td>找到一个<strong>可验证的抽象层</strong>（稳定性指标）</td></tr>
+            <tr><td>5. 设计可观察的输入输出</td><td>整个系统在边界处就能验证对错</td><td>不读代码也能验</td></tr>
+          </tbody>
+        </table>
+        <h3>结果不只是"省时间"</h3>
+        <blockquote>
+          <p>当一个原本两周的项目变成一天，我们意识到——<strong>之前那种"两周的项目"，现在我们会主动多做几个。</strong></p>
+          <p>软件的边际成本下来了，能消费的软件多了。</p>
+        </blockquote>
+        <p>这是 vibe coding 的真正回报：<strong>不是省人力，是让你敢做更大的事。</strong></p>
+      </div>
 
-<div class="mermaid">flowchart TD
-    A[1. Be Claude's PM<br/>花时间喂上下文] --> B[2. 只在 leaf 放手<br/>骨架人工把关]
-    B --> C[3. 设计可验证的抽象层<br/>不读代码也能验对错]
-    C --> D[4. 记住指数<br/>不放手 = 主动被淘汰]
-</div>
-<p><strong>图 6：四条原则一图速记</strong>（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=908s">15:08</a>）</p>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>一句话</th>
-<th>怎么落地</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>做 Claude 的 PM</td>
-<td>提需求、约束、上下文，先 plan 再 execute</td>
-</tr>
-<tr>
-<td>2</td>
-<td>leaf node 上 vibe</td>
-<td>让技术债被装进"反正不再变"的角落</td>
-</tr>
-<tr>
-<td>3</td>
-<td>找一个能验证的抽象</td>
-<td>验收测试、压力测试、可观察 IO；技术债无法验时坚持读</td>
-</tr>
-<tr>
-<td>4</td>
-<td>拥抱指数</td>
-<td>现在不一定要 vibe，但<strong>别养成"不读完每行不放手"的肌肉记忆</strong>，那是未来的瓶颈</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="九-q-a-精华">九、Q&A 精华</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">八</span>放手的四条收纳：闭环原则</h2>
+        <table>
+          <thead><tr><th>#</th><th>一句话</th><th>怎么落地</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>做 Claude 的 PM</td><td>提需求、约束、上下文，先 plan 再 execute</td></tr>
+            <tr><td>2</td><td>leaf node 上 vibe</td><td>让技术债被装进"反正不再变"的角落</td></tr>
+            <tr><td>3</td><td>找一个能验证的抽象</td><td>验收测试、压力测试、可观察 IO；技术债无法验时坚持读</td></tr>
+            <tr><td>4</td><td>拥抱指数</td><td>现在不一定要 vibe，但<strong>别养成"不读完每行不放手"的肌肉记忆</strong>，那是未来的瓶颈</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-<h3>Q1：vibe coding 时代，新人怎么学？</h3>
-<p>担心：以前我们是<strong>在 syntax / 调库 / 连接组件的痛苦里学会编程</strong>——现在那些痛苦都被 AI 接走了，怎么成长？</p>
-<p>Eric 的回答（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1026s">17:06</a>）：</p>
-<ul>
-<li><strong>悲观面</strong>：你确实不会经历那种"硬核挣扎"，就像他大学教授当年抱怨"现在的程序员不会手写汇编了"；</li>
-<li><strong>乐观面</strong>：你身边永远有一个 <strong>pair programmer</strong> 24/7 待命。看到不熟悉的库可以<strong>当场问 Claude</strong>："这是啥？为什么用它不用别的？" <strong>学得比以前快得多。</strong></li>
-<li><strong>更高维度</strong>：以前一个架构决定要 2 年才能验对错，未来可能 6 个月就出结果——<strong>愿意学的人能在同样日历时间里多走 4 倍的循环</strong>。</li>
-</ul>
-<blockquote>
-<p><strong>会被淘汰的是懒人</strong>——不是新人。</p>
-</blockquote>
-<h3>Q2：plan 要写多详细？是不是要写完整 PRD？</h3>
-<p>Eric（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1130s">18:50</a>）：</p>
-<ul>
-<li>取决于你<strong>在乎什么</strong>——只在乎结果就只描述需求，了解代码库的话可以指定类、参考实例；</li>
-<li><strong>别过度约束</strong>：模型在"留一定空间"时表现最好；</li>
-<li><strong>不要标准化 PRD 模板</strong>——按"给 junior 工程师交代"的颗粒度即可。</li>
-</ul>
-<h3>Q3：安全 / 漏洞怎么办？</h3>
-<p>提问者举例：被报最严重漏洞的 10 个 vibe-coded App，连职业黑客都没出手就被攻破。</p>
-<p>Eric（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1254s">20:54</a>）：</p>
-<ul>
-<li><strong>回到第 1 条原则</strong>——Claude 的 PM 要懂得问对问题，知道哪里危险；</li>
-<li>自己的 22k 行案例之所以敢做，是因为那个系统<strong>完全离线</strong>，已经事先确认"出错也没有外部攻击面"；</li>
-<li>媒体里被攻破的那些 case，几乎都是"压根不该 vibe code 上线的人"在做生产业务；</li>
-<li>期待未来出现<strong>「可证明安全的脚手架」</strong>——核心安全敏感的部分（auth、支付）官方写好，用户只 vibe code 业务部分，类似 Claude Artifacts 那种"前端隔离环境"扩展到带后端。</li>
-</ul>
-<h3>Q4：TDD 怎么和 Claude 配？</h3>
-<p>提问者吐槽：Claude 容易"一起把实现 + 测试都写了"，测试也写得过度依赖实现。</p>
-<p>Eric（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1389s">23:09</a>）的具体打法：</p>
-<ul>
-<li><strong>明确告诉 Claude 测试格式</strong>："写 3 个端到端测试——1 个 happy path + 2 个 error case"；</li>
-<li><strong>要 end-to-end，不要单元测试细节</strong>——这种测试人类可读、不被实现绑死；</li>
-<li><strong>vibe coding 时只读测试，不读实现</strong>——测试过你就放心。</li>
-</ul>
-<h3>Q5：怎么算"embrace exponentials"？</h3>
-<p>提问者引 Karpathy 原话：模型只会变得更好，但不会在每个维度都变好——是不是该有所保留？</p>
-<p>Eric（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1544s">25:44</a>）：</p>
-<blockquote>
-<p>重点不是"模型会变好"——<strong>而是变好得比你想象的快</strong>。</p>
-<p>不是稳定增量，<strong>是斜率本身会一直上去</strong>。</p>
-<p>引 Dario Amodei + Mike Krieger 的话："Machines of loving grace 不是科幻，是产品路线图。"</p>
-</blockquote>
-<p>对照计算机历史：90 年代多几 KB RAM 是大事；今天我们以 TB 为单位——不是<strong>线性</strong>变好了几十倍，是<strong>对数级</strong>好了几百万倍。<strong>对未来 20 年的设想，要按这个尺度算。</strong></p>
-<h3>Q6：你的具体工作流？多久 <code>/compact</code> 一次？</h3>
-<p>Eric（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1687s">28:07</a>）：</p>
-<ul>
-<li>终端开 Claude Code + 同时在 VS Code 里<strong>滚动 review</strong> diff；</li>
-<li><strong>在自己作为人类工程师"想去吃午饭"的那种自然停顿点</strong>做 <code>/compact</code>；</li>
-<li>常见套路：先让 Claude 探索代码库、做 plan、<strong>把 plan 落到一个 markdown 文档</strong>；</li>
-<li><strong>然后 <code>/compact</code></strong>——把 100k token 的探索压成几千字摘要，再开干。</li>
-</ul>
-<h3>Q7：多个 Claude 并行？git worktree？</h3>
-<p>Eric（<a href="https://www.youtube.com/watch?v=fHWFF_pnqDk&amp;t=1803s">30:03</a>）：</p>
-<ul>
-<li>Claude Code 起项目 + Cursor 收尾："<strong>确切知道要改哪几行</strong>"时用 Cursor 比 Claude 更快；</li>
-<li>进新代码库时，<strong>先用 Claude Code 让它替你画地图</strong>："这个 codebase 里 auth 在哪？给我类名、文件路径"——构建心智模型再动手；</li>
-<li>多开 / worktree 他没具体推一种姿势——但补充：<strong>"用文件做 Agent 之间的信息总线"是当前的现实最佳实践。</strong></li>
-</ul>
-<hr />
-<h2 id="十-一页速查">十、一页速查</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">九</span>Q&A 精华</h2>
 
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>传统编码</th>
-<th>紧反馈 AI（Copilot）</th>
-<th>Vibe Coding</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>你和代码的距离</td>
-<td>写每行</td>
-<td>看每行</td>
-<td><strong>看产品行为，不看代码</strong></td>
-</tr>
-<tr>
-<td>适合范围</td>
-<td>任何</td>
-<td>任何</td>
-<td><strong>叶节点 / 离线 / 可验证抽象的系统</strong></td>
-</tr>
-<tr>
-<td>关键技能</td>
-<td>写代码</td>
-<td>评估代码</td>
-<td><strong>当 PM：提需求、定约束、验产品</strong></td>
-</tr>
-<tr>
-<td>时间消耗</td>
-<td>实现耗时</td>
-<td>实现 + review</td>
-<td><strong>前置上下文 + 验收测试</strong></td>
-</tr>
-<tr>
-<td>现在不做的代价</td>
-<td>无</td>
-<td>慢一点</td>
-<td><strong>2 年后跟不上指数曲线</strong></td>
-</tr>
-</tbody>
-</table>
-<h3>一句话外带</h3>
-<blockquote>
-<p>Vibe coding 在 prod 不是赌运气——它的核心配方是：<strong>做 Claude 的 PM + 只在 leaf 节点放手 + 设计可验证的抽象层 + 接受指数曲线</strong>。今天可以选择不放手，<strong>但别让"必须读每一行"的执念在两年后把你变成团队的瓶颈</strong>。</p>
-</blockquote>
-<hr />
-<p><em>本文基于 YouTube 自动字幕 + 人工章节整理 + 中文重新组织。时间戳链接点击可跳回 YouTube 对应位置核对原话。</em></p>
+        <h3>Q1：vibe coding 时代，新人怎么学？</h3>
+        <p>Eric 的回答：</p>
+        <ul>
+          <li><strong>悲观面：</strong>你确实不会经历那种"硬核挣扎"，就像他大学教授当年抱怨"现在的程序员不会手写汇编了"；</li>
+          <li><strong>乐观面：</strong>你身边永远有一个 <strong>pair programmer</strong> 24/7 待命。看到不熟悉的库可以<strong>当场问 Claude</strong>："这是啥？为什么用它不用别的？" <strong>学得比以前快得多。</strong></li>
+          <li><strong>更高维度：</strong>以前一个架构决定要 2 年才能验对错，未来可能 6 个月就出结果——<strong>愿意学的人能在同样日历时间里多走 4 倍的循环。</strong></li>
+        </ul>
+        <blockquote><strong>会被淘汰的是懒人</strong>——不是新人。</blockquote>
+
+        <h3>Q2：plan 要写多详细？是不是要写完整 PRD？</h3>
+        <ul>
+          <li>取决于你<strong>在乎什么</strong>——只在乎结果就只描述需求，了解代码库的话可以指定类、参考实例；</li>
+          <li><strong>别过度约束：</strong>模型在"留一定空间"时表现最好；</li>
+          <li><strong>不要标准化 PRD 模板</strong>——按"给 junior 工程师交代"的颗粒度即可。</li>
+        </ul>
+
+        <h3>Q3：安全 / 漏洞怎么办？</h3>
+        <ul>
+          <li><strong>回到第 1 条原则</strong>——Claude 的 PM 要懂得问对问题，知道哪里危险；</li>
+          <li>自己的 22k 行案例之所以敢做，是因为那个系统<strong>完全离线</strong>，已经事先确认"出错也没有外部攻击面"；</li>
+          <li>期待未来出现<strong>「可证明安全的脚手架」</strong>——核心安全敏感的部分（auth、支付）官方写好，用户只 vibe code 业务部分。</li>
+        </ul>
+
+        <h3>Q4：TDD 怎么和 Claude 配？</h3>
+        <ul>
+          <li><strong>明确告诉 Claude 测试格式：</strong>"写 3 个端到端测试——1 个 happy path + 2 个 error case"；</li>
+          <li><strong>要 end-to-end，不要单元测试细节</strong>——这种测试人类可读、不被实现绑死；</li>
+          <li><strong>vibe coding 时只读测试，不读实现</strong>——测试过你就放心。</li>
+        </ul>
+
+        <h3>Q5：怎么算"embrace exponentials"？</h3>
+        <blockquote>
+          <p>重点不是"模型会变好"——<strong>而是变好得比你想象的快。</strong></p>
+          <p>不是稳定增量，<strong>是斜率本身会一直上去。</strong></p>
+        </blockquote>
+
+        <h3>Q6：你的具体工作流？多久 <code>/compact</code> 一次？</h3>
+        <ul>
+          <li>终端开 Claude Code + 同时在 VS Code 里<strong>滚动 review</strong> diff；</li>
+          <li><strong>在自己作为人类工程师"想去吃午饭"的那种自然停顿点</strong>做 <code>/compact</code>；</li>
+          <li>常见套路：先让 Claude 探索代码库、做 plan、<strong>把 plan 落到一个 markdown 文档</strong>；</li>
+          <li><strong>然后 <code>/compact</code></strong>——把 100k token 的探索压成几千字摘要，再开干。</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">十</span>一页速查</h2>
+        <table>
+          <thead><tr><th>维度</th><th>传统编码</th><th>紧反馈 AI（Copilot）</th><th>Vibe Coding</th></tr></thead>
+          <tbody>
+            <tr><td>你和代码的距离</td><td>写每行</td><td>看每行</td><td><strong>看产品行为，不看代码</strong></td></tr>
+            <tr><td>适合范围</td><td>任何</td><td>任何</td><td><strong>叶节点 / 离线 / 可验证抽象的系统</strong></td></tr>
+            <tr><td>关键技能</td><td>写代码</td><td>评估代码</td><td><strong>当 PM：提需求、定约束、验产品</strong></td></tr>
+            <tr><td>时间消耗</td><td>实现耗时</td><td>实现 + review</td><td><strong>前置上下文 + 验收测试</strong></td></tr>
+            <tr><td>现在不做的代价</td><td>无</td><td>慢一点</td><td><strong>2 年后跟不上指数曲线</strong></td></tr>
+          </tbody>
+        </table>
+        <blockquote>一句话外带：vibe coding 的真正约束不是模型能力，而是<strong>你自己能不能找到一套不读代码也能验证产品行为的方法</strong>。技术债是目前唯一无法被绕过的硬约束——所以只在 leaf node 上放手。</blockquote>
+      </div>
+
+    </div>
   </main>
-</div>
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
-</script>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=fHWFF_pnqDk" target="_blank">▶ 原视频</a>
+  </footer>
 </body>
 </html>

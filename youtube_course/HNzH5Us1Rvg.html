@@ -1,505 +1,470 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>MCP 201：用全部 5 个原语构建丰富交互</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  :root {
-    --bg: #fafaf7;
-    --fg: #1a1a1a;
-    --muted: #6b6b6b;
-    --accent: #c96442;
-    --accent-bg: #f6e8e0;
-    --border: #e3e3df;
-    --code-bg: #f3f1ec;
-    --sidebar-w: 280px;
-  }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0; background: var(--bg); color: var(--fg);
-    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
-  }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP 201：用全部 5 个原语构建丰富交互 — David (Anthropic)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .layout { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
-  aside.toc {
-    position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto;
-    padding: 28px 20px; border-right: 1px solid var(--border); background: #fff;
-    font-size: 14px;
-  }
-  aside.toc h2 {
-    font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
-    color: var(--muted); margin: 0 0 12px;
-  }
-  aside.toc ol { list-style: none; margin: 0; padding: 0; }
-  aside.toc li { margin: 0 0 10px; line-height: 1.4; }
-  aside.toc a { color: var(--fg); display: block; }
-  aside.toc a:hover { color: var(--accent); }
-
-  main { padding: 40px clamp(24px, 6vw, 80px); max-width: 920px; }
-  main > h1:first-child { font-size: 30px; line-height: 1.3; margin: 0 0 10px; }
-
-  h2 {
-    font-size: 22px; margin: 48px 0 16px; padding-bottom: 8px;
-    border-bottom: 2px solid var(--border); scroll-margin-top: 20px;
-  }
-  h3 { font-size: 17px; margin: 28px 0 12px; color: #333; }
-
-  p { margin: 0 0 18px; }
-
-  blockquote {
-    margin: 18px 0; padding: 12px 18px; border-left: 3px solid var(--accent);
-    background: var(--accent-bg); color: #4a3320; font-size: 15px;
-  }
-  blockquote p:last-child { margin-bottom: 0; }
-
-  ul, ol { margin: 0 0 18px; padding-left: 28px; }
-  li { margin: 0 0 8px; }
-  li > p { margin: 0 0 8px; }
-
-  code {
-    background: var(--code-bg); padding: 2px 6px; border-radius: 3px;
-    font: 0.92em ui-monospace, SFMono-Regular, Menlo, monospace;
-  }
-  pre {
-    background: var(--code-bg); padding: 14px 16px; border-radius: 6px;
-    overflow-x: auto; font-size: 13px;
-  }
-  pre code { background: transparent; padding: 0; }
-
-  /* Mermaid containers — let mermaid.js render inside, white bg */
-  .mermaid {
-    background: #fff; padding: 18px; border: 1px solid var(--border);
-    border-radius: 6px; margin: 20px 0; text-align: center;
-  }
-
-  table {
-    border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14.5px;
-  }
-  th, td {
-    border: 1px solid var(--border); padding: 10px 12px; text-align: left;
-    vertical-align: top; line-height: 1.55;
-  }
-  th { background: #f1ede6; font-weight: 600; }
-  tr:nth-child(even) td { background: #fbf9f4; }
-
-  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-
-  em { color: var(--muted); }
-
-  footer.meta {
-    border-top: 1px solid var(--border); padding-top: 20px; margin-top: 48px;
-    color: var(--muted); font-size: 13px;
-  }
-
-  @media (max-width: 760px) {
-    .layout { grid-template-columns: 1fr; }
-    aside.toc {
-      position: static; max-height: none; border-right: none;
-      border-bottom: 1px solid var(--border);
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
     }
-  }
-</style>
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .content-card:hover::before { opacity: 1; }
+
+    .section { margin: 36px 0; }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 24px 0 12px;
+    }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875em;
+      color: var(--accent-cyan);
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+      margin: 18px 0;
+    }
+
+    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
+
+    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="layout">
-  <aside class="toc">
-    <h2>目录</h2>
-    <ol><li><a href="#一-为什么要做这场分享">一、为什么要做这场分享</a></li>
-<li><a href="#二-5-个原语的全景">二、5 个原语的全景</a></li>
-<li><a href="#三-prompts-用户主动调入的-模板">三、Prompts：用户主动调入的"模板"</a></li>
-<li><a href="#四-resources-应用驱动的-原始数据接入">四、Resources：应用驱动的"原始数据接入"</a></li>
-<li><a href="#五-tools-模型驱动的动作">五、Tools：模型驱动的动作</a></li>
-<li><a href="#六-决定用哪一个-interaction-model-交互模型">六、决定用哪一个：**Interaction Model（交互模型）**</a></li>
-<li><a href="#七-sampling-server-反过来让-client-跑一次模型">七、Sampling：server 反过来让 client 跑一次模型</a></li>
-<li><a href="#八-roots-server-反过来问-client-你都开了哪些工作区">八、Roots：server 反过来问 client "你都开了哪些工作区"</a></li>
-<li><a href="#九-把-5-个原语组合起来-一个聊天应用的-mcp-server">九、把 5 个原语组合起来：一个聊天应用的 MCP server</a></li>
-<li><a href="#十-mcp-的下一步-从本地走向-web">十、MCP 的下一步：从本地走向 Web</a></li>
-<li><a href="#十一-未来几个月路线图">十一、未来几个月路线图</a></li>
-<li><a href="#十二-一页速查">十二、一页速查</a></li></ol>
-  </aside>
-  <main>
-<h1>MCP 201：用全部 5 个原语构建丰富交互</h1>
-<blockquote>
-<p>作者：<strong>David</strong>（Anthropic 技术员 / MCP 协议共同创建者） · 演讲场合：Code with Claude · 时长：约 26 分钟 · <a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg">▶ 原视频</a></p>
-<p><strong>本文是中文整理版</strong>：在视频内容的基础上重新组织、补图表、补对照表，方便快速阅读。关键节点附 YouTube 时间戳链接，可点击跳回原视频对应位置核对。</p>
-</blockquote>
-<hr />
-<h2 id="一-为什么要做这场分享">一、为什么要做这场分享</h2>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">MCP 201：用全部 5 个原语构建丰富交互</h1>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ ~26 分钟</span>
+      <span class="meta-badge source">📺 Code with Claude</span>
+      <span class="meta-badge">🤖 David (Anthropic)</span>
+    </div>
+  </header>
 
-<p>社区目前 1 万多个 MCP server，<strong>绝大多数只用了协议里最容易的那一块——工具（tools）</strong>。但 MCP 协议设计里其实有 <strong>5 个原语</strong>（3 个 server 端 + 2 个 client 端），合在一起能让 LLM 应用做出比"工具调用"丰富得多的交互（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=13s">0:13</a>）。</p>
-<p>这次演讲想做三件事：</p>
-<ol>
-<li>把 5 个原语过一遍，重点讲少有人用的那几个；</li>
-<li>用一个聊天 App 例子演示<strong>怎么把 5 个原语组合</strong>起来；</li>
-<li>谈 MCP 下一步——<strong>从本地走向 Web</strong>。</li>
-</ol>
-<hr />
-<h2 id="二-5-个原语的全景">二、5 个原语的全景</h2>
+  <main style="position: relative; z-index: 1;">
+    <div class="content-card">
 
-<div class="mermaid">flowchart LR
-    subgraph Server[Server 暴露给 Client]
-        P[Prompts<br/>用户驱动]
-        R[Resources<br/>应用驱动]
-        T[Tools<br/>模型驱动]
-    end
-    subgraph Client[Client 暴露给 Server]
-        S[Sampling<br/>请求一次推理]
-        Ro[Roots<br/>询问可见的工作区]
-    end
-    User[用户] -->|slash / 命令| P
-    App[AI 应用] -->|嵌入上下文 / RAG| R
-    Model[模型] -->|自动选择调用| T
-    Server -.向上请求.-> S
-    Server -.向上查询.-> Ro
-</div>
-<p><strong>图 1：MCP 协议的 5 个原语</strong>——一边由 server 暴露给 client，一边由 client 暴露给 server。<strong>最关键的区别在于"谁来发起"</strong>。</p>
-<table>
-<thead>
-<tr>
-<th>原语</th>
-<th>谁来发起</th>
-<th>一句话定位</th>
-<th>典型场景</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Prompts</strong></td>
-<td>用户</td>
-<td>预制好的提示模板，<strong>用户主动调入上下文</strong></td>
-<td>slash 命令、<code>@cmd</code> 命令</td>
-</tr>
-<tr>
-<td><strong>Resources</strong></td>
-<td>应用</td>
-<td>原始数据/内容，<strong>由 client 应用决定怎么用</strong></td>
-<td>文件式挂载、RAG embedding</td>
-</tr>
-<tr>
-<td><strong>Tools</strong></td>
-<td>模型</td>
-<td>可被模型自主调用的动作</td>
-<td>查数据库、改文件</td>
-</tr>
-<tr>
-<td><strong>Sampling</strong></td>
-<td>Server</td>
-<td>让 client 帮 server 做一次模型推理</td>
-<td>server 内部想用 LLM 但不持模型</td>
-</tr>
-<tr>
-<td><strong>Roots</strong></td>
-<td>Server</td>
-<td>询问 client 当前开着哪些工作区/目录</td>
-<td>像 IDE 这类多 workspace 的环境</td>
-</tr>
-</tbody>
-</table>
-<p>下面分别展开。</p>
-<hr />
-<h2 id="三-prompts-用户主动调入的-模板">三、Prompts：用户主动调入的"模板"</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>为什么要做这场分享</h2>
+        <p>社区目前 1 万多个 MCP server，<strong>绝大多数只用了协议里最容易的那一块——工具（tools）</strong>。但 MCP 协议设计里其实有 <strong>5 个原语</strong>（3 个 server 端 + 2 个 client 端），合在一起能让 LLM 应用做出比"工具调用"丰富得多的交互。</p>
+        <p>这次演讲的目标：</p>
+        <ol>
+          <li>把 5 个原语过一遍，重点讲少有人用的那几个；</li>
+          <li>用一个聊天 App 例子演示<strong>怎么把 5 个原语组合</strong>起来；</li>
+          <li>谈 MCP 下一步——<strong>从本地走向 Web</strong>。</li>
+        </ol>
+      </div>
 
-<p><strong>Prompts 是 MCP 里最被忽视的原语之一</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=51s">0:51</a>）。一句话：<strong>MCP server 可以暴露一组"提示模板"，让用户在 client 里主动选用</strong>。</p>
-<div class="mermaid">flowchart LR
-    Author[Server 作者] -->|定义| P1[Prompt:<br/>summarize-pr]
-    Author -->|定义| P2[Prompt:<br/>review-issue]
-    User[用户] -->|/summarize-pr| P1
-    P1 -->|参数自动补全<br/>抓取 PR comments| Ctx[上下文窗口]
-    Ctx --> Model[模型作答]
-</div>
-<p><strong>图 2：Prompt 的典型用法</strong>——用户敲一个 slash 命令，server 把对应模板（甚至动态抓取的真实数据）一次性塞进上下文。</p>
-<h3>它解决了什么问题</h3>
-<ul>
-<li><strong>你（作者）最懂自己的 server 该怎么用</strong>——把"招牌玩法"打包成 prompt，让用户开箱即上手；</li>
-<li><strong>prompts 是动态执行的</strong>——背后就是代码，不只是静态模板。可以在用户调用时去远端抓数据。</li>
-</ul>
-<h3>例子：把 PR comments 拉进上下文</h3>
-<p>David 在 Zed 编辑器里演示：用户敲 <code>/pr-comments</code>，prompt 背后就去 GitHub 拉 PR 评论，<strong>直接进上下文</strong>，然后用户跟模型说"按这些 review 意见把代码改一下"。</p>
-<h3>鲜为人知的加分项：<strong>Prompt Completion</strong></h3>
-<p>定义 prompt 时还能给参数附<strong>补全函数</strong>。视频里用户敲完 <code>/pr-comments</code> 后，弹出可选 PR 列表供选择（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=203s">3:23</a>）。在 TypeScript 里实现这个需求只要几行——一个 completion 函数 + 一个生成 prompt 的函数，Claude Code + Claude 4 基本能直接给你写出来。</p>
-<hr />
-<h2 id="四-resources-应用驱动的-原始数据接入">四、Resources：应用驱动的"原始数据接入"</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>5 个原语的全景</h2>
+        <p><strong>最关键的区别在于"谁来发起"：</strong></p>
+        <table>
+          <thead><tr><th>原语</th><th>谁来发起</th><th>一句话定位</th><th>典型场景</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Prompts</strong></td><td>用户</td><td>预制好的提示模板，<strong>用户主动调入上下文</strong></td><td>slash 命令、<code>@cmd</code> 命令</td></tr>
+            <tr><td><strong>Resources</strong></td><td>应用</td><td>原始数据/内容，<strong>由 client 应用决定怎么用</strong></td><td>文件式挂载、RAG embedding</td></tr>
+            <tr><td><strong>Tools</strong></td><td>模型</td><td>可被模型自主调用的动作</td><td>查数据库、改文件</td></tr>
+            <tr><td><strong>Sampling</strong></td><td>Server</td><td>让 client 帮 server 做一次模型推理</td><td>server 内部想用 LLM 但不持模型</td></tr>
+            <tr><td><strong>Roots</strong></td><td>Server</td><td>询问 client 当前开着哪些工作区/目录</td><td>像 IDE 这类多 workspace 的环境</td></tr>
+          </tbody>
+        </table>
+        <blockquote>"应该让数据出现的<strong>时机</strong>和<strong>意图</strong>，决定你用哪个原语"——这是 David 给的核心判断准则。</blockquote>
+      </div>
 
-<p>Prompts 是给用户用的，<strong>Resources 是给应用（client）用的</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=282s">4:42</a>）。</p>
-<div class="mermaid">flowchart LR
-    Server[MCP Server] -->|expose| Res1[Resource:<br/>db_schema/users]
-    Server -->|expose| Res2[Resource:<br/>db_schema/orders]
-    Res1 --> App[Client 应用<br/>Claude Desktop / VS Code]
-    Res2 --> App
-    App -->|方式一| Ctx[加入上下文窗口]
-    App -->|方式二| Embed[做 embedding<br/>RAG 召回]
-    App -->|方式三| UI[像文件一样挂在边栏]
-</div>
-<p><strong>图 3：Resource 的三种消费方式</strong>——应用层决定怎么用，不只是"塞进上下文"这一种。</p>
-<h3>它解决了什么问题</h3>
-<ul>
-<li><strong>应用决定怎么用这份数据</strong>——上下文/索引/UI 渲染都行；</li>
-<li>是 <strong>MCP 中比较被低估的原语</strong>：很多人只想着"加进上下文"，但 client 完全可以拿来做 embedding/RAG。</li>
-</ul>
-<h3>例子：暴露数据库 schema</h3>
-<p>David 演示用 Astra DB 的 MCP server 把库表 schema 作为 resource 暴露。在 Claude Desktop 里<strong>像挂文件一样把表挂上</strong>，然后说"画一张 ER 图"，Claude 自己读 schema 自己画图（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=355s">5:55</a>）。</p>
-<hr />
-<h2 id="五-tools-模型驱动的动作">五、Tools：模型驱动的动作</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>Prompts：用户主动调入的"模板"</h2>
+        <p><strong>Prompts 是 MCP 里最被忽视的原语之一。</strong> 一句话：<strong>MCP server 可以暴露一组"提示模板"，让用户在 client 里主动选用。</strong></p>
+        <h3>它解决了什么问题</h3>
+        <ul>
+          <li><strong>你（作者）最懂自己的 server 该怎么用</strong>——把"招牌玩法"打包成 prompt，让用户开箱即上手；</li>
+          <li><strong>prompts 是动态执行的</strong>——背后就是代码，不只是静态模板。可以在用户调用时去远端抓数据。</li>
+        </ul>
+        <h3>例子：把 PR comments 拉进上下文</h3>
+        <p>用户敲 <code>/pr-comments</code>，prompt 背后就去 GitHub 拉 PR 评论，<strong>直接进上下文</strong>，然后用户跟模型说"按这些 review 意见把代码改一下"。</p>
+        <h3>鲜为人知的加分项：Prompt Completion</h3>
+        <p>定义 prompt 时还能给参数附<strong>补全函数</strong>。用户敲完 <code>/pr-comments</code> 后，弹出可选 PR 列表供选择。在 TypeScript 里实现这个需求只要几行——一个 completion 函数 + 一个生成 prompt 的函数，Claude Code + Claude 4 基本能直接给你写出来。</p>
+      </div>
 
-<p>第三个 server 端原语，<strong>大家都熟</strong>：模型在跑的过程中自己决定要不要调用，常见用法不展开。David 说"建过 MCP server 的人，第一次看到模型自己调用你建的工具——是最有魔力的时刻"（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=401s">6:41</a>）。</p>
-<hr />
-<h2 id="六-决定用哪一个-interaction-model-交互模型">六、决定用哪一个：**Interaction Model（交互模型）**</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>Resources：应用驱动的"原始数据接入"</h2>
+        <p>Prompts 是给用户用的，<strong>Resources 是给应用（client）用的。</strong></p>
+        <h3>Resource 的三种消费方式</h3>
+        <ul>
+          <li><strong>方式一：加入上下文窗口</strong></li>
+          <li><strong>方式二：做 embedding / RAG 召回</strong></li>
+          <li><strong>方式三：像文件一样挂在边栏</strong></li>
+        </ul>
+        <h3>它解决了什么问题</h3>
+        <ul>
+          <li><strong>应用决定怎么用这份数据</strong>——上下文/索引/UI 渲染都行；</li>
+          <li>是 <strong>MCP 中比较被低估的原语</strong>：很多人只想着"加进上下文"，但 client 完全可以拿来做 embedding/RAG。</li>
+        </ul>
+        <h3>例子：暴露数据库 schema</h3>
+        <p>用 Astra DB 的 MCP server 把库表 schema 作为 resource 暴露。在 Claude Desktop 里<strong>像挂文件一样把表挂上</strong>，然后说"画一张 ER 图"，Claude 自己读 schema 自己画图。</p>
+      </div>
 
-<p>3 个 server 原语功能上有重叠（都能往上下文里塞东西），到底用谁？<strong>协议规范里其实埋着答案，叫 interaction model</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=482s">8:02</a>）：</p>
-<table>
-<thead>
-<tr>
-<th>原语</th>
-<th>由谁触发</th>
-<th>同一份数据按"何时出现"决定用谁</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Prompts</strong></td>
-<td><strong>用户</strong> 主动</td>
-<td>用户想立刻把它推到上下文里时</td>
-</tr>
-<tr>
-<td><strong>Resources</strong></td>
-<td><strong>应用</strong> 决定</td>
-<td>应用层有自己的策略——索引、按需召回、UI 渲染</td>
-</tr>
-<tr>
-<td><strong>Tools</strong></td>
-<td><strong>模型</strong> 自主</td>
-<td>模型在解决任务时按需调用</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>"应该让数据出现的<strong>时机</strong>和<strong>意图</strong>，决定你用哪个原语"——这是 David 给的核心判断准则。</p>
-</blockquote>
-<hr />
-<h2 id="七-sampling-server-反过来让-client-跑一次模型">七、Sampling：server 反过来让 client 跑一次模型</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>Tools：模型驱动的动作</h2>
+        <p>第三个 server 端原语，<strong>大家都熟</strong>：模型在跑的过程中自己决定要不要调用。David 说"建过 MCP server 的人，第一次看到模型自己调用你建的工具——是最有魔力的时刻"。</p>
+      </div>
 
-<p>讲到 sampling 之前，David 抛了个具体问题（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=601s">10:01</a>）：</p>
-<blockquote>
-<p>"我想给一个 issue tracker 做 MCP server，<strong>支持「总结某 issue 的讨论」</strong>。总结需要模型——但 server 又不知道 client 用的是哪个模型，更没有 client 的 API key。怎么办？"</p>
-</blockquote>
-<p>最朴素的做法是 server 自己装 Anthropic SDK + 自己要个 key——立刻就尴尬：
-- 用户要在 server 上又配一把 API key；
-- 把"哪个模型、谁付钱、谁审隐私"的控制权从 client 抢走。</p>
-<h3>Sampling 的本质</h3>
-<p><strong>让 server 反过来请求 client 帮忙做一次推理。</strong></p>
-<div class="mermaid">flowchart TD
-    User[用户] --> Client[MCP Client<br/>Claude Desktop]
-    Client -->|tool 调用| Server[MCP Server<br/>issue tracker]
-    Server -->|sampling 请求<br/>「帮我跑这段 prompt」| Client
-    Client -->|"用 client 已配置的模型 + 订阅"| Model[模型]
-    Model --> Client
-    Client -->|completion 结果| Server
-    Server -->|tool 结果| Client
-    Client --> User
-</div>
-<p><strong>图 4：Sampling 让 server "借" client 的模型</strong>——server 不再需要自己持模型/key。</p>
-<h3>它带来的两个红利</h3>
-<ol>
-<li><strong>Client 始终掌握安全 / 隐私 / 成本</strong>——用户在 client 那里看清楚每次推理付了多少 token、走了哪个模型，<strong>不用再额外给 server 一把 key</strong>；</li>
-<li><strong>可递归 / 可链式</strong>——server A 调 server B，B 再要 sampling，请求一路冒泡到最上层的 client。任何一个 MCP server 想用模型，<strong>都向上要</strong>，永远是同一个 client 守门（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=737s">12:17</a>）。</li>
-</ol>
-<blockquote>
-<p>David 坦言：<strong>sampling 是最让他兴奋、但目前 client 支持最差的原语</strong>。Anthropic 第一方产品今年内会落地（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=780s">13:00</a>）。</p>
-</blockquote>
-<hr />
-<h2 id="八-roots-server-反过来问-client-你都开了哪些工作区">八、Roots：server 反过来问 client "你都开了哪些工作区"</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>决定用哪一个：Interaction Model（交互模型）</h2>
+        <p>3 个 server 原语功能上有重叠（都能往上下文里塞东西），到底用谁？<strong>协议规范里其实埋着答案，叫 interaction model：</strong></p>
+        <table>
+          <thead><tr><th>原语</th><th>由谁触发</th><th>同一份数据按"何时出现"决定用谁</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Prompts</strong></td><td><strong>用户</strong> 主动</td><td>用户想立刻把它推到上下文里时</td></tr>
+            <tr><td><strong>Resources</strong></td><td><strong>应用</strong> 决定</td><td>应用层有自己的策略——索引、按需召回、UI 渲染</td></tr>
+            <tr><td><strong>Tools</strong></td><td><strong>模型</strong> 自主</td><td>模型在解决任务时按需调用</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-<p>第二个 client 端原语。命名 David 自己也吐槽"起得不好"（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=817s">13:37</a>）。</p>
-<h3>它解决什么</h3>
-<p>想象你做一个 <strong>git MCP server</strong>——希望它在 IDE 里跑 git 命令。问题：</p>
-<blockquote>
-<p>server 怎么知道用户的 IDE 此刻开着哪些工程目录？</p>
-</blockquote>
-<p><strong>Roots 就是 client 暴露给 server 的"我现在打开了这些目录"接口</strong>，server 拿到后只在这些目录里干活，不乱跑。</p>
-<p>VS Code 目前已经支持 roots（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=900s">15:00</a>）。</p>
-<hr />
-<h2 id="九-把-5-个原语组合起来-一个聊天应用的-mcp-server">九、把 5 个原语组合起来：一个聊天应用的 MCP server</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">七</span>Sampling：server 反过来让 client 跑一次模型</h2>
+        <p>David 抛了个具体问题：</p>
+        <blockquote><p>"我想给一个 issue tracker 做 MCP server，<strong>支持「总结某 issue 的讨论」</strong>。总结需要模型——但 server 又不知道 client 用的是哪个模型，更没有 client 的 API key。怎么办？"</p></blockquote>
+        <p>最朴素的做法是 server 自己装 Anthropic SDK + 自己要个 key——立刻就尴尬：
+        <ul>
+          <li>用户要在 server 上又配一把 API key；</li>
+          <li>把"哪个模型、谁付钱、谁审隐私"的控制权从 client 抢走。</li>
+        </ul>
+        </p>
+        <h3>Sampling 的本质</h3>
+        <p><strong>让 server 反过来请求 client 帮忙做一次推理。</strong></p>
+        <blockquote>它带来的两个红利：
+        <ol>
+          <li><strong>Client 始终掌握安全 / 隐私 / 成本</strong>——用户在 client 那里看清楚每次推理付了多少 token、走了哪个模型，<strong>不用再额外给 server 一把 key</strong>；</li>
+          <li><strong>可递归 / 可链式</strong>——server A 调 server B，B 再要 sampling，请求一路冒泡到最上层的 client。任何一个 MCP server 想用模型，<strong>都向上要</strong>，永远是同一个 client 守门。</li>
+        </ol>
+        </blockquote>
+        <blockquote>David 坦言：<strong>sampling 是最让他兴奋、但目前 client 支持最差的原语。</strong> Anthropic 第一方产品今年内会落地。</blockquote>
+      </div>
 
-<p>David 给的端到端例子（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=924s">15:24</a>）——给 Slack / Discord 这类聊天 App 做 MCP server：</p>
-<table>
-<thead>
-<tr>
-<th>原语</th>
-<th>在这个 server 里怎么用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Prompts</strong></td>
-<td><code>summarize-this-discussion</code>、<code>what-happened-since-yesterday</code> 这种 slash 命令，用户直接调入</td>
-</tr>
-<tr>
-<td><strong>Prompt Completion</strong></td>
-<td>在 <code>summarize-this-discussion</code> 的参数里给"最近的 thread 列表"做自动补全</td>
-</tr>
-<tr>
-<td><strong>Resources</strong></td>
-<td>把"频道列表""最近 thread"暴露给 client；client 自己决定要不要 index、要不要做 RAG</td>
-</tr>
-<tr>
-<td><strong>Tools</strong></td>
-<td><code>search_messages</code>、<code>read_channel</code>、<code>read_thread</code> 这些动作</td>
-</tr>
-<tr>
-<td><strong>Sampling</strong></td>
-<td>在 <code>summarize_thread</code> 内部要做总结时，反过来让 client 跑模型</td>
-</tr>
-</tbody>
-</table>
-<div class="mermaid">flowchart LR
-    User[用户] -->|/summarize| Prompt[Prompts<br/>带 completion]
-    User -->|挂频道| Res[Resources<br/>频道/thread 列表]
-    Model[模型] -->|read_thread| Tool[Tools]
-    Tool -->|内部要总结| Sampling[Sampling]
-    Sampling -->|向上请求| Client[Client]
-    Client -->|completion| Tool
+      <div class="section">
+        <h2 class="section-title"><span class="num">八</span>Roots：server 反过来问 client "你都开了哪些工作区"</h2>
+        <p>第二个 client 端原语。命名 David 自己也吐槽"起得不好"。</p>
+        <h3>它解决什么</h3>
+        <p>想象你做一个 <strong>git MCP server</strong>——希望它在 IDE 里跑 git 命令。问题：</p>
+        <blockquote><p>server 怎么知道用户的 IDE 此刻开着哪些工程目录？</p></blockquote>
+        <p><strong>Roots 就是 client 暴露给 server 的"我现在打开了这些目录"接口</strong>，server 拿到后只在这些目录里干活，不乱跑。</p>
+        <p>VS Code 目前已经支持 roots。</p>
+      </div>
 
-    classDef good fill:#e0f0e0,stroke:#3a6a3a,color:#1a1a1a
-    class Prompt,Res,Tool,Sampling good
-</div>
-<p><strong>图 5：5 个原语组合后的聊天 App MCP server</strong>——用户、应用、模型三条交互链路都被覆盖，不再只是"等模型调工具"。</p>
-<hr />
-<h2 id="十-mcp-的下一步-从本地走向-web">十、MCP 的下一步：从本地走向 Web</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">九</span>把 5 个原语组合起来：一个聊天应用的 MCP server</h2>
+        <p>David 给的端到端例子——给 Slack / Discord 这类聊天 App 做 MCP server：</p>
+        <table>
+          <thead><tr><th>原语</th><th>在这个 server 里怎么用</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Prompts</strong></td><td><code>summarize-this-discussion</code>、<code>what-happened-since-yesterday</code> 这种 slash 命令，用户直接调入</td></tr>
+            <tr><td><strong>Prompt Completion</strong></td><td>在 <code>summarize-this-discussion</code> 的参数里给"最近的 thread 列表"做自动补全</td></tr>
+            <tr><td><strong>Resources</strong></td><td>把"频道列表""最近 thread"暴露给 client；client 自己决定要不要 index、要不要做 RAG</td></tr>
+            <tr><td><strong>Tools</strong></td><td><code>search_messages</code>、<code>read_channel</code>、<code>read_thread</code> 这些动作</td></tr>
+            <tr><td><strong>Sampling</strong></td><td>在 <code>summarize_thread</code> 内部要做总结时，反过来让 client 跑模型</td></tr>
+          </tbody>
+        </table>
+        <blockquote>用户、应用、模型三条交互链路都被覆盖，不再只是"等模型调工具"。</blockquote>
+      </div>
 
-<p>社区现在 1 万多个 server，<strong>绝大多数是本地的</strong>——Docker 容器、本地可执行。下一步：让 MCP server 成为<strong>网站</strong>——client 直接连 URL 就能用（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1028s">17:08</a>）。</p>
-<p>要走这一步需要两块基础：</p>
-<ol>
-<li><strong>Authorization（授权）</strong>——把私有数据安全地接入 LLM 应用；</li>
-<li><strong>Scaling（可伸缩）</strong>——server 能像普通 Web API 一样横向扩展。</li>
-</ol>
-<h3>10.1 授权：OAuth 2.1</h3>
-<p>MCP 规范现在要求远程 server 走 <strong>OAuth 2.1</strong>。这个名字听着唬人，<strong>实际上就是 OAuth 2.0 + 业界已经在做的安全加固</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1124s">18:44</a>）。</p>
-<div class="mermaid">flowchart LR
-    User[用户] -->|输入 mcp.payment.com| Client[MCP Client]
-    Client -->|OAuth 流程| Payment[payment.com<br/>身份 + 授权]
-    Payment -->|token| Client
-    Client -->|带 token 调用| Server[mcp.payment.com<br/>MCP Server]
-    Server -->|用户私有数据| Client
-</div>
-<p><strong>图 6：远程 MCP 的两个典型部署</strong>——To-C 走"我去 payment.com 登录"那一套；To-B 走"公司 SSO（Okta / Azure AD）"。</p>
-<table>
-<thead>
-<tr>
-<th>场景</th>
-<th>关键收益</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>公网产品</strong></td>
-<td>用户在 client 里直接配 <code>mcp.payment.com</code>，OAuth 登一下，<strong>不再需要信任随便一个开发者放在本地的 Docker 镜像</strong>——信任锚回到原服务</td>
-</tr>
-<tr>
-<td><strong>企业内部</strong></td>
-<td>现有 SSO / 身份提供方（Okta / Azure AD）继续生效，员工早上登一次，全天调任何内部 MCP server 都自动鉴权（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1277s">21:17</a>）</td>
-</tr>
-</tbody>
-</table>
-<p>David 强调企业场景的好处：<strong>"做 MCP server 的团队"和"做身份/集成的平台团队"可以清晰分工</strong>——这是大企业能跑出体量化部署的关键。</p>
-<h3>10.2 可伸缩：Streamable HTTP</h3>
-<p>新增的 <strong>Streamable HTTP</strong> 让 MCP server "像普通 REST API 一样水平扩展"（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1346s">22:26</a>）：</p>
-<table>
-<thead>
-<tr>
-<th>情形</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>简单 tool 调用</td>
-<td>直接 return <code>application/json</code>，<strong>连接关闭</strong>，下一次请求另一个 Lambda 接</td>
-</tr>
-<tr>
-<td>需要流式 / 后续推送（sampling、notification 等）</td>
-<td>升级到 stream，server 可以在最终 return 之前来回发消息</td>
-</tr>
-</tbody>
-</table>
-<p><strong>结果</strong>：MCP server 可以放在 Lambda / Cloud Run / 任何 serverless 上，跟普通 API 一样部署。</p>
-<hr />
-<h2 id="十一-未来几个月路线图">十一、未来几个月路线图</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">十</span>MCP 的下一步：从本地走向 Web</h2>
+        <p>社区现在 1 万多个 server，<strong>绝大多数是本地的</strong>——Docker 容器、本地可执行。下一步：让 MCP server 成为<strong>网站</strong>——client 直接连 URL 就能用。</p>
+        <p>要走这一步需要两块基础：</p>
+        <ol>
+          <li><strong>Authorization（授权）</strong>——把私有数据安全地接入 LLM 应用；</li>
+          <li><strong>Scaling（可伸缩）</strong>——server 能像普通 Web API 一样横向扩展。</li>
+        </ol>
+        <h3>授权：OAuth 2.1</h3>
+        <p>MCP 规范现在要求远程 server 走 <strong>OAuth 2.1</strong>。这个名字听着唬人，<strong>实际上就是 OAuth 2.0 + 业界已经在做的安全加固。</strong></p>
+        <table>
+          <thead><tr><th>场景</th><th>关键收益</th></tr></thead>
+          <tbody>
+            <tr><td><strong>公网产品</strong></td><td>用户在 client 里直接配 <code>mcp.payment.com</code>，OAuth 登一下，<strong>不再需要信任随便一个开发者放在本地的 Docker 镜像</strong>——信任锚回到原服务</td></tr>
+            <tr><td><strong>企业内部</strong></td><td>现有 SSO / 身份提供方（Okta / Azure AD）继续生效，员工早上登一次，全天调任何内部 MCP server 都自动鉴权</td></tr>
+          </tbody>
+        </table>
+        <h3>可伸缩：Streamable HTTP</h3>
+        <p>新增的 <strong>Streamable HTTP</strong> 让 MCP server "像普通 REST API 一样水平扩展"：</p>
+        <table>
+          <thead><tr><th>情形</th><th>行为</th></tr></thead>
+          <tbody>
+            <tr><td>简单 tool 调用</td><td>直接 return <code>application/json</code>，<strong>连接关闭</strong>，下一次请求另一个 Lambda 接</td></tr>
+            <tr><td>需要流式 / 后续推送（sampling、notification 等）</td><td>升级到 stream，server 可以在最终 return 之前来回发消息</td></tr>
+          </tbody>
+        </table>
+        <p><strong>结果：</strong>MCP server 可以放在 Lambda / Cloud Run / 任何 serverless 上，跟普通 API 一样部署。</p>
+      </div>
 
-<p><a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1450s">24:10</a> 起，David 列了协议侧 + 生态侧的下一波重点：</p>
-<div class="mermaid">flowchart TD
-    subgraph Spec[协议规范]
-        A[Async tasks<br/>支持几小时级长任务]
-        E[Elicitation<br/>server 向用户主动要输入]
-        R[官方 Registry<br/>统一发现/发布]
-        M[多模态<br/>结果流式、其他媒介]
-    end
-    subgraph Eco[生态]
-        Ruby[Ruby SDK<br/>Shopify 捐赠]
-        Go[Go SDK<br/>Google Go 团队官方实现]
-    end
-</div>
-<p><strong>图 7：MCP 下一步路线图</strong>——协议在补长任务、用户输入、registry、多模态；生态在补 Ruby / Go 官方 SDK。</p>
-<p>特别提一下 <strong>Elicitation</strong>：服务器能反过来<strong>问用户拿输入</strong>（<a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg&amp;t=1495s">24:55</a>）。例如"我需要你确认这个邮箱地址再继续"。这在做 MCP agent 时非常关键。</p>
-<hr />
-<h2 id="十二-一页速查">十二、一页速查</h2>
+      <div class="section">
+        <h2 class="section-title"><span class="num">十一</span>未来几个月路线图</h2>
+        <table>
+          <thead><tr><th>类别</th><th>功能</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="4">协议规范</td><td><strong>Async tasks</strong></td><td>支持几小时级长任务</td></tr>
+            <tr><td><strong>Elicitation</strong></td><td>server 向用户主动要输入</td></tr>
+            <tr><td><strong>官方 Registry</strong></td><td>统一发现/发布</td></tr>
+            <tr><td><strong>多模态</strong></td><td>结果流式、其他媒介</td></tr>
+            <tr><td rowspan="2">生态</td><td><strong>Ruby SDK</strong></td><td>Shopify 捐赠</td></tr>
+            <tr><td><strong>Go SDK</strong></td><td>Google Go 团队官方实现</td></tr>
+          </tbody>
+        </table>
+        <p>特别提一下 <strong>Elicitation</strong>：服务器能反过来<strong>问用户拿输入</strong>。例如"我需要你确认这个邮箱地址再继续"。这在做 MCP agent 时非常关键。</p>
+      </div>
 
-<table>
-<thead>
-<tr>
-<th>原语</th>
-<th>方向</th>
-<th>触发者</th>
-<th>何时考虑</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Prompts</td>
-<td>server → client</td>
-<td>用户</td>
-<td>想给 server 配一组"招牌玩法"或 slash 命令</td>
-</tr>
-<tr>
-<td>Resources</td>
-<td>server → client</td>
-<td>应用</td>
-<td>想让 client 用更高级的方式（RAG / 索引）消费数据</td>
-</tr>
-<tr>
-<td>Tools</td>
-<td>server → client</td>
-<td>模型</td>
-<td>经典动作调用</td>
-</tr>
-<tr>
-<td>Sampling</td>
-<td>client → server</td>
-<td>server 反向</td>
-<td>server 内部要用 LLM 但不该自己持模型/key</td>
-</tr>
-<tr>
-<td>Roots</td>
-<td>client → server</td>
-<td>server 反向</td>
-<td>server 需要知道 client 当前的 workspace 范围</td>
-</tr>
-</tbody>
-</table>
-<h3>一句话外带</h3>
-<blockquote>
-<p>大多数人把 MCP 当成"暴露工具的协议"，<strong>实际上 MCP 是一份关于"AI 应用 / 用户 / 模型三方协作"的完整协议</strong>——5 个原语恰好覆盖了 3 方所有方向的交互。要做出比工具调用更丰富的体验，<strong>先把 prompts / resources / sampling / roots 这四个被冷落的原语用起来</strong>。</p>
-</blockquote>
-<hr />
-<p><em>本文基于 YouTube 自动字幕 + 人工章节整理 + 中文重新组织。时间戳链接点击可跳回 YouTube 对应位置核对原话。</em></p>
+      <div class="section">
+        <h2 class="section-title"><span class="num">十二</span>一页速查</h2>
+        <table>
+          <thead><tr><th>原语</th><th>方向</th><th>触发者</th><th>何时考虑</th></tr></thead>
+          <tbody>
+            <tr><td>Prompts</td><td>server → client</td><td>用户</td><td>想给 server 配一组"招牌玩法"或 slash 命令</td></tr>
+            <tr><td>Resources</td><td>server → client</td><td>应用</td><td>想让 client 用更高级的方式（RAG / 索引）消费数据</td></tr>
+            <tr><td>Tools</td><td>server → client</td><td>模型</td><td>经典动作调用</td></tr>
+            <tr><td>Sampling</td><td>client → server</td><td>server 反向</td><td>server 内部要用 LLM 但不该自己持模型/key</td></tr>
+            <tr><td>Roots</td><td>client → server</td><td>server 反向</td><td>server 需要知道 client 当前的 workspace 范围</td></tr>
+          </tbody>
+        </table>
+        <blockquote>一句话外带：大多数人把 MCP 当成"暴露工具的协议"，<strong>实际上 MCP 是一份关于"AI 应用 / 用户 / 模型三方协作"的完整协议</strong>——5 个原语恰好覆盖了 3 方所有方向的交互。要做出比工具调用更丰富的体验，<strong>先把 prompts / resources / sampling / roots 这四个被冷落的原语用起来。</strong></blockquote>
+      </div>
+
+    </div>
   </main>
-</div>
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({ startOnLoad: true, theme: 'neutral', securityLevel: 'loose' });
-</script>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=HNzH5Us1Rvg" target="_blank">▶ 原视频</a>
+  </footer>
 </body>
 </html>
