@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ruflo: 60个并行Agent在43秒内完成多步推理任务</title>
+  <title>AI并行推理新SOTA：Ruflo 60 个并行 Agent</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -289,52 +289,51 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
       返回课程列表
     </a>
-    <h1 class="page-title">Ruflo: 60个并行Agent在43秒内完成多步推理任务</h1>
+    <h1 class="page-title">AI并行推理新SOTA：Ruflo 60 个并行 Agent</h1>
     <div class="page-meta">
-      <span class="meta-badge time">⏱ ~1 分钟</span>
+      <span class="meta-badge time">⏱ 43 秒</span>
       <span class="meta-badge source">📺 Ruflo</span>
+      <span class="meta-badge">⭐ 14k GitHub stars</span>
     </div>
   </header>
 
   <main style="position: relative; z-index: 1;">
     <div class="content-card">
       <div class="section">
-        <h2 class="section-title"><span class="num">一</span>概述</h2>
-        <p>Ruflo 展示了其多 Agent 系统的强大并行处理能力：在仅 43 秒内，通过 60 个并行工作的 AI Agent 完成了一个需要多步推理的复杂任务。</p>
-        <p>这个演示的核心亮点在于<strong>并行化</strong>——不是让单个 Agent 逐步处理，而是将任务分解，分配给多个 Agent 同时工作，显著缩短了完成任务所需的时间。</p>
+        <h2 class="section-title"><span class="num">一</span>43 秒讲清楚的卖点</h2>
+        <p>这段短视频把 Ruflo 的定位说得很直接：普通 Claude Code 一次跑一个 Agent，而 Ruflo 试图把同一类工作扩展成<strong>最多 60 个 AI Agent 并行执行</strong>，并且声称已经在 GitHub 上获得 14k stars。</p>
+        <p>它的核心不是展示一个复杂 UI，而是强调三个结果：更多 Agent 同时工作、共享一份记忆避免信息丢失、通过模型路由降低成本。</p>
       </div>
 
       <div class="section">
         <h2 class="section-title"><span class="num">二</span>并行 Agent 架构</h2>
-        <p>Ruflo 的多 Agent 系统采用了<strong>任务分解 + 并行执行</strong>的模式。当一个复杂请求进入系统时：</p>
+        <p>视频里的例子是把同一个目标拆给不同角色：一个 Agent 写代码，一个 Agent 跑测试，另一个 Agent 做安全审查。它们不是串行等待，而是在同一时间推进。</p>
         <ol>
-          <li><strong>任务分解器</strong>将请求拆分为多个可并行处理的子任务</li>
-          <li><strong>Agent 池</strong>中的 60 个 Agent 同时接收并处理各自负责的子任务</li>
-          <li><strong>结果汇总</strong>将所有 Agent 的输出整合为最终结果</li>
+          <li><strong>分工：</strong>把计划、编码、测试、安全复核拆成相对独立的任务。</li>
+          <li><strong>并行：</strong>最多让 60 个 Agent 同时运行，减少排队时间。</li>
+          <li><strong>共享记忆：</strong>多个 Agent 共享同一份上下文，避免各自为战后信息对不上。</li>
         </ol>
-        <p>这种架构的优势在于：</p>
-        <ul>
-          <li><strong>速度提升</strong>：多任务并行处理，时间复杂度从 O(n) 降低到接近 O(1)</li>
-          <li><strong>可扩展性</strong>：根据任务复杂度动态调整并行 Agent 数量</li>
-          <li><strong>容错性</strong>：单个 Agent 失败不影响整体任务完成</li>
-        </ul>
+        <p>这类架构适合天然可拆分的工程任务；如果任务本身强依赖前一步结果，并行 Agent 的收益会明显下降。</p>
       </div>
 
       <div class="section">
-        <h2 class="section-title"><span class="num">三</span>关键设计决策</h2>
-        <h3 style="color: var(--text-primary); font-size: 0.95rem; margin: 18px 0 10px;">3.1 何时使用并行 Agent？</h3>
-        <p>并行 Agent 架构最适合以下场景：</p>
-        <ul>
-          <li>任务可分解为多个相互独立的子任务</li>
-          <li>需要快速获取多来源的信息（如多网站搜索、多数据库查询）</li>
-          <li>复杂分析可并行处理不同维度</li>
-        </ul>
-        <h3 style="color: var(--text-primary); font-size: 0.95rem; margin: 18px 0 10px;">3.2 协调机制</h3>
-        <p>多个 Agent 同时工作时需要一个<strong>协调者（Orchestrator）</strong>来管理任务分配、结果汇总和冲突处理。Ruflo 的系统在这方面做了专门优化，确保 60 个 Agent 能够高效协作而不会产生资源竞争或结果冲突。</p>
+        <h2 class="section-title"><span class="num">三</span>成本策略：便宜模型先上，难题再用 Opus</h2>
+        <p>Ruflo 的另一个卖点是预算控制：简单任务会自动路由到免费或低价模型，只有真正困难的部分才调用 Claude Opus。视频给出的说法是可以节省约 75% 成本。</p>
+        <p>这个设计背后的判断是：不是每个子任务都需要最强模型。格式整理、简单检查、局部搜索可以交给便宜模型，架构判断、复杂推理和最终整合再交给更强模型。</p>
       </div>
 
       <div class="section">
-        <h2 class="section-title"><span class="num">四</span>术语解释</h2>
+        <h2 class="section-title"><span class="num">四</span>适合什么场景</h2>
+        <ul>
+          <li><strong>代码生成：</strong>同时做实现、测试、边界条件检查。</li>
+          <li><strong>代码审查：</strong>并行检查安全、性能、可维护性和测试缺口。</li>
+          <li><strong>研究任务：</strong>把不同资料源或不同假设分给多个 Agent 同时验证。</li>
+        </ul>
+        <blockquote>关键判断：并行不是为了堆数量，而是为了把可以同时推进的工作真正同时推进。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>术语解释</h2>
         <table>
           <thead>
             <tr><th>术语</th><th>解释</th></tr>
