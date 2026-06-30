@@ -1,210 +1,619 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agents Explained: How to Create and Use AI Agents in 2026 — AI Master</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #16161f;
-  --text-primary: #e2e8f0;
-  --accent: #63b3ed;
-  --accent-hover: #4299e1;
-  --card-bg: rgba(255,255,255,0.05);
-  --card-border: rgba(255,255,255,0.08);
-}
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: Inter, -apple-system, sans-serif;
-  line-height: 1.7;
-  margin: 0;
-  padding: 0;
-}
-button, .btn {
-  background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  font-family: inherit;
-  font-size: 1rem;
-}
-button:hover, .btn:hover {
-  background: var(--accent);
-  color: var(--bg-primary);
-}
-.hero {
-  background: var(--bg-secondary);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 2rem;
-  backdrop-filter: blur(12px);
-  margin-bottom: 2rem;
-}
-.content-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(12px);
-}
-h1, h2, h3 { color: var(--text-primary); }
-a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--accent-hover); }
-.chapter { color: var(--accent); }
-.embed-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin: 2rem 0; }
-.embed-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-.container { max-width: 960px; margin: 0 auto; padding: 2rem; }
-.tag { display: inline-block; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem; margin-right: 0.4rem; }
-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
-th, td { border: 1px solid var(--card-border); padding: 0.6rem 0.8rem; text-align: left; vertical-align: top; }
-th { background: var(--bg-secondary); color: var(--accent); font-weight: 600; }
-ul { padding-left: 1.2rem; }
-li { margin-bottom: 0.4rem; }
-.footer-line { width: 60px; height: 2px; background: var(--accent); border-radius: 2px; margin: 0.5rem 0 1rem; opacity: 0.8; }
-.meta-row { margin-top: 0.75rem; }
-h2 { margin-top: 0; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>别再把 AI Agent 当聊天机器人用：2026 实战入门指南 — AI Master</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --accent-amber: #f6ad55;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(99, 179, 237, 0.10), transparent 28%),
+        linear-gradient(135deg, #12121a 0%, var(--bg-primary) 52%, #101018 100%);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease; }
+    a:hover { color: var(--accent-hover); }
+
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    button:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .container {
+      width: min(980px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 36px 0 56px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.035);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+      border-color: rgba(99, 179, 237, 0.34);
+      background: rgba(99, 179, 237, 0.08);
+    }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 2px solid rgba(99, 179, 237, 0.45);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.15;
+      letter-spacing: 0;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+      margin-bottom: 20px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--card-border);
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.035);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .embed-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      margin: 0 0 2rem;
+      border: 1px solid var(--card-border);
+      background: #050507;
+    }
+
+    .embed-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .section { margin: 34px 0; }
+    .section:first-child { margin-top: 0; }
+    .section:last-child { margin-bottom: 0; }
+
+    h2 {
+      color: var(--text-primary);
+      font-size: 1.28rem;
+      line-height: 1.35;
+      margin: 0 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 .num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      color: var(--accent);
+      background: rgba(99, 179, 237, 0.10);
+      border: 1px solid rgba(99, 179, 237, 0.22);
+      padding: 2px 8px;
+      border-radius: 5px;
+      flex: 0 0 auto;
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1.02rem;
+      margin: 24px 0 10px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0 0 14px;
+    }
+
+    strong { color: var(--text-primary); font-weight: 700; }
+
+    ul, ol {
+      color: var(--text-secondary);
+      padding-left: 22px;
+      margin: 0 0 14px;
+    }
+
+    li { margin: 0 0 8px; }
+
+    .lead {
+      color: #cbd5e0;
+      font-size: 1.02rem;
+    }
+
+    .note {
+      border: 1px solid rgba(104, 211, 145, 0.22);
+      background: rgba(104, 211, 145, 0.06);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.08);
+      border-radius: 0 10px 10px 0;
+      color: #d6bcfa;
+      font-size: 0.96rem;
+    }
+
+    blockquote cite {
+      display: block;
+      color: var(--text-muted);
+      font-style: normal;
+      margin-top: 8px;
+      font-size: 0.84rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 24px;
+      font-size: 0.9rem;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    th, td {
+      border: 1px solid var(--card-border);
+      padding: 12px 13px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    th {
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.10);
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.025); }
+
+    code {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--accent);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+
+    .contract-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .mini-card {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 14px;
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 0;
+      margin: 0;
+    }
+
+    .time {
+      color: var(--accent-green);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
+    }
+
+    .related {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .related a {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 10px;
+      padding: 14px;
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .related a span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      font-weight: 500;
+      margin-top: 5px;
+    }
+
+    .related a:hover {
+      border-color: rgba(99, 179, 237, 0.36);
+      background: rgba(99, 179, 237, 0.08);
+    }
+
+    footer {
+      color: var(--text-muted);
+      text-align: center;
+      padding: 34px 0 0;
+      font-size: 0.84rem;
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(100% - 28px, 980px); padding-top: 24px; }
+      .hero, .content-card { padding: 1.15rem; }
+      .contract-grid, .related { grid-template-columns: 1fr; }
+      .timeline li { grid-template-columns: 60px 1fr; gap: 10px; }
+      table { display: block; overflow-x: auto; white-space: normal; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
+  <div class="container">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
 
-  <!-- 1. Hero header -->
-  <section class="hero">
-    <h1>AI Agents Explained: How to Create and Use AI Agents in 2026</h1>
-    <div class="meta-row">
-      <span class="tag">AI Master</span>
-      <span class="tag">24:28</span>
-      <span class="tag">88,975 views</span>
-      <span class="tag">Uploaded 2026-05-13</span>
+    <header class="hero">
+      <div class="eyebrow">AI Agent 入门课 · 2026 实战版</div>
+      <h1>别再把 AI Agent 当聊天机器人用</h1>
+      <p class="subtitle">AI Agents Explained: How to Create and Use AI Agents in 2026</p>
+      <p class="lead">这期视频的核心不是再解释一遍“AI 很强”，而是把一个更具体的问题摊开：你可能已经在为 Agent 级别的能力付费，却仍然用聊天机器人的方式使用它。页面下方把视频内容整理成中文文章，重点讲清楚 Chatbot 和 Agent 的差别、四类平台怎么选、Prompt Contracts 怎么写，以及为什么记忆文件会让 Agent 越用越像长期同事。</p>
+      <div class="meta-row">
+        <span class="tag">频道：AI Master</span>
+        <span class="tag">时长：24:28</span>
+        <span class="tag">播放：88,975 次</span>
+        <span class="tag">上传：2026-05-13</span>
+      </div>
+    </header>
+
+    <div class="embed-wrapper">
+      <iframe src="https://www.youtube.com/embed/4TvH-OZhwxI" title="AI Agents Explained: How to Create and Use AI Agents in 2026" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
-    <p>A hands-on 2026 guide that draws a hard line between <strong>chatbots</strong> and <strong>AI agents</strong> — "Same Claude, same 20 bucks a month. Two completely different tools." Most people pay for the agent and use it like a chatbot. The host walks through four real installations (Claude Code, OpenAI Codex, OpenClaw, Google Antigravity) and then drills the two habits that turn a paid subscription into actual leverage: <strong>Prompt Contracts</strong> and <strong>memory files</strong>.</p>
-    <p style="margin-bottom:0;"><a href="https://www.youtube.com/watch?v=4TvH-OZhwxI" target="_blank" rel="noopener">Watch on YouTube ↗</a></p>
-  </section>
 
-  <!-- 2. Video embed -->
-  <div class="embed-wrapper">
-    <iframe src="https://www.youtube.com/embed/4TvH-OZhwxI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <main class="content-card">
+      <section class="section">
+        <h2><span class="num">一</span>问题引入：AI 时代最贵的错误</h2>
+        <p>视频开头用了一个很直接的对比：同样是 Claude，同样每月二十美元左右的订阅，有人把它当作聊天窗口，有人却让它打开浏览器、读文件、批量改名、跑命令、整理表格，并在午饭前完成原本要花一周的琐碎工作。</p>
+        <p>这就是“AI 时代最贵的错误”：你买到的可能已经是第二种工具，却还在用第一种方式提问。聊天机器人可以告诉你“应该如何整理下载文件夹”，Agent 则可以真的进入文件夹，读取几十个 PDF、截图、收据和合同，按日期和供应商重命名，拆成分类目录，再输出一张税务季可用的费用表。</p>
+        <p>这不是提示词运气好，也不是模型突然变聪明。视频反复强调，Agent 能跑起来，是因为模型之外接上了工具、记忆、目标和循环。只要你仍然把请求写成“帮我想想”“给我一些建议”，它就会倾向于返回文字；当你把请求写成有终点、有边界、有交付格式的任务合同，它才更可能真正把事情做完。</p>
+        <blockquote>
+          A chatbot can tell you how to do this. An agent just does it.
+          <cite>视频开场对聊天机器人和 Agent 的核心区分</cite>
+        </blockquote>
+        <p>所以这期视频值得看的地方，不在于又列了几个热门工具，而在于它把“如何翻转开关”讲得很具体：先建立概念模型，再选平台，最后用 Prompt Contract 和 Memory File 把 Agent 从一次性问答变成可复用的工作系统。</p>
+      </section>
+
+      <section class="section">
+        <h2><span class="num">二</span>核心概念：Chatbot 和 Agent 到底差在哪里</h2>
+        <p>视频最重要的基础判断是：Chatbot 和 Agent 可以运行在完全相同的大模型上，脑子可能是同一个，差异在于脑子周围接了什么。一个世界级厨师坐在空房间里，没有炉子、没有食材、没有订单，他仍然懂烹饪，却做不出菜。Agent 的差异正是这些“周边设施”。</p>
+        <p>聊天机器人是“只有脑子”的形态。你输入一句话，它返回一句或一段答案，然后对话结束。它通常不能自己打开文件、运行命令、访问浏览器、改动项目，也不会天然记得你上周教过它的偏好。它很有用，但被框在聊天窗口里。</p>
+        <p>Agent 是同一个脑子外接四个关键组件：LLM、Tools、Memory、Goals。LLM 是推理引擎；Tools 是手，包括终端、浏览器、文件系统、API；Memory 是笔记本，让它每次开始前读到项目约定和历史教训；Goals 是目的地，不是模糊愿望，而是有完成定义的结果。</p>
+        <div class="note">
+          <p><strong>四个核心组件：</strong>LLM 负责判断，Tools 负责行动，Memory 负责延续上下文，Goals 负责定义完成标准。缺任何一个，系统都会退化：没有工具就只能建议，没有记忆就重复犯错，没有目标就容易跑偏。</p>
+        </div>
+        <h3>Observe-Think-Act 循环</h3>
+        <p>把四个组件串起来的是一个简单循环：Observe、Think、Act。Observe 是观察当前世界状态，例如文件是否存在、页面显示什么、上一条命令返回了什么；Think 是基于当前事实决定下一步，而不是死守五分钟前的假设；Act 是调用工具改变某些东西。然后它再次观察，直到结果满足目标。</p>
+        <p>这个循环解释了为什么 Agent 不应该只被当成“高级聊天框”。真正的 Agent 会在行动后检查结果，会因为命令失败而换路，会因为文件内容与预期不同而调整计划。你给它的不是“一个问题”，而是“一个可验证的任务”。</p>
+        <blockquote>
+          Observe, think, act, checking against the goal until done.
+          <cite>视频对 Agent 引擎的最短描述</cite>
+        </blockquote>
+      </section>
+
+      <section class="section">
+        <h2><span class="num">三</span>关键论点与实操：四个平台、两套习惯</h2>
+        <p>视频说市面上有很多 Agent 平台，但作者长期测试后把四个留在自己的工作流里：Claude Code、OpenAI Codex、OpenClaw、Google Antigravity。它们不是互相替代的同一种产品，而是各自擅长不同的工作形态。</p>
+
+        <h3>1. Claude Code：适合复杂编排和可解释推理</h3>
+        <p>Claude Code 被视频描述为 Anthropic 的官方 Agent，能在本机运行，适合 Mac、Windows 以及 Windows ARM 64。视频特别提醒：免费的 Claude.ai 不包含 Claude Code，需要付费 Anthropic 方案；同一订阅同时覆盖网页聊天和 Claude Code。</p>
+        <p>它的强项是可观察的推理过程。你能看到模型如何思考、如何调用工具、如何编辑文件，也可以在任务进行中排队追加消息或重新引导。视频还强调，Claude Code 不只是写代码工具。开头的下载文件夹整理、批量重命名、PDF 解析、截图抽取和视频处理任务，都属于它能处理的通用电脑工作。</p>
+        <p>适合把 Claude Code 当“思考伙伴”而不是“导弹”使用：复杂调试、跨文件重构、项目整理、长链路自动化、需要你中途检查和纠偏的任务，都更适合它。</p>
+
+        <h3>2. OpenAI Codex：适合工程仓库里的执行型修改</h3>
+        <p>视频把 Codex 放在第二个 Agent 平台讲，重点是 OpenAI 在编码工作流上的能力。对于开发者来说，Codex 的价值不是“会回答代码问题”，而是能在仓库里读上下文、改文件、运行测试、根据失败结果继续修补。</p>
+        <p>如果你的任务是补测试、改接口、写页面、重构某个模块、准备 pull request，那么 Codex 这类代码型 Agent 更接近“能直接落地的工程协作者”。它需要清晰的文件边界、测试命令和完成标准；你越把它当成仓库里的执行者，而不是百科问答，它的价值越明显。</p>
+
+        <h3>3. OpenClaw：适合跨应用的个人生产力自动化</h3>
+        <p>OpenClaw 在视频里更偏向应用层 Agent：网页仪表盘、聊天界面、市场集成，以及和 Telegram Bot 组合使用。它适合把 Notion、Google Docs、演示文稿、任务管理和消息通知串起来，让 Agent 在多个日常工具之间搬运信息、总结内容、分发任务。</p>
+        <p>这类平台的关键不在代码能力，而在连接能力。你要自动整理信息流、把想法变成看板、把文档摘要推到消息软件，OpenClaw 这类产品会比纯代码 Agent 更贴近日常工作。</p>
+
+        <h3>4. Google Antigravity：适合 Google 生态和长上下文工作</h3>
+        <p>视频把 Google Antigravity 作为 Google/Gemini 阵营的 Agent 形态介绍。它的优势通常来自 Google Workspace、Gemini 长上下文以及与 Docs、Sheets、Gmail、Drive 等资料源的结合。</p>
+        <p>如果你的工作主要沉淀在 Google 文档、表格、邮件和云盘里，Antigravity 代表的是另一种入口：不是先进入代码仓库，而是先进入工作资料库。它更适合跨文档归纳、表格整理、邮件上下文分析和基于 Workspace 的任务推进。</p>
+
+        <h3>Prompt Contracts：从描述愿望到签任务合同</h3>
+        <p>视频后半段最实用的部分是 Prompt Contract。作者认为，修复 Agent 跑偏的答案不是“写更长的提示词”，而是写更结构化的提示词。一个真实的 Agent 请求应该包含四段：Goal、Constraints、Format、Failure。</p>
+        <div class="contract-grid">
+          <div class="mini-card">
+            <h3>Goal</h3>
+            <p>写结果，不写动作。不是“做一个落地页”，而是“做一个单页产品发布站，首屏推动用户留下邮箱，并可在本地预览”。</p>
+          </div>
+          <div class="mini-card">
+            <h3>Constraints</h3>
+            <p>写护栏。不能装依赖、不能碰某个目录、不能部署、不能用外部 CDN、不能复制竞品文案，都应提前说明。</p>
+          </div>
+          <div class="mini-card">
+            <h3>Format</h3>
+            <p>写交付物形状。单个 <code>index.html</code>、一个目录、JSON schema、Markdown 报告、补丁 diff，都要在开始前定清楚。</p>
+          </div>
+          <div class="mini-card">
+            <h3>Failure</h3>
+            <p>写卡住时怎么办。缺关键信息就停下来问；工具连续失败两次就报告尝试过程；允许猜测时也要标注假设。</p>
+          </div>
+        </div>
+        <p>这四段之所以有效，是因为它们分别解决了 Agent 执行中的四类不确定性：不知道完成标准、不知道边界、不知道交付格式、不知道失败策略。没有这些信息时，Agent 会自己发明答案，而且这个发明过程会消耗真实 token 和真实时间。</p>
+
+        <h3>Memory 文件：让 Agent 不要每次重新入职</h3>
+        <p>视频最后一段讲 Memory。每个严肃平台都有类似能力，只是文件名不同：Claude Code 读 <code>CLAUDE.md</code>，OpenClaw 可以读 <code>AGENTS.md</code> 一类项目规则，Antigravity 也有自己的记忆约定。共同点是：项目根目录里放一个纯文本规则文件，Agent 每次开工前都会读。</p>
+        <p>作者给了一个很具体的例子：他做 B2B 客户仪表盘时，Agent 每次都往面向客户的文案里塞表情符号。手工删一次，下次又回来。后来他让 Agent 在项目根目录创建 <code>CLAUDE.md</code>，写入“除非明确要求，不要在客户可见文案里使用表情符号；这是 B2B 产品”。这个问题之后就消失了。</p>
+        <p>更高级的技巧是让记忆文件自我更新：每次任务结束前，如果用户纠正了你，或者你因为错误假设踩坑，就把新的规则追加到文件底部的 learned rules 区域。这样第一轮只有一条规则，第五轮可能有二十条，第二十轮时 Agent 已经积累了足够多的项目偏好，不会反复犯同一种错。</p>
+      </section>
+
+      <section class="section">
+        <h2><span class="num">四</span>对比表格与决策矩阵</h2>
+        <p>下面两张表把视频里的平台选择和提示词写法整理成可直接使用的决策矩阵。第一张回答“我该打开哪个平台”，第二张回答“我该怎样给 Agent 下任务”。</p>
+        <table>
+          <thead>
+            <tr>
+              <th>平台</th>
+              <th>最适合的任务</th>
+              <th>主要优点</th>
+              <th>风险或注意点</th>
+              <th>决策建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Claude Code</strong></td>
+              <td>复杂项目整理、代码重构、文件批处理、需要中途观察推理的多步骤任务。</td>
+              <td>推理过程可见，工具调用清楚，适合边做边纠偏，也能处理非代码的本机工作。</td>
+              <td>需要付费计划；如果授权过宽，要明确目录、命令和部署边界。</td>
+              <td>当你想要“思考伙伴”而不是一次性自动执行器时优先选它。</td>
+            </tr>
+            <tr>
+              <td><strong>OpenAI Codex</strong></td>
+              <td>仓库内改代码、补测试、修 bug、根据失败测试继续迭代。</td>
+              <td>贴近工程工作流，适合读上下文、产出补丁、运行验证命令。</td>
+              <td>需要把文件范围、测试命令和完成定义写清楚，否则容易扩大修改面。</td>
+              <td>当任务的交付物是代码 diff 或可验证工程改动时优先选它。</td>
+            </tr>
+            <tr>
+              <td><strong>OpenClaw</strong></td>
+              <td>Notion、Google Docs、任务软件、Telegram 等跨应用自动化。</td>
+              <td>连接日常工具强，适合总结、分发、整理和多任务并行。</td>
+              <td>集成越多，权限边界越要清楚；自动发消息或改文档前要设置确认步骤。</td>
+              <td>当工作主要发生在应用和信息流之间，而不是代码仓库里时使用。</td>
+            </tr>
+            <tr>
+              <td><strong>Google Antigravity</strong></td>
+              <td>Google Workspace 资料整理、长上下文文档分析、邮件和表格工作流。</td>
+              <td>贴合 Google 生态，适合从 Drive、Docs、Sheets、Gmail 中读取上下文。</td>
+              <td>要确认企业权限、数据范围和外部分享策略，避免误处理敏感资料。</td>
+              <td>当你的核心上下文已经在 Google 生态里时优先考虑。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>写法</th>
+              <th>典型内容</th>
+              <th>Agent 会如何理解</th>
+              <th>常见结果</th>
+              <th>改进建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Description</strong><br>描述式提示</td>
+              <td>“帮我做一个产品落地页”“整理一下这个文件夹”“写一个自动化脚本”。</td>
+              <td>只有方向，没有终点、护栏、输出形状和失败策略。</td>
+              <td>可能输出一堆建议，也可能做了但格式不对，还可能顺手改了不该改的地方。</td>
+              <td>把愿望改写成 Goal，补上禁止事项、交付格式和卡住时动作。</td>
+            </tr>
+            <tr>
+              <td><strong>Prompt Contract</strong><br>合同式提示</td>
+              <td>Goal、Constraints、Format、Failure 四段，每段都写具体。</td>
+              <td>知道“完成是什么”“哪些不能做”“交付物长什么样”“不确定时怎么处理”。</td>
+              <td>更容易真正执行到完成，也更容易验证结果是否满足要求。</td>
+              <td>把成功经验写进记忆文件，把踩坑经验变成下一次的 Constraints。</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2><span class="num">五</span>引用块：视频里的关键金句</h2>
+        <p>这些句子可以当成使用 Agent 的操作原则。英文保留原意，中文解释放在后面，方便复盘时直接引用。</p>
+        <blockquote>
+          Most people are paying for the second one and using it like the first.
+          <cite>多数人付的是 Agent 的钱，却按聊天机器人的方式使用。</cite>
+        </blockquote>
+        <blockquote>
+          The fix isn't a longer prompt, it's a structured one.
+          <cite>Agent 跑偏时，优先修结构，而不是把提示词越写越长。</cite>
+        </blockquote>
+        <blockquote>
+          Goal, constraints, format, failure. Memorize those four words.
+          <cite>每个严肃 Agent 任务都应该回答这四件事。</cite>
+        </blockquote>
+        <blockquote>
+          Description versus contract, that's the whole shift.
+          <cite>从“描述需求”转向“签订任务合同”，是使用方式的根本变化。</cite>
+        </blockquote>
+        <blockquote>
+          The agent isn't broken. You just never told it to remember.
+          <cite>很多重复错误不是模型坏了，而是你没有把规则写进记忆。</cite>
+        </blockquote>
+        <blockquote>
+          Stop reading about AI agents. Start running them.
+          <cite>最终行动建议：选一个真实任务，从今晚开始跑完整链路。</cite>
+        </blockquote>
+      </section>
+
+      <section class="section">
+        <h2><span class="num">六</span>时间戳目录</h2>
+        <p>下面按视频节奏整理成八个章节。即使不重新看完整视频，也可以用这个目录定位到对应概念。</p>
+        <ul class="timeline">
+          <li><span class="time">0:00</span><span><strong>最贵的 AI 使用错误。</strong> 同一订阅、同一模型，聊天机器人和 Agent 的产出差距可以是“告诉你怎么做”和“直接替你做完”。</span></li>
+          <li><span class="time">1:21</span><span><strong>AI Agent 的基础结构。</strong> 解释 Chatbot 和 Agent 的本质差异，提出 LLM、Tools、Memory、Goals 与 Observe-Think-Act 循环。</span></li>
+          <li><span class="time">3:30</span><span><strong>Claude Code 安装和第一次运行。</strong> 讲付费计划、桌面端下载、选择文件夹、输入自然语言任务和观察工具调用。</span></li>
+          <li><span class="time">6:45</span><span><strong>OpenAI Codex 的位置。</strong> 面向代码仓库的 Agent 工作流，重点在读上下文、改文件、跑验证和继续迭代。</span></li>
+          <li><span class="time">9:07</span><span><strong>OpenClaw 的应用自动化。</strong> 通过网页界面、集成市场和 Telegram Bot，把 Agent 接到日常工具和信息流里。</span></li>
+          <li><span class="time">12:25</span><span><strong>Google Antigravity。</strong> 介绍 Google 阵营的 Agent 入口，适合 Workspace、长上下文资料和文档/表格/邮件工作。</span></li>
+          <li><span class="time">16:44</span><span><strong>Prompt Contracts。</strong> 用 Goal、Constraints、Format、Failure 四段把模糊提示改成可执行任务合同。</span></li>
+          <li><span class="time">21:53</span><span><strong>Memory 文件。</strong> 解释 <code>CLAUDE.md</code>、<code>AGENTS.md</code> 等项目记忆如何让 Agent 不再反复犯同样错误。</span></li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2><span class="num">七</span>相关推荐</h2>
+        <p>如果你想继续看 Agent 设计、上下文管理和课程列表，可以从下面两个入口继续阅读。</p>
+        <div class="related">
+          <a href="index.html">返回课程列表<span>浏览全部 YouTube Course 页面</span></a>
+          <a href="mWvtOHlZM-I.html">工具、技能还是子智能体？<span>参考文章式结构的 Agent 架构拆解课</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      根据视频字幕整理为中文课程页 · 原视频：AI Agents Explained: How to Create and Use AI Agents in 2026
+    </footer>
   </div>
-
-  <!-- 3. Key takeaways -->
-  <section class="content-card">
-    <h2>Key Takeaways</h2>
-    <ul>
-      <li><strong>Stop paying for an agent and using it like a chatbot.</strong> The opening hook — same model, same subscription, completely different outcomes depending on how you prompt it.</li>
-      <li><strong>An AI agent isn't magic — it's a model + tools + a loop.</strong> You give it a goal, it picks the tool, runs it, reads the result, and iterates until done.</li>
-      <li><strong>Four platforms actually install and run in 2026:</strong> Claude Code, OpenAI Codex, OpenClaw, Google Antigravity — pick by use case, not by hype.</li>
-      <li><strong>Prompt Contracts &gt; Prompt Descriptions.</strong> Structure every request into Goal, Inputs, Output format, and Constraints before you hit enter.</li>
-      <li><strong>Memory files make agents permanent teammates.</strong> CLAUDE.md, AGENTS.md, OpenClaw's equivalent — teach once, the platform remembers forever.</li>
-      <li><strong>Close the loop by running it end-to-end.</strong> "Stop reading about AI agents. Start running them."</li>
-    </ul>
-  </section>
-
-  <!-- 4. Chapter timeline -->
-  <section class="content-card">
-    <h2>Chapter Timeline</h2>
-    <ul>
-      <li><span class="chapter">0:00</span> — The most expensive AI mistake right now</li>
-      <li><span class="chapter">1:21</span> — What an AI agent actually is</li>
-      <li><span class="chapter">3:30</span> — Claude Code — install &amp; first run</li>
-      <li><span class="chapter">6:45</span> — OpenAI Codex — install &amp; first run</li>
-      <li><span class="chapter">9:07</span> — OpenClaw — install &amp; first run</li>
-      <li><span class="chapter">12:25</span> — Google Antigravity — install &amp; first run</li>
-      <li><span class="chapter">16:44</span> — Prompt Contracts: the 4-section structure</li>
-      <li><span class="chapter">21:53</span> — Memory files: teach once, never repeat</li>
-    </ul>
-  </section>
-
-  <!-- 5. The two career-changing techniques -->
-  <section class="content-card">
-    <h2>The Two Career-Changing Techniques</h2>
-
-    <h3>1. Prompt Contracts (4-Section Structure)</h3>
-    <p>The single biggest upgrade you can make to your prompts. Stop describing what you want — <em>contract</em> it. Before you press enter, force yourself to write four blocks:</p>
-    <ul>
-      <li><strong>Goal</strong> — one sentence. What "done" looks like, in plain language.</li>
-      <li><strong>Inputs</strong> — exactly what data, files, or context the agent gets to work with.</li>
-      <li><strong>Output format</strong> — the shape of the deliverable (JSON schema, Markdown table, commit diff, slide outline). If you don't say it, you get prose.</li>
-      <li><strong>Constraints</strong> — what's off-limits: libraries, file paths, tone, length, languages, timeouts.</li>
-    </ul>
-    <p>This is what stops the "agent did something dumb" loop. You aren't blaming the model — the model was doing exactly what a vague prompt allowed. <em>"Description vs contract — that's the whole shift."</em></p>
-
-    <h3>2. Memory Files (CLAUDE.md / AGENTS.md)</h3>
-    <p>Every serious agent platform ships a project-root memory file. The naming differs — <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> in many ecosystems, OpenClaw's own equivalent — but the idea is identical: a plain Markdown file the agent reads at the start of every session.</p>
-    <ul>
-      <li>Tell it once who you are, what the project is, what tools it may use, what it must never do.</li>
-      <li>Stop re-explaining yourself in every chat. The agent inherits the context automatically.</li>
-      <li>Treat it like onboarding a new hire — the README you'd want them to read on day one.</li>
-    </ul>
-    <p><em>"Every serious platform has the same feature with different file names."</em></p>
-  </section>
-
-  <!-- 6. Platform comparison -->
-  <section class="content-card">
-    <h2>Platform Comparison</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Platform</th>
-          <th>Strengths</th>
-          <th>Best Use Case</th>
-          <th>Install Friction</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Claude Code</strong></td>
-          <td>Interpretable step-by-step reasoning; you can literally watch the model think; designed for chaining multiple agents together.</td>
-          <td>"Thinking partner" work — architecture decisions, debug sessions, multi-step refactors where you want to see the reasoning trail.</td>
-          <td>Low. Single CLI install, sign in with your existing subscription, run from any repo root.</td>
-        </tr>
-        <tr>
-          <td><strong>OpenAI Codex</strong></td>
-          <td>Tuned for coding workflows; tight editor integration; strong on code-aware diffs and patch-style edits.</td>
-          <td>Day-to-day software-engineering tasks in a repo — file edits, test generation, pull-request prep.</td>
-          <td>Low. Editor extension or CLI; signs in with the same OpenAI account as ChatGPT.</td>
-        </tr>
-        <tr>
-          <td><strong>OpenClaw</strong></td>
-          <td>Clean web dashboard + chat UI; first-class marketplace integrations (Apple Notes, Notion, Things 3, PowerPoint, Google Docs); pairs with a Telegram bot by pasting a bot token.</td>
-          <td>Productivity automation across the apps you already use — summarize unread email, build a Kanban, fan out 10 tasks at once, send to Telegram.</td>
-          <td>Low–medium. Web signup is instant; Telegram bot setup is ~5–10 minutes (paste token, pick webhook). Marketplace integrations are one-click after auth.</td>
-        </tr>
-        <tr>
-          <td><strong>Google Antigravity</strong> <em>(Gemini-based)</em></td>
-          <td>Google's take on the agent space; tight fit with Google Workspace data and Gemini's long context window.</td>
-          <td>Workflows anchored in Docs, Sheets, Gmail, Drive; tasks that benefit from a very large context window over your own files.</td>
-          <td>Low. Google-account sign-in; available wherever Workspace credentials are accepted.</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- 7. Related videos -->
-  <section class="content-card">
-    <h2>Related Videos in This Course</h2>
-    <ul>
-      <li><a href="EAeUiipzCTE.html">Microsoft Agent Framework 入门教程</a></li>
-      <li><a href="LNkAW4SSgdY.html">2026 AI Agents 完整指南</a></li>
-      <li><a href="QJG2nA2_Xko.html">AI并行推理新SOTA：Ruflo 60 个并行 Agent</a></li>
-      <li><a href="3Y8aq_ofEVs.html">机器人的终局 — NVIDIA Jim Fan</a></li>
-    </ul>
-  </section>
-
-  <!-- 8. Footer -->
-  <footer style="margin-top:2rem; padding-top:1rem;">
-    <div class="footer-line"></div>
-    <p style="color:var(--text-primary); opacity:0.75; font-size:0.9rem;">Generated for the YouTube Course collection</p>
-  </footer>
-
-</div>
 </body>
 </html>
