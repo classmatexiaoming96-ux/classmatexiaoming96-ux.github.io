@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 智能体的五个复杂度层级——从单次 LLM 调用到自治 Agent — Dave Ebbelaar (DataLumina)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-frame {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-bottom: 32px;
+      background: #000;
+    }
+    .video-frame iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .content-card:hover::before { opacity: 1; }
+
+    .section { margin: 36px 0; }
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+
+    h2 { font-size: 1.3rem; font-weight: 700; color: var(--text-primary); margin: 32px 0 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border-color); }
+    h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 24px 0 12px; }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+
+    table { border-collapse: collapse; width: 100%; margin: 18px 0; font-size: 0.875rem; }
+    th, td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; vertical-align: top; line-height: 1.55; }
+    th { background: rgba(255, 255, 255, 0.03); font-weight: 600; color: var(--text-primary); }
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+
+    code { background: rgba(255, 255, 255, 0.06); padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; color: var(--accent-cyan); }
+    pre { background: rgba(255, 255, 255, 0.04); padding: 14px 16px; border-radius: 8px; overflow-x: auto; font-size: 0.875rem; border: 1px solid var(--border-color); margin: 18px 0; }
+    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
+
+    .toc { background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px 24px; margin: 24px 0; }
+    .toc h3 { margin-top: 0; color: var(--accent-cyan); font-size: 0.95rem; }
+    .toc ol { margin-bottom: 0; }
+    .toc li { line-height: 1.55; }
+    .toc time { color: var(--accent-purple); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; margin-right: 8px; }
+
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
+    .related-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; transition: all 0.2s ease; text-decoration: none; display: block; }
+    .related-card:hover { border-color: var(--border-hover); background: rgba(99,179,237,0.05); transform: translateY(-2px); }
+    .related-card .rc-title { color: var(--text-primary); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+    .related-card .rc-meta { color: var(--text-muted); font-size: 0.75rem; }
+
+    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
+    footer { text-align: center; padding: 40px 0 50px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color); margin-top: 20px; }
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">AI 智能体的五个复杂度层级——从单次 LLM 调用到自治 Agent</h1>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ ~23 分钟</span>
+      <span class="meta-badge source">📺 Dave Ebbelaar</span>
+      <span class="meta-badge">🤖 DataLumina</span>
+      <span class="meta-badge">👁 1.3 万播放</span>
+    </div>
+  </header>
+
+  <main style="position: relative; z-index: 1;">
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/BaXTos7B1vY" title="5 Levels of AI Agents - From Simple LLM Calls to Multi-Agent Systems" allowfullscreen loading="lazy"></iframe>
+    </div>
+
+    <div class="content-card">
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>问题：复杂度不是越高越好</h2>
+        <p>当一个产品经理跑来跟你说"我们要做个 AI Agent"——先停一下。Dave Ebbelaar 在这条视频里把这件事拆得很透：<strong>市面上叫"AI Agent"的东西，复杂度可以从 1 到 5 跨越四个数量级，而 80% 的项目其实只需要 Level 1 或 Level 2。</strong></p>
+        <p>Dave 是 DataLumina 的 AI 工程师、AI 方向双学位（学士+硕士），长期给客户做生产级 AI 系统。这次他不是讲理论框架，而是把自己在客户项目里<strong>真正用得上</strong>的五个层级摊开来讲，每层都配代码和真实案例。</p>
+        <p>这个视频解决的核心问题只有一个：<strong>当你坐在白板前要做一个 AI 功能时，怎么判断自己到底需要哪一层？</strong></p>
+        <blockquote>把任何想用 AI 自动化的流程都先拎出来问一句：能不能用一个简单的 LLM 调用解决？能不能用一个 workflow（DAG）解决？只有在简单方案撑不住的时候，才升级到 agent。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>核心概念：什么是"五个层级"</h2>
+        <p>Dave 把所有叫"AI Agent"的东西按<strong>自治程度和编排复杂度</strong>分成五层。越往上越强大，但同时越难调试、越难维护、越难控制成本。</p>
+        <ul>
+          <li><strong>Level 1：基础 LLM 调用（augmented LLM）</strong>——一次 API call + 结构化输出。最简单，几乎所有项目都从这里起步。</li>
+          <li><strong>Level 2：Workflow / DAG（提示链与路由）</strong>——多个 LLM 节点按有向无环图编排，前面分类，后面分流。是过去两年 Dave 一直在"布道"的方案。</li>
+          <li><strong>Level 3：工具调用 Agent（tool calling）</strong>——LLM 可以在循环中自主决定调用哪些工具。灵活，但有不可预测性。</li>
+          <li><strong>Level 4：多智能体系统（multi-agent / sub-agent）</strong>——多个 Claude/GPT 互相协作、互相调用。能力上限最高，但复杂度爆炸。</li>
+          <li><strong>Level 5：自治 Agent / 智能体 OS（agentic coding harness）</strong>——能读、写、跑 bash、上网、长时间自主运行（Claude Code、OpenClaw 这种）。</li>
+        </ul>
+        <blockquote>五层之间不是替代关系，而是<strong>组合关系</strong>——一个 Level 5 的系统里其实同时跑着 Level 1 到 Level 4 的子模块。理解这一点是判断"什么时候用哪一层"的前提。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>五层逐一拆解</h2>
+
+        <h3>Level 1：Augmented LLM——一切的地基</h3>
+        <p>一次结构化输出 API 调用，配上 prompt 工程，<strong>就足够解决 30%–40% 的实际业务问题</strong>。比如把用户反馈分类、生成产品描述、把工单摘要成 50 字。</p>
+        <p>关键不是"用 LLM"，而是<strong>用结构化输出</strong>——给模型一个 JSON schema，让它必须按你定义的字段输出。这是把 LLM 从"聊天机器人"变成"系统组件"的第一步。</p>
+
+        <h3>Level 2：Workflow / DAG——两年主推的生产范式</h3>
+        <p>这一层 Dave 强调得最多。<strong>过去两年他给客户做的所有生产系统，主干都是一个 DAG（directed acyclic graph，有向无环图）。</strong></p>
+        <p>工作方式：</p>
+        <ol>
+          <li>先用一个分类节点判断"进来的请求属于哪一类"（账单问题 / 技术问题 / 投诉 / 其他）；</li>
+          <li>每个分类走自己的子流程；</li>
+          <li>每个子流程里再串若干 LLM 节点 + 工具调用节点 + 数据处理节点。</li>
+        </ol>
+        <p>关键观察：<strong>DAG 让你的系统是"可解释的"——任何一个输出都能追溯到具体的执行路径</strong>。这在生产环境是不可妥协的，因为出了错你必须能 debug 出到底是哪一步出问题。</p>
+        <blockquote>我布道了两年的事：先把任何你能想清楚的流程做成 DAG，只有当 DAG 真的表达不出来时再上 agent。这是给客户做生产系统最稳的路径。</blockquote>
+
+        <h3>Level 3：工具调用 Agent——把判断权交给 LLM</h3>
+        <p>当你的流程里有一步<strong>根本无法在写代码时决定怎么做</strong>，就升级到 Level 3。比如"用户问了一个问题，模型自己判断要不要去查内部知识库、要不要去搜网络、要不要发邮件"。</p>
+        <p>Level 3 的本质是：把"控制流"从开发者手里交到模型手里。模型在一个 while 循环里反复判断、调用工具、读结果、决定下一步。</p>
+        <p>Dave 提到他们最近在 Level 2 系统的"边缘节点"（edge nodes）上引入 Level 3——也就是说，<strong>不是把整个系统换成 agent，而是在 DAG 的某个分支上 agent 化。</strong> 这是一种更保守也更可控的做法。</p>
+
+        <h3>Level 4：多智能体协作</h3>
+        <p>Level 4 是"多个 agent 互相调用"。这层在生产环境里<strong>非常稀少</strong>——因为一旦你有两个 agent 互相协作，调试和 eval 复杂度会指数级上升。</p>
+        <p>Dave 给的两个合理用例：</p>
+        <ul>
+          <li><strong>并行性：</strong>把大任务拆给多个 agent 同时跑（比如多源 deep research、多代码库并行探索）；</li>
+          <li><strong>隔离上下文：</strong>需要一份"干净的"上下文来做事，不希望被主对话污染（比如代码生成后单独拉一个 agent 做 code review）。</li>
+        </ul>
+        <p>除此之外，<strong>大多数声称"需要多 agent"的场景，其实一个主 agent + DAG 就够</strong>。多 agent 应该是最后才考虑的事。</p>
+
+        <h3>Level 5：自治 Agent / Coding Harness</h3>
+        <p>Level 5 是当下最热的方向——Claude Code、Cursor Agent、OpenClaw 这类"coding agent"。它们能：</p>
+        <ul>
+          <li>跑任意 bash 命令；</li>
+          <li>读写本地文件；</li>
+          <li>执行 Python / Node 脚本；</li>
+          <li>上网搜索；</li>
+          <li>连续运行几十分钟甚至几小时。</li>
+        </ul>
+        <p>Dave 用 Anthropic 自家的 <strong>Claude Agent SDK</strong> 演示了 Level 5 的能力。<code>pip install claude-agent-sdk</code> 就能拿到和 Claude Code 一样的内核能力，然后嵌到自己的应用里。</p>
+        <blockquote>Level 5 非常强大，但也非常<strong>experimental</strong>——它能改你的文件系统、能执行任意代码、能联网。让这种能力在生产里裸跑，需要非常成熟的安全沙箱和可观测性。目前最适合的形态还是本地 CLI 工具，而不是面向终端用户的产品。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>五层对比表与决策矩阵</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <th>层级</th>
+              <th>名称</th>
+              <th>核心特征</th>
+              <th>自治程度</th>
+              <th>可解释性</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Level 1</strong></td>
+              <td>Augmented LLM</td>
+              <td>单次 API call + 结构化输出</td>
+              <td>无（纯函数）</td>
+              <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td><strong>Level 2</strong></td>
+              <td>Workflow / DAG</td>
+              <td>多节点编排、有向无环图</td>
+              <td>低（控制流确定）</td>
+              <td>⭐⭐⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td><strong>Level 3</strong></td>
+              <td>Tool Calling Agent</td>
+              <td>LLM 在循环中自主选工具</td>
+              <td>中（部分）</td>
+              <td>⭐⭐⭐</td>
+            </tr>
+            <tr>
+              <td><strong>Level 4</strong></td>
+              <td>Multi-Agent</td>
+              <td>多 agent 互相调用</td>
+              <td>高</td>
+              <td>⭐⭐</td>
+            </tr>
+            <tr>
+              <td><strong>Level 5</strong></td>
+              <td>Autonomous / Coding Harness</td>
+              <td>跑 bash / 写文件 / 联网 / 长时间运行</td>
+              <td>极高</td>
+              <td>⭐</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>决策矩阵：什么时候用哪一层？</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>业务场景</th>
+              <th>推荐层级</th>
+              <th>理由</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>工单分类、内容摘要、文档改写</td>
+              <td><strong>Level 1</strong></td>
+              <td>单次调用足够，强上 agent 反而引入不确定性</td>
+            </tr>
+            <tr>
+              <td>客服工单处理（分类→查知识库→草拟回复→人工审核）</td>
+              <td><strong>Level 2</strong> 为主，关键分支引入 <strong>Level 3</strong></td>
+              <td>主干确定，少数步骤需要 LLM 自主判断</td>
+            </tr>
+            <tr>
+              <td>数据分析助手（用户问"上周销量最好的 SKU 是什么"）</td>
+              <td><strong>Level 3</strong></td>
+              <td>查询路径无法预判，必须 LLM 决定查什么</td>
+            </tr>
+            <tr>
+              <td>多源调研（同时查 5 个数据源做综合报告）</td>
+              <td><strong>Level 4</strong>（多 sub-agent 并行）</td>
+              <td>主 agent 串行太慢，并行子 agent 提速</td>
+            </tr>
+            <tr>
+              <td>开发任务自动化（写代码、跑测试、提 PR）</td>
+              <td><strong>Level 5</strong></td>
+              <td>需要完整 shell + 文件系统 + 长时间运行</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>生产经验：Dave 给客户的"反常识"建议</h2>
+        <p>视频后半段 Dave 分享了几个<strong>反直觉</strong>的生产经验——和当下"agent 万岁"的舆论明显不同：</p>
+
+        <h3>1. 永远从 Level 1 开始</h3>
+        <p>不要"先做个 agent，以后再优化"——一开始就上 Level 3+，<strong>debug 成本会让你后悔</strong>。Dave 说他们最近客户项目里 90% 都是 Level 1 + Level 2。</p>
+
+        <h3>2. Level 2 是生产主力，Level 3 是补丁</h3>
+        <p>主干永远用 DAG，<strong>只在某些边角节点上插入 agent</strong>。这样主干是确定的、可解释的，agent 失败不会拖垮整条流程。</p>
+
+        <h3>3. Level 4 多 agent 慎用</h3>
+        <p>除非真的需要<strong>并行性</strong>或<strong>上下文隔离</strong>，否则不要上多 agent。理由是 debug 难度和 eval 难度都会爆炸式增长。</p>
+
+        <h3>4. Level 5 目前是工具，不是产品</h3>
+        <p>Claude Code / OpenClaw 这类工具非常强，但目前最适合的形态还是<strong>开发者自己用的 CLI 工具</strong>，而不是直接打包成面向终端用户的产品。把它嵌到面向用户的产品里需要：</p>
+        <ul>
+          <li>严格的沙箱（不允许它乱删文件）；</li>
+          <li>完整的 audit log（每一步操作可回放）；</li>
+          <li>成本控制（长时间运行可能烧掉几百美元 token）。</li>
+        </ul>
+
+        <h3>5. "复杂度溢出"是真实风险</h3>
+        <p>Dave 反复警告一个他自己踩过的坑：项目一开始 Level 1 就够用，随着业务方需求增加，你开始加 edge case、加分支、加工具——半年后你打开系统图，发现已经是一个<strong>DAG 怪物</strong>：</p>
+        <blockquote>从一个小而美的图开始，不断往里加东西，最后你会得到一个有 20 倍到 30 倍节点数的 Frankenstein（科学怪人）式 DAG——能跑，但没人敢动。</blockquote>
+        <p>他的解法是：<strong>每加一个节点前先问一句"能不能用 Level 1 解决？"</strong>。如果可以，就别加。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>关键引用</h2>
+        <blockquote>当业务方跑来说"我们想要个 AI Agent"——先按住他们，问一句："你的流程能用 Level 1 描述吗？能用 Level 2 描述吗？" 如果可以，agent 不是答案。</blockquote>
+        <blockquote>我布道 Level 2 两年了。每次看到新客户想"搞个 agent"，我第一件事都是拉他们回到 DAG。DAG 是你最好的朋友——确定、可解释、能 debug。</blockquote>
+        <blockquote>Level 5 工具（Claude Code 之类）非常强大，但你要清醒：它能改你文件系统、能跑任意 bash、能联网。让这种东西在生产里裸跑，需要非常成熟的安全设计。</blockquote>
+        <blockquote>最近的趋势是：<strong>客户在主动减少 sub-agent 数量</strong>。因为模型越来越聪明，主 agent 能管的复杂度越来越大，sub-agent 的边际收益在变小。</blockquote>
+        <blockquote>Level 1 + Level 2 解决了客户 90% 的问题。多 agent 听起来性感，但 debug 起来要命。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">七</span>时间戳目录</h2>
+        <div class="toc">
+          <h3>📑 章节速览</h3>
+          <ol>
+            <li><time>00:00–01:30</time> 引入：为什么做 AI 功能前要先选对复杂度层级</li>
+            <li><time>01:30–03:00</time> 五层概览：从单次 LLM 调用到自治 agent</li>
+            <li><time>03:00–05:30</time> Level 1：Augmented LLM + 结构化输出</li>
+            <li><time>05:30–08:30</time> Level 2：DAG 编排，过去两年的生产主力</li>
+            <li><time>08:30–11:00</time> Level 2 案例：客户支持工单处理的 DAG 实际拓扑</li>
+            <li><time>11:00–13:00</time> Level 3：Tool calling agent 的"边缘节点"模式</li>
+            <li><time>13:00–15:30</time> Level 4：多智能体协作的两个合理用例</li>
+            <li><time>15:30–18:00</time> Level 5：自治 coding agent（Claude Agent SDK 演示）</li>
+            <li><time>18:00–20:30</time> 真实生产系统：18 步客户支持 DAG 案例</li>
+            <li><time>20:30–22:00</time> 反常识结论：先 Level 1，再 Level 2，最后才 Level 3+</li>
+            <li><time>22:00–23:00</time> 社区与下一步</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">八</span>术语速查表</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>术语</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Augmented LLM</strong></td>
+              <td>最基础的 LLM 应用形态：一次 API call + 结构化输出，零自主决策</td>
+            </tr>
+            <tr>
+              <td><strong>DAG (Directed Acyclic Graph)</strong></td>
+              <td>有向无环图，多个 LLM 节点按确定路径编排，主流生产范式</td>
+            </tr>
+            <tr>
+              <td><strong>Tool Calling</strong></td>
+              <td>LLM 在循环中自主决定调用哪些工具（API、数据库、文件等）</td>
+            </tr>
+            <tr>
+              <td><strong>Edge Node</strong></td>
+              <td>DAG 中被 agent 化的分支节点；主干仍是确定性流程</td>
+            </tr>
+            <tr>
+              <td><strong>Sub-agent</strong></td>
+              <td>多 agent 架构中的子智能体，由主 agent 调用</td>
+            </tr>
+            <tr>
+              <td><strong>Coding Harness</strong></td>
+              <td>能跑 bash / 写文件 / 联网 / 长跑的自治 agent 内核（Claude Code、OpenClaw 都基于此）</td>
+            </tr>
+            <tr>
+              <td><strong>Claude Agent SDK</strong></td>
+              <td>Anthropic 提供的 Python SDK，封装 Claude Code 同样的自治能力，可嵌到自定义应用</td>
+            </tr>
+            <tr>
+              <td><strong>Structured Output</strong></td>
+              <td>给 LLM 一个 JSON schema 强制按字段输出，把 LLM 从"聊天"变成"系统组件"</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">九</span>相关推荐</h2>
+        <p>本视频与本站其他几篇 agent 主题文章互为补充，建议按以下顺序阅读：</p>
+        <div class="related-grid">
+          <a href="mWvtOHlZM-I.html" class="related-card">
+            <div class="rc-title">工具、技能还是子智能体？拆解一个过度膨胀的 Agent</div>
+            <div class="rc-meta">Will (Anthropic) · ~45 分钟</div>
+          </a>
+          <a href="4TvH-OZhwxI.html" class="related-card">
+            <div class="rc-title">AI Agents Explained: 2026 年最被浪费的 AI 订阅</div>
+            <div class="rc-meta">AI Master · ~25 分钟</div>
+          </a>
+          <a href="HNzH5Us1Rvg.html" class="related-card">
+            <div class="rc-title">RAG 与 Agent 系统的工程化权衡</div>
+            <div class="rc-meta">~30 分钟</div>
+          </a>
+          <a href="index.html" class="related-card">
+            <div class="rc-title">← 返回课程列表</div>
+            <div class="rc-meta">查看全部 13 篇</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=BaXTos7B1vY" target="_blank">▶ 原视频</a>
+  </footer>
+</body>
+</html>
