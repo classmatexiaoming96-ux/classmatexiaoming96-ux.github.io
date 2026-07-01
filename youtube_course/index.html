@@ -398,7 +398,7 @@
 
   <div class="stats-bar">
     <div class="stat-item">
-      <div class="stat-value">11</div>
+      <div class="stat-value">12</div>
       <div class="stat-label">精选课程</div>
     </div>
     <div class="stat-item">
@@ -481,7 +481,7 @@
     <div class="section-header">
       <span class="section-emoji">📦</span>
       <h2 class="section-title">Agent 工程</h2>
-      <span class="section-count">4 个视频</span>
+      <span class="section-count">6 个视频</span>
     </div>
     <p class="section-desc">Agent 架构设计、智能体系统、工程实践</p>
     <div class="cards-grid">
@@ -551,6 +551,19 @@
         <p class="card-desc">拆解 2026 年最被浪费的 AI 订阅：同款 Claude 20 美元月费，聊天机器人 vs AI Agent 是两种完全不同的工具。实操对比 Claude Code、OpenAI Codex、OpenClaw、Google Antigravity 四大平台，并讲解 Prompt Contracts 四段式提示结构与 CLAUDE.md/AGENTS.md 记忆文件这两项"改变习惯"的核心技巧。</p>
         <a href="4TvH-OZhwxI.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
+
+      <div class="video-card">
+        <div class="card-header">
+          <h2 class="card-title">5 Levels of AI Agents - From Simple LLM Calls to Multi-Agent Systems</h2>
+          <div class="card-icon">🎬</div>
+        </div>
+        <div class="badges">
+          <span class="badge badge-time">23 分钟</span>
+          <span class="badge badge-source">Dave Ebbelaar</span>
+        </div>
+        <p class="card-desc">从单次 LLM 调用到自治 Agent 的五个复杂度层级，Dave Ebbelaar 用代码和真实客户案例逐层拆解</p>
+        <a href="BaXTos7B1vY.html" class="card-link">阅读中文版 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
     </div>
   </section>
 
@@ -608,5 +621,35 @@
     由 AI 自动整理字幕并生成 · 
     <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a>
   </footer>
+  <script>
+    (function updateCourseStats() {
+      const statItems = document.querySelectorAll('.stat-item');
+      if (statItems.length < 3) return;
+
+      const courseLinks = document.querySelectorAll('.video-card a[href$=".html"]');
+      const courses = [...new Set([...courseLinks].map((link) => link.getAttribute('href')))]
+        .filter((href) => href && href !== 'index.html');
+
+      const categories = document.querySelectorAll('.category-section');
+      const durationBadges = document.querySelectorAll('.badge-time, .duration');
+      const totalMinutes = [...durationBadges].reduce((total, badge) => {
+        const match = badge.textContent.match(/~?\s*(\d+(?:\.\d+)?)\s*(秒|分钟)/);
+        if (!match) return total;
+
+        const value = Number.parseFloat(match[1]);
+        const minutes = match[2] === '秒'
+          ? Math.max(1, Math.ceil(value / 60))
+          : Math.max(1, Math.round(value));
+
+        return total + minutes;
+      }, 0);
+
+      statItems[0].querySelector('.stat-value').textContent = courses.length;
+      if (totalMinutes > 0) {
+        statItems[1].querySelector('.stat-value').textContent = `~${totalMinutes}`;
+      }
+      statItems[2].querySelector('.stat-value').textContent = categories.length;
+    })();
+  </script>
 </body>
 </html>
