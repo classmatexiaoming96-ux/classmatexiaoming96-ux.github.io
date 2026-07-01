@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codex CLI 与 Claude Code 的最大变革：把 MCP 变成文件系统的 Mirage 新范式</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .content-card:hover::before { opacity: 1; }
+
+    .section { margin: 36px 0; }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 24px 0 12px;
+    }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875em;
+      color: var(--accent-cyan);
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+      margin: 18px 0;
+    }
+
+    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
+
+    hr { border: none; border-top: 1px solid var(--border-color); margin: 32px 0; }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">Codex CLI 与 Claude Code 的最大变革：把 MCP 变成文件系统的 Mirage 新范式</h1>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ ~10 分钟</span>
+      <span class="meta-badge source">📺 AI LABS</span>
+      <span class="meta-badge">🎬 This Is The Greatest Shift In Codex CLI And Claude Code</span>
+      <span class="meta-badge">👁 ~9k 浏览</span>
+      <span class="meta-badge">🆔 B44bXmzU60s</span>
+    </div>
+  </header>
+
+  <main style="position: relative; z-index: 1;">
+    <div class="content-card">
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>问题引入：MCP 工具调用的"代价比想象中大得多"</h2>
+        <p>想象一下：你是十九世纪的一艘海盗船船长，最近刚抢到一件名为"AI 工具"的宝贝。过去几个月里，你一直让船员（也就是 Claude）通过 <strong>MCP（Model Context Protocol）</strong> 协议去调用各种外部服务。比如船上挂着 Gmail 的 MCP 接口，Claude 想看邮件时，得先调用一次 <code>search</code> 工具搜出线程，再用 <code>read</code> 工具逐条读，最后用 <code>reply</code> 工具发回复。整个过程看起来很顺畅，但每一步都在让模型"重新学一次该怎么做"。</p>
+        <p>视频作者一上来就抛出了一个反直觉的设想——如果 Gmail MCP 不是一种"协议"，而是<strong>一个真实的文件夹</strong>呢？Claude 完全可以像读本地代码库里的 <code>markdown</code> 文件一样走进去、读邮件、再走出来。这正是 Mirage 这个项目的核心承诺：把任何外部服务包装成一个<strong>虚拟文件系统</strong>，让 AI Agent 像操作本地文件一样操作它。</p>
+        <p>这个设想看似只是把"调用 API"换成了"读文件"，但它背后撬动的，是过去两年 LLM Agent 架构中一个被严重低估的<strong>系统性税</strong>。</p>
+        <blockquote>当你给 Claude 添加一个新工具时，不管它是 MCP 还是 API，模型都被迫<strong>当场学会一个新动作</strong>——就像一个婴儿被人拿枪指着头逼他立刻学会走路。每加一个工具，都要重新读 description、规划调用顺序、记住上下文……这是持续不断的 token 开销。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>核心概念：从零讲透 MCP / File System / Mirage 三层关系</h2>
+        <p>要把 Mirage 讲明白，先得把背后三个概念拆清楚。</p>
+        <h3>1. 什么是 MCP（Model Context Protocol）</h3>
+        <p>MCP 是 Anthropic 在 2024 年推出的一个<strong>标准协议</strong>，让外部服务（Gmail、Notion、Google Drive、Figma 等）以一种统一的方式暴露"工具列表"给大模型。每个工具都需要写一段 description，模型在调用前先读它，再决定要不要用、用哪个、参数怎么填。这套机制的好处是<strong>通用</strong>，坏处是——通用背后是<strong>反复的临时学习</strong>。</p>
+        <h3>2. 什么是 File System（文件系统）</h3>
+        <p>文件系统是 Unix 用五十年时间打磨出来的<strong>最古老也最稳定的人机接口</strong>。<code>ls</code>、<code>cd</code>、<code>cat</code>、<code>cp</code>、<code>grep</code>、<code>find</code>……这些命令在过去半个世纪里被写入的代码数量以<strong>百亿行</strong>计。每一个现代 LLM 的训练数据里都泡在它们之中。所以模型对"文件系统怎么用"这件事，<strong>不是临时学的，而是骨子里会的</strong>。</p>
+        <h3>3. 什么是 Mirage（虚拟文件系统）</h3>
+        <p>Mirage 是一个开源项目（视频里说可以从源码直接 clone），它做的事只有一件：<strong>把任何支持 API 的外部服务，映射成你操作系统上的一个文件夹</strong>。在 macOS 上，它依赖 MacFUSE 这套用户态文件系统框架；在 Linux 上则依赖 FUSE。挂载之后，Gmail 的每一封邮件就是 <code>/mirage/gmail/inbox/xxx.md</code>，Google Drive 的每个文件就是 <code>/mirage/drive/yyy.pdf</code>。Claude 用最熟悉的 <code>Read</code> / <code>Glob</code> / <code>Bash</code> 工具就能直接操作它们，<strong>不用学任何新工具</strong>。</p>
+        <blockquote>Unix 把文件系统打磨了五十年，这恰好也是 LLM 在训练数据里见过最多次的抽象层。<strong>文件系统之所以是 Agent 跨服务工作的最佳中介，是因为它根本不需要模型再学一次。</strong></blockquote>
+        <h3>三者关系一览</h3>
+        <table>
+          <thead><tr><th>层级</th><th>形态</th><th>对模型而言</th><th>由谁提供</th></tr></thead>
+          <tbody>
+            <tr><td><strong>应用层</strong>：Gmail / Notion / Drive</td><td>一个个 MCP server</td><td>每个都要重新学一次</td><td>各家 SaaS 服务方</td></tr>
+            <tr><td><strong>抽象层</strong>：Mirage 虚拟文件系统</td><td>本地挂载的文件夹</td><td>用现成的 <code>ls</code> / <code>cat</code> 就能搞定</td><td>Mirage 开源项目（MacFUSE / FUSE）</td></tr>
+            <tr><td><strong>底层</strong>：操作系统文件系统</td><td>真实文件 + 目录树</td><td>模型已经"精通"的接口</td><td>Unix / Linux / macOS 内核</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>关键论点：为什么"把 MCP 变文件夹"是范式级变革</h2>
+        <p>视频里反复强调一件事：工具调用 vs 文件系统，<strong>本质上不是两种 API 风格，而是两种认知负担的分配方式</strong>。前者把"重新学习"的压力交给模型，后者把"统一接口"的稳定性交给底层。下面分五个论点展开。</p>
+
+        <h3>论点 1：每次 tool call 都是一次"上下文税"</h3>
+        <p>当你给 Claude 接了 5 个 MCP，模型每开一个新对话，都要先读这 5 个 MCP 的全部 description，记住哪个工具负责什么、参数格式是什么、错误码长啥样。这部分是<strong>纯开销</strong>，不产生任何业务价值。MCP 越多，这笔税越重。视频里提到一种情形：模型同时接了 13 个工具，最终真正用上的只有 3 个，剩下 10 个的 description 一直在污染上下文。</p>
+
+        <h3>论点 2：文件系统是 LLM 唯一"反复练过"的接口</h3>
+        <p>Unix 文件系统命令在 GitHub 上的代码里出现频次远高于任何新兴协议。LLM 在 pretrain 阶段读过的数十 T token 里，<code>cat README.md</code> 这类操作的 co-occurrence 概率极高。结果就是：当你想让模型"读一份邮件"，与其让它先理解 IMAP 协议，再调 MCP 的 <code>read_email</code> 工具，不如直接 <code>cat /mirage/gmail/inbox/foo.md</code>——<strong>模型立刻就知道该干什么</strong>。</p>
+
+        <h3>论点 3：附件、文件、二进制内容再也不用"塞回上下文"</h3>
+        <p>原版 Gmail MCP 只能看到附件<strong>文件名</strong>，无法读取内容——Claude 面对一张发票就像盲人摸象。Mirage 的解法非常朴素：附件在 Drive MCP 上本来就是个文件，挂载到 Mirage 之后，模型可以直接 <code>cat</code> 它。原本需要把附件 base64 塞进上下文的笨办法被彻底跳过。</p>
+        <p>更有意思的是大文件场景。一个 100MB 的 CSV，如果用传统 MCP 下载，要么超时要么爆 context。Mirage 的做法是<strong>不下载</strong>，让模型在文件所在位置直接 <code>grep</code> / <code>awk</code> / <code>head</code>——上下文里只回传匹配到的几行，而不是整个文件。这跟之前 Will 在 Anthropic 那场关于 Agent 设计的分享里强调的"用 bash + 代码执行替代自定义工具"是同一思路。</p>
+
+        <h3>论点 4：JSON 工具调用不再需要"每次重新解析"</h3>
+        <p>传统 MCP 工作流是：模型输出 <code>{"tool": "search", "args": {...}}</code> → 框架解析 → 调用 → 返回字符串 → 模型再读字符串。每一步都在 token 里兜圈子。换成文件系统后，模型直接 <code>grep -r "sponsor" /mirage/gmail/</code>，<strong>整个回路都是 shell 原语</strong>，模型甚至不用"调用工具"，只是在"写代码"。这种<strong>从工具调用退化为代码生成</strong>的体验，正是视频反复暗示的"Codex CLI / Claude Code 真正强大的原因"。</p>
+
+        <h3>论点 5：复合工具不再需要写 TypeScript wrapper</h3>
+        <p>视频里专门对比了 Docker 之前演示的"Code Mode"——它允许用 TypeScript 写一个新工具，把多个 MCP 的能力组合起来。但 Mirage 的逻辑更进一步：你<strong>不需要写新工具</strong>，直接用 <code>bash</code> 把几个 <code>cp</code> / <code>cat</code> / <code>grep</code> 串起来就行。视频里的例子是"在收件箱里找提到 sponsor 的邮件，取出金额最大的三封，把摘要写到 Notion 页面"——这套流程用 bash 一行命令搞定，<strong>完全不需要注册一个新 MCP</strong>。</p>
+        <blockquote>Code Mode 解决了"工具组合"问题，但 Mirage 干脆<strong>消灭了"工具"这个概念本身</strong>——所有跨服务操作都退化成 bash 管道。这就是标题里说的"greatest shift"。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>对比表格：MCP 工具调用模式 vs Mirage 文件系统模式</h2>
+        <p>下面这张表把两种范式在五个维度上做了直接对比，方便快速判断什么时候该用哪种。</p>
+        <table>
+          <thead><tr><th>对比维度</th><th>MCP 工具调用模式</th><th>Mirage 文件/目录模式</th></tr></thead>
+          <tbody>
+            <tr><td><strong>上下文开销</strong></td><td>每个工具都要占一段 description，工具多时上下文很快被污染</td><td>零额外开销——只用到 LLM 已熟的 <code>ls</code> / <code>cat</code> / <code>cp</code> 原语</td></tr>
+            <tr><td><strong>学习成本</strong></td><td>每个新 MCP 都是一次"现场教学"，模型要重新规划调用顺序</td><td>模型天然会文件操作，跨服务不需额外学习</td></tr>
+            <tr><td><strong>灵活性 / 复合操作</strong></td><td>需要写 TypeScript wrapper 或 Code Mode 才能组合多个工具</td><td>直接用 bash 管道 + grep/awk 串起来，几乎无限组合</td></tr>
+            <tr><td><strong>大文件 / 附件处理</strong></td><td>要么 base64 塞上下文，要么超时爆 context</td><td>不下载，<code>grep</code> / <code>head</code> 流式处理，只回传命中行</td></tr>
+            <tr><td><strong>维护成本</strong></td><td>MCP server 要单独部署、版本管理、OAuth 配置</td><td>挂载一次即可，认证交给底层 API key，重启进程即可恢复</td></tr>
+            <tr><td><strong>生态成熟度</strong></td><td>Anthropic 官方主推，主流 IDE 客户端都支持</td><td>早期项目，需要 MacFUSE / FUSE，macOS 上还需要授权系统扩展</td></tr>
+          </tbody>
+        </table>
+        <p>简而言之：MCP 是<strong>为多 Agent 共享治理而设计的协议层</strong>，Mirage 则是<strong>把单 Agent 工作流里的"工具"概念彻底解构</strong>。两者并不冲突——可以同时用：跨团队共享的工具走 MCP，跨服务的工作流走 Mirage。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>实操步骤：从 clone 到跑通</h2>
+        <p>视频里演示的安装流程不算短，但作者特意说"不用死记文档，让 Claude 带着你走完"——这是把 Will 在《过度膨胀的 Agent》里强调的"用 bash + 文件系统替代自定义工具"理念反过来又示范了一次。下面是关键节点。</p>
+
+        <h3>1. 克隆源码</h3>
+        <p>不要读 README，直接 <code>git clone</code> Mirage 仓库，然后在仓库根目录启动 Claude Code，让它自己 <code>cat README.md</code> 并逐步引导你执行。这是 Will 那场 workshop 里反复强调的"先让模型看本地代码再行动"原则。</p>
+
+        <h3>2. macOS 上装 MacFUSE</h3>
+        <p>Mirage 需要把虚拟文件系统挂载到本地目录。macOS 用户态文件系统依赖 MacFUSE，安装命令大致是 <code>brew install macfuse</code>。安装完成后<strong>必须重启 Mac</strong>——这是 macOS 出于安全考虑强制要求的。重启后还得到"系统设置 → 隐私与安全性"里手动允许 MacFUSE 的系统扩展加载，整个过程"像在火山口安装一块砖头"。</p>
+
+        <h3>3. 配置 OAuth 与凭据</h3>
+        <p>每个要挂载的服务（Gmail / Drive / Notion 等）都需要先在 Google Cloud Console 里开 API、生成 OAuth client，再把凭据写到 Mirage 的配置目录。这一步"用户体验像在用外语填税表"，但好在 Claude 可以自动打开浏览器走 OAuth 流程，<strong>不需要用户手动复制粘贴</strong>。</p>
+
+        <h3>4. 执行 mount 命令</h3>
+        <p>凭据就绪后，跑 <code>mirage mount</code>，系统会新开一个终端窗口，把虚拟文件系统挂到 <code>~/Mirage/</code> 之类的位置。视频里建议把这条命令跑成 <strong>background process</strong>，否则一关终端整个挂载就掉了。但 background 模式每次重启都会丢失缓存和索引——这点后面"持久化"一节会展开。</p>
+
+        <h3>5. 在 Mirage 目录里启动 Claude</h3>
+        <p><code>cd ~/Mirage && claude</code>，新会话里的 Claude 看到的目录结构是：</p>
+        <pre><code>~/Mirage/
+├── gmail/
+│   ├── inbox/
+│   ├── sent/
+│   └── drafts/
+├── drive/
+│   ├── documents/
+│   └── spreadsheets/
+└── notion/
+    └── pages/</code></pre>
+        <p>模型可以直接 <code>ls gmail/inbox/</code> 看到所有邮件文件名，<code>cat gmail/inbox/xxx.md</code> 读全文。这种体验对模型来说跟操作本地代码库完全一致——没有"工具调用"的概念。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>视频关键观点引用（blockquotes）</h2>
+        <blockquote>工具调用 vs 文件系统，<strong>本质上是给 LLM 已有原语 vs 强迫它现场学新工具</strong>。前者是站在巨人肩膀上，后者是每次都从零学起。</blockquote>
+        <blockquote>Mirage 不是一个新工具，它是一个<strong>让"工具"这个概念消失</strong>的抽象层。当所有外部服务都变成文件夹，bash 就成了万能的胶水。</blockquote>
+        <blockquote>视频里反复出现的一句话：<strong>"It's basically a virtual file system for AI agents."</strong> 后面紧跟的论点是——这是过去两年里 Agent 架构第一次真正意义上的"范式切换"，而不是又一种新协议。</blockquote>
+        <blockquote>一个反直觉的结论：把 Gmail MCP 挂成文件夹后，<strong>Claude 反而更"懂"邮件了</strong>——因为它用的是 <code>grep</code>，而 <code>grep</code> 是它训练数据里出现频率最高的命令之一。</blockquote>
+        <blockquote>最后作者留了一个开放问题：<strong>"Every new AI founder has been doing this for the past 2 years."</strong> 意思是——大家都在重复造"Agent + 工具"的轮子，而 Mirage 提醒我们：<strong>也许根本不需要那么多新工具，只需要一个老掉牙的文件系统。</strong></blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">七</span>时间戳目录：视频关键节点</h2>
+        <p>下面是按字幕节奏梳理出来的时间戳索引，方便对照原视频定位。</p>
+        <table>
+          <thead><tr><th>时间</th><th>节点</th><th>核心内容</th></tr></thead>
+          <tbody>
+            <tr><td><code>00:00</code></td><td>海盗比喻引入</td><td>用 Gmail MCP 的搜索→读→回复三步流程，类比海盗发现新工具</td></tr>
+            <tr><td><code>00:48</code></td><td>反问：如果 MCP 是文件夹</td><td>引出 Mirage 的核心承诺——把外部服务挂载成本地目录</td></tr>
+            <tr><td><code>01:30</code></td><td>Mirage 是什么</td><td>"Virtual file system for AI agents"——抽象层定义</td></tr>
+            <tr><td><code>02:00</code></td><td>为什么文件系统重要</td><td>LLM 的训练数据里文件命令出现频次远超新协议</td></tr>
+            <tr><td><code>03:00</code></td><td>工具调用的"上下文税"</td><td>每次加 MCP 都要重新读 description、重新规划调用</td></tr>
+            <tr><td><code>03:50</code></td><td>Gmail MCP 盲区</td><td>无法读取附件，只能看到文件名——Mirage 直接读文件解决</td></tr>
+            <tr><td><code>04:30</code></td><td>Google Drive 大文件问题</td><td>100MB 文件 MCP 下载会爆 context，Mirage 用 <code>cp</code> 流式处理</td></tr>
+            <tr><td><code>05:00</code></td><td>安装流程概述</td><td>clone 源码 → 让 Claude 引导 → 配 MacFUSE</td></tr>
+            <tr><td><code>05:45</code></td><td>MacFUSE 与 macOS 授权</td><td>系统扩展机制 + 必须重启 Mac</td></tr>
+            <tr><td><code>06:20</code></td><td>OAuth 凭据配置</td><td>Google Cloud Console → 开 API → 写 credentials.json</td></tr>
+            <tr><td><code>07:00</code></td><td>挂载命令与 background process</td><td>挂载后即可在 Mirage 目录里启动 Claude</td></tr>
+            <tr><td><code>07:30</code></td><td>与 Code Mode 的对比</td><td>Code Mode 用 TS 包装组合工具，Mirage 用 bash 管道组合</td></tr>
+            <tr><td><code>08:00</code></td><td>自定义服务举例</td><td>理论上任何 API 都能挂载：Figma、Google Chat、Notion 都可以</td></tr>
+            <tr><td><code>08:40</code></td><td>持久化问题</td><td>后台进程重启后缓存丢失，需要 demon 进程做持久化</td></tr>
+            <tr><td><code>09:30</code></td><td>总结与 Super Thanks</td><td>再次强调"工具调用 → 文件系统"的范式转变</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">八</span>决策矩阵：什么场景该用 Mirage</h2>
+        <p>并非所有 Agent 场景都适合 Mirage。下面这张表帮你判断什么时候该切到虚拟文件系统，什么时候老老实实用 MCP。</p>
+        <table>
+          <thead><tr><th>场景</th><th>推荐方案</th><th>理由</th></tr></thead>
+          <tbody>
+            <tr><td>单 Agent 处理跨多个 SaaS 的工作流</td><td><strong>Mirage</strong></td><td>避免每个服务都注册一个 MCP，bash 管道就够了</td></tr>
+            <tr><td>需要读附件、PDF、大文件</td><td><strong>Mirage</strong></td><td>流式 grep/awk 不污染 context</td></tr>
+            <tr><td>多个 Agent / 团队共享同一套治理工具</td><td>MCP</td><td>MCP 的核心价值是<strong>治理与共享</strong>，不是性能</td></tr>
+            <tr><td>需要细粒度权限控制和审计日志</td><td>MCP</td><td>成熟的权限模型 + 集中管控</td></tr>
+            <tr><td>极简 demo / 一次性脚本</td><td><strong>Mirage</strong></td><td>克隆即用，不需要部署 MCP server</td></tr>
+            <tr><td>需要 TypeScript 强类型工具契约</td><td>Code Mode</td><td>TS 包装比 bash 更适合大型项目</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">九</span>与同站其他视频的关联</h2>
+        <p>Mirage 的"文件即接口"思路其实在好几期往期视频里都出现过。下面列出与本片最相关的三段课程，方便延伸阅读。</p>
+        <ul>
+          <li><strong>mWvtOHlZM-I：</strong>Anthropic Will 那场 workshop 的核心结论是"用 bash + 文件系统 + 代码执行替代自定义工具"——Mirage 等于把这个结论从"代码库"扩展到了"整个 SaaS 世界"。</li>
+          <li><strong>gv0WHhKelSE：</strong>Docker 的 Code Mode 演示了用 TypeScript 包装 MCP 组合工具的能力——Mirage 是 Code Mode 思路的"更激进版本"，连包装都省了。</li>
+          <li><strong>HNzH5Us1Rvg：</strong>另一期讲 Codex CLI 改造的实战——视频里展示的"用文件系统原语代替专用工具"在本期 Mirage 上得到了完整的工程化落地。</li>
+        </ul>
+        <p>如果你只看一期，那就先看 Will 那场 workshop；如果你想看 Mirage 这条思路的实战形态，本期就是答案。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">十</span>附：核心术语速查</h2>
+        <table>
+          <thead><tr><th>术语</th><th>一句话解释</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MCP</strong></td><td>Model Context Protocol，让外部服务以统一协议暴露工具给 LLM</td></tr>
+            <tr><td><strong>Mirage</strong></td><td>开源虚拟文件系统，把任意 API 服务挂载成本地目录</td></tr>
+            <tr><td><strong>MacFUSE</strong></td><td>macOS 用户态文件系统框架，Mirage 在 mac 上的底层依赖</td></tr>
+            <tr><td><strong>上下文税</strong></td><td>每个 MCP 工具的 description 持续占用 token 而不产生业务价值</td></tr>
+            <tr><td><strong>Code Mode</strong></td><td>用 TypeScript 组合多个 MCP 工具的能力，Docker 之前的演示</td></tr>
+            <tr><td><strong>virtual file system</strong></td><td>由 Mirage 实现的"看起来像文件其实是 API"的抽象层</td></tr>
+            <tr><td><strong>background process</strong></td><td>挂载 Mirage 时推荐的运行方式，避免占着终端</td></tr>
+            <tr><td><strong>persistent demon</strong></td><td>Mirage 用来解决"后台重启缓存丢失"的常驻进程方案</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=B44bXmzU60s" target="_blank">▶ 原视频</a> ·
+    <a href="index.html">返回课程列表</a> ·
+    <a href="mWvtOHlZM-I.html">Will: Agent 拆解</a> ·
+    <a href="gv0WHhKelSE.html">Docker Code Mode</a> ·
+    <a href="HNzH5Us1Rvg.html">Codex CLI 实战</a>
+  </footer>
+</body>
+</html>
