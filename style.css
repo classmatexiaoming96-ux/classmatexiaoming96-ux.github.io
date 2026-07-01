@@ -366,6 +366,7 @@ a {
 .index-link {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 8px 18px;
   background: transparent;
@@ -385,6 +386,11 @@ a {
 .index-link-icon {
   font-size: 1rem;
   line-height: 1;
+}
+.index-link-sub {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 400;
 }
 
 .hero-scroll-hint {
