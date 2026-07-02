@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Learning · Anthropic Engineering 中文解读</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  .learning-nav { max-width: 1100px; margin: 0 auto; padding: 24px; display: flex; align-items: center; gap: 16px; }
+  .learning-nav a.back { color: var(--accent); text-decoration: none; font-family: var(--font-mono); font-size: 13px; }
+  .learning-container { max-width: 1100px; margin: 0 auto; padding: 16px 24px 80px; }
+  .learning-header { padding: 24px 0 40px; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+  .learning-header h1 { font-size: clamp(36px, 5vw, 56px); line-height: 1.1; margin: 0 0 16px; }
+  .learning-header .subtitle { color: var(--text-secondary); font-size: 18px; margin: 0 0 8px; }
+  .learning-header .meta { color: var(--text-muted); font-family: var(--font-mono); font-size: 13px; }
+  .article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+  .article-card { display: block; padding: 22px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.2s, transform 0.2s; text-decoration: none; color: inherit; }
+  .article-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .article-card.disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+  .article-card .date { color: var(--text-muted); font-family: var(--font-mono); font-size: 12px; margin-bottom: 8px; }
+  .article-card .zh-title { font-size: 18px; font-weight: 600; margin: 0 0 6px; line-height: 1.35; }
+  .article-card .en-title { color: var(--text-muted); font-size: 13px; font-family: var(--font-mono); margin: 0 0 12px; }
+  .article-card .summary { color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0; }
+  .article-card .status { display: inline-block; margin-top: 12px; padding: 3px 8px; font-size: 11px; font-family: var(--font-mono); border-radius: 4px; }
+  .article-card .status.done { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+  .article-card .status.pending { background: rgba(120, 120, 130, 0.15); color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <nav class="learning-nav">
+    <a href="../index.html" class="back">← 返回首页</a>
+  </nav>
+
+  <div class="learning-container">
+    <header class="learning-header">
+      <h1>Agent Learning</h1>
+      <p class="subtitle">Anthropic Engineering 系列文章中文深度解读</p>
+      <p class="meta">24 篇文章 · 持续更新中 · 1 / 24 已发布</p>
+    </header>
+
+    <div class="article-grid">
+      <a class="article-card" href="articles/april-23-postmortem.html">
+        <div class="date">2026-04-23</div>
+        <h3 class="zh-title">近期 Claude Code 质量报告的更新</h3>
+        <p class="en-title">An update on recent Claude Code quality reports</p>
+        <p class="summary">Anthropic 复盘了部分用户认为 Claude Code 质量下降的原因：三个相互独立的产品层变更叠加，影响了 reasoning effort、长会话中的思考历史缓存，以及系统 prompt 的简洁性约束。</p>
+        <span class="status done">✓ 已发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-04-08</div>
+        <h3 class="zh-title">扩展 Managed Agents：把大脑和双手解耦</h3>
+        <p class="en-title">Scaling Managed Agents: Decoupling the brain from the hands</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-03-25</div>
+        <h3 class="zh-title">Claude Code auto mode：跳过权限的更安全方式</h3>
+        <p class="en-title">How we built Claude Code auto mode: a safer way to skip permissions</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-03-24</div>
+        <h3 class="zh-title">长时应用开发的 Harness 设计</h3>
+        <p class="en-title">Harness design for long-running application development</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-03-06</div>
+        <h3 class="zh-title">Claude Opus 4.6 在 BrowseComp 上的 eval 感知</h3>
+        <p class="en-title">Eval awareness in Claude Opus 4.6's BrowseComp performance</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-02-05</div>
+        <h3 class="zh-title">量化 agentic coding eval 中的基础设施噪声</h3>
+        <p class="en-title">Quantifying infrastructure noise in agentic coding evaluations</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-02-05</div>
+        <h3 class="zh-title">用 Claude Code 团队构建 C 编译器</h3>
+        <p class="en-title">Building a C compiler with a team of parallel Claude Codes</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026-01-09</div>
+        <h3 class="zh-title">AI agents 的 eval 入门</h3>
+        <p class="en-title">Demystifying evals for AI agents</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-11-26</div>
+        <h3 class="zh-title">长时 agents 的有效 harness</h3>
+        <p class="en-title">Effective harnesses for long-running agents</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-11-24</div>
+        <h3 class="zh-title">Claude Developer Platform 推出 advanced tool use</h3>
+        <p class="en-title">Introducing advanced tool use on the Claude Developer Platform</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-11-04</div>
+        <h3 class="zh-title">MCP 代码执行：构建更高效的 agents</h3>
+        <p class="en-title">Code execution with MCP: Building more efficient agents</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-10-20</div>
+        <h3 class="zh-title">超越权限提示：用 sandboxing 让 Claude Code 更安全</h3>
+        <p class="en-title">Beyond permission prompts: making Claude Code more secure with sandboxing</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-10-16</div>
+        <h3 class="zh-title">用 Agent Skills 武装 agents 应对真实世界</h3>
+        <p class="en-title">Equipping agents for the real world with Agent Skills</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-09-29</div>
+        <h3 class="zh-title">面向 AI agents 的有效 context engineering</h3>
+        <p class="en-title">Effective context engineering for AI agents</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-09-17</div>
+        <h3 class="zh-title">对最近三个问题的 postmortem</h3>
+        <p class="en-title">A postmortem of three recent issues</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-09-11</div>
+        <h3 class="zh-title">与 agents 一起为 agents 写工具</h3>
+        <p class="en-title">Writing effective tools for agents — with agents</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-06-26</div>
+        <h3 class="zh-title">Desktop Extensions：一键安装 MCP server</h3>
+        <p class="en-title">Desktop Extensions: One-click MCP server installation</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-06-13</div>
+        <h3 class="zh-title">我们如何构建多 agent 研究系统</h3>
+        <p class="en-title">How we built our multi-agent research system</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-04-18</div>
+        <h3 class="zh-title">Claude Code：agentic coding 最佳实践</h3>
+        <p class="en-title">Claude Code: Best practices for agentic coding</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-03-20</div>
+        <h3 class="zh-title">"think" 工具：让 Claude 能停下来思考</h3>
+        <p class="en-title">The "think" tool: Enabling Claude to stop and think</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2025-01-06</div>
+        <h3 class="zh-title">用 Claude Sonnet 4.5 在 SWE-bench Verified 上立标杆</h3>
+        <p class="en-title">Raising the bar on SWE-bench Verified with Claude Sonnet 4.5</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2024-12-19</div>
+        <h3 class="zh-title">构建有效的 agents</h3>
+        <p class="en-title">Building effective agents</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2024-09-19</div>
+        <h3 class="zh-title">引入 Contextual Retrieval</h3>
+        <p class="en-title">Introducing Contextual Retrieval</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+
+      <a class="article-card disabled" href="#">
+        <div class="date">2026 专题</div>
+        <h3 class="zh-title">我们如何在不同产品中约束 Claude</h3>
+        <p class="en-title">How we contain Claude across products</p>
+        <p class="summary">（待翻译）</p>
+        <span class="status pending">⏳ 待发布</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
