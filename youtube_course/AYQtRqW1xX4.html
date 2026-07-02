@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何用 AI Agent 创业：2026 年完整实战课程</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --accent-soft: rgba(99, 179, 237, 0.11);
+      --accent-line: rgba(99, 179, 237, 0.28);
+      --purple: #9f7aea;
+      --purple-soft: rgba(159, 122, 234, 0.11);
+      --green: #68d391;
+      --green-soft: rgba(104, 211, 145, 0.1);
+      --orange: #f6ad55;
+      --orange-soft: rgba(246, 173, 85, 0.1);
+      --danger: #fc8181;
+      --danger-soft: rgba(252, 129, 129, 0.1);
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.78;
+      min-height: 100vh;
+      padding: 0 22px 48px;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
+        radial-gradient(circle at 20% 0%, rgba(99, 179, 237, 0.12), transparent 36%),
+        radial-gradient(circle at 80% 12%, rgba(159, 122, 234, 0.10), transparent 32%);
+      background-size: 64px 64px, 64px 64px, 100% 100%, 100% 100%;
+      background-attachment: fixed;
+    }
+
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    button:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .page {
+      width: min(960px, 100%);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      padding: 34px 0 22px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      transition: border-color 0.2s, color 0.2s, transform 0.2s, background 0.2s;
+    }
+
+    .back-link:hover {
+      color: var(--accent);
+      border-color: var(--accent-line);
+      background: var(--accent-soft);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--purple), var(--green));
+      opacity: 0.95;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 1.14;
+      letter-spacing: 0;
+      margin-bottom: 14px;
+      color: var(--text-primary);
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+    }
+
+    .hero-note {
+      color: var(--text-secondary);
+      max-width: 830px;
+      margin-top: 14px;
+      font-size: 1rem;
+    }
+
+    .meta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 22px 0 0;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border: 1px solid var(--card-border);
+      border-radius: 7px;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.035);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .meta-badge strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card + .content-card {
+      margin-top: 22px;
+    }
+
+    .video-card {
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 18px;
+      font-size: 1.28rem;
+      line-height: 1.35;
+      color: var(--text-primary);
+    }
+
+    .section-title .num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      border-radius: 5px;
+      padding: 2px 8px;
+      flex: 0 0 auto;
+    }
+
+    h2 {
+      color: var(--text-primary);
+      font-size: 1.34rem;
+      line-height: 1.35;
+      margin: 6px 0 16px;
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1.04rem;
+      line-height: 1.45;
+      margin: 24px 0 10px;
+    }
+
+    h4 {
+      color: var(--text-primary);
+      font-size: 0.98rem;
+      margin: 18px 0 8px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0 0 14px;
+    }
+
+    strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .lead {
+      color: #cbd5e0;
+      font-size: 1.02rem;
+    }
+
+    .callout {
+      border: 1px solid var(--accent-line);
+      background: var(--accent-soft);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 18px 0;
+      color: var(--text-secondary);
+    }
+
+    .callout.warning {
+      border-color: rgba(246, 173, 85, 0.28);
+      background: var(--orange-soft);
+    }
+
+    .callout.success {
+      border-color: rgba(104, 211, 145, 0.28);
+      background: var(--green-soft);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    .mini-card {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .mini-card h3 {
+      margin-top: 0;
+    }
+
+    .steps {
+      counter-reset: steps;
+      list-style: none;
+      padding-left: 0;
+      margin: 16px 0;
+    }
+
+    .steps li {
+      counter-increment: steps;
+      position: relative;
+      padding: 13px 14px 13px 48px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .steps li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 14px;
+      top: 14px;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border-radius: 5px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      color: var(--accent);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    ul {
+      margin: 12px 0 16px 22px;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 26px;
+      color: var(--text-secondary);
+      font-size: 0.93rem;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+
+    th, td {
+      border: 1px solid var(--card-border);
+      padding: 12px 13px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.09);
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(255,255,255,0.025);
+    }
+
+    caption {
+      caption-side: top;
+      text-align: left;
+      color: var(--text-primary);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    blockquote {
+      margin: 16px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent);
+      background: rgba(99, 179, 237, 0.08);
+      border-radius: 0 10px 10px 0;
+      color: #cbd5e0;
+    }
+
+    blockquote p {
+      margin-bottom: 8px;
+      color: #d7e3f1;
+    }
+
+    blockquote cite {
+      display: block;
+      color: var(--text-muted);
+      font-style: normal;
+      font-size: 0.86rem;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .quote-grid blockquote {
+      margin: 0;
+      min-height: 150px;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .toc-list li {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--card-border);
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .toc-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .time {
+      font-family: "JetBrains Mono", monospace;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .recommendations a {
+      text-decoration: none;
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 10px;
+      padding: 14px;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .recommendations a:hover {
+      border-color: var(--accent-line);
+      background: var(--accent-soft);
+      transform: translateY(-1px);
+    }
+
+    .recommendations span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 4px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    code {
+      font-family: "JetBrains Mono", monospace;
+      color: #dbeafe;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 4px;
+      padding: 2px 5px;
+      font-size: 0.88em;
+    }
+
+    .footer-note {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      margin-top: 16px;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 0 14px 36px;
+      }
+
+      .hero,
+      .content-card {
+        padding: 1.15rem;
+      }
+
+      .video-card {
+        padding: 0;
+      }
+
+      .two-col,
+      .quote-grid,
+      .recommendations {
+        grid-template-columns: 1fr;
+      }
+
+      .toc-list li {
+        grid-template-columns: 64px 1fr;
+        gap: 10px;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: normal;
+      }
+
+      th, td {
+        min-width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="topbar">
+      <a class="back-link" href="index.html">← 返回课程列表</a>
+    </div>
+
+    <header class="hero">
+      <div class="eyebrow">AI Agent 商业化课程 · 2026 入门实战</div>
+      <h1>如何用 AI Agent 创业：2026 年完整实战课程</h1>
+      <p class="subtitle">英文原题：How to Build &amp; Sell AI Agents in 2026: Ultimate Beginner's Guide</p>
+      <div class="meta-grid" aria-label="视频基本信息">
+        <span class="meta-badge">频道 <strong>Liam Ottley</strong></span>
+        <span class="meta-badge">时长 <strong>18 分 30 秒</strong></span>
+        <span class="meta-badge">视频 ID <strong>AYQtRqW1xX4</strong></span>
+        <span class="meta-badge">主题 <strong>AI Agent、自动化、销售</strong></span>
+      </div>
+      <p class="hero-note">Liam Ottley 以自己的经历开场：三年前从自学 AI agents 开始，后来创办多家 AI 公司，累计获得 1000 万美元以上收入，频道拥有 70 万以上订阅者，并为 NBA 球队与 Fortune 500 公司交付过 agent 项目。本页把视频压缩成一份中文课程笔记：从概念、工具、实操流程，到如何把 agent 能力卖给真实企业。</p>
+    </header>
+
+    <section class="content-card video-card" aria-label="视频嵌入">
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/AYQtRqW1xX4" title="How to Build & Sell AI Agents in 2026: Ultimate Beginner's Guide" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">01</span>一、问题引入：为什么是现在，为什么是 AI Agent</h2>
+      <p class="lead">这支视频不是单纯教你把一个聊天机器人接到网站上，而是在回答一个更现实的问题：当企业已经知道 AI 可以降本增效，却不知道该找谁落地时，普通人如何进入这个供需缺口，学会构建、包装并销售 AI Agent 服务。</p>
+      <p>Liam 引用 McKinsey 2025 年 11 月报告中的判断：美国现有工作中，有 57% 可以被已经存在的技术自动化。关键不是“五年后会发生什么”，而是“今天就已经能做什么”。这意味着机会并不只属于拥有大模型实验室、资本或工程团队的人；机会也属于那些能把模型、业务流程、API、数据库和客户结果接起来的人。</p>
+      <p>视频里另一个重要背景是工资与供需差。AI 技能带来的工资溢价达到 56%，并且在一年内翻倍。Liam 把这解释成早期入场者优势：当市场需求快速扩大，而具备实操交付能力的人仍然稀缺时，最先建立案例、流程和信任的人，会更容易占据客户心智。</p>
+      <div class="callout warning">
+        <strong>课程的核心矛盾：</strong>企业并不缺“想用 AI”的意愿，缺的是能把 AI 接进真实业务流程的人。Liam 用 “1:1100” 来描述 AI 服务商与真实需求企业之间的供需缺口：每一个懂交付的服务商，背后都有大量企业还没有被服务。
+      </div>
+      <p>所以这支视频的价值不在于炫耀工具，而在于给初学者建立一条路径：先理解 agent 的工作方式，再通过几个端到端案例知道如何搭建，最后把能力转成可售卖的咨询、自动化或定制交付服务。</p>
+      <div class="tag-row">
+        <span class="tag">自动化红利</span>
+        <span class="tag">技能工资溢价</span>
+        <span class="tag">服务商缺口</span>
+        <span class="tag">端到端交付</span>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">02</span>二、核心概念：从 0 理解 AI Agent</h2>
+      <p class="lead">Liam 对 AI Agent 的定义很实用：它是能理解指令并采取行动完成任务的“数字员工”。这个定义的重点在“采取行动”，也就是 agent 不只是回答问题，而是能调用工具、读取数据、写入系统、触发流程，并把一个业务任务推进到结果。</p>
+
+      <h3>2.1 Chatbot 与 AI Agent 的分界线</h3>
+      <p>传统 chatbot 的主要职责是对话。用户问一个问题，它生成一个回答；用户再问，它再回答。它可以很聪明，但如果它不能连接外部系统、不能执行动作、不能把结果写回业务工具，它仍然只是一个信息交互界面。</p>
+      <p>AI Agent 则更像一个拥有工作台的员工。它既能读懂用户意图，也能决定下一步需要调用什么工具：可能是查 CRM、读取发票、调用 Google Solar API、发邮件、写 Airtable、给 lead 打电话，或者触发 n8n 中的下一段流程。它的产出不是一句话，而是一个被完成或被推进的任务。</p>
+
+      <h3>2.2 Agent 的五大组件</h3>
+      <p>视频把 agent 拆成五个基础组件：Brain、Prompt、Memory、Knowledge、Tools。这个拆法适合初学者，因为它把“智能”从一个抽象概念拆成了几个可调试的部分。</p>
+      <ul>
+        <li><strong>Brain（模型）：</strong>负责理解、推理和生成。它可以是 Gemini、OpenAI、Anthropic 或其他模型。</li>
+        <li><strong>Prompt（提示词）：</strong>规定 agent 的角色、目标、限制、输出格式和工作步骤。</li>
+        <li><strong>Memory（记忆）：</strong>保存对话上下文、用户偏好或长期状态，让 agent 不必每次从零开始。</li>
+        <li><strong>Knowledge（知识）：</strong>企业文档、FAQ、产品手册、价格表、政策规则等可检索信息。</li>
+        <li><strong>Tools（工具）：</strong>agent 调用外部软件的能力，例如 API、数据库、邮箱、表格、CRM、拨号系统。</li>
+      </ul>
+
+      <h3>2.3 Liam 的三大可控要素：Prompt、Knowledge、Tools</h3>
+      <p>虽然 agent 有五个组件，但 Liam 强调初学者真正应该集中注意力的，是三个最可控、最直接影响交付效果的要素：Prompt、Knowledge、Tools。</p>
+      <p><strong>Prompt</strong>决定 agent 如何理解任务和约束边界；<strong>Knowledge</strong>决定 agent 有没有足够可靠的业务背景；<strong>Tools</strong>决定 agent 能不能把事情做完。模型本身当然重要，但初学者通常不会训练模型；记忆也有价值，但很多商业自动化的第一步并不依赖复杂长期记忆。相反，只要你能把提示词写清楚、把知识源整理好、把工具接通，就已经能交付大量可收费的工作流。</p>
+
+      <div class="two-col">
+        <article class="mini-card">
+          <h3>Prompt 像岗位说明书</h3>
+          <p>它告诉 agent “你是谁、服务谁、目标是什么、不能做什么、输出要长什么样”。在商业场景里，提示词写得越像岗位 SOP，越容易稳定交付。</p>
+        </article>
+        <article class="mini-card">
+          <h3>Tools 像员工权限</h3>
+          <p>没有工具的 agent 只能建议；有工具的 agent 才能操作。工具越多，agent 解决问题的路径越多，但也越需要权限控制和错误处理。</p>
+        </article>
+      </div>
+
+      <h3>2.4 工具与 API 的原理</h3>
+      <p>Agent 调用工具，本质上是通过 API 与外部软件交互。你给 agent 一个工具描述，它会阅读这个描述，判断什么时候该调用，提取所需参数，把参数传给 API，然后把 API 返回结果纳入下一步推理。</p>
+      <p>例如在费用报销流程中，agent 看到发票图片后，需要调用模型提取字段；字段返回后，又需要交给 Output Parser 变成结构化数据；用户确认后，再调用 Airtable 写入记录。这里的 agent 并不是“一次回答完所有内容”，而是像流程协调员一样，在多个工具之间接力。</p>
+      <p>复杂任务通常会被拆成多步：先搜集信息，再整理格式，再确认，再写入系统，再通知相关人。这个拆解能力，是 agent 与普通自动化脚本的差异之一。脚本通常按固定路径运行；agent 则能在一定范围内根据上下文决定下一步。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">03</span>三、关键论点与实操步骤：从概念到可卖服务</h2>
+      <p class="lead">视频中最有实操价值的部分，是四个端到端 agent 案例。它们不是孤立 demo，而是覆盖了企业常见需求：票据处理、线索捕获、咨询报价、电话资格筛选和自动跟进。下面按课程脉络拆解。</p>
+
+      <h3>3.1 费用报销 Agent 实操：从发票图片到 Airtable 记录</h3>
+      <p>第一个案例用 n8n 搭建费用报销 agent。用户通过 Telegram 发送发票，流程自动接收图片，然后调用 Gemini 2.5 Flash 识别发票中的关键信息，例如商家、金额、日期、税费、币种和用途。模型输出后，Output Parser 把自然语言结果整理成可写入数据库的字段。</p>
+      <p>这个案例看似简单，但它体现了企业最愿意付费的一类自动化：把高频、重复、容易出错的手工录入变成半自动或全自动流程。财务、行政、采购、HR 都有类似任务。Liam 的演示并不是为了说“报销就是最好的商业方向”，而是为了证明一个模式：只要某个流程由非结构化输入开始，以结构化记录结束，中间需要人反复复制粘贴，就适合用 agent 改造。</p>
+      <ol class="steps">
+        <li><strong>输入：</strong>员工在 Telegram 里发送发票图片或文件，n8n 监听消息并获取附件。</li>
+        <li><strong>理解：</strong>Gemini 2.5 Flash 读取发票内容，提取金额、日期、供应商等字段。</li>
+        <li><strong>结构化：</strong>Output Parser 校验字段格式，减少模型自由输出带来的不稳定。</li>
+        <li><strong>确认：</strong>流程暂停并等待用户确认，避免错误数据直接进入财务表。</li>
+        <li><strong>写入：</strong>确认后把结果写入 Airtable，形成可查询、可审核的报销记录。</li>
+      </ol>
+      <div class="callout">
+        <strong>可复制的商业表达：</strong>“我们帮你把员工报销从人工录入变成 Telegram 提交、AI 自动识别、人工一键确认、财务表自动更新。”这比“我会做 AI agent”更容易让客户理解价值。
+      </div>
+
+      <h3>3.2 太阳能咨询 Agent：把地址变成报价线索</h3>
+      <p>第二个案例面向太阳能行业。用户在聊天框里输入地址，agent 调用 Google Solar API，获取屋顶可安装面板数量、预计发电量、太阳照射条件和相关财务估算。随后，它可以把联邦税收抵免 30% 这样的政策信息纳入回答，并把用户资料写入 Airtable，形成 lead。</p>
+      <p>这个案例的关键在于：它把“咨询”变成了“数据驱动的互动报价”。传统表单只能收集姓名、电话和邮箱；AI 太阳能咨询 agent 则可以先给用户一个有价值的初步判断，再自然地收集联系方式。对企业来说，这种 lead 往往比冷冰冰的表单更有质量，因为用户已经看到了个性化结果。</p>
+      <ol class="steps">
+        <li><strong>用户输入地址：</strong>聊天框收集用户地址，并提示用户补充屋顶或电费相关信息。</li>
+        <li><strong>调用 Google Solar API：</strong>根据地址获取屋顶潜力、面板数量和发电估算。</li>
+        <li><strong>生成咨询结果：</strong>把技术数据转成用户能理解的语言，包括节省潜力和 30% 联邦税收抵免。</li>
+        <li><strong>捕获线索：</strong>在用户产生兴趣后收集姓名、电话、邮箱和安装意向。</li>
+        <li><strong>写入 Airtable：</strong>把地址、估算结果和联系方式统一存储，供销售团队跟进。</li>
+      </ol>
+      <p>从销售角度看，这个 agent 的价值不是“能聊天”，而是“能提高线索转化率”。它让网站访客从浏览者变成被初步教育过的潜在客户，同时减少销售人员在低意向用户身上浪费的时间。</p>
+
+      <h3>3.3 AI 语音 Qualification Agent：让电话筛选自动发生</h3>
+      <p>第三个重点案例是 AI 语音资格筛选 agent。Liam 提到 Retell 和 11Labs 这类语音工具，用来自动拨打 lead 电话，收集关键信息，并把结果传回 n8n 触发后续流程。</p>
+      <p>在真实销售团队里，“联系新线索、确认预算、确认时间、确认需求、判断是否值得销售跟进”是非常耗时的工作。语音 agent 的意义在于，它可以承担第一轮筛选：礼貌开场、说明来意、提问、记录回答、判断是否合格，并在满足条件时安排下一步。</p>
+      <ol class="steps">
+        <li><strong>触发拨号：</strong>Airtable 或 CRM 出现新 lead 后，n8n 调用 Retell 或 11Labs 发起电话。</li>
+        <li><strong>对话脚本：</strong>语音 agent 按业务脚本询问预算、需求、地区、时间线和决策权。</li>
+        <li><strong>结构化记录：</strong>通话结果被转成字段，例如意向等级、痛点、异议和推荐下一步。</li>
+        <li><strong>后续动作：</strong>合格 lead 自动通知销售，不合格 lead 进入培育或沉默流程。</li>
+      </ol>
+      <p>这个案例的交付门槛更高，因为电话场景对语速、延迟、口吻、合规和失败兜底都有要求。但正因为复杂，客户也更愿意为稳定结果付费。对初学者来说，它适合作为进阶项目，而不是第一个上手项目。</p>
+
+      <h3>3.4 Chat Widget + Voice + Lead Capture：从入口到跟进的全链路</h3>
+      <p>视频还涉及把聊天组件、语音 agent 和线索捕获连成完整链路。网站上的 chat widget 负责接住访客，agent 负责回答问题、判断需求、收集资料；当用户留下电话后，语音 agent 可以继续做 qualification；所有结果写入 Airtable 或 CRM，再由 n8n 触发邮件、短信、销售提醒或预约流程。</p>
+      <p>这条链路更接近真实商业交付：客户通常不只想要一个“智能聊天框”，而是想要更多合格线索、更少人工筛选、更快响应速度和更清晰的销售数据。因此，卖 agent 的时候，应该围绕业务指标表达，而不是围绕工具名称表达。</p>
+      <div class="callout success">
+        <strong>从项目到产品化服务：</strong>把“搭一个 agent”包装成“网站线索捕获与自动资格筛选系统”，客户更容易判断 ROI，也更容易接受一次性搭建费加月度维护费。
+      </div>
+
+      <h3>3.5 变现蓝图：Builder 与 Consultant 两条路径</h3>
+      <p>Liam 提到自己的 AI 自动化学校，并把入门者大致分成两条路径：builder 和 consultant。Builder 偏重亲手搭建系统，理解 n8n、API、数据库、部署和调试；consultant 偏重发现业务问题、设计方案、销售项目、管理客户预期和交付结果。</p>
+      <p>这两条路径并不互斥。最强的个人服务商通常两边都懂：既能用客户语言讲清楚 ROI，也能进入 n8n 里修复一个失败节点。初学者可以先从 builder 做起，用小项目建立手感，再逐步训练咨询与销售能力；也可以从 consultant 做起，找技术伙伴交付，但必须理解 agent 的边界，避免卖出无法落地的承诺。</p>
+      <p>视频里的 30 天挑战，本质上是把学习目标从“看完课程”改成“拿到第一个付费客户”。这会逼迫你做三件事：选择一个垂直场景，做出一个可展示 demo，联系真实企业并询问他们是否愿意为结果付费。</p>
+
+      <h3>3.6 推荐工具栈：先用低代码跑通商业闭环</h3>
+      <p>视频中出现的工具栈非常适合初学者：n8n 用来编排流程，Gemini 2.5 Flash 用来做快速低成本的理解与提取，Airtable 用来存储结构化数据，Telegram 用作轻量输入入口，Google Solar API 提供行业数据，Retell 或 11Labs 负责语音交互，Hostinger 可用于部署面向客户的网站或演示页面。</p>
+      <p>这套工具的优点是交付速度快，不要求一开始就写完整后端。缺点是当客户规模、权限、审计、稳定性要求上升时，你需要补上更严谨的工程能力，例如日志、重试、错误队列、权限隔离、数据备份和隐私合规。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">04</span>四、对比表格与决策矩阵</h2>
+      <p class="lead">下面三张表把视频里的核心判断整理成可扫描的决策矩阵。阅读方式很简单：先判断你是在做聊天体验还是业务动作，再判断你能控制的 agent 组件，最后选择一个适合当前能力和客户需求的实操项目。</p>
+
+      <table>
+        <caption>表 1：Chatbot vs AI Agent 对比</caption>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>Chatbot</th>
+            <th>AI Agent</th>
+            <th>商业含义</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>响应方式</td>
+            <td>主要生成文字回答，围绕对话本身工作。</td>
+            <td>理解目标后拆解任务，并在多个步骤中推进结果。</td>
+            <td>客户为“结果”付费的意愿通常高于为“回答”付费。</td>
+          </tr>
+          <tr>
+            <td>是否采取行动</td>
+            <td>通常不直接执行外部动作，除非额外接入自动化。</td>
+            <td>可以调用 API、写入数据库、发送消息、触发工作流。</td>
+            <td>能否行动，是从演示工具进入企业流程的分界线。</td>
+          </tr>
+          <tr>
+            <td>是否需要工具</td>
+            <td>可以只依赖模型和知识库。</td>
+            <td>高度依赖工具描述、权限、参数提取和返回结果处理。</td>
+            <td>工具越贴近业务系统，项目越有护城河。</td>
+          </tr>
+          <tr>
+            <td>典型场景</td>
+            <td>FAQ、客服问答、产品介绍、内容推荐。</td>
+            <td>报销处理、线索筛选、报价生成、CRM 更新、自动跟进。</td>
+            <td>初学者可先用 chatbot 获得入口，再逐步升级为 agent。</td>
+          </tr>
+          <tr>
+            <td>风险点</td>
+            <td>回答不准、知识过期、用户体验差。</td>
+            <td>错误调用工具、写错数据、权限过大、流程失败无人知晓。</td>
+            <td>销售 agent 服务时必须说明确认、日志和人工兜底机制。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <caption>表 2：三大可控要素对照</caption>
+        <thead>
+          <tr>
+            <th>可控要素</th>
+            <th>作用</th>
+            <th>难度</th>
+            <th>典型工具或做法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Prompting</td>
+            <td>定义角色、目标、边界、输出格式和任务步骤，是 agent 的岗位说明书。</td>
+            <td>入门容易，稳定变难；需要反复根据失败样例调整。</td>
+            <td>系统提示词、Few-shot 示例、输出模板、错误处理指令、业务 SOP。</td>
+          </tr>
+          <tr>
+            <td>Knowledge</td>
+            <td>提供业务上下文，让 agent 回答和决策基于公司资料、产品规则和行业数据。</td>
+            <td>中等；难点在资料清洗、版本更新、权限隔离和检索质量。</td>
+            <td>知识库、向量检索、FAQ、政策文档、产品手册、价格表、Airtable。</td>
+          </tr>
+          <tr>
+            <td>Tools</td>
+            <td>让 agent 采取行动，例如查数据、写记录、发通知、拨电话、生成报价。</td>
+            <td>最高；涉及 API、鉴权、参数校验、失败重试和业务后果。</td>
+            <td>n8n、Zapier、Make、Google Solar API、Telegram、Retell、11Labs、CRM API。</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <caption>表 3：四个实操 Agent 对比</caption>
+        <thead>
+          <tr>
+            <th>实操 Agent</th>
+            <th>用途</th>
+            <th>平台</th>
+            <th>关键 API / 工具</th>
+            <th>复杂度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>费用报销 Agent</td>
+            <td>把发票图片转成结构化报销记录，并等待用户确认后写入表格。</td>
+            <td>n8n、Telegram、Airtable</td>
+            <td>Gemini 2.5 Flash、Output Parser、Airtable API、Telegram Bot</td>
+            <td>低到中；适合第一个商业 demo。</td>
+          </tr>
+          <tr>
+            <td>太阳能咨询 Agent</td>
+            <td>根据地址估算屋顶太阳能潜力，生成初步咨询结果并捕获 lead。</td>
+            <td>网站 Chat Widget、Airtable</td>
+            <td>Google Solar API、Airtable API、聊天组件、税收抵免规则</td>
+            <td>中；需要处理行业数据与用户转化路径。</td>
+          </tr>
+          <tr>
+            <td>AI 语音 Qualification Agent</td>
+            <td>自动拨打新线索电话，询问预算、需求和时间线，判断是否值得销售跟进。</td>
+            <td>Retell 或 11Labs、n8n、CRM</td>
+            <td>语音模型、电话 API、转写、n8n Webhook、CRM / Airtable</td>
+            <td>中到高；需要关注延迟、脚本质量和合规。</td>
+          </tr>
+          <tr>
+            <td>Chat + Voice + Lead Capture 全链路 Agent</td>
+            <td>从网站访客接待到电话筛选，再到 CRM 记录和销售通知的完整自动化。</td>
+            <td>网站、n8n、Airtable、语音平台</td>
+            <td>Chat Widget、Retell / 11Labs、Airtable API、邮件或短信通知、Hostinger 部署</td>
+            <td>高；适合包装成高客单价服务。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">05</span>五、视频金句：值得反复记住的四个判断</h2>
+      <p class="lead">这些句子保留英文原文，并在中文语境中解释其意义。它们基本覆盖了视频的逻辑：自动化机会已经存在，初学者要聚焦可控要素，工具决定行动能力，而早期建立技能的人会获得市场位置。</p>
+      <div class="quote-grid">
+        <blockquote>
+          <p>“57% of all the work that Americans do today can be automated with the technology that already exists. Not technology coming in 5 years.”</p>
+          <cite>中文理解：机会不是遥远预测，而是已经可以用现有技术改造的工作。</cite>
+        </blockquote>
+        <blockquote>
+          <p>“While an agent has five components, the three things you actually need to focus on are prompting, knowledge, and tools.”</p>
+          <cite>中文理解：初学者不要被概念淹没，先抓住最能影响交付结果的三件事。</cite>
+        </blockquote>
+        <blockquote>
+          <p>“The more tools you give to an agent, the more flexibility it has to solve problems.”</p>
+          <cite>中文理解：工具就是 agent 的行动能力，但工具越多，越要设计权限和错误兜底。</cite>
+        </blockquote>
+        <blockquote>
+          <p>“The people who build these skills now, while the gap is still massive, are the ones who will get to establish themselves.”</p>
+          <cite>中文理解：供需缺口最大的时候，也是个人建立案例、口碑和定价权的时候。</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">06</span>六、时间戳目录：按章节快速回看</h2>
+      <p class="lead">以下时间点根据字幕概要和视频结构整理，适合二刷时快速定位。具体秒点可能因 YouTube 章节或片头长度略有偏差，但内容顺序与课程脉络一致。</p>
+      <ol class="toc-list">
+        <li><span class="time">00:00</span><span>开场：Liam 介绍自己的 AI agent 经历、公司收入、订阅者规模和企业交付背景。</span></li>
+        <li><span class="time">01:05</span><span>市场背景：McKinsey 57% 自动化潜力、AI 技能工资溢价和早期入场者优势。</span></li>
+        <li><span class="time">02:20</span><span>供需缺口：为什么大量企业有 AI 需求，但缺少能真正落地的服务商。</span></li>
+        <li><span class="time">03:10</span><span>AI Agent 定义：从“会聊天的机器人”转向“能采取行动的数字员工”。</span></li>
+        <li><span class="time">04:15</span><span>五大组件：Brain、Prompt、Memory、Knowledge、Tools 的基本作用。</span></li>
+        <li><span class="time">05:25</span><span>三大可控要素：为什么初学者要优先掌握 Prompting、Knowledge 和 Tools。</span></li>
+        <li><span class="time">06:30</span><span>工具调用原理：agent 如何通过 API 读取工具描述、提取参数并获得返回结果。</span></li>
+        <li><span class="time">07:35</span><span>多工具编排：复杂任务如何拆成搜索、整理、确认、写入和通知等步骤。</span></li>
+        <li><span class="time">08:40</span><span>费用报销 Agent：Telegram 接收发票，Gemini 2.5 Flash 提取字段，Airtable 存储。</span></li>
+        <li><span class="time">10:25</span><span>用户确认机制：为什么在财务和高风险流程里要保留人工确认节点。</span></li>
+        <li><span class="time">11:20</span><span>太阳能咨询 Agent：地址输入、Google Solar API、发电估算、税收抵免和 lead 捕获。</span></li>
+        <li><span class="time">13:10</span><span>AI 语音 Qualification Agent：Retell / 11Labs 自动拨号，收集销售筛选信息。</span></li>
+        <li><span class="time">14:45</span><span>全链路 Agent：Chat Widget、Voice、Lead Capture 与 n8n 后续流程连接。</span></li>
+        <li><span class="time">16:10</span><span>变现蓝图：AI 自动化学校、builder 路径、consultant 路径和 30 天拿客户挑战。</span></li>
+        <li><span class="time">17:35</span><span>工具栈总结：n8n、Gemini 2.5 Flash、Airtable、Telegram、Google Solar API、11Labs / Retell、Hostinger。</span></li>
+      </ol>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">07</span>七、把课程变成行动：初学者的 30 天执行框架</h2>
+      <p class="lead">如果只看完视频，你获得的是信息；如果把它拆成 30 天行动，你才会获得可销售的资产。下面是基于视频逻辑整理的执行框架，适合没有客户、没有案例、但愿意从一个垂直场景开始的人。</p>
+
+      <h3>第 1 周：选一个流程，而不是选一个工具</h3>
+      <p>不要从“我要学 n8n”开始，而要从“我想帮谁减少什么工作”开始。好的入门流程通常具备三个特征：重复频率高、输入输出清晰、业务风险可控。费用报销、线索录入、客服 FAQ 升级、预约提醒、报价初筛，都是比较适合的起点。</p>
+
+      <h3>第 2 周：做一个可演示的端到端 demo</h3>
+      <p>Demo 不需要覆盖所有边界情况，但必须能从真实输入走到真实结果。比如上传一张发票，最后看到 Airtable 多了一条记录；输入一个地址，最后看到太阳能估算和 lead 记录。客户不需要知道每个节点的细节，他们需要看到流程被完成。</p>
+
+      <h3>第 3 周：联系真实企业，验证痛点和付费意愿</h3>
+      <p>用非常具体的语言发起沟通：不要说“我能帮你做 AI 自动化”，而要说“我做了一个系统，可以把你们的发票录入时间减少到员工拍照、AI 提取、财务确认三步。你们现在每周处理多少张发票？”这种表达会自然引出业务现状、成本和预算。</p>
+
+      <h3>第 4 周：把第一个项目交付成案例</h3>
+      <p>第一个客户不一定要高价，但必须换来真实反馈、可展示截图、前后对比和推荐语。后续销售时，你需要的不是“我学过某某课程”，而是“我帮一个团队把某流程从每天 2 小时降到 15 分钟”。这才是 agent 服务的商业证据。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">08</span>八、风险与边界：卖 AI Agent 时不要忽略的问题</h2>
+      <p class="lead">视频强调机会，但真正交付时还要理解边界。企业愿意为自动化付费，也会担心错误、权限、隐私和稳定性。你越早把这些问题纳入方案，越像一个可信的服务商。</p>
+      <table>
+        <caption>补充矩阵：交付 AI Agent 前的风险检查</caption>
+        <thead>
+          <tr>
+            <th>风险</th>
+            <th>可能后果</th>
+            <th>建议处理方式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>模型提取错误</td>
+            <td>发票金额、客户电话或报价参数写错，影响财务或销售判断。</td>
+            <td>使用结构化 parser、字段校验、置信度提示和人工确认节点。</td>
+          </tr>
+          <tr>
+            <td>工具权限过大</td>
+            <td>agent 可能写入错误系统、泄露数据或触发不该触发的动作。</td>
+            <td>最小权限原则；先读后写；高风险动作必须人工批准。</td>
+          </tr>
+          <tr>
+            <td>流程失败无人知道</td>
+            <td>客户以为系统在运行，实际 lead 没有进入 CRM 或电话没有拨出。</td>
+            <td>设置日志、失败通知、重试策略和人工回查面板。</td>
+          </tr>
+          <tr>
+            <td>客户预期过高</td>
+            <td>客户以为 agent 可以完全替代员工，遇到边界情况后失望。</td>
+            <td>销售时明确自动化范围、准确率假设、人工兜底和迭代周期。</td>
+          </tr>
+          <tr>
+            <td>隐私与合规问题</td>
+            <td>发票、电话录音、客户资料可能涉及敏感信息。</td>
+            <td>确认数据存储位置、访问权限、保留周期和客户所在行业要求。</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>初学者最容易犯的错误，是把 demo 当成交付。Demo 证明“能跑通”，交付则要求“能在客户环境里持续稳定地跑”。两者之间的差距，正是你可以向客户收取搭建费、维护费和优化费的理由。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">09</span>九、相关推荐</h2>
+      <p class="lead">继续阅读课程列表或相邻课程，可以把本页内容放到更大的 AI agent 学习路径里。</p>
+      <div class="recommendations">
+        <a href="index.html">返回完整课程列表<span>浏览更多 YouTube 课程笔记与中文讲解。</span></a>
+        <a href="mWvtOHlZM-I.html">工具、技能还是子智能体？<span>拆解一个过度膨胀的 Agent 设计。</span></a>
+        <a href="EAeUiipzCTE.html">相关 AI Agent 课程页<span>继续学习 agent 架构、工具调用与落地流程。</span></a>
+        <a href="youtube_course/mWvtOHlZM-I.html">备用课程链接<span>如果从站点根目录进入，可使用该相对路径跳转。</span></a>
+      </div>
+      <p class="footer-note">本页为视频学习笔记，所有正文、表格、按钮文字与章节说明均使用简体中文；英文标题与金句保留原文以便对照视频内容。</p>
+    </section>
+  </main>
+</body>
+</html>
