@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>近期 Claude Code 质量报告的更新 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-04-23</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">近期 Claude Code 质量报告的更新</h1>
+      <p class="article-original-title">原文：An update on recent Claude Code quality reports</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Anthropic 复盘了部分用户认为 Claude Code 质量下降的原因：三个相互独立的产品层变更叠加，影响了 reasoning effort、长会话中的思考历史缓存，以及系统 prompt 的简洁性约束。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>问题来自 Claude Code、Claude Agent SDK 和 Claude Cowork 的三项变更，API 与推理层未受影响。</li>
+        <li>3 月 4 日默认 reasoning effort 从 high 改为 medium，降低了延迟，但牺牲了部分智能表现。</li>
+        <li>3 月 26 日的缓存优化 bug 会在空闲超过一小时的会话中持续丢弃旧 thinking，造成遗忘和重复。</li>
+        <li>4 月 16 日加入的系统 prompt 简洁性指令，与其他 prompt 变更组合后损害了编码质量。</li>
+        <li>三个问题分别在 4 月 7 日、4 月 10 日和 4 月 20 日修复；截至 4 月 20 日 v2.1.116，全部问题已解决。</li>
+        <li>内部 eval 和 dogfooding 未能一开始复现问题，暴露出公开构建、长尾场景和 prompt 变更评审上的缺口。</li>
+        <li>Anthropic 将扩大逐模型 eval、prompt ablation、渐进 rollout 和 soak period，并改进 Code Review 工具。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <p>过去一个月里，我们一直在调查一些用户关于 Claude 回复质量变差的报告。我们将这些报告追溯到三个相互独立的变更，它们分别影响了 Claude Code、Claude Agent SDK 和 Claude Cowork。API 没有受到影响。</p>
+      <p>截至 4 月 20 日（v2.1.116），这三个问题现在都已经解决。</p>
+      <p>在这篇文章中，我们会解释发现了什么、修复了什么，以及我们将如何改变做法，让类似问题今后更不容易再次发生。</p>
+      <p>我们非常严肃地看待有关质量下降的报告。我们绝不会有意降低模型质量，而且我们能够立刻确认 API 和 inference layer 没有受到影响。</p>
+      <p>经过调查，我们识别出三个不同的问题：</p>
+      <ul>
+        <li>3 月 4 日，我们将 Claude Code 的默认 reasoning effort 从 high 改为 medium，以降低部分用户在 high 模式下遇到的极长延迟。这种延迟有时长到足以让 UI 看起来像被冻结了一样。这个取舍是错误的。用户告诉我们，他们更希望默认获得更高智能，并在简单任务中主动选择较低 effort；因此我们在 4 月 7 日回滚了该变更。这个问题影响了 Sonnet 4.6 和 Opus 4.6。</li>
+        <li>3 月 26 日，我们发布了一项变更：对空闲超过一小时的 session，清除 Claude 较早的 thinking，以降低用户恢复这些 session 时的延迟。一个 bug 导致清理行为不是只发生一次，而是在该 session 后续每一轮都持续发生，使 Claude 显得健忘和重复。我们在 4 月 10 日修复了它。这个问题影响了 Sonnet 4.6 和 Opus 4.6。</li>
+        <li>4 月 16 日，我们加入了一条系统 prompt 指令，用于减少冗长程度。它与其他 prompt 变更组合后损害了编码质量，并在 4 月 20 日被回滚。这个问题影响了 Sonnet 4.6、Opus 4.6 和 Opus 4.7。</li>
+      </ul>
+      <p>由于每个变更都在不同时间影响了不同流量切片，汇总后的效果看起来像是广泛而不一致的质量下降。虽然我们从 3 月初就开始调查这些报告，但一开始很难把它们与用户反馈中的正常波动区分开来，而且我们的内部使用和 eval 最初也没有复现已识别出的问题。</p>
+      <p>这不是用户应该从 Claude Code 获得的体验。截至 4 月 23 日，我们正在为所有订阅用户重置使用额度。</p>
+
+      <h2>Claude Code 默认 reasoning effort 的变更</h2>
+      <p>2 月，我们在 Claude Code 中发布 Opus 4.6 时，将默认 reasoning effort 设为 high。</p>
+      <p>不久后，我们收到用户反馈：Claude Opus 4.6 在 high effort 模式下偶尔会思考过久，导致 UI 看起来被冻结，并给这些用户带来不成比例的延迟和 token 使用量。</p>
+      <p>一般来说，模型思考时间越长，输出越好。Effort level 是 Claude Code 让用户设置这种取舍的方式：更多思考，还是更低延迟和更少触发使用额度限制。我们为模型校准 effort level 时，会考虑这种取舍，以便在 test-time-compute 曲线上选择一组能为用户提供最佳选项范围的点。在产品层，我们随后选择该曲线上的哪一个点作为默认值，并把这个值作为 effort 参数发送到 Messages API；其他选项则通过 /effort 提供。</p>
+      <p>*</p>
+      <p>在我们的内部 eval 和测试中，对大多数任务而言，medium effort 以显著更低的延迟取得了略低的智能表现。它也没有遭遇同样偶发的极长 thinking 尾部延迟问题，并且有助于最大化用户的使用额度。因此，我们推出了一项变更，将 medium 设为默认 effort，并通过产品内对话框解释了原因。</p>
+      <p>推出后不久，用户开始报告 Claude Code 感觉没有以前聪明。我们发布了多轮设计迭代，让当前 effort 设置更清晰，以提醒用户可以更改默认值，包括启动时提示、内联 effort 选择器，以及恢复 ultrathink；但大多数用户仍保留了 medium effort 默认值。</p>
+      <p>在听到更多客户反馈后，我们在 4 月 7 日推翻了这一决定。现在，所有用户在 Opus 4.7 上默认使用 xhigh effort，在所有其他模型上默认使用 high effort。</p>
+
+      <h2>一次丢失先前 reasoning 的缓存优化</h2>
+      <p>Claude 针对任务进行 reasoning 时，这些 reasoning 通常会保留在对话历史中。这样在之后每一轮里，Claude 都能看到自己为什么进行了那些编辑和 tool call。</p>
+      <p>3 月 26 日，我们发布了一项本意是提升该功能效率的改进。我们使用 prompt caching，让连续 API 调用对用户来说更便宜、更快。Claude 发起 API 请求时，会把输入 token 写入缓存；经过一段时间不活动后，prompt 会从缓存中逐出，为其他 prompt 腾出空间。Cache utilization 是我们认真管理的事项（更多内容见我们的方法）。</p>
+      <p>设计本应很简单：如果某个 session 已经空闲超过一小时，我们可以通过清除旧的 thinking section 来降低用户恢复该 session 的成本。由于这个请求无论如何都会是 cache miss，我们可以从请求中剪掉不必要的 message，减少发送给 API 的未缓存 token 数量。之后我们再恢复发送完整 reasoning history。为此，我们使用了 clear_thinking_20251015 API header，并搭配 keep:1。</p>
+      <p>实现中存在一个 bug。它没有只清除一次 thinking history，而是在该 session 后续每一轮都清除。一个 session 一旦跨过空闲阈值，该进程后续的每个请求都会告诉 API：只保留最近一个 reasoning block，并丢弃之前所有内容。这个问题会叠加：如果你在 Claude 正处于 tool use 中途时发送 follow-up message，它会在损坏的 flag 下开启新一轮，因此连当前轮的 reasoning 也会被丢弃。Claude 会继续执行，但越来越缺少对自己为何选择当前做法的记忆。这表现为用户报告的健忘、重复和奇怪的工具选择。</p>
+      <p>由于这会持续从后续请求中丢弃 thinking block，这些请求也会造成 cache miss。我们认为，这就是另一些关于使用额度比预期消耗更快的报告背后的原因。</p>
+      <p>两个无关实验让我们一开始很难复现这个问题：一个是仅限内部的、与 message queueing 相关的 server-side experiment；另一个是 thinking 展示方式上的正交变更，它在大多数 CLI session 中压制了这个 bug，因此即便测试外部构建时我们也没有捕捉到它。</p>
+      <p>这个 bug 位于 Claude Code 的 context management、Anthropic API 和 extended thinking 的交叉处。它引入的变更通过了多轮人工和自动化 code review，也通过了 unit test、end-to-end test、automated verification 和 dogfooding。再加上它只发生在一个角落场景（stale session）中，并且复现困难，我们花了一周多才发现并确认 root cause。</p>
+      <p>作为调查的一部分，我们使用 Opus 4.7 针对有问题的 pull request 回测了 Code Review。在提供收集完整 context 所需的代码仓库后，Opus 4.7 找到了这个 bug，而 Opus 4.6 没有。为了防止这种情况再次发生，我们现在正在为 code review 落地额外 repository 作为 context 的支持。</p>
+      <p>我们在 4 月 10 日的 v2.1.101 中修复了这个 bug。</p>
+
+      <h2>一次用于降低冗长程度的系统 prompt 变更</h2>
+      <p>我们的最新模型 Claude Opus 4.7，相比前代有一个明显的行为特征：正如我们在发布时写到的，它往往相当冗长。这让它在难题上更聪明，但也会产生更多输出 token。</p>
+      <p>在发布 Opus 4.7 前几周，我们开始为此调整 Claude Code。每个模型的行为都有细微差异，因此每次发布前，我们都会花时间为它优化 harness 和产品。</p>
+      <p>我们有多种工具可以减少冗长程度：模型训练、prompting，以及改进产品中的 thinking UX。最终这些方法我们都用了，但系统 prompt 中新增的一条内容对 Claude Code 的智能表现产生了过大的影响：</p>
+      <blockquote>“长度限制：tool call 之间的文本保持在 ≤25 个词。除非任务需要更多细节，最终回复保持在 ≤100 个词。”*</blockquote>
+      <p>经过数周内部测试，并且在我们运行的一组 evaluation 中没有发现 regression 后，我们对该变更有信心，并在 4 月 16 日随 Opus 4.7 一起发布。</p>
+      <p>作为这次调查的一部分，我们使用更广泛的一组 evaluation 运行了更多 ablation，即移除系统 prompt 中的行，以理解每一行的影响。其中一个 evaluation 显示 Opus 4.6 和 4.7 都下降了 3%。我们立即将该 prompt 作为 4 月 20 日发布的一部分回滚。</p>
+
+      <h2>未来计划</h2>
+      <p>为了避免这些问题，我们将以几种不同方式调整做法：确保更多内部员工使用 Claude Code 的准确公开构建，而不是我们用于测试新功能的版本；并改进我们内部使用的 Code Review 工具，同时把改进后的版本提供给客户。</p>
+      <p>我们也会对系统 prompt 变更加上更严格的控制。针对 Claude Code 的每一次系统 prompt 变更，我们都会运行一套广泛的逐模型 eval，继续通过 ablation 理解每一行的影响，并且已经构建了新工具，让 prompt 变更更容易被 review 和 audit。我们还在 CLAUDE.md 中增加了指导，确保面向特定模型的变更只对其目标模型生效。对于任何可能以智能为代价的变更，我们会加入 soak period、更广泛的 eval suite 和渐进 rollout，以便更早发现问题。</p>
+      <p>我们最近在 X 上创建了 @ClaudeDevs，让我们有空间深入解释产品决策及其背后的 reasoning。我们也会在 GitHub 的集中 thread 中分享同样的更新。</p>
+      <p>最后，我们想感谢用户：那些使用 /feedback command 与我们分享问题的人，以及在线发布具体、可复现示例的人，最终让我们得以识别并修复这些问题。今天，我们正在为所有订阅用户重置使用额度。</p>
+      <p>我们非常感谢你们的反馈和耐心。</p>
+      <p><em>本文为 Anthropic 官方工程博客文章。</em></p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇复盘的关键不只是“三个 bug 已修复”，而是展示了 agent 产品质量如何由模型、prompt、harness、缓存、UI 默认值和真实用户工作流共同决定。API 与 inference layer 没有退化，但产品层的默认 effort 降级、context window 中 thinking history 的意外丢失，以及看似合理的简洁性约束，都会让用户感知到“模型变笨”。这说明 agent 评估不能只看单轮 benchmark，也不能只依赖内部构建和短会话测试。长时间 idle 后恢复、tool use 中途追加消息、不同模型共享 prompt 指令、缓存命中与额度消耗之间的耦合，都是真实生产环境中的关键边界。Anthropic 后续强调逐模型 eval、prompt ablation、公开构建 dogfooding、渐进 rollout 和更强 Code Review，本质上是在把 agent 系统当作完整软件产品而不是孤立模型来治理。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>agent 产品的默认参数就是产品承诺；降低延迟前，应明确衡量对智能体验的影响。</li>
+        <li>context management 和 prompt caching 的优化必须覆盖 stale session、tool use 中断、follow-up message 等长尾工作流。</li>
+        <li>系统 prompt 的每一行都应做逐模型 ablation，尤其是可能限制输出、思考或解释空间的指令。</li>
+        <li>内部 dogfooding 应尽量使用用户实际拿到的公开构建，否则容易错过发布版本中的交互性问题。</li>
+        <li>Code Review agent 需要足够完整的 repository context；缺少上下文时，高能力模型也可能错过跨模块 bug。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/april-23-postmortem" target="_blank" rel="noopener">https://www.anthropic.com/engineering/april-23-postmortem</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
