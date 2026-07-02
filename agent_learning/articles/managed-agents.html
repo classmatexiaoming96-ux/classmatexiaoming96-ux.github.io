@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>扩展 Managed Agents：将大脑与双手解耦 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-04-08</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">扩展 Managed Agents：将大脑与双手解耦</h1>
+      <p class="article-original-title">原文：Scaling Managed Agents: Decoupling the brain from the hands</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>本文讲述 Anthropic 如何把 Managed Agents 拆成 session、harness 与 sandbox 等稳定接口，让 Claude 的“大脑”与执行环境的“双手”解耦，从而提升可靠性、安全边界、长程上下文管理与扩展性能。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>harness 中关于模型能力的假设会随模型进步而过期，因此需要持续被质疑和替换。</li>
+        <li>Managed Agents 通过 session、harness、sandbox 三个抽象，把 agent 系统组件虚拟化为可替换接口。</li>
+        <li>把所有组件放进同一个容器会制造“pet”式基础设施，故障恢复、调试和网络连接都会变脆弱。</li>
+        <li>将“大脑”Claude 与 harness 从“手”sandbox 和工具中分离后，容器可以像 cattle 一样失败后重建。</li>
+        <li>session log 放在 harness 之外，使 harness 崩溃后可通过 <code>wake(sessionId)</code>、<code>getSession(id)</code> 恢复。</li>
+        <li>安全设计的关键是让凭据永远不能从运行 Claude 生成代码的 sandbox 中触达。</li>
+        <li>session 不是 Claude 的 context window，而是可持久查询、可重新切片的外部上下文对象。</li>
+        <li>按需 provision 容器让 p50 TTFT 下降约 60%，p95 下降超过 90%。</li>
+        <li>统一的 <code>execute(name, input) → string</code> 接口支持 custom tool、MCP server 与多种执行环境。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <p>Anthropic 是一家 AI 安全与研究公司，致力于构建可靠、可解释且可控的 AI 系统。</p>
+      <p>可以按照我们的文档开始使用 Claude Managed Agents。Engineering Blog 上一直有一个主题：如何构建有效的 agent，以及如何为长时间运行的工作设计 harness。这些工作中有一条共同线索：harness 会编码关于 Claude 不能独立完成什么的假设。然而，这些假设需要被频繁质疑，因为随着模型改进，它们可能会变得过时。</p>
+      <p>举一个例子，在此前的工作中，我们发现 Claude Sonnet 4.5 在感觉自己的 context limit 逼近时，会过早结束任务，这种行为有时被称为“context anxiety”。我们通过在 harness 中加入 context reset 来处理这个问题。但当我们把同一个 harness 用在 Claude Opus 4.5 上时，发现这种行为消失了。那些 reset 已经变成了无用负担。</p>
+      <p>我们预计 harness 会持续演进。因此我们构建了 Managed Agents：这是 Claude Platform 中的一项托管服务，会代表你运行长程 agent，并通过一小组接口暴露能力。这些接口被设计为比任何特定实现更持久，包括我们今天运行的实现。</p>
+      <p>构建 Managed Agents 意味着要解决计算领域的一个老问题：如何为“尚未被设想出来的程序”设计系统。几十年前，操作系统通过把硬件虚拟化成足够通用的抽象来解决这个问题，例如 process 和 file，从而服务于当时还不存在的程序。抽象比硬件更长寿。<code>read()</code> 命令并不关心它访问的是 20 世纪 70 年代的磁盘组，还是现代 SSD。上层抽象保持稳定，而底层实现可以自由变化。</p>
+      <p>Managed Agents 遵循同样的模式。我们把 agent 的组件虚拟化了：session，也就是所有已发生事件的 append-only log；harness，也就是调用 Claude 并把 Claude 的 tool call 路由到相关基础设施的循环；sandbox，也就是 Claude 可以运行代码和编辑文件的执行环境。这样，每个组件的实现都可以被替换，而不会扰动其他组件。我们对这些接口的形状有明确主张，但不对接口背后运行什么作出规定。</p>
+      <p class="section-note">要点：Managed Agents 的核心不是固定某个 agent 实现，而是把 agent 运行时拆成稳定、可演进的接口。</p>
+
+      <h2>不要领养一只 pet</h2>
+      <p>一开始，我们把所有 agent 组件都放进一个容器里，这意味着 session、agent harness 和 sandbox 共享同一个环境。这种方法有好处，例如文件编辑就是直接的 syscall，也没有需要设计的服务边界。</p>
+      <p>但把所有东西耦合进一个容器后，我们遇到了一个古老的基础设施问题：我们领养了一只 pet。在 pets-vs-cattle 的类比中，pet 是一个有名字、需要手工照料、不能失去的个体，而 cattle 是可互换的。在我们的场景中，服务器变成了那个 pet；如果容器失败，session 就丢失了。如果容器无响应，我们就必须把它救回来。</p>
+      <p>照料容器意味着要调试无响应、卡住的 session。我们唯一的观察窗口是 WebSocket event stream，但它无法告诉我们故障来自哪里，这意味着 harness 中的 bug、event stream 中的丢包，或者容器离线，表现出来都一样。为了弄清出了什么问题，工程师必须在容器里打开 shell；但由于该容器往往也保存着用户数据，这种做法实际上意味着我们缺乏调试能力。</p>
+      <p>第二个问题是，harness 假设 Claude 处理的任何东西都和它一起存在于容器里。当客户要求我们把 Claude 连接到他们的 virtual private cloud 时，他们要么必须让自己的网络和我们的网络 peering，要么在自己的环境中运行我们的 harness。一个被写死在 harness 里的假设，在我们想把它连接到不同基础设施时变成了问题。</p>
+      <p class="section-note">要点：单容器方案早期简单，但把 session、harness、sandbox 绑成了不可丢失的宠物式系统。</p>
+
+      <h2>将大脑与双手解耦</h2>
+      <p>我们最终采用的解决方案，是把我们称为“大脑”的部分 Claude 与它的 harness，同时从“双手”sandbox 和执行动作的工具，以及“session”事件日志中解耦出来。每一部分都变成了一个接口，对其他部分只做很少假设，并且每一部分都可以独立失败或被替换。</p>
+      <p>harness 离开容器。将大脑与双手解耦意味着 harness 不再住在容器里。它像调用其他任何 tool 一样调用容器：<code>execute(name, input) → string</code>。容器变成了 cattle。如果容器死掉，harness 会把故障捕获为 tool-call error 并传回给 Claude。如果 Claude 决定重试，一个新容器可以用标准配方重新初始化：<code>provision({resources})</code>。我们不再需要把失败的容器救回健康状态。</p>
+      <p>从 harness 故障中恢复。harness 也变成了 cattle。因为 session log 位于 harness 之外，harness 中没有任何东西需要在崩溃后存活。当某个 harness 失败时，一个新的 harness 可以通过 <code>wake(sessionId)</code> 重新启动，使用 <code>getSession(id)</code> 取回 event log，并从最后一个事件恢复。在 agent loop 期间，harness 会用 <code>emitEvent(id, event)</code> 写入 session，以保持事件的持久记录。</p>
+      <p>安全边界。在耦合设计中，Claude 生成的任何不受信任代码都和凭据运行在同一个容器里，因此 prompt injection 只需要说服 Claude 读取自己的环境。一旦攻击者拿到这些 token，他们就可以启动新的、未受限制的 session，并把工作委派给它们。窄化 scope 是一种显然的缓解方式，但这会编码一个关于 Claude 不能用受限 token 做什么的假设，而 Claude 正变得越来越聪明。结构性修复方式是确保 token 永远无法从 Claude 生成代码运行所在的 sandbox 中触达。</p>
+      <p>我们使用了两种模式来确保这一点。Auth 可以与资源打包在一起，也可以保存在 sandbox 外部的 vault 中。对于 Git，我们使用每个 repository 的 access token 在 sandbox 初始化期间 clone repo，并把它接入本地 git remote。Git push 和 pull 可以在 sandbox 内部工作，而 agent 永远不会亲自处理 token。对于 custom tool，我们支持 MCP，并把 OAuth token 存储在安全 vault 中。Claude 通过专用 proxy 调用 MCP tool；这个 proxy 接收与 session 关联的 token。随后 proxy 可以从 vault 中获取相应凭据，并调用外部服务。harness 永远不会知道任何凭据。</p>
+      <p class="section-note">要点：解耦之后，故障恢复和安全边界都从“修补容器”转为接口层面的结构设计。</p>
+
+      <h2>session 不是 Claude 的 context window</h2>
+      <p>长程任务常常会超过 Claude 的 context window 长度，而处理这个问题的标准方法都会涉及不可逆的取舍：决定保留什么。我们在此前关于 context engineering 的工作中探索过这些技术。例如，compaction 让 Claude 保存其 context window 的摘要，memory tool 让 Claude 把上下文写入文件，从而支持跨 session 学习。这可以与 context trimming 配合使用，后者会有选择地删除旧 tool result 或 thinking block 等 token。</p>
+      <p>但有选择地保留或丢弃上下文的不可逆决策可能导致失败。未来轮次会需要哪些 token 很难提前知道。如果 message 经过 compaction 步骤转换，harness 会把被压缩的 message 从 Claude 的 context window 中移除，而这些 message 只有在被存储时才能恢复。此前的工作探索过一种处理方式：把 context 存为一个存在于 context window 外部的对象。例如，context 可以是 REPL 中的一个对象，LLM 通过写代码对它进行过滤或切片来以编程方式访问。</p>
+      <p>在 Managed Agents 中，session 提供了同样的好处，作为一个存在于 Claude context window 外部的 context object。但 context 并不是存储在 sandbox 或 REPL 里，而是被持久存储在 session log 中。接口 <code>getEvents()</code> 允许大脑通过选择 event stream 的位置切片来查询 context。该接口可以灵活使用，让大脑从上次停止阅读的位置继续，在某个特定时刻之前回退几个事件以查看前因，或者在某个特定动作之前重新阅读 context。</p>
+      <p>任何取回的 event 也可以先在 harness 中转换，再传入 Claude 的 context window。这些转换可以是 harness 编码的任何逻辑，包括用于实现高 prompt cache 命中率的 context organization，以及 context engineering。我们把 session 中可恢复 context 存储和 harness 中任意 context management 的职责分离开来，因为我们无法预测未来模型需要哪些具体的 context engineering。接口把 context management 推入 harness，并且只保证 session 是持久的、可查询的。</p>
+      <p class="section-note">要点：session log 是可恢复的事实来源，context window 只是当前推理时被组织出来的一次视图。</p>
+
+      <h2>许多大脑，许多双手</h2>
+      <p>许多大脑。将大脑与双手解耦解决了我们最早遇到的客户抱怨之一。当团队希望 Claude 操作自己 VPC 中的资源时，唯一途径是让他们的网络和我们的网络 peering，因为承载 harness 的容器假设每个资源都在它旁边。一旦 harness 不再位于容器中，这个假设就消失了。同样的改变也带来了性能收益。最初把大脑放进容器意味着有多少大脑就需要多少容器。对每个大脑来说，在容器 provision 完成之前无法发生任何 inference；每个 session 都要预先支付完整的容器设置成本。每个 session，甚至那些永远不会碰 sandbox 的 session，都必须 clone repo、boot process、从我们的服务器 fetch pending events。</p>
+      <p>这种死时间体现在 time-to-first-token，简称 TTFT，它衡量 session 在接受工作和产出第一个 response token 之间等待了多久。TTFT 是用户最直接感受到的延迟。</p>
+      <p>将大脑与双手解耦意味着容器只有在需要时才由大脑通过 tool call <code>execute(name, input) → string</code> 来 provision。因此，如果一个 session 一开始不需要容器，它就不会等待容器。只要 orchestration layer 从 session log 中拉取了 pending events，inference 就可以开始。使用这种架构后，我们的 p50 TTFT 下降了约 60%，p95 下降超过 90%。扩展到许多大脑只意味着启动许多无状态 harness，并且仅在需要时把它们连接到双手。</p>
+      <p>许多双手。我们还希望能够把每个大脑连接到许多双手。实践中，这意味着 Claude 必须理解许多执行环境，并决定把工作发送到哪里，这比在单个 shell 中操作是更难的认知任务。我们最初让大脑待在单个容器中，是因为更早的模型还不具备这种能力。随着 intelligence 扩展，单个容器反而成了限制：当该容器失败时，我们会失去大脑正在触达的每只手的状态。</p>
+      <p>将大脑与双手解耦让每只手都成为一个 tool，<code>execute(name, input) → string</code>：传入一个 name 和 input，返回一个 string。这个接口支持任何 custom tool、任何 MCP server，以及我们自己的 tool。harness 不知道 sandbox 是容器、手机，还是 Pokémon emulator。并且由于没有任何一只手与任何大脑耦合，大脑可以把手传递给彼此。</p>
+      <p class="section-note">要点：多大脑和多双手的扩展，都依赖于统一的 tool 接口与无状态 harness，而不是更多持久容器。</p>
+
+      <h2>结论</h2>
+      <p>我们面对的挑战是一个老问题：如何为“尚未被设想出来的程序”设计系统。操作系统通过把硬件虚拟化成足够通用的抽象，支撑了当时还不存在的程序，并因此延续了几十年。通过 Managed Agents，我们的目标是设计一个能够容纳 Claude 周围未来 harness、sandbox 或其他组件的系统。</p>
+      <p>Managed Agents 是同样精神下的 meta-harness，它并不预设 Claude 未来会需要哪一种具体 harness。相反，它是一个具备通用接口的系统，允许许多不同的 harness 存在。例如，Claude Code 是一个优秀的 harness，我们在许多任务中广泛使用。我们也展示过，面向特定任务的 agent harness 在狭窄领域表现出色。Managed Agents 可以容纳其中任何一种，并随 Claude 的 intelligence 演进而匹配。</p>
+      <p>Meta-harness 设计意味着要对 Claude 周围的接口有明确主张：我们预计 Claude 需要操作 state，也就是 session；也需要执行 computation，也就是 sandbox。我们还预计 Claude 需要扩展到许多大脑和许多双手。我们设计这些接口，使它们能够在长时间跨度上可靠、安全地运行。但我们不对 Claude 需要多少大脑或双手、它们位于哪里作出假设。</p>
+      <p class="section-note">要点：Managed Agents 的长期价值在于接口稳定性，让未来更强模型和不同 harness 都能接入同一个系统框架。</p>
+
+      <h2>致谢</h2>
+      <p>本文为 Anthropic 官方工程博客文章。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章的关键不只是“把容器拆开”，而是把 agent 系统从一次性工程实现提升为操作系统式的抽象设计。Anthropic 明确承认，harness 本质上会包含对模型短板的判断，而这些判断会随 Claude Sonnet 4.5 到 Claude Opus 4.5 这样的模型升级而失效。因此 Managed Agents 选择稳定接口，而不是稳定实现：session 负责可恢复事实，harness 负责可替换策略，sandbox 和 tool 负责受控执行。这个划分也解释了为什么安全、性能和扩展性在同一架构变化中同时改善。凭据不进入 sandbox，降低 prompt injection 后果；容器按需启动，改善 TTFT；session log 外置，让 harness 崩溃后可以恢复。对长期 agent 产品而言，这种设计比单纯优化 prompt 或增加工具更根本，因为它为未来未知的模型能力和 agent 形态预留了演进空间。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>不要把 agent 的推理循环、执行环境、状态日志和凭据放进同一个不可替换运行时。</li>
+        <li>把 session log 设计为 append-only、可查询、可恢复的事实来源，而不是把 context window 当作唯一状态。</li>
+        <li>工具和 sandbox 应使用统一、窄接口，例如 <code>execute(name, input) → string</code>，便于替换和故障隔离。</li>
+        <li>凭据应通过 vault、proxy 或资源绑定方式间接使用，避免暴露给 Claude 生成代码运行的环境。</li>
+        <li>在模型升级后重新审视 harness 中的补丁逻辑，及时移除已经过期的能力假设。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/managed-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/managed-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
