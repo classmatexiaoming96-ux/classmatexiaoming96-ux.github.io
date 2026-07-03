@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 sandboxing 让 Claude Code 更安全、更自主 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-07-02</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">用 sandboxing 让 Claude Code 更安全、更自主</h1>
+      <p class="article-original-title">原文：Making Claude Code more secure and autonomous with sandboxing</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>本文介绍 Claude Code 的 sandboxing 能力：通过文件系统隔离和网络隔离，在减少 permission prompt 的同时控制 prompt injection、凭据外传和恶意命令带来的风险。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>Claude Code 默认基于 permission 模型运行，写文件和执行多数命令前需要用户批准。</li>
+        <li>频繁点击 approve 会拖慢开发节奏，并造成 approval fatigue，反而降低用户对风险动作的注意力。</li>
+        <li>Anthropic 内部使用显示，sandboxing 可安全减少 84% 的 permission prompt。</li>
+        <li>有效 sandboxing 必须同时具备 filesystem isolation 和 network isolation，单独任一层都不足以防 prompt injection 后的外逃。</li>
+        <li>sandboxed bash tool 使用 Linux bubblewrap 和 MacOS seatbelt 等 OS-level primitive，把 bash 命令限制在用户定义的目录和网络边界内。</li>
+        <li>网络访问通过连接到 sandbox 外 proxy server 的 unix domain socket 管控，可限制 domain 并处理新 domain 的用户确认。</li>
+        <li>Claude Code on the web 把每个 session 放进云端隔离 sandbox，并确保 git credential、signing key 等敏感凭据不进入 sandbox。</li>
+        <li>Web 版 git 流程通过自定义 proxy 校验 scoped credential、branch 和 repository destination，再附加正确认证 token。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <p>在 Claude Code 中，Claude 会与你一起编写、测试和调试代码：它会浏览你的 codebase、编辑多个文件，并运行命令来验证自己的工作。给 Claude 这么多访问 codebase 和文件的能力会引入风险，尤其是在 prompt injection 场景下。</p>
+      <p>为了解决这个问题，我们在 Claude Code 中引入了两个建立在 sandboxing 之上的新功能。二者都旨在为开发者提供更安全的工作空间，同时让 Claude 能以更高自主性、更少 permission prompt 运行。在我们的内部使用中，sandboxing 已经可以安全地减少 84% 的 permission prompt。通过定义 Claude 可自由工作的固定边界，它们同时提升了安全性和 agent 的行动能力。</p>
+      <h3>让 Claude Code 用户保持安全</h3>
+      <p>Claude Code 运行在基于 permission 的模型上：默认情况下它是只读的，这意味着在修改内容或运行任何命令之前，它会先请求 permission。也有一些例外：我们会自动允许像 <code>echo</code> 或 <code>cat</code> 这样的安全命令，但大多数操作仍然需要明确批准。</p>
+      <p>不断点击“approve”会拖慢开发循环，并可能导致 approval fatigue：用户可能不再仔细关注自己正在批准的内容，进而让开发过程变得更不安全。</p>
+      <p>为了解决这一点，我们为 Claude Code 推出了 sandboxing。</p>
+      <p class="section-note">要点：permission prompt 本身是安全机制，但过多 prompt 会削弱人的判断质量，sandboxing 的目标是把边界前移到执行环境。</p>
+
+      <h2>Sandboxing：一种更安全、更自主的方法</h2>
+      <p>Sandboxing 会创建预先定义的边界，Claude 可以在这些边界内更自由地工作，而不是为每一个动作请求 permission。启用 sandboxing 后，你会收到大幅减少的 permission prompt，同时获得更高安全性。</p>
+      <p>我们的 sandboxing 方法建立在操作系统级功能之上，用来启用两类边界：</p>
+      <ul>
+        <li>Filesystem isolation，确保 Claude 只能访问或修改特定目录。这对于阻止被 prompt injection 攻破的 Claude 修改敏感系统文件尤其重要。</li>
+        <li>Network isolation，确保 Claude 只能连接到已批准的服务器。这可以防止被 prompt injection 攻破的 Claude 泄露敏感信息或下载 malware。</li>
+      </ul>
+      <p>值得注意的是，有效的 sandboxing 同时需要 filesystem isolation 和 network isolation。没有 network isolation，被攻破的 agent 可能外传 SSH key 等敏感文件；没有 filesystem isolation，被攻破的 agent 则可能轻易逃出 sandbox 并获得网络访问。正是通过同时使用这两种技术，我们才能为 Claude Code 用户提供更安全、更快速的 agentic experience。</p>
+      <h3>Claude Code 中的两个新 sandboxing 功能</h3>
+      <h3>Sandboxed bash tool：无需 permission prompt 的安全 bash 执行</h3>
+      <p>我们正在引入一个新的 sandbox runtime，目前以 beta 形式作为 research preview 提供。它让你精确定义 agent 可以访问哪些目录和网络 host，同时避免启动和管理 container 的开销。它可用于 sandbox 任意 process、agent 和 MCP server，也作为开源 research preview 提供。</p>
+      <p>在 Claude Code 中，我们使用这个 runtime 来 sandbox bash tool，让 Claude 能在你设置的定义边界内运行命令。在安全 sandbox 内，Claude 可以更自主地运行，并安全执行命令而无需 permission prompt。如果 Claude 试图访问 sandbox 外的内容，你会立刻收到通知，并可以选择是否允许。</p>
+      <p>我们基于 Linux bubblewrap 和 MacOS seatbelt 等 OS-level primitive 构建该能力，在 OS 层强制执行这些限制。它们不仅覆盖 Claude Code 的直接交互，也覆盖由命令生成的任何 script、program 或 subprocess。如上所述，这个 sandbox 同时执行两类隔离：</p>
+      <ul>
+        <li>Filesystem isolation：允许对当前工作目录进行读写访问，但阻止修改该目录之外的任何文件。</li>
+        <li>Network isolation：只允许通过一个 unix domain socket 访问互联网，该 socket 连接到运行在 sandbox 外部的 proxy server。这个 proxy server 会对 process 可连接的 domain 执行限制，并处理新请求 domain 的用户确认。如果你希望进一步提高安全性，我们也支持自定义这个 proxy，对出站流量执行任意规则。</li>
+      </ul>
+      <p>这两个组件都是可配置的：你可以轻松选择允许或禁止特定 file path 或 domain。</p>
+      <p>Claude Code 的 sandboxing 架构通过 filesystem 和 network 控制来隔离代码执行，自动允许安全操作、阻止恶意操作，并且只在必要时请求 permission。</p>
+      <p>Sandboxing 可以确保即使 prompt injection 成功，也会被完全隔离，无法影响用户整体安全。这样一来，被攻破的 Claude Code 无法窃取你的 SSH key，也无法向攻击者的服务器回连。</p>
+      <p>要开始使用该功能，请在 Claude Code 中运行 <code>/sandbox</code>，并查看关于我们安全模型的更多技术细节。</p>
+      <p>为了让其他团队更容易构建更安全的 agent，我们已经开源了这个功能。我们认为其他团队也应考虑在自己的 agent 中采用这项技术，以增强其 agent 的安全态势。</p>
+      <h3>Web 上的 Claude Code：在云端安全运行 Claude Code</h3>
+      <p>今天，我们还发布了 Claude Code on the web，让用户能够在云端的隔离 sandbox 中运行 Claude Code。Claude Code on the web 会在一个隔离 sandbox 中执行每个 Claude Code session，在安全可靠的方式下拥有对其服务器的完整访问。我们设计这个 sandbox 的目标，是确保敏感凭据（例如 git credential 或 signing key）永远不会和 Claude Code 一起出现在 sandbox 内。这样，即使 sandbox 中运行的代码被攻破，用户也能避免进一步伤害。</p>
+      <p>Claude Code on the web 使用一个自定义 proxy service，透明处理所有 git 交互。在 sandbox 内，git client 会使用专门构建的 scoped credential 向该服务认证。proxy 会验证这个 credential 和 git 交互内容（例如确认它只 push 到配置好的 branch），然后在把请求发送到 GitHub 之前附加正确的 authentication token。</p>
+      <p>Claude Code 的 Git integration 会通过一个 secure proxy 路由命令，该 proxy 会验证 authentication token、branch name 和 repository destination，从而允许安全的 version control workflow，同时防止未授权 push。</p>
+      <p class="section-note">要点：桌面侧用 OS sandbox 管住命令执行，Web 侧把 credential 留在 sandbox 外，用 proxy 把 git 操作变成可验证、可限权的协议。</p>
+
+      <h2>开始使用</h2>
+      <p>新的 sandboxed bash tool 和 Claude Code on the web，为使用 Claude 进行工程工作的开发者在安全性和生产力上都带来了显著改进。</p>
+      <p>要开始使用这些工具：</p>
+      <ul>
+        <li>在 Claude 中运行 <code>/sandbox</code>，并查看我们的文档，了解如何配置这个 sandbox。</li>
+        <li>前往 <code>claude.com/code</code> 试用 Claude Code on the web。</li>
+      </ul>
+      <p>或者，如果你正在构建自己的 agent，可以查看我们开源的 sandboxing 代码，并考虑把它集成到你的工作中。我们期待看到你构建出的成果。</p>
+      <p>要了解更多关于 Claude Code on the web 的信息，请查看我们的 launch blog post。</p>
+
+      <h2>Acknowledgements</h2>
+      <p>本文由 David Dworken 和 Oliver Weller-Davies 撰写，Meaghan Choi、Catherine Wu、Molly Vorwerck、Alex Isken、Kier Bradwell 和 Kevin Garcia 参与贡献。</p>
+      <p>本文为 Anthropic 官方工程博客文章。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章的重点不是“让 agent 少问几次”，而是把权限控制从人反复点击转移到可执行的环境边界。传统 permission prompt 依赖用户在每次动作前保持注意力，但 agentic coding 的命令密度很高，长期审批很容易变成机械动作。Anthropic 的方案更像是把安全策略下沉：filesystem isolation 限定 agent 能碰哪些文件，network isolation 限定它能把信息发到哪里，二者组合后才真正能抑制 prompt injection 的后果。Web 版设计也展示了同一原则：不要把高价值 credential 放进 agent 可触达的环境，而是通过 proxy 将 git 操作约束到 branch、repo 和 token 级别。这对所有 agent 产品都有借鉴意义：自主性不是简单跳过 permission，而是先明确可行动边界，再让模型在边界内尽量自由。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>为 coding agent 设计安全模式时，不要只做命令 allowlist；要同时考虑文件系统访问和网络外联路径。</li>
+        <li>把 secret、signing key、git credential 等高价值凭据放在 agent sandbox 之外，通过 scoped credential 或 proxy 间接完成必要操作。</li>
+        <li>对需要网络访问的 agent，使用可审计的 domain policy 和新 domain confirmation，而不是默认全网开放。</li>
+        <li>把 permission prompt 用在越界请求上，而不是用来确认每个低风险动作，这样用户注意力才会留给真正重要的决策。</li>
+        <li>如果正在构建自有 agent runtime，可以优先评估 bubblewrap、seatbelt、container 或 proxy 组合，而不是只依赖 prompt 约束模型行为。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/claude-code-sandboxing" target="_blank" rel="noopener">https://www.anthropic.com/engineering/claude-code-sandboxing</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
