@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic AI 2026 完整课程：从概念、框架到实战自动化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a5a5b8;
+      --text-muted: #62627a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.75;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header { padding: 40px 0 28px; position: relative; z-index: 1; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+    .page-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 18px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+    .hero, .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.6rem;
+      margin-bottom: 1.4rem;
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 1;
+    }
+    .hero {
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+    .hero::before, .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0.85;
+    }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #050508;
+      margin: 20px 0 4px;
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    h2 {
+      font-size: 1.28rem;
+      color: var(--text-primary);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    h3 { color: var(--text-primary); margin: 20px 0 10px; font-size: 1rem; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    a { color: var(--accent-cyan); text-decoration: none; }
+    a:hover { color: var(--accent-blue); }
+    ul, ol { color: var(--text-secondary); margin: 10px 0 16px 22px; }
+    li { margin-bottom: 8px; }
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.08);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.92rem;
+    }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+    th { background: rgba(99, 179, 237, 0.1); color: var(--accent-cyan); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+    td { color: var(--text-secondary); }
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .mini-card {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .mini-card .label { color: var(--accent-green); font-size: 0.78rem; font-weight: 700; margin-bottom: 6px; }
+    .timestamp-list { list-style: none; margin-left: 0; }
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .timestamp-list span { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); font-size: 0.86rem; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin: 4px 8px 4px 0;
+    }
+    .btn:hover { background: var(--accent-cyan); color: var(--bg-primary); }
+    footer {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 40px 0 56px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 640px) {
+      body { padding: 0 16px; }
+      .hero, .content-card { padding: 1.15rem; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <h1 class="page-title">Agentic AI 2026 完整课程：从概念、框架到实战自动化</h1>
+      <p class="subtitle">原视频：Agentic AI Full Course 2026 | Agentic AI Tutorial For Beginners | Agentic AI Course | Simplilearn</p>
+      <div class="page-meta">
+        <span class="meta-badge source">Simplilearn</span>
+        <span class="meta-badge time">1 小时 10 分 34 秒</span>
+        <span class="meta-badge">约 76,500 次观看</span>
+        <span class="meta-badge">英文自动字幕</span>
+      </div>
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/2R-niMsB0QY" title="Agentic AI Full Course 2026" allowfullscreen></iframe>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <article class="content-card">
+      <h2><span class="num">一</span>问题引入：为什么 2026 年大家又开始认真谈 Agent？</h2>
+      <p>这支视频的开场很直接：AI 已经不只是回答问题、写文案或生成几段代码。新一代系统开始具备更完整的行动闭环：它们能理解目标、拆分任务、选择工具、调用外部系统、评估结果，并在失败时调整下一步。视频把这种能力称为 <strong>Agentic AI</strong>，也就是能围绕目标持续行动的智能体系统。</p>
+      <p>它值得看，不是因为它提出了一个全新的名词，而是因为它把初学者最容易混在一起的东西拆开了：聊天机器人、工作流、工具调用、记忆、规划、多智能体协作、评估与提示优化。很多团队做 Agent 失败，并不是模型不够强，而是把所有复杂度都塞进一个提示词里，既没有状态管理，也没有任务边界，更没有评估回路。这个视频适合用作一张地图：先知道“系统里有哪些积木”，再决定什么时候真的需要 Agent。</p>
+      <blockquote>可转述的核心判断：Agentic AI 的关键不是“让模型说得更像人”，而是让模型处在一个能观察、计划、行动、校验并继续迭代的系统里。</blockquote>
+
+      <h2><span class="num">二</span>核心概念：Agent 不是聊天机器人加几个插件</h2>
+      <p>视频首先把 Agentic AI 定义为一种能自主执行任务的 AI 系统。它不只是响应一次输入，而是根据目标反复判断“下一步做什么”。这里的“自主”不是完全无人监管，而是指系统在限定边界内拥有决策权：可以选择工具，可以读取上下文，可以把任务拆成子任务，也可以根据执行结果修正计划。</p>
+      <p>理解这个概念时，可以把普通 LLM 看成大脑，把工具看成手，把记忆看成工作笔记，把规划器看成项目经理，把评估器看成质检员。一个可用 Agent 往往不是单一模型，而是这些部件组合起来的工程系统。缺少任何一环，系统都会退化：只有模型没有工具，它只能建议；只有工具没有规划，它只会按脚本跑；只有规划没有评估，它会在错误方向上越走越远。</p>
+      <div class="note-grid">
+        <div class="mini-card"><div class="label">目标理解</div><p>Agent 需要把模糊需求转成可执行目标，例如“处理预约请求”不是一句话，而是一组输入、规则、输出和异常路径。</p></div>
+        <div class="mini-card"><div class="label">工具调用</div><p>工具让 Agent 触达外部世界：数据库、表格、邮箱、搜索、文件系统、API 或业务系统。</p></div>
+        <div class="mini-card"><div class="label">记忆与上下文</div><p>短期记忆维持当前任务状态，长期记忆保存历史偏好、事实和可复用知识。</p></div>
+        <div class="mini-card"><div class="label">评估闭环</div><p>Agent 需要知道结果是否达标，否则“自动化”很快会变成“自动制造事故”。</p></div>
+      </div>
+
+      <h2><span class="num">三</span>关键论点与实操步骤：从框架到工作流</h2>
+      <h3>1. 先区分四种系统层级</h3>
+      <p>视频中反复强调：不是所有任务都应该上 Agent。最简单的是单次聊天或单次 LLM 调用；再往上是带工具的助手；再往上是预定义工作流；最后才是能动态决策的 Agent。工程上最常见的坑，是把一个固定审批流程包装成 Agent，结果既慢又不可控。若任务路径稳定，工作流更便宜；若路径依赖环境、需要探索和判断，Agent 才有意义。</p>
+      <h3>2. 框架只是骨架，不是魔法</h3>
+      <p>视频列举了 LangChain、AutoGen、CrewAI、AutoGPT 等框架。它们分别偏向不同问题：LangChain 适合把模型、工具、链式步骤和记忆接起来；AutoGen 更强调多智能体对话协作；CrewAI 倾向角色化团队；AutoGPT 则展示了目标驱动循环的早期形态。选择框架时不要先问“哪个最火”，而要问系统是否需要多角色、是否需要图式流程、是否依赖长期记忆、是否要接企业工具。</p>
+      <h3>3. 记忆不是把所有历史都塞回提示词</h3>
+      <p>课程把记忆分成对话记忆、摘要记忆、向量数据库记忆和长期知识库。真正重要的是检索策略：Agent 在行动前应该拿到“当前步骤需要的上下文”，而不是把所有过去内容都倒进去。ChromaDB、Pinecone、Weaviate、FAISS 这类向量库可以保存 embedding，让系统按相似度找回相关上下文，但它们仍需要清晰的数据边界、过期策略和引用来源。</p>
+      <h3>4. 规划决定 Agent 能走多远</h3>
+      <p>视频把规划讲成一个持续循环：把大目标拆成小任务，执行任务，评估结果，再必要时调整计划。链式思维适合路径清晰的问题，树式思维适合需要比较多个方案的问题。现实系统通常会把两者混用：先用树式探索方案，再把选定方案变成线性执行计划。</p>
+      <h3>5. 实战项目落在 n8n / Google Sheets / Gmail</h3>
+      <p>后半段实操展示了一个自动化预约确认流程：Google Form 或 Google Sheet 作为触发源，n8n 读取新增行，经过条件判断和字段映射后，调用 Gmail 发送 HTML 邮件。这个例子看似基础，但它揭示了 Agent 工程的关键：模型能力只是系统的一部分，OAuth、触发器、字段结构、错误回退和人工预览同样决定最终可用性。</p>
+
+      <h2><span class="num">四</span>决策矩阵：什么时候用哪种 Agent 架构？</h2>
+      <table>
+        <thead>
+          <tr><th>方案</th><th>适用场景</th><th>优点</th><th>主要风险</th><th>建议</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>单次 LLM 调用</td><td>摘要、改写、分类、一次性问答</td><td>成本低、延迟低、容易测试</td><td>无法保持状态，不能主动行动</td><td>默认从这里开始，不要一上来就 Agent 化</td></tr>
+          <tr><td>工具型助手</td><td>查询数据库、调用搜索、读取文档、生成报告</td><td>能连接外部信息，仍保持较好可控性</td><td>工具 schema 不清会导致误调用</td><td>适合大多数企业内部助手</td></tr>
+          <tr><td>预定义工作流</td><td>审批、通知、表单处理、固定业务流程</td><td>稳定、可审计、便于合规</td><td>遇到非标准输入时弹性不足</td><td>路径稳定时优先选它，而不是 Agent</td></tr>
+          <tr><td>单 Agent 动态规划</td><td>研究、排错、复杂客服、自动化运营</td><td>能根据环境调整步骤</td><td>成本、延迟、误操作风险更高</td><td>必须加权限边界和评估闭环</td></tr>
+          <tr><td>多 Agent 协作</td><td>需要研究员、写作者、审阅者等角色分工</td><td>角色边界清楚，可并行处理复杂任务</td><td>通信成本高，容易“传话失真”</td><td>只有当单 Agent 上下文或职责过载时再引入</td></tr>
+        </tbody>
+      </table>
+
+      <h2><span class="num">五</span>引用块：视频里最值得带走的判断</h2>
+      <blockquote>Agent 的价值不在于替代所有工作流，而在于处理那些“下一步取决于当前结果”的任务。可预测的流程应该自动化，不可预测的目标才需要智能体。</blockquote>
+      <blockquote>记忆模块让 Agent 不必每次从零开始，但记忆也会污染判断。工程上要保存事实、偏好和结果，不要保存一堆未经筛选的对话噪音。</blockquote>
+      <blockquote>评估和提示优化不是上线后的补丁，而是 Agent 设计的一部分。没有 eval 的 Agent，等于没有仪表盘的自动驾驶。</blockquote>
+
+      <h2><span class="num">六</span>时间戳目录：按视频脉络快速定位</h2>
+      <ul class="timestamp-list">
+        <li><span>00:00</span><p>引入 Agentic AI：AI 从生成内容走向计划、决策、工具调用与人机协作。</p></li>
+        <li><span>03:11</span><p>基础概念：什么是 Agentic AI，它与传统聊天机器人、静态自动化的区别。</p></li>
+        <li><span>08:06</span><p>核心概念：目标、环境、行动、工具、记忆和反馈回路如何组成 Agent。</p></li>
+        <li><span>15:15</span><p>框架与库：LangChain、AutoGen、CrewAI、AutoGPT 的定位与适合场景。</p></li>
+        <li><span>22:09</span><p>记忆与长期上下文：对话记忆、摘要记忆、向量数据库和长期知识管理。</p></li>
+        <li><span>30:01</span><p>规划与决策链：任务分解、执行、评估、重新规划，以及链式 / 树式推理。</p></li>
+        <li><span>36:25</span><p>高级用例：企业流程、知识检索、自动化运营、多工具协同和业务系统集成。</p></li>
+        <li><span>39:48</span><p>Agent 评估与提示优化：如何用结果质量、成本、错误率和回归测试约束系统。</p></li>
+        <li><span>43:50</span><p>风险、伦理与未来：权限、隐私、幻觉、人工审批和责任边界。</p></li>
+        <li><span>47:27</span><p>实战项目：用 n8n、Google Sheets、OAuth 和 Gmail 搭一个预约确认自动化流程。</p></li>
+      </ul>
+
+      <h2><span class="num">七</span>给工程团队的落地建议</h2>
+      <p>如果你要把这门课转成团队实践，可以按四步走。第一步，把业务目标写成输入、输出、权限和失败条件，而不是一句“让 Agent 帮我处理”。第二步，先做固定工作流，把确定性路径跑稳。第三步，只在确实需要判断的位置引入模型，比如分类、摘要、路由或异常处理。第四步，再把这些判断点组织成可观测的 Agent loop，并为每一步记录输入、输出、工具调用和评估结果。</p>
+      <p>这套顺序看起来保守，但它能避免很多“演示很酷，上线很痛”的问题。Agentic AI 的工程成熟度，往往不取决于模型有多聪明，而取决于系统有没有把权限、上下文、工具、状态和评估设计清楚。视频里的 n8n 实战也提醒我们：真正能工作的 Agent，最后一定会落到具体系统、具体账号、具体表字段和具体异常处理上。</p>
+
+      <h2><span class="num">八</span>相关推荐</h2>
+      <p>
+        <a class="btn" href="index.html">返回全部课程</a>
+        <a class="btn" href="LNkAW4SSgdY.html">2026 AI Agents 完整指南</a>
+        <a class="btn" href="BaXTos7B1vY.html">5 Levels of AI Agents</a>
+        <a class="btn" href="AYQtRqW1xX4.html">AI Agent 创业实战课</a>
+      </p>
+    </article>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=2R-niMsB0QY" target="_blank">▶ 原视频</a>
+  </footer>
+</body>
+</html>
