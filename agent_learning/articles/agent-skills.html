@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>真实工作需要组织知识：如何生成报表、部署服务、处理客户退款、转换文档、审查 PR。Agent Skills 的思路，是把这些可复用流程封装为 agent 可发现、可加载的能力。</p>
+      <p>本文介绍 Agent Skills 的思想：把可复用工作流、领域知识、工具说明和模板封装成可加载能力，让 agents 在真实任务中获得可迁移的专业技能。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>skills 把领域知识、流程、脚本和模板打包成可加载能力。</li>
-        <li>相比把所有说明塞进 system prompt，skills 支持按需加载。</li>
+        <li>skills 把领域知识、流程、脚本和模板打包成 agent 可发现、可加载的能力。</li>
+        <li>相比把所有说明塞进 system prompt，skills 支持按需加载，降低 context 噪声。</li>
         <li>skill 应包含触发条件、步骤、约束、引用材料和验证方式。</li>
         <li>好的 skill 像给新人同事的操作手册，而不是抽象原则合集。</li>
-        <li>skills 适合重复任务：报表、部署、文档转换、代码审查和数据处理。</li>
-        <li>skill 质量需要 eval 和版本管理。</li>
+        <li>skills 适合重复任务：报表、部署、文档转换、代码审查、数据处理和客服流程。</li>
+        <li>skill 质量需要 eval，检查 agent 是否在正确任务中调用并按步骤执行。</li>
+        <li>版本管理很重要，因为 skill 会成为组织知识的一部分。</li>
+        <li>skills 与 MCP、tools、hooks 可组合，形成完整 agent 工作环境。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文介绍 Agent Skills 的思想：把可复用工作流、领域知识、工具说明和模板封装成可加载能力，让 agents 在真实任务中获得可迁移的专业技能。</p>
       <h3>为什么需要 skills</h3>
-      <p>通用模型可以推理，但真实业务还有大量本地流程。每次把这些流程手写进 prompt，不仅低效，也容易遗漏关键约束。</p>
-      <p>skill 让组织知识外部化：agent 根据任务触发 skill，读取说明、脚本、模板和检查方法，再按流程执行。</p>
+      <p>真实工作不仅需要通用智能，还需要领域流程。如何生成周报、如何部署服务、如何处理客户退款、如何转换文档、如何审查 PR，这些任务都有组织特定知识。把这些知识每次手写进 prompt，既低效又不稳定。</p>
+      <p>Agent Skills 的思路是把可复用知识封装成可加载能力。agent 根据任务触发 skill，读取说明、脚本、模板和约束，再按流程执行。</p>
       <h3>skill 的结构</h3>
-      <p>一个好的 skill 应包括名称、描述、触发条件、操作步骤、约束、验证方法和必要引用材料。如果涉及文件格式、API 或安全边界，应提供具体模板和示例。</p>
+      <p>一个好的 skill 应包括名称、描述、触发条件、操作步骤、约束、验证方法和必要引用材料。如果任务涉及文件格式、API、设计规范或安全边界，skill 应提供具体模板和示例。</p>
       <p>skill 不应只写宏大原则。它应该像给新同事的 runbook：什么时候用、先看什么、怎么做、怎么检查、不能做什么、出错时怎么办。</p>
+      <h3>按需加载与 context 管理</h3>
+      <p>skills 的优势之一是按需加载。组织知识不必全部放进 system prompt，只有当任务相关时才进入 context。这降低噪声，也让 agent 更容易聚焦当前流程。</p>
+      <p>这与 context engineering 一致：把长期知识放在外部资源中，通过触发机制引入高价值片段。skill 越具体，越能减少 agent 自己猜流程的成本。</p>
       <h3>治理与评估</h3>
-      <p>skills 会逐渐成为组织知识库，因此需要版本管理。每次修改 skill，都应检查 agent 是否更容易正确触发、是否减少错误、是否遵守约束。</p>
-      <p>也要避免 skill 膨胀。一个 skill 如果覆盖过多任务，会变成另一份噪声 prompt。更好的方式是小而专、可组合、可测试。</p>
+      <p>skills 会逐渐成为组织知识库，因此需要版本管理和 eval。每次修改 skill，都应检查 agent 是否更容易正确触发、是否减少错误、是否遵守约束、是否能完成真实任务。</p>
+      <p>还要避免 skill 膨胀。一个 skill 如果覆盖过多任务，会变成另一份噪声 prompt。更好的方式是小而专、可组合、可测试。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>Agent Skills 是 prompt engineering 产品化的一步。它承认组织能力不是单次提示词，而是流程、工具、模板、约束和经验的集合。模型提供通用推理，skills 提供本地知识和操作纪律。谁能把团队隐性流程沉淀成高质量 skills，谁就能更快让 agent 进入真实业务。</p>
+      <p>Agent Skills 是把 prompt engineering 产品化的一步。它承认组织能力不是单次提示词，而是流程、工具、模板、约束和经验的集合。对企业 agent 来说，skills 可能比单个模型升级更重要：模型提供通用推理，skills 提供本地知识和操作纪律。谁能把团队隐性流程沉淀成高质量 skills，谁就能更快让 agent 进入真实业务。</p>
     </section>
     <section>
       <h2>落地启示</h2>

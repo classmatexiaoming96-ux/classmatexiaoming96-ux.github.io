@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>长时 agent 不只是一个 while loop。它要在几十到上百轮交互中保持目标、调用工具、读取结果、更新计划、处理失败，并在 context 被压缩后继续工作。</p>
+      <p>本文系统讨论长时 agent harness：如何管理 session、memory、tool loop、context reset、权限边界和恢复策略，让 agent 在小时级任务中保持可靠。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
+        <li>长时 agent 的 harness 负责维持目标、状态、工具循环和错误恢复。</li>
         <li>session log 应作为事实来源，context window 只是当前工作视图。</li>
         <li>memory 和 compaction 要保留可恢复信息，而不是泛泛总结。</li>
-        <li>tool loop 需要停止条件、预算和异常处理。</li>
+        <li>tool loop 需要停止条件、预算和异常处理，防止无休止行动。</li>
         <li>权限边界应按风险分层，低风险自动化，高风险请求人类批准。</li>
-        <li>harness 中的模型能力假设会随模型升级过期。</li>
-        <li>可观测性是生产长时 agent 的基本要求。</li>
+        <li>harness 中的模型能力假设会随模型升级过期，需要持续审视。</li>
+        <li>可观测性是生产长时 agent 的基本要求，不是调试附属品。</li>
+        <li>长时任务成功率来自模型能力与 harness 设计共同作用。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文系统讨论长时 agent harness：如何管理 session、memory、tool loop、context reset、权限边界和恢复策略，让 agent 在小时级任务中保持可靠。</p>
       <h3>harness 的角色</h3>
-      <p>好的 harness 不是替模型做所有决定，而是给模型稳定边界。它定义哪些状态持久化、哪些工具可用、何时停止、何时请求人类、何时重试。</p>
-      <p>长时任务会持续制造熵：上下文膨胀、工具失败、目标漂移、状态丢失。harness 通过外部结构对抗这些熵。</p>
+      <p>长时 agent 不只是一个 while loop。它需要在几十到上百轮交互中保持目标、调用工具、读取结果、更新计划、处理失败，并在 context window 被压缩后继续工作。harness 是承载这些职责的运行时。</p>
+      <p>好的 harness 不是替模型做所有决定，而是给模型稳定的工作边界。它定义哪些状态持久化、哪些工具可用、何时停止、何时请求人类、何时重试。</p>
       <h3>session 与 context</h3>
-      <p>session log 记录用户输入、模型计划、tool call、tool result、错误、checkpoint 和人类反馈。context window 则是从 session 中挑选出来的当前视图。</p>
-      <p>把两者区分开，才能在长任务中恢复和压缩。compaction 应优先保留目标、已验证事实、未解决问题、修改范围、失败尝试和下一步计划。</p>
-      <h3>预算、停止和恢复</h3>
-      <p>没有预算，agent 可能不停搜索、重复测试、反复修同一个错误。预算可以是时间、tool call、token、文件范围或 retry 次数。</p>
-      <p>完成也不应只看模型自述，而应满足验收条件。恢复能力则包括 checkpoint、resume、rewind 和 crash-safe session。</p>
+      <p>session log 应记录所有重要事件：用户输入、模型计划、tool call、tool result、错误、checkpoint 和人类反馈。context window 则是从 session 中挑选出来喂给模型的当前视图。把两者区分开，才能在长任务中恢复和压缩。</p>
+      <p>compaction 的难点是决定保留什么。对长时 agent，最重要的通常不是完整对话，而是当前目标、已验证事实、未解决问题、修改范围、失败尝试和下一步计划。</p>
+      <h3>工具循环与停止条件</h3>
+      <p>tool loop 需要预算。没有预算，agent 可能不停搜索、反复测试、重复修同一个错误。预算可以是时间、tool calls、tokens、文件范围或最大 retry 次数。预算不是束缚，而是帮助 agent 在不确定时选择汇报或请求帮助。</p>
+      <p>停止条件同样重要。完成不只是模型说完成，而应满足验收条件：测试通过、diff 符合范围、引用完整、用户目标被覆盖、没有未处理错误。</p>
+      <h3>安全与恢复</h3>
+      <p>长时 agent 的风险随时间增长。它可能逐渐偏离目标，也可能在错误上下文中做高风险动作。harness 应把权限按风险分层：读取和低风险命令可自动执行，删除、发布、外部写入、权限提升需要确认。</p>
+      <p>恢复能力包括 checkpoint、resume、rewind 和 crash-safe session。agent 运行越久，越不能把状态只放在进程内存里。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章的底层思想，是承认模型智能需要运行时结构才能长期稳定发挥。agent 产品竞争不只是模型分数，而是 harness 能否把模型放进真实环境：让它能记住关键事实、受控使用工具、在失败时恢复，并在高风险点找到人。</p>
+      <p>有效 harness 的底层思想，是承认 agent 的智能需要外部结构才能长期稳定发挥。单轮模型可以很强，但长时任务会持续制造熵：上下文膨胀、工具失败、目标漂移、权限风险、状态丢失。harness 通过状态、预算、验证和恢复机制对抗这些熵。真正的 agent 产品竞争，不只是模型分数，而是这些运行时设计能否让模型在现实环境中持续可靠。</p>
     </section>
     <section>
       <h2>落地启示</h2>

@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>很多任务不该让模型在自然语言里硬算。MCP code execution 让 agent 在受控环境中运行代码，把数据处理、文件转换、统计验证和测试执行交给计算空间。</p>
+      <p>本文讨论通过 MCP 提供代码执行能力，让 agents 能在受控环境中运行脚本、处理数据、验证假设和压缩上下文，从而提升效率与可靠性。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>代码执行让 agent 不只阅读数据，还能计算和验证。</li>
-        <li>把计算交给工具可减少 context token，避免模型手算。</li>
+        <li>MCP code execution 让 agent 不只阅读数据，还能在受控环境中计算和验证。</li>
+        <li>代码执行适合数据分析、文件转换、API 编排、测试和复杂推理辅助。</li>
+        <li>把计算交给工具可减少 context token，避免模型手算或手动枚举。</li>
         <li>执行环境必须 sandboxed，限制文件、网络、资源和凭据访问。</li>
-        <li>工具结果应返回摘要、关键输出和 artifact，而不是完整 stdout。</li>
+        <li>工具结果应返回摘要、关键输出和可追溯 artifact，而不是全部 stdout。</li>
         <li>MCP 提供统一接口，让不同执行后端可被 agent 使用。</li>
-        <li>代码执行与 context engineering 互补。</li>
+        <li>安全设计需要区分读、写、外联和持久化动作。</li>
+        <li>代码执行与 context engineering 互补：用程序筛选信息，再把高信号结果交给模型。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文讨论通过 MCP 提供代码执行能力，让 agents 能在受控环境中运行脚本、处理数据、验证假设和压缩上下文，从而提升效率与可靠性。</p>
       <h3>为什么 agent 需要代码执行</h3>
-      <p>处理大表格、比较日志、解析文件、运行统计、验证 API 返回和转换格式，都不适合让模型直接在 token 里完成。</p>
-      <p>更高效的方式是让模型写脚本、运行脚本、解释结果。agent 不必把数千行数据都读进 context，可以先过滤、聚合、抽样，再只读取高信号摘要。</p>
+      <p>很多任务不适合让模型直接在自然语言里完成：处理大表格、比较日志、解析文件、运行统计、验证 API 返回、转换格式。模型可以写出思路，但真正高效的方式是让它在受控环境中运行代码。</p>
+      <p>代码执行把一部分工作从 token 空间转回计算空间。agent 不必把数千行数据都读进 context，可以写脚本过滤、聚合、抽样，再只把结果摘要返回模型。</p>
       <h3>MCP 的作用</h3>
-      <p>MCP 把代码执行能力以统一工具形式暴露出来。后端可以是本地 sandbox、远程容器或专用数据环境，agent 只需要理解能力和约束。</p>
-      <p>这降低了集成成本，也允许企业把执行放在自己的安全边界内。</p>
-      <h3>边界和返回值</h3>
-      <p>代码执行是高风险能力。未经限制的执行环境可能读取敏感文件、访问网络、消耗资源或修改状态，因此要限制文件系统、网络、CPU、内存、时间和凭据。</p>
-      <p>返回值不应直接倾倒 stdout。好的结果包含 exit code、摘要、关键表格、错误类型、artifact 路径和下一步建议。</p>
+      <p>MCP 让代码执行能力以统一工具形式暴露给模型。无论后端是本地 sandbox、远程容器还是专用数据环境，agent 都可以通过一致接口请求执行，并接收结构化结果。</p>
+      <p>这降低了集成成本，也让企业能在自己的安全边界内提供执行环境。agent 不需要知道所有基础设施细节，只需要理解工具能力和约束。</p>
+      <h3>安全边界</h3>
+      <p>代码执行是高风险能力。未经限制的执行环境可能读取敏感文件、访问网络、消耗资源或修改状态。因此 sandbox 必须限制文件系统、网络、CPU、内存、运行时间和凭据。外部写入应显式授权。</p>
+      <p>更细的设计是把执行环境分级：只读分析、临时文件写入、网络访问、持久化写入、外部系统操作分别对应不同权限。agent 可以在低风险环境自由探索，高风险动作再请求确认。</p>
+      <h3>返回什么给模型</h3>
+      <p>执行结果不应简单返回完整 stdout。好的结果包括 exit code、摘要、关键表格、错误类型、artifact 路径和下一步建议。大量原始输出会占满 context，并让模型重新做筛选工作。</p>
+      <p>对数据任务，工具可以返回统计摘要和 sample rows；对测试任务，返回失败测试名称、错误堆栈关键帧和相关文件；对转换任务，返回产物路径和校验信息。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>MCP code execution 的长期意义，在于把 agent 从纯语言推理器变成可计算系统。很多所谓模型不擅长的任务，本来就不该让模型手算。关键不是给 agent 一台无限制机器，而是给它一套可审计、可限制、可恢复的计算工具。</p>
+      <p>MCP code execution 的长期意义，在于它把 agent 从纯语言推理器变成可计算系统。很多所谓“模型不擅长”的任务，其实不该让模型在 token 里完成；应该让模型写程序、运行程序、解释结果。关键是边界：执行环境越强，安全设计越重要。最好的形态不是给 agent 一台无限制机器，而是给它一套可审计、可限制、可恢复的计算工具。</p>
     </section>
     <section>
       <h2>落地启示</h2>

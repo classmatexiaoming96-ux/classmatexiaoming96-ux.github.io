@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,43 +45,55 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>Anthropic 的经验是，最成功的 agent 实现往往不是最复杂的框架，而是简单、可组合、可调试的模式。复杂度应随着任务需要逐步增加。</p>
+      <p>这篇文章是 Anthropic 关于 agent 架构的基础文本。它的核心不是鼓励把所有 LLM 应用都做成复杂 agent，而是强调从简单方案开始，用 workflow 和 agent 两类模式分别处理确定流程与开放决策。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>agentic systems 可分为 workflow 与 agent：前者预定义路径，后者动态决定过程。</li>
-        <li>构建 LLM 应用时应先找最简单可行方案。</li>
-        <li>agentic systems 常以延迟和成本换取任务表现。</li>
-        <li>框架能降低入门成本，但也可能遮蔽 prompt 和 response，增加调试难度。</li>
-        <li>常见模式包括 prompt chaining、routing、parallelization、orchestrator-worker 和 evaluator-optimizer。</li>
-        <li>工具 prompt engineering 是 agent 成败的关键组成。</li>
+        <li>Anthropic 将 agentic systems 区分为 workflows 与 agents：前者沿预设代码路径编排，后者动态决定流程和工具使用。</li>
+        <li>构建 LLM 应用时，应先寻找最简单可行方案，只在收益明确时增加复杂度。</li>
+        <li>agentic systems 往往用更高 latency 和 cost 换取更强任务表现，因此不能默认使用。</li>
+        <li>框架能降低入门门槛，但也可能遮蔽 prompt、response 和 tool call，增加调试难度。</li>
+        <li>常见 building blocks 包括 prompt chaining、routing、parallelization、orchestrator-worker、evaluator-optimizer。</li>
+        <li>工具设计需要 prompt engineering：名称、description、参数和返回值都会影响 agent 行为。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
-      <h3>什么时候用 agent</h3>
-      <p>如果单次 LLM call 加检索和 examples 已经能解决问题，就不必引入完整 agent。agentic systems 往往增加延迟、成本和故障面。</p>
-      <p>workflow 适合路径明确、可控性强的任务；agent 适合需要灵活决策、工具选择和开放探索的任务。</p>
-      <h3>简单模式优先</h3>
-      <p>prompt chaining、routing、parallelization、orchestrator-worker、evaluator-optimizer 都是可组合 building blocks。团队可以先用少量代码实现，再在真实任务中验证。</p>
-      <p>框架有价值，但开发者需要理解底层 prompt、tool schema 和响应。否则框架抽象会让调试变难，并诱导过早复杂化。</p>
-      <h3>工具和实践</h3>
-      <p>工具应被当作 agent 的行动界面，而不是随手暴露的 API。名称、描述、参数、返回值和错误信息都会影响模型是否正确使用。</p>
-      <p>最终目标不是展示复杂架构，而是让系统在真实任务上可靠完成、可观察、可调试、可控制成本。</p>
+      <h2>正文</h2>
+      <h3>What are agents?</h3>
+      <p>文章先给出一个务实定义：不同团队会把 agent 理解为不同东西。有些人指长期自主系统，有些人指更规则化的 workflow。Anthropic 将这些统称为 agentic systems，但保留一个关键架构区分。</p>
+      <p>workflows 是 LLM 与工具沿预定义代码路径被编排的系统；agents 则由 LLM 自己动态决定流程、工具和下一步行动。这个区分很重要，因为两者的可控性、成本、调试方式和失败模式都不同。</p>
+      <p>对工程团队来说，第一步不是选择流行框架，而是判断任务到底需要确定编排，还是需要模型在运行中做策略选择。</p>
+      <h3>When and when not to use agents</h3>
+      <p>文章反复强调：先找最简单方案。很多应用用单次 LLM call、retrieval、examples 和清晰 prompt 就足够；不需要为所有问题引入 agent loop。</p>
+      <p>当任务路径明确、边界稳定、成功条件可程序化时，workflow 往往更好，因为它更可预测、更便宜、更容易调试。agent 更适合需要灵活决策、复杂工具选择、开放搜索和多步恢复的任务。</p>
+      <p>这也是一个成本判断。agent 往往消耗更多 token、更多 tool calls 和更长时间；只有当任务价值足以覆盖这些成本时，它才是正确选择。</p>
+      <h3>When and how to use frameworks</h3>
+      <p>框架可以简化模型调用、tool definition、response parsing 和 chaining，但抽象也会让底层 prompt 和工具结果不透明。对 agent 系统而言，不透明就意味着难调试。</p>
+      <p>文章建议开发者尽量理解底层代码与数据流。即使用框架，也要能看到模型收到了什么、工具 schema 是什么、返回值如何进入 context，以及每一轮为什么继续。</p>
+      <p>这条建议在今天仍然关键：很多 agent 产品问题并非模型不够强，而是 framework 把错误藏在了漂亮接口后面。</p>
+      <h3>Building blocks, workflows and agents</h3>
+      <p>文章列出的模式不是互斥框架，而是可组合积木。prompt chaining 适合把复杂任务拆成有中间校验的步骤；routing 适合把输入分派到不同 prompt 或模型；parallelization 适合独立子任务同时执行。</p>
+      <p>orchestrator-worker 模式适合子任务数量和形状无法提前完全确定的场景，由一个 lead model 动态拆分并分派；evaluator-optimizer 则适合可迭代改善的输出，例如代码、检索答案或报告。</p>
+      <p>真正成熟的设计，是把这些模式用于系统中最需要的部分，而不是把整个应用塞进一个全能 agent。</p>
+      <h3>Agents in practice and tool design</h3>
+      <p>文章在实践部分强调两个高价值领域：customer support 与 coding agents。这两个领域都有清晰目标、丰富工具和可验证结果，但也有足够多边界情况，需要模型动态判断。</p>
+      <p>工具是 agent 成败的关键。对人类工程师友好的 API 不一定对模型友好；工具名称、参数语义、返回摘要、错误信息都需要被当作 prompt surface 设计。</p>
+      <p>因此，有效 agents 的建设不是一次性 prompt，而是一整套评估、工具、流程、观察和约束的系统工程。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章之所以长期重要，是因为它给 agent 热潮降温：有效 agent 不等于堆框架和多轮循环。好的系统从任务结构出发，先用简单 workflow 解决确定部分，再把需要动态决策的部分交给 agent。复杂度是成本，不是成就。</p>
+      <p>这篇文章的重要性在于给 agent 热潮降温。它没有把 agent 描述成万能范式，而是把它放回工程权衡：什么时候 workflow 更好，什么时候 agent 值得付出成本，什么时候框架反而遮蔽问题。对团队来说，真正的成熟度不是能搭一个复杂 agent，而是能解释为什么这里需要 agent、它比简单方案多解决了什么、又引入了哪些新风险。这个判断能力比任何框架 API 都更稀缺。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
-        <li>先验证单次调用或简单 workflow 是否足够。</li>
-        <li>只在灵活性和开放探索确实带来收益时引入 agent。</li>
-        <li>使用框架时仍要能看到 prompt、工具调用和响应。</li>
-        <li>把 agent 模式当成 building blocks，而不是完整大框架。</li>
-        <li>持续用真实任务 eval 成本、延迟和成功率。</li>
+        <li>先用单次调用或简单 workflow 建立 baseline，再证明 agent loop 的额外收益。</li>
+        <li>把 prompt chaining、routing、parallelization 等模式当积木，而不是套用大框架。</li>
+        <li>使用框架时保留对 prompt、tool calls、tool results 和 cost 的可观测性。</li>
+        <li>为工具做 agent-specific 设计：清晰命名、少参数、高信号返回和可操作错误。</li>
+        <li>用真实任务评估 latency、cost、success rate 和可恢复性，而不是只看 demo。</li>
       </ul>
     </section>
     <footer class="article-footer">

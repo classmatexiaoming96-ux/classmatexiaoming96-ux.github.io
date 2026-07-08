@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>当用户说“AI 变笨了”时，问题未必来自模型本身。agent 产品质量可能被 prompt、context、tool policy、缓存、实验开关和基础设施共同影响。</p>
+      <p>本文以 postmortem 形式复盘三个近期问题，强调 agent 产品中的回归往往来自模型、harness、prompt、缓存和基础设施多层交互。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>agent 产品问题通常不是单点 bug，而是多层变更叠加。</li>
+        <li>agent 产品问题通常不是单点 bug，而是模型行为、harness 和产品层变更叠加。</li>
         <li>postmortem 应关注时间线、影响范围、根因、检测缺口和防复发措施。</li>
         <li>用户感知质量下降可能来自 context、prompt、tool policy、缓存或基础设施。</li>
         <li>多层系统需要分层指标，否则很难判断问题来自哪里。</li>
         <li>灰度、canary、回滚和 feature flag 是 agent 产品发布的关键安全阀。</li>
-        <li>真实问题应反向更新 eval 回归集。</li>
+        <li>应保存足够 trace，帮助复盘模型看到什么、做了什么、为什么做。</li>
+        <li>修复不应只加 prompt 补丁，还要检查 harness 假设是否过期。</li>
+        <li>透明复盘能建立用户信任，也能推动内部工程纪律。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文以 postmortem 形式复盘三个近期问题，强调 agent 产品中的回归往往来自模型、harness、prompt、缓存和基础设施多层交互。</p>
       <h3>为什么 agent postmortem 难</h3>
-      <p>传统软件故障常能定位到代码路径、配置或依赖。agent 产品更复杂：模型版本、system prompt、tool definitions、context 管理、缓存、权限策略、UI 和 infra 都可能改变体验。</p>
-      <p>一个小 prompt 变更可能让模型更保守；一次 tool result 格式调整可能影响后续计划；缓存异常可能让长会话表现突然变差。</p>
-      <h3>postmortem 应该记录什么</h3>
-      <p>有用的 postmortem 要回答发生了什么、何时开始、影响哪些用户、如何检测、直接原因和深层原因分别是什么、为什么没有提前发现、如何防复发。</p>
-      <p>对 agent 系统，还应补充 trace：模型输入、tool calls、tool results、context 组织、prompt 版本、模型版本和实验开关。</p>
+      <p>传统软件故障经常能定位到某个代码路径、配置或依赖。agent 产品更复杂：模型版本、system prompt、tool definitions、context 管理、缓存、权限策略、UI 和基础设施都可能改变用户体验。</p>
+      <p>当用户说“质量下降”时，问题可能不是模型本身变差，而是 prompt 被压缩、context 被错误裁剪、tool result 格式改变、缓存失效、或者某个安全策略影响了行动路径。</p>
+      <h3>postmortem 的基本结构</h3>
+      <p>一份有用的 postmortem 应回答：发生了什么、何时开始、影响哪些用户、如何检测、直接原因是什么、深层原因是什么、为什么没有提前发现、已经修复什么、还要防止什么复发。</p>
+      <p>对 agent 系统，还应补充 trace 维度：模型输入、tool calls、tool results、context 组织、prompt 版本、模型版本和实验开关。没有这些，复盘只能停留在猜测。</p>
+      <h3>三类常见问题</h3>
+      <p>第一类是产品层变更与模型行为交互。例如修改 prompt 中一句限制，可能导致模型更保守或更激进。第二类是基础设施问题，例如缓存、长会话状态或工具服务异常。第三类是 eval 缺口：内部测试没有覆盖真实用户长尾工作流。</p>
+      <p>这些问题常常叠加。单个变更看似无害，但多个变更同时发布，可能共同造成明显质量变化。</p>
       <h3>防复发机制</h3>
-      <p>防复发不能只靠以后小心。需要分层 metrics、canary、灰度、自动回归 eval、feature flags、快速回滚和更细 trace。</p>
-      <p>每次真实问题都应成为未来回归集的一部分，否则系统会反复踩同类坑。</p>
+      <p>防复发不能只靠“以后更小心”。需要分层 metrics、canary、灰度发布、自动回归 eval、feature flags、快速回滚和更细 trace。对高影响变更，最好能在小流量下比较用户行为和成功率。</p>
+      <p>postmortem 也应反向更新 eval。每次真实问题都应该成为未来回归集的一部分，否则系统会反复踩同类坑。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>agent 产品 postmortem 的价值，是把模糊的“AI 质量下降”拆成可行动工程事实。模型行为是概率性的，但产品质量不能因此变成玄学。只有保存 trace、指标和发布历史，团队才能知道变化来自模型、prompt、tool、context 还是 infra。</p>
+      <p>agent 产品 postmortem 的价值，是把模糊的“AI 变笨了”拆成可行动工程事实。模型行为是概率性的，但产品质量不能因此变成玄学。只有保存 trace、分层指标和发布历史，团队才能知道变化来自模型、prompt、tool、context 还是 infra。透明复盘不只是公关动作，它是建立 agent 工程学的过程。</p>
     </section>
     <section>
       <h2>落地启示</h2>

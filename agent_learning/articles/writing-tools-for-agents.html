@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,43 +45,51 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>这篇文章讨论如何为 agents 写工具，也如何让 Claude Code 等 agent 帮你优化工具。核心观点是：工具不是给人类开发者看的函数，而是给非确定性 agent 使用的行动界面。</p>
+      <p>这篇文章讨论如何为 agents 写工具，也讨论如何让 Claude Code 参与工具优化。它把工具重新定义为 deterministic software 与 non-deterministic agent 之间的契约。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>工具是确定性系统与非确定性 agent 之间的新契约。</li>
-        <li>工具质量会直接限制 agent 能完成任务的范围。</li>
-        <li>应先原型化工具，再通过 agent eval 系统测量效果。</li>
-        <li>工具命名和 namespace 应定义清晰功能边界。</li>
-        <li>返回值要提供 meaningful context，而不是原始后端字段堆叠。</li>
-        <li>工具描述、schema 和返回格式都需要 prompt engineering。</li>
+        <li>agent 使用工具不是普通函数调用，而是在不确定任务状态下选择、填参、解释结果和继续行动。</li>
+        <li>高质量工具需要从 prototype 开始，用 agent eval 衡量真实表现。</li>
+        <li>Claude Code 可以帮助生成 eval、分析 transcript、优化 tool descriptions 和返回格式。</li>
+        <li>工具命名与 namespace 要帮助模型理解功能边界，避免混用或重复调用。</li>
+        <li>tool result 要返回 meaningful context，而不是无筛选地倾倒后端字段。</li>
+        <li>token efficiency 是工具设计的一部分，长返回会降低后续推理质量。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
-      <h3>什么是给 agent 的工具</h3>
-      <p>传统函数面向确定性调用者：输入相同，输出相同。agent 则会在不确定上下文中决定是否调用工具、何时调用、传什么参数、如何解释结果。</p>
-      <p>因此工具设计不能只追求 API 完整性，而要追求 agent 可用性。一个对人类工程师清楚的函数，对模型未必清楚。</p>
-      <h3>如何写工具</h3>
-      <p>好的流程是先构建最小原型，让 agent 在真实任务中使用，再看失败轨迹：它是否选错工具、填错参数、误解返回、重复调用或忽略错误。</p>
-      <p>Claude Code 可以参与这个过程：生成 eval、分析 transcript、修改工具说明、压缩返回结果，并对比修改前后的成功率。</p>
-      <h3>有效工具的原则</h3>
-      <p>工具应选择正确粒度。太底层会迫使 agent 做过多编排，太高层会失去灵活性。namespace 要清楚，让模型理解边界。</p>
-      <p>返回结果要服务下一步决策。对 agent 来说，最有价值的不是全量字段，而是状态、关键证据、可选下一步和错误恢复信息。</p>
+      <h2>正文</h2>
+      <h3>What is a tool?</h3>
+      <p>文章先区分传统软件函数与 agent tool。传统函数面对确定性调用者，输入相同通常输出相同；agent tool 面对的是会推理、会误解、会在多种策略之间选择的模型。</p>
+      <p>当用户问“今天要不要带伞”时，agent 可能调用天气工具，也可能追问位置，甚至可能试图凭常识回答。因此，工具不是被动 API，而是 agent 的行动 affordance。</p>
+      <p>这意味着工具要按 agent 的认知方式设计：模型是否能理解何时调用、如何填参、如何解释返回、失败后如何恢复。</p>
+      <h3>How to write tools</h3>
+      <p>文章建议从原型和 eval 开始。不要假设工具 schema 写完就算完成；应该让 agent 在真实或代表性任务中使用它，观察 transcript 中的失败模式。</p>
+      <p>Claude Code 可以参与这个循环：它能读工具实现、生成测试任务、运行 eval、比较成功率，并提出 tool description、参数命名、返回结构上的修改。</p>
+      <p>关键是把工具优化变成可测过程。工具是否更好，不应只靠开发者感觉，而应看 agent 是否更少误调用、更少填错参数、更能从错误中恢复。</p>
+      <h3>Principles for writing effective tools</h3>
+      <p>第一个原则是选择正确工具边界。太底层会让 agent 做太多编排，太高层会牺牲灵活性。理想工具应贴近用户任务语义，同时保留必要控制。</p>
+      <p>第二个原则是 namespace。工具集合越大，越需要通过命名和分组向模型说明边界。否则 agent 会在功能重叠工具之间摇摆，或者把一个工具用于错误任务。</p>
+      <p>第三个原则是返回 meaningful context。模型需要知道状态、关键证据、下一步选项和错误原因；它不需要后端对象的所有字段。返回越高信号，后续推理越稳。</p>
+      <h3>Looking ahead</h3>
+      <p>文章的长期判断是：随着 MCP 和 agent 工具生态扩大，工具设计会成为新的产品接口设计。过去我们为人类写 UI、为程序写 API；现在还要为 agent 写 ACI。</p>
+      <p>这个接口既要服务模型，也要让人类可审计。好的工具返回、权限、日志和 eval 会让 agent 行为更可解释，而不是只提高自动化能力。</p>
+      <p>因此工具工程不是附属任务，而是 agent 产品的核心竞争力。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章把 tool design 提升为 agent 产品的核心能力。未来软件接口不只服务人类和程序，也服务会推理但会犯错的模型。工具越符合 agent 的认知形状，模型越能可靠行动。反过来，糟糕工具会把强模型变成一个不断猜参数、误读结果的脆弱系统。</p>
+      <p>这篇文章最有启发的地方，是它把 tool design 从后端工程问题转成认知接口问题。模型不会像确定性程序一样调用 API，它会根据上下文猜测、试探、修正。工具越符合模型理解任务的方式，agent 越能可靠行动。反过来，糟糕工具会让强模型变成一个不断猜参数、误读结果、重复调用的脆弱系统。未来团队可能需要像做 UX research 一样做 tool research：看 transcript，找误解点，改命名、改返回、改权限，再用 eval 验证。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
-        <li>用真实 agent 任务评估工具，而不是只看单元测试。</li>
-        <li>让工具名称、namespace 和 description 清晰传达用途。</li>
-        <li>把复杂后端细节隐藏在工具内部，返回任务相关语义。</li>
-        <li>为工具建立 eval，持续优化成功率和 token 成本。</li>
-        <li>让 Claude Code 帮忙分析 transcript 和改进工具说明。</li>
+        <li>把工具当作 agent-facing interface 设计，而不是直接暴露内部 API。</li>
+        <li>建立工具 eval，比较修改前后的成功率、误调用率和 token 成本。</li>
+        <li>让返回值优先服务下一步决策：状态、证据、错误类型、可选动作。</li>
+        <li>用 namespace 和清晰 description 降低工具选择歧义。</li>
+        <li>让 Claude Code 参与 transcript 分析和工具迭代，但用 eval 验证结果。</li>
       </ul>
     </section>
     <footer class="article-footer">

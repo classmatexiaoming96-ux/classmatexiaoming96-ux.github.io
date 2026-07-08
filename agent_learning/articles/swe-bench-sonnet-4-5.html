@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>SWE-bench Verified 来自真实开源项目 issue，要求模型修改代码并通过测试。它比人工构造题更接近维护工作，但仍需要结合实验设置解读。</p>
+      <p>本文围绕 Claude Sonnet 4.5 在 SWE-bench Verified 上的表现，分析 agentic coding benchmark 如何衡量真实代码修复能力、harness 和验证流程。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>SWE-bench Verified 测真实代码修复，而不是单次补全。</li>
-        <li>高分依赖模型、harness、工具、测试执行和错误恢复。</li>
-        <li>agentic coding 包括理解 repo、定位 bug、运行测试和迭代修复。</li>
-        <li>Verified 子集提高题目质量，但仍受环境噪声影响。</li>
-        <li>benchmark 报告应披露 test-time compute、重试、工具和筛选策略。</li>
-        <li>产品中的 coding agents 还需要 scope 控制和安全边界。</li>
+        <li>SWE-bench Verified 用真实开源项目 issue 测试模型修复代码的能力。</li>
+        <li>高分依赖模型、harness、工具、测试执行和错误恢复共同作用。</li>
+        <li>agentic coding 不只是写 patch，还包括理解 repo、定位 bug、运行测试和迭代修复。</li>
+        <li>Verified 子集提高了题目质量和判分可信度，但仍受环境噪声影响。</li>
+        <li>Sonnet 4.5 的意义在于更强长程代码理解和更稳工具使用。</li>
+        <li>benchmark 报告应披露是否使用 test-time compute、重试、工具和人工筛选。</li>
+        <li>SWE-bench 不能覆盖所有软件工程，但能作为回归基准。</li>
+        <li>产品中的 coding agents 还需要用户意图、scope 控制和安全边界。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文围绕 Claude Sonnet 4.5 在 SWE-bench Verified 上的表现，分析 agentic coding benchmark 如何衡量真实代码修复能力、harness 和验证流程。</p>
       <h3>SWE-bench Verified 测什么</h3>
-      <p>任务来自真实开源项目 issue，代码库大、依赖复杂、错误信息不完整、修复路径不唯一。这比静态代码生成更接近真实工程。</p>
-      <p>Verified 子集通过筛选减少 ambiguous issue 和不稳定判分，但它仍是 benchmark，不等同于所有软件工程能力。</p>
+      <p>SWE-bench Verified 来自真实开源项目 issue，要求模型修改代码，让相关测试通过。相比人工构造题，它更接近真实维护工作：代码库大、依赖复杂、错误信息不完整、修复路径不唯一。</p>
+      <p>Verified 子集通过人工筛选提高题目质量，减少 ambiguous issue 和不稳定判分。但它仍然是 benchmark，不等同于全部软件工程能力。</p>
       <h3>为什么是 agentic coding</h3>
-      <p>取得好成绩需要模型像 agent 一样工作：读 issue、搜索代码、定位文件、理解测试、写 patch、运行测试、分析失败、再迭代。</p>
-      <p>因此分数同时反映模型和 harness。工具选择、context 管理、timeout、重试和 patch 提交流程都会影响结果。</p>
+      <p>在 SWE-bench 上取得好成绩，需要模型像 agent 一样工作：阅读 issue、搜索代码、定位相关文件、理解测试、写 patch、运行测试、分析失败、再迭代。单次补全很难完成完整闭环。</p>
+      <p>因此分数同时反映模型能力和 harness 设计。工具选择、context 管理、测试命令、重试策略、timeout 和 patch 提交流程都会影响结果。</p>
+      <h3>Sonnet 4.5 的能力信号</h3>
+      <p>如果 Sonnet 4.5 在该基准上提升，最重要的能力信号通常包括长代码上下文理解、更好的 bug localization、更少无关改动、更可靠测试反馈利用，以及更稳的指令遵循。</p>
+      <p>这些能力对产品很关键。用户不只想要通过 benchmark 的 patch，还希望 agent 理解项目风格、控制修改范围、解释原因，并在测试不可用时诚实说明不确定性。</p>
       <h3>如何解读 leaderboard</h3>
-      <p>SWE-bench 分数应结合实验设置：是否允许多次尝试、使用多少 token、是否运行隐藏测试、是否人工过滤、是否使用额外检索。</p>
-      <p>对团队来说，它更适合作为能力方向和回归基线，再结合自己的真实工单评估业务效果。</p>
+      <p>SWE-bench 分数应结合实验设置解读：是否允许多次尝试、使用多少 token、是否运行隐藏测试、是否有人工过滤、是否使用额外检索、执行环境如何控制。不同 harness 之间的分数并不总是直接比较。</p>
+      <p>对团队来说，SWE-bench 更适合作为回归测试和能力方向指示，而不是唯一产品指标。真实 coding agent 还需要测新功能开发、重构、代码审查、迁移和长期项目维护。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>SWE-bench Verified 的价值，是把 coding agent 从 demo 带到可比较评估。它迫使模型面对真实代码库的不整洁。但它也提醒我们，agentic coding 是系统能力：模型变强是一部分，harness 如何给文件、命令、反馈和回滚机制同样关键。</p>
+      <p>SWE-bench Verified 的价值，在于把 coding agent 从 demo 带到可比较评估。它迫使模型面对真实代码库的不整洁：依赖、测试、历史设计和错误线索。但它也提醒我们，agentic coding 是系统能力。模型变强是一部分，harness 如何给它文件、命令、反馈和回滚机制同样关键。产品团队应该用 SWE-bench 建立基线，再用自己的真实工单评估业务效果。</p>
     </section>
     <section>
       <h2>落地启示</h2>

@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>Claude Code 需要执行命令、读写文件和调用工具。permission prompt 可以提醒用户，但不能成为唯一安全机制，因为人会疲劳，模型也可能被诱导提出看似合理的危险请求。</p>
+      <p>本文讨论为什么 permission prompts 不是 Claude Code 安全的终点，并介绍 sandboxing 如何用系统边界限制文件、网络和凭据访问，减少 prompt injection 后果。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
         <li>permission prompt 能提醒用户，但不能替代技术隔离。</li>
-        <li>长期批准会产生疲劳，攻击也可能诱导模型请求危险操作。</li>
-        <li>sandboxing 把风险从每次判断转移到默认边界。</li>
+        <li>用户长期批准会产生疲劳，攻击也可能诱导模型请求危险操作。</li>
+        <li>sandboxing 把风险从“每次判断”转移到“默认边界”。</li>
         <li>文件系统隔离可限制 agent 读取和修改的路径范围。</li>
         <li>网络隔离可减少凭据外传、恶意下载和未授权请求。</li>
         <li>凭据不应暴露给 Claude 生成代码运行的环境。</li>
+        <li>安全设计应结合 prompt injection 检测、tool policy 和可审计日志。</li>
+        <li>自主性越高，越需要结构性隔离而不是更多弹窗。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文讨论为什么 permission prompts 不是 Claude Code 安全的终点，并介绍 sandboxing 如何用系统边界限制文件、网络和凭据访问，减少 prompt injection 后果。</p>
       <h3>permission prompts 的局限</h3>
-      <p>如果每几分钟都弹出确认，用户会逐渐机械批准。prompt injection 也可能让模型把危险动作包装成合理请求。</p>
-      <p>因此安全不能只靠问用户。更稳的策略，是让环境默认限制在安全边界内，让低风险动作顺畅进行，高风险能力结构上不可达或需要明确授权。</p>
+      <p>Claude Code 需要执行命令、读写文件、调用工具。permission prompts 可以让用户确认高风险动作，但它依赖人类持续判断。如果每几分钟都弹出确认，用户会疲劳；如果 prompt injection 说服模型提出看似合理的请求，人类也可能误批。</p>
+      <p>因此，安全不能只靠问用户。更稳的策略是把环境默认限制在安全边界内，让低风险动作顺畅进行，高风险能力从结构上不可达或需要明确授权。</p>
       <h3>sandboxing 的作用</h3>
-      <p>sandboxing 通过文件系统、网络、进程、资源和凭据隔离，把 agent 的行动空间限制在任务需要的范围内。</p>
-      <p>即使模型被恶意内容影响，攻击者也更难读取敏感文件、外传 token 或修改不相关资源。</p>
+      <p>sandboxing 通过文件系统、网络、进程、资源和凭据隔离，把 agent 的行动空间限制在任务需要的范围内。即使模型被恶意内容影响，攻击者也更难读取敏感文件、外传 token 或修改不相关资源。</p>
+      <p>文件系统隔离可以让 agent 只访问当前 repo 或临时工作区。网络隔离可以默认禁止外联，只允许必要域名。资源限制可以防止无限进程和消耗攻击。</p>
+      <h3>凭据和工具边界</h3>
+      <p>最关键的原则是：凭据不要进入 Claude 生成代码可读取的环境。Git、MCP、云服务等凭据可以通过 proxy、vault 或资源绑定方式使用，让 agent 能完成操作，却拿不到原始 secret。</p>
+      <p>工具也应带 policy。某些工具只读，某些工具可写但需要确认，某些工具只能在 sandbox 内部运行。权限边界越清楚，prompt prompt injection 的后果越小。</p>
       <h3>安全与体验</h3>
-      <p>更强隔离不是为了让 agent 更笨重，而是为了让它更自主。低风险动作被 sandbox 包住，就可以减少无意义确认。</p>
-      <p>用户注意力应留给真正重要的决定：删除数据、外部写入、权限提升、发布和凭据访问。</p>
+      <p>更强隔离不是为了让 agent 更受限，而是为了让它更自主。低风险操作如果被 sandbox 包住，就可以减少 permission prompt；用户把注意力留给真正重要的决定。</p>
+      <p>安全体验的目标是少打扰但更可信：默认安全边界、清晰升级路径、可审计日志和发生异常时的解释。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇主题把 agent 安全从 UI 问题拉回系统边界问题。随着 coding agents 更自主，用户不可能审查每个命令的所有后果。sandboxing 的意义，是把可犯错空间缩小，让模型即便被诱导也只能在有限范围内行动。好的安全设计不是不断喊停，而是让安全成为默认环境。</p>
+      <p>这篇主题的价值在于，它把 agent 安全从 UI 交互问题拉回系统边界问题。permission prompt 是最后一道人类判断，但不能成为唯一防线。随着 coding agents 更自主，用户不可能审查每个命令的所有后果。sandboxing 的意义，是把可犯错空间缩小，让模型即便被诱导也只能在有限范围内行动。好的安全设计不是不断喊停，而是让安全成为默认环境。</p>
     </section>
     <section>
       <h2>落地启示</h2>

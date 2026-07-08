@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>C 编译器足够复杂：它需要语言规范、模块架构、边界条件和大量测试。把多个 Claude Code session 当成并行工程团队，是观察 agent 协作边界的好实验。</p>
+      <p>本文把多个 Claude Code session 当成并行工程团队，分工实现 lexer、parser、type checker、codegen 和测试，展示 agent 协作在大型编译器任务中的组织方式。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>C 编译器能考验 agent 的规范阅读、架构一致性和长程状态管理。</li>
-        <li>parallel sessions 可以分工实现 lexer、parser、type checker、codegen 和测试。</li>
-        <li>lead session 需要维护架构文档、共享 AST 约定和验收标准。</li>
-        <li>并行开发的主要风险是接口漂移、重复实现和测试覆盖不一致。</li>
-        <li>集成比单点实现更难，需要频繁 merge 和全量回归。</li>
-        <li>人类仍应控制架构边界和最终验收。</li>
+        <li>C 编译器是测试 agentic coding 的好任务，因为它需要语言规范、架构设计和大量验证。</li>
+        <li>多个 Claude Code session 可像工程团队一样分工，但需要明确接口和集成节奏。</li>
+        <li>并行开发的关键风险是接口漂移、重复实现和测试覆盖不一致。</li>
+        <li>lead session 应维护架构文档、任务拆分、共享 AST 约定和验收测试。</li>
+        <li>worker sessions 适合处理 lexer、parser、semantic analysis、codegen、runtime 和 test fixtures。</li>
+        <li>集成比单点实现更难，需要频繁 merge、运行全量测试和处理冲突。</li>
+        <li>编译器项目能暴露 agent 对规范阅读、边界条件和长程状态的管理能力。</li>
+        <li>人类仍应控制架构边界和最终验收，而不是让 parallel agents 自发收敛。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文把多个 Claude Code session 当成并行工程团队，分工实现 lexer、parser、type checker、codegen 和测试，展示 agent 协作在大型编译器任务中的组织方式。</p>
       <h3>为什么是 C 编译器</h3>
-      <p>编译器项目包含词法、语法、类型、诊断、IR、代码生成和运行时测试。每个子系统都可以独立推进，但整体必须共享同一套抽象。</p>
-      <p>C 语言还有历史包袱和大量边界情况，agent 不能只靠模板生成，必须持续查规范、构造测试和修复回归。</p>
+      <p>构建 C 编译器是一个很硬的工程任务。它包含词法分析、语法分析、类型系统、语义检查、IR、代码生成、错误信息、测试框架和大量边界情况。这个任务足够复杂，能考验 agent 是否只是会写局部代码，还是能在长期架构中保持一致。</p>
+      <p>C 语言也有大量历史包袱和未定义行为。agent 必须不断查规范、构造测试、修复回归，不能只靠模板式生成。</p>
       <h3>把 Claude Code 当成团队</h3>
-      <p>parallel Claude Code 的核心收益是上下文隔离和并行探索。worker session 可以深挖一个模块，不必把全部细节塞给同一个 agent。</p>
-      <p>但并行不等于自由开工。lead session 需要承担技术负责人角色：拆任务、定义接口、维护设计文档、收敛实现，并决定什么时候集成。</p>
-      <h3>接口与验证</h3>
-      <p>编译器协作的关键是共享契约：token 类型、AST 节点、symbol table、type representation、diagnostic format 和 IR schema 都要尽早固定。</p>
-      <p>验证也必须分层。lexer golden tests、parser snapshot、type error cases、codegen smoke tests 和端到端执行测试共同构成集成安全网。</p>
+      <p>parallel Claude Code 的思路，是让多个 session 分别承担子系统工作。一个 lead session 负责总体架构、接口和集成计划；其他 worker sessions 负责 lexer、parser、type checker、codegen、测试和文档等模块。</p>
+      <p>这种模式的收益是并行探索和上下文隔离。每个 worker 可以在自己的 context 中深入一个子问题，不会把所有细节塞给同一个 agent。代价是协调：接口必须清楚，否则每个 worker 都会发明自己的 AST、错误类型和测试习惯。</p>
+      <h3>接口是协作核心</h3>
+      <p>编译器的模块边界天然适合协作，但前提是共享契约明确。例如 token 类型、AST 节点、symbol table、type representation、diagnostic format、IR schema 都要尽早固定。lead session 应持续更新架构文档，让 worker 以同一事实来源工作。</p>
+      <p>如果缺少共享契约，parallel agents 会产生看似独立完成、实则难以集成的代码。最后人工或 lead agent 会被迫做大量胶水修复，抵消并行收益。</p>
+      <h3>验证与集成</h3>
+      <p>编译器开发尤其依赖测试。最小测试包括 lexer golden tests、parser snapshot、type error cases、codegen smoke tests、以及端到端编译运行。每个 worker 都应为自己的模块贡献测试，lead session 则负责全量回归。</p>
+      <p>集成节奏应该短。长时间让 sessions 各自开发，最后再合并，会放大接口漂移。更好的方式是小批量任务、频繁同步、持续跑测试，让冲突在早期暴露。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这类实验最有价值的结论，不是 Claude 能否写出一个玩具编译器，而是多 agent 编程仍然需要组织设计。没有共享事实来源、接口契约和集成责任，并行 agent 会生成许多局部合理但整体冲突的代码。未来 agent 团队可能很强，但它们仍需要技术负责人、架构边界和持续验证。</p>
+      <p>这类实验最有价值的启示，不是 Claude 是否能写出一个玩具编译器，而是 parallel coding agents 需要怎样的组织结构。多 agent 编程不等于并行开工，真正难的是共享设计、接口契约和集成责任。换句话说，agent 团队仍然需要技术负责人。人类可以把更多局部实现交给 Claude，但必须设计信息流：谁维护规范、谁裁决接口、谁跑全量测试、谁处理回归。没有这些机制，并行只会制造更多不一致。</p>
     </section>
     <section>
       <h2>落地启示</h2>

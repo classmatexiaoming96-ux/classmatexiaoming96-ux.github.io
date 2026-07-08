@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>coding agent 的评测不像选择题。它要 checkout 仓库、安装依赖、运行测试、修改文件和提交 patch。任何基础设施不稳定都会污染最终分数，因此可靠 eval 必须把噪声显式建模。</p>
+      <p>本文聚焦 agentic coding eval 的基础设施噪声：测试 flaky、依赖失败、沙箱差异和超时会污染模型能力测量，需要被记录、复现和量化。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>agentic coding eval 同时测模型、工具、sandbox、依赖、测试和判分脚本。</li>
+        <li>agentic coding eval 不只测模型，还测 sandbox、依赖、测试、网络和任务 harness。</li>
         <li>同一个 patch 可能因 flaky test 或环境差异得到不同结果。</li>
-        <li>基础设施噪声会掩盖小模型差异，也可能制造虚假 leaderboard 波动。</li>
-        <li>失败应区分模型错误、工具错误、环境错误、测试错误和判分错误。</li>
-        <li>重复运行、环境快照和端到端 trace 是量化噪声的基础。</li>
-        <li>能否诊断基础设施问题，本身也是 coding agent 能力的一部分。</li>
+        <li>基础设施噪声会掩盖小模型差异，也会让 leaderboard 产生虚假波动。</li>
+        <li>应区分模型错误、工具错误、环境错误、测试错误和判分错误。</li>
+        <li>重复运行、种子控制、环境快照和 failure taxonomy 是量化噪声的基础。</li>
+        <li>评测报告应披露 timeout、retry、依赖安装失败率和 flaky test 处理策略。</li>
+        <li>对 coding agent 来说，能否诊断基础设施问题本身也是能力的一部分。</li>
+        <li>可靠 eval 需要可复现容器、稳定数据集和端到端 trace。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文聚焦 agentic coding eval 的基础设施噪声：测试 flaky、依赖失败、沙箱差异和超时会污染模型能力测量，需要被记录、复现和量化。</p>
       <h3>噪声来自哪里</h3>
-      <p>真实代码评测链路很长：仓库 checkout、依赖安装、shell 命令、沙箱限制、网络状态、时间限制、测试执行和判分脚本都会影响结果。任一环节不稳定，pass rate 都会混入非模型因素。</p>
-      <p>这类噪声比普通文本 benchmark 更难处理，因为执行代码就意味着依赖环境，而环境天然有不确定性。</p>
+      <p>agentic coding eval 看起来是在测模型修 bug 或实现功能，但实际链路很长：仓库 checkout、依赖安装、测试运行、shell 工具、沙箱限制、网络状态、时间限制、判分脚本都会影响最终结果。任何一个环节不稳定，分数就会混入基础设施噪声。</p>
+      <p>这种噪声和传统 benchmark 不同。选择题或文本生成评测通常输入输出较短，而 coding eval 会执行代码。执行就意味着环境，环境就意味着不确定性。</p>
       <h3>为什么必须量化</h3>
-      <p>如果两个模型只差一两个百分点，而评测环境自身波动也有类似幅度，那么直接比较就不可靠。更糟的是，优化测试策略或 retry 逻辑可能被误读为模型能力提升。</p>
-      <p>量化噪声不是为了消灭所有不确定性，而是让团队知道分数的置信范围：多少任务失败于安装，多少失败于 timeout，多少在重复运行中不稳定。</p>
-      <h3>从 eval 反哺 agent 设计</h3>
-      <p>基础设施问题不只是评测污染，也是真实开发的一部分。优秀 coding agent 应能识别 flaky test、重跑关键用例、缩小失败范围、检查依赖，并向用户说明不确定性。</p>
-      <p>因此 eval harness 一方面要控制环境噪声，另一方面也可以设计专门任务来评估 agent 对不可靠环境的诊断能力。</p>
+      <p>如果两个模型分数只差 1-2 个百分点，而基础设施噪声本身就有类似幅度，那么我们很难说哪一个真正更强。更糟的是，优化 harness 或测试策略可能带来分数提升，却被误认为模型能力提升。</p>
+      <p>量化噪声的目的不是追求完美无噪声，而是让评估者知道不确定性范围。一个可信报告应该能说清：有多少任务失败于依赖安装，有多少失败于 timeout，有多少在重复运行中不稳定。</p>
+      <h3>如何测量</h3>
+      <p>第一步是分类。失败至少应分为模型行为错误、工具调用错误、环境错误、测试错误、判分错误。第二步是重复运行同一配置，观察结果方差。第三步是固定环境快照，让任务尽量在相同依赖和系统状态下执行。</p>
+      <p>trace 也很重要。完整日志能显示 agent 是否真的写了错误代码，还是因为下载依赖失败、测试 flaky、权限不足或命令超时而被判失败。没有 trace，噪声只能被猜测。</p>
+      <h3>对 agent 设计的反作用</h3>
+      <p>有趣的是，基础设施问题不一定只是评测污染。在真实开发中，agent 也会遇到 flaky test 和环境错误。优秀 coding agent 应能识别这些情况：重跑测试、缩小失败范围、检查依赖、向用户说明不确定性，而不是盲目修改代码。</p>
+      <p>因此，eval harness 既要控制噪声，也可以专门设计基础设施鲁棒性任务，评估 agent 是否会处理不可靠环境。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章把 coding agent leaderboard 拉回工程现实：我们测的从来不是纯模型，而是模型加运行时的系统。一个 pass rate 背后可能包含网络、依赖、测试和 retry 策略。真正有用的 eval 应该像生产可观测性一样分层、可复现、可追踪，否则团队可能以为自己提升了模型，实际只是调顺了环境。</p>
+      <p>这篇主题指出了 agentic coding 评测最容易被忽略的事实：我们测的不是一个纯模型，而是模型加工具加环境组成的系统。只报告 pass rate 会把复杂失败压成单个数字，隐藏了系统层面的不确定性。对工程团队而言，真正有用的 eval 应该像生产可观测性一样：分层、可追踪、可复现、可解释。否则你以为自己在提升模型，实际可能只是调顺了测试环境。</p>
     </section>
     <section>
       <h2>落地启示</h2>

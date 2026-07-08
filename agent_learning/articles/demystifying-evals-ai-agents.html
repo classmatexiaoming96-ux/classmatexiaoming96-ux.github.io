@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>agent eval 不是给单轮回答打分。agent 会计划、调用工具、观察结果、修改环境并继续行动，真正的风险常常藏在中间轨迹里。</p>
+      <p>本文介绍 AI agent eval 的基本方法：从真实任务、可验证结果、rubric、trajectory 记录和回归集开始，把 agent 质量变成可持续改进的工程指标。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
+        <li>agent eval 不是一次问答打分，而是对多步行为轨迹的评估。</li>
         <li>好的 eval 来自真实用户任务，并有明确成功标准。</li>
         <li>最终答案、工具轨迹、成本、延迟、失败恢复和安全性都应纳入指标。</li>
-        <li>回归集应覆盖高频任务、边缘任务、历史失败和安全边界。</li>
         <li>LLM judge 有用，但需要 rubric、校准集和人工抽检。</li>
+        <li>回归集应覆盖高频任务、边缘任务、历史失败和安全边界。</li>
         <li>eval 应区分能力问题、工具问题、prompt 问题和产品约束问题。</li>
+        <li>持续评估比一次性 leaderboard 更能指导 agent 产品迭代。</li>
         <li>最小可用 eval 可以从几十个真实案例和人工判分开始。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文介绍 AI agent eval 的基本方法：从真实任务、可验证结果、rubric、trajectory 记录和回归集开始，把 agent 质量变成可持续改进的工程指标。</p>
       <h3>agent eval 为什么特殊</h3>
-      <p>传统 LLM eval 常常是输入问题、输出答案、判定对错。agent eval 更难，因为它要评估行为过程：调用了什么工具、是否访问了正确账户、是否修改了不该动的文件。</p>
-      <p>最终答案正确并不代表过程安全。一个客服 agent 可能给出正确退款结论，却途中读取了错误用户数据；coding agent 可能测试通过，却改了不该改的公共接口。</p>
+      <p>传统 LLM eval 经常评估单轮回答：输入问题，输出答案，然后判定对错。agent eval 更难，因为 agent 会计划、调用工具、观察结果、修改环境、再继续行动。最终答案只是轨迹的末端，很多风险藏在中间。</p>
+      <p>例如一个客服 agent 最后可能给出正确退款结论，但途中访问了错误账户；一个 coding agent 最终测试通过，却修改了不该动的文件。agent eval 必须看行为过程。</p>
       <h3>从真实任务开始</h3>
-      <p>最有效的 eval 来自用户请求、客服记录、开发工单、历史 bug 和失败案例。每个任务都需要明确什么算完成、哪些动作禁止、哪些信息必须引用。</p>
-      <p>早期不需要庞大数据集。几十个高质量案例，加上清晰 rubric 和人工复核，已经能让产品迭代从 impression 转向事实。</p>
-      <h3>指标与 judge</h3>
-      <p>agent 指标应包括 success rate、tool call 数、token 成本、延迟、错误恢复、权限请求和政策遵守。不同产品权重不同，研究、coding、客服各有核心风险。</p>
-      <p>LLM judge 能降低开放式评估成本，但必须配合 rubric、gold labels、校准和争议样本复查。高风险任务中，judge 只能做初筛。</p>
+      <p>好的 eval 不应凭空想象。最有效的任务来自真实用户请求、客服记录、开发工单、历史 bug、失败案例和产品边界。每个任务都需要明确成功标准：什么算完成、哪些动作禁止、哪些信息必须引用、哪些成本不可接受。</p>
+      <p>初期不需要庞大数据集。几十个高质量案例，加上清晰 rubric 和人工复核，就能比没有 eval 的迭代强很多。规模化之前，先保证任务代表真实产品风险。</p>
+      <h3>指标不止 accuracy</h3>
+      <p>agent 的指标应包括 success rate、tool call 数、token 成本、延迟、错误恢复、是否请求不必要权限、是否遵守政策、是否提供可验证引用。不同产品权重不同：研究 agent 关注来源质量，coding agent 关注测试和 diff，客服 agent 关注政策合规。</p>
+      <p>trajectory 是核心证据。保存每轮 message、tool call、tool result、错误、retry、最终输出，才能在失败后知道应该改 prompt、改工具、改 harness，还是改产品约束。</p>
+      <h3>LLM judge 与人工校准</h3>
+      <p>LLM judge 能降低 eval 成本，尤其适合开放式答案和长报告。但 judge 不是神谕，必须配合 rubric、少量人工 gold labels、定期校准和争议样本复查。对高风险任务，judge 只能做初筛，不能替代人工判断。</p>
+      <p>一个实用做法是把 eval 分为自动硬指标和软判断：测试是否通过、引用是否存在、是否调用 forbidden tool 这类可程序化检查先跑；报告质量、完整性和解释力再交给 judge 或人工。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>agent eval 的本质，是把“感觉它变好了”变成工程事实。失败可能来自模型、prompt、工具、权限、UI、环境或用户需求不清。没有 eval，团队只能围绕 demo impression 争论；有了 eval，才能知道每次修改改善了什么、牺牲了什么、是否引入回归。</p>
+      <p>agent eval 的本质，是把“我感觉这个 agent 变好了”变成可讨论的工程事实。它要求团队承认 agent 是系统，而不是单个模型调用。失败可能来自模型、prompt、工具、环境、权限、UI 或用户需求不清。没有 eval，团队只会在 demo impression 中漂移；有了 eval，才知道每次修改到底改善了什么、牺牲了什么、是否引入回归。</p>
     </section>
     <section>
       <h2>落地启示</h2>

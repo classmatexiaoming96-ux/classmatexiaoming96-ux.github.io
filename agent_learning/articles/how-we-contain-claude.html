@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,43 +45,55 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>随着 Claude 进入聊天、编码、研究和工具执行场景，containment 不再是单一安全开关。不同产品有不同风险：读什么、能做什么、如何处理不可信输入、怎样记录和升级。</p>
+      <p>Claude 在不同产品中拥有不同能力：聊天、编码、浏览、工具调用、文件编辑和外部系统操作。containment 的目标不是让 agent 不能行动，而是让它在明确、可审计、可恢复的边界内行动。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>不同产品中的 Claude 面临不同风险类型和行动边界。</li>
-        <li>防线通常由模型行为、harness policy 和系统隔离共同组成。</li>
-        <li>agent containment pattern 要限制文件、网络、工具、凭据和外部写入。</li>
-        <li>不可信输入会影响模型，因此必须区分用户指令、工具结果和外部内容。</li>
+        <li>不同产品风险不同，containment 必须按场景设计，而不是只靠一套通用规则。</li>
+        <li>防线通常由模型行为、harness policy、tool permission、sandbox、network policy 和 audit log 共同组成。</li>
+        <li>agent containment 要限制文件、网络、工具、凭据和外部写入。</li>
+        <li>系统必须区分用户指令、外部内容、工具结果和模型记忆，避免 prompt injection 混淆数据与指令。</li>
         <li>可信度不是二元属性，而是随来源、权限和任务上下文变化。</li>
-        <li>containment 的目标是让 Claude 更有用，同时把失败后果限制在可承受范围。</li>
+        <li>好的 containment 让 Claude 更自主，因为低风险动作可以在默认边界内顺畅执行。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
-      <h3>三类风险与三层防线</h3>
-      <p>Claude 在不同产品里可能面临数据泄露、越权行动、被不可信内容诱导等风险。单靠模型“听话”不足以覆盖这些场景。</p>
-      <p>更稳的防线是多层组合：模型层遵循政策，harness 层限制工具和权限，系统层用 sandbox、network policy、vault 和审计日志限制后果。</p>
-      <h3>contain agents 的模式</h3>
-      <p>agent 越能行动，越需要明确边界。文件系统、网络、工具、凭据和外部写入都应分层控制，让低风险探索顺畅，高风险动作需要显式授权。</p>
-      <p>这类模式不是为了压低能力，而是为了让 agent 在默认安全边界内更自主。</p>
-      <h3>信任 Claude 读到的内容</h3>
-      <p>agent 会读取网页、代码、issue、邮件、文档和工具结果，其中很多内容不应被当作指令。系统必须区分来自用户的授权指令与来自外部内容的非可信文本。</p>
-      <p>prompt injection 的难点在于它利用语言界面混淆数据和指令。containment 需要让这种混淆即便发生，也难以触达敏感能力。</p>
+      <h2>正文</h2>
+      <h3>Three types of risk, three components of defense</h3>
+      <p>文章将 Claude 产品中的风险拆成不同类型：泄露敏感信息、执行越权动作、被不可信内容诱导偏离用户目标。每类风险都需要不同控制面。</p>
+      <p>单靠模型层对齐不足以覆盖这些场景。更稳的做法是多层防线：模型遵守政策，harness 限制工具和权限，系统层用 sandbox、network isolation、credential vault 和 audit log 限制后果。</p>
+      <p>这种组合的价值在于，即使某一层判断失误，其他层仍能降低损害范围。</p>
+      <h3>Patterns for containing agents</h3>
+      <p>agent 越能行动，越需要把能力分层。读文件、写文件、访问网络、调用外部系统、使用凭据、发布结果，这些动作的风险并不相同。</p>
+      <p>containment pattern 的目标是给低风险探索足够空间，同时把高风险能力放在更窄接口后面。比如凭据通过 vault 或 proxy 使用，而不是暴露给模型生成代码可读取的环境。</p>
+      <p>这也是用户体验问题。好的边界减少无意义 permission prompt，让用户把注意力放在真正需要判断的动作上。</p>
+      <h3>Trusting what the agent reads</h3>
+      <p>agent 会读取网页、issue、代码、邮件、文档和工具返回，其中很多文本都可能包含恶意指令。系统必须区分“用户授权的指令”和“外部内容中的文字”。</p>
+      <p>prompt injection 的本质，是利用语言界面把数据伪装成指令。如果外部内容能让 agent 访问凭据、发请求或修改文件，风险就会被放大。</p>
+      <p>因此 containment 需要和 context engineering 结合：来源、权限、可信度和可执行能力都应进入 harness 的策略判断。</p>
+      <h3>Looking ahead</h3>
+      <p>随着 agent 能力增强，containment 不能只在产品发布时设计一次。模型、更强工具、新 MCP server、新工作流都会改变风险面。</p>
+      <p>未来的 containment 更像运行时策略系统：根据任务、用户、数据来源、工具权限和组织策略动态决定可做什么。</p>
+      <p>它的成功标准不是完全消灭风险，而是让风险可理解、可审计、可恢复，并与产品价值匹配。</p>
+      <h3>Summary</h3>
+      <p>文章最终传达的是一种架构观：安全不是单点模型分类器，而是模型、harness、工具、隔离、凭据和日志共同构成的产品系统。</p>
+      <p>Claude 越多地进入真实工作，containment 越需要从“阻止模型说错话”扩展到“限制 agent 行动后果”。</p>
+      <p>这也是 agent 产品走向企业环境的前提。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章可以看作 Anthropic 对 agent 安全工程的总览。随着 Claude 从回答问题走向执行任务，安全不再是单点分类器，而是产品架构：模型、harness、工具、sandbox、凭据、审计共同定义行动空间。真正成熟的 containment 不是让 agent 什么都不能做，而是让它能在可解释、可恢复、可限制的范围内做更多事。</p>
+      <p>这篇文章可以看作 Anthropic 对 agent 安全工程的总览。它真正关心的不是让 Claude 更保守，而是让 Claude 的自主性建立在系统边界之上。没有 containment，增强工具能力会线性增加风险；有了 containment，更多低风险动作可以自动化，高风险动作则通过权限、隔离和审计被收束。对工程团队来说，这意味着安全不应最后接入，而应与工具设计、context pipeline 和部署架构同时设计。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
-        <li>把风险按读、写、外联、凭据和外部影响分层。</li>
-        <li>区分用户指令与外部内容，尤其是网页和工具返回。</li>
-        <li>用 sandbox 和 vault 限制 prompt injection 的后果。</li>
-        <li>为高风险工具加 policy、审批和审计。</li>
-        <li>按产品场景设计 containment，而不是套一套通用规则。</li>
+        <li>按读、写、外联、凭据、发布和权限提升对 agent 动作分层。</li>
+        <li>把凭据放进 vault/proxy，不要暴露给 sandbox 中的生成代码。</li>
+        <li>区分用户指令与外部内容，给工具结果标注来源和可信度。</li>
+        <li>为高风险工具配置 policy、approval、rate limit 和 audit log。</li>
+        <li>把 containment 作为持续演进的运行时策略，而不是一次性安全清单。</li>
       </ul>
     </section>
     <footer class="article-footer">

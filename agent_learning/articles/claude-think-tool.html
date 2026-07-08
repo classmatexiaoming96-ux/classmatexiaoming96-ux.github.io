@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -40,47 +41,57 @@
         <span class="article-author">Anthropic Engineering</span>
       </div>
       <h1 class="article-title">&quot;think&quot; 工具：让 Claude 能停下来思考</h1>
-      <p class="article-original-title">原文：The &quot;think&quot; tool: Enabling Claude to stop and think</p>
+      <p class="article-original-title">原文：The &quot;think&quot; tool: Enabling Claude to stop and think in complex tool use situations</p>
     </header>
     <section>
       <h2>导读</h2>
-      <p>"think" tool 是一个结构化 scratchpad，让 Claude 在复杂 tool-use workflow 中停下来分析。它不获取新信息、不改变外部状态，只帮助模型整理中途获得的信息。</p>
+      <p>"think" tool 是一个专门给 Claude 在 tool-use 中途使用的结构化 scratchpad。它不获取新信息、不改变外部状态，只帮助模型在看到工具结果后停下来核对规则、证据和下一步。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>"think" tool 与 extended thinking 不同，它发生在工具调用链中途。</li>
-        <li>它适合长工具链、多轮对话、政策密集环境和代价高的顺序决策。</li>
-        <li>工具本身无副作用，只记录结构化推理。</li>
-        <li>在 tau-bench airline 任务中，配合优化提示显著提升表现。</li>
-        <li>最佳提示要求列出规则、检查必要信息、验证政策合规并审视工具结果。</li>
-        <li>简单指令遵循和并行工具调用通常不需要 think tool。</li>
+        <li>"think" tool 与 extended thinking 不同：extended thinking 发生在回复前，think tool 可在工具链中途调用。</li>
+        <li>它适合长工具链、多步对话、政策密集环境，以及错误代价高的顺序决策。</li>
+        <li>工具本身无副作用，不查数据、不写状态，只记录结构化推理。</li>
+        <li>在 tau-bench airline 任务中，think + optimized prompting 达到 0.570 pass^1，baseline 为 0.370。</li>
+        <li>展示的 airline 表中，Think + Prompt 在 k=1 达到 0.584，baseline 为 0.332。</li>
+        <li>retail 任务中，未提示的 think 达到 0.812 pass^1，baseline 为 0.783。</li>
+        <li>类似 think tool 对 Claude 3.7 Sonnet 的 SWE-bench 0.623 结果有帮助，隔离实验平均提升 1.6%。</li>
+        <li>文章后来更新说明，多数场景现在优先推荐 extended thinking。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
       <h3>为什么需要中途思考</h3>
-      <p>复杂工具任务的难点常发生在工具返回之后。模型需要把新信息与规则、用户目标和下一步动作对齐，而不是机械继续调用工具。</p>
-      <p>"think" tool 给了模型一个低风险空间，让它在行动前整理政策、检查缺失信息和评估工具结果。</p>
-      <h3>适合与不适合</h3>
-      <p>适合场景包括客服政策、航空改签、零售退货、长链路工具调用和顺序决策。每一步都可能改变后续选择，因此中途反思有价值。</p>
-      <p>不适合场景则是简单指令、单次工具调用或互不依赖的并行工具调用。此时额外 scratchpad 只会增加成本。</p>
-      <h3>与 extended thinking 的关系</h3>
-      <p>文章后来更新说明，多数情况下现代 extended thinking 更推荐。它能覆盖许多需要深度推理的场景。</p>
-      <p>但 think tool 作为设计模式仍有启发：当工具结果改变任务状态时，系统可以提供一个无副作用、可审计的中途推理节点。</p>
+      <p>复杂 tool-use workflow 的关键困难往往发生在工具返回之后。模型已经拿到新信息，但还需要把它与用户目标、业务规则、政策约束和历史步骤对齐。</p>
+      <p>如果没有一个显式停顿点，agent 可能直接继续调用下一个工具，导致没有检查必要信息、误读政策、或者在顺序决策中提前执行不可逆动作。</p>
+      <p>"think" tool 的设计很克制：它不给模型新能力，也不改变外部状态，只提供一个可审计的中途 scratchpad。</p>
+      <h3>与 extended thinking 的区别</h3>
+      <p>extended thinking 主要发生在模型生成回复之前；而 think tool 可以出现在 response 中途，尤其是在一个或多个 tool results 返回之后。</p>
+      <p>这使它适合那些“看到新证据后必须重新推理”的任务。例如客服改签、退款政策、订单处理、代码修改后的测试失败分析。</p>
+      <p>文章后来更新指出，在现代模型能力下，多数场景更推荐 extended thinking。但 think tool 仍然是一个重要设计模式：为高风险中间状态提供无副作用推理节点。</p>
+      <h3>实验结果说明什么</h3>
+      <p>文章给出多个 benchmark 信号。tau-bench airline 中，think + optimized prompting 的 pass^1 为 0.570，baseline 为 0.370，是 54% relative improvement；展示表中 Think + Prompt 在 k=1 达到 0.584，而 baseline 为 0.332。</p>
+      <p>retail 任务中，未提示 think 的 pass^1 为 0.812，baseline 为 0.783。SWE-bench 场景中，类似 think tool 对 Claude 3.7 Sonnet 的 0.623 结果也有贡献，隔离实验显示平均 1.6% 提升且有统计显著性。</p>
+      <p>这些数字说明，收益并不是来自工具本身执行了什么，而是来自它改变了模型在复杂流程中的推理节奏。</p>
+      <h3>什么场景适合，什么场景不适合</h3>
+      <p>最适合的场景是工具输出分析、政策密集环境和顺序决策。此时模型需要明确列出适用规则、检查缺失信息、验证 policy compliance，再决定下一步动作。</p>
+      <p>不适合的场景是简单 instruction following、单次工具调用，或者互不依赖的并行工具调用。此时加入 scratchpad 只会增加 token 和 latency。</p>
+      <p>换句话说，think tool 应被当作 targeted guardrail，而不是所有任务的默认装饰。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章的价值不只在某个工具本身，而在一个 agent 设计模式：让模型在行动前有结构化停顿。工具调用系统容易鼓励模型连续行动，而高风险流程需要先核对规则、证据和缺口。无副作用 scratchpad 是一种低成本护栏，让 agent 的下一步更可解释。</p>
+      <p>这篇文章的价值不只是介绍一个工具，而是提出一种 agent harness 设计思路：在外部行动前插入可解释、无副作用的反思节点。强 agent 的风险往往不是不会行动，而是行动太连续。对于政策、权限、资金、数据修改等任务，系统需要让模型在关键点核对规则和证据。即使今天 extended thinking 覆盖了很多场景，think tool 仍提醒我们：推理能力不仅是模型内部参数，也可以通过工具界面和流程节奏被工程化。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
         <li>只在复杂顺序决策和政策密集流程中引入中途思考。</li>
-        <li>让 scratchpad 明确检查规则、缺失信息和工具结果。</li>
-        <li>不要让 think tool 获取信息或改变状态。</li>
-        <li>用 eval 判断它是否真的提升成功率。</li>
-        <li>能用 extended thinking 覆盖时，优先使用更现代的内建能力。</li>
+        <li>让 scratchpad 明确检查规则、缺失信息、工具结果和下一步风险。</li>
+        <li>不要让 think tool 获取信息或改变状态，保持无副作用。</li>
+        <li>用 eval 判断它是否真的提升成功率，而不是默认开启。</li>
+        <li>能用 extended thinking 覆盖时，优先使用现代内建推理能力。</li>
       </ul>
     </section>
     <footer class="article-footer">

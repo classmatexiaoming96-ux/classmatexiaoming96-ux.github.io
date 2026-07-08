@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,7 +45,8 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>MCP 让 Claude 能连接外部工具，但早期安装常要求用户编辑配置、安装依赖、处理路径和环境变量。Desktop Extensions 的目标，是把这些步骤产品化。</p>
+      <p>本文介绍 Desktop Extensions：把 MCP server 打包成一键安装能力，降低普通用户连接本地应用、文件、浏览器和业务工具的门槛。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
@@ -52,26 +54,33 @@
         <li>MCP server 扩展了 Claude 与外部工具和数据源交互的能力。</li>
         <li>安装和配置一直是 MCP 普及的主要门槛。</li>
         <li>Desktop Extensions 将 server、配置、权限和说明打包，支持一键安装。</li>
-        <li>扩展需要声明能力、权限、数据访问范围和安全边界。</li>
+        <li>扩展需要清晰声明能力、权限、数据访问范围和安全边界。</li>
         <li>用户体验应包括发现、安装、更新、禁用、卸载和故障诊断。</li>
+        <li>开发者需要稳定 manifest、版本管理和兼容性策略。</li>
+        <li>本地扩展尤其适合文件系统、开发工具、浏览器和个人生产力软件。</li>
         <li>一键安装降低摩擦，也要求更强审核、签名和信任模型。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文介绍 Desktop Extensions：把 MCP server 打包成一键安装能力，降低普通用户连接本地应用、文件、浏览器和业务工具的门槛。</p>
       <h3>MCP 的安装摩擦</h3>
-      <p>开发者可以接受编辑 JSON、配置环境变量和处理路径，但普通用户不会。要让 MCP 进入真实工作流，安装体验必须像桌面插件一样简单。</p>
-      <p>Desktop Extensions 不是改变协议本身，而是补齐分发层和用户体验层。</p>
+      <p>MCP 让 Claude 能连接外部工具，但早期安装常要求用户编辑配置、安装依赖、处理路径和环境变量。这对开发者可接受，对普通用户就是巨大门槛。</p>
+      <p>Desktop Extensions 的目标是把这些步骤打包，让用户像安装桌面插件一样添加 MCP server。</p>
       <h3>扩展包应该包含什么</h3>
-      <p>一个扩展不仅是可执行文件。它需要 manifest、名称、描述、版本、权限声明、启动命令、默认配置、图标、更新策略和文档。</p>
-      <p>权限说明尤其关键。文件系统扩展、邮件发送扩展和数据库扩展风险不同，安装界面应清楚展示访问范围和写入能力。</p>
-      <h3>生态与治理</h3>
-      <p>一键安装只是第一步。完整体验还包括启用、禁用、更新、卸载、查看日志、诊断连接失败和管理权限。</p>
-      <p>低摩擦分发也带来供应链风险。签名、审核、来源展示、版本 pinning 和企业允许列表会成为扩展生态基础设施。</p>
+      <p>一个扩展不仅是可执行文件。它还需要 manifest、名称、描述、版本、权限声明、启动命令、配置默认值、图标、更新策略和文档。用户要知道它会访问什么、能做什么、出现问题如何排查。</p>
+      <p>权限说明尤其重要。一个文件系统扩展和一个邮件发送扩展的风险不同，安装界面应清楚展示访问范围和外部写入能力。</p>
+      <h3>用户体验</h3>
+      <p>一键安装只是第一步。完整体验还包括发现扩展、启用/禁用、更新、卸载、查看日志、诊断连接失败和管理权限。否则用户遇到问题后仍然回到命令行排障。</p>
+      <p>对企业用户，还可能需要管理员策略、允许列表、版本 pinning 和审计。扩展生态越大，治理越重要。</p>
+      <h3>开发者生态</h3>
+      <p>Desktop Extensions 可以让更多开发者把自己的工具接入 Claude：数据库、设计软件、浏览器自动化、内部系统、知识库、代码搜索。MCP 提供协议，extension 提供分发体验。</p>
+      <p>但低摩擦安装也增加供应链风险。签名、审核、来源展示和权限隔离会成为扩展生态的基础设施。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>Desktop Extensions 的意义，是把 MCP 从开发者配置文件推进到用户可理解的产品形态。agent 生态要进入真实工作流，不能要求每个用户都懂 server command 和 JSON 配置。协议开放只是第一步，安装、权限和信任体验决定它能走多远。</p>
+      <p>Desktop Extensions 的意义，是把 MCP 从开发者配置文件推进到用户可理解的产品形态。agent 生态要进入真实工作流，不能要求每个用户都懂 server command 和 JSON 配置。一键安装让能力分发更像 app store，但也带来 app store 的老问题：信任、权限、更新和治理。未来 agent 工具生态的关键，可能不只是协议多开放，而是安装和权限体验多可靠。</p>
     </section>
     <section>
       <h2>落地启示</h2>

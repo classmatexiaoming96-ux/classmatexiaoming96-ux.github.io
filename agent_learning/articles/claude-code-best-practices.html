@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,43 +45,57 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>Claude Code 不是聊天框，它能读文件、运行命令、编辑代码并自主推进问题。让它表现稳定的关键，是管理 context、验证路径和项目环境。</p>
+      <p>这篇最佳实践把 Claude Code 当作一个会读文件、跑命令、改代码、持续推进问题的 agentic coding 环境，而不是普通聊天框。核心方法是控制 context、提供验证路径、配置工作环境，并在长会话中持续纠偏。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>context window 会填满，性能会随噪声增加而下降。</li>
-        <li>强工作流是先探索、再计划、再编码。</li>
-        <li>prompt 应提供命令、日志、URL、路径、截图和期望行为等具体上下文。</li>
-        <li>CLAUDE.md 应记录项目约定、常用命令、测试说明和风格要求。</li>
-        <li>大功能可先让 Claude 访谈用户并写 self-contained spec。</li>
-        <li>长会话需要 early correction、clear、compaction、subagents 和 checkpoint。</li>
+        <li>Claude Code 不只是 chatbot，它能读文件、运行命令、编辑代码并自主推进任务。</li>
+        <li>最重要的限制来自 context window：上下文越满、噪声越多，模型表现越容易下降。</li>
+        <li>推荐工作流是先 explore，再 plan，最后 code，而不是直接让模型开写。</li>
+        <li>prompt 应包含命令、日志、URL、文件路径、截图、预期行为等具体上下文。</li>
+        <li>CLAUDE.md 应沉淀项目约定、常用命令、代码风格、测试说明和仓库约束。</li>
+        <li>大功能适合先访谈用户并写 self-contained spec，再进入实现。</li>
+        <li>长会话需要 early correction、/clear、compaction、subagents、rewind checkpoint 和可恢复 session。</li>
+        <li>扩展使用可以通过 non-interactive mode、多 session、fan-out、auto mode 和独立 review 完成。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
-      <h3>把 Claude Code 当成协作者</h3>
-      <p>Claude Code 能实际操作代码库，因此输入不应只有一句需求。给它错误日志、复现命令、相关路径、预期行为和约束，能显著减少猜测。</p>
-      <p>最佳流程通常是探索、计划、实现、验证。先让它理解代码形状，再让它改动，会比直接要求写功能更稳。</p>
-      <h3>环境和验证</h3>
-      <p>项目应提供明确测试命令、构建命令、lint 命令和本地运行方式。没有验证路径，coding agent 很容易停在“看起来合理”。</p>
-      <p>CLAUDE.md 可以沉淀项目约定，但不应过度膨胀。它应该写常用命令、代码风格、测试策略和不该触碰的边界。</p>
-      <h3>长会话管理</h3>
-      <p>长 session 会积累噪声。用户应尽早纠偏，必要时清理上下文、创建 checkpoint、拆分 subagent 或让 Claude 总结当前状态。</p>
-      <p>对大功能，先生成 spec 再实现，可以把需求讨论和编码执行分开，降低反复修改造成的 context 污染。</p>
+      <h2>正文</h2>
+      <h3>Claude Code 不是聊天框</h3>
+      <p>文章首先改变使用心智：Claude Code 处在代码库里，可以搜索、阅读、执行、编辑和验证。因此，用户给它的信息越接近真实工程上下文，它越能像协作者一样工作。</p>
+      <p>这也意味着 prompt 不应只是“帮我修 bug”。更好的输入包括复现步骤、报错日志、相关文件、已经尝试过的命令、期望行为、不能修改的边界，以及验收标准。</p>
+      <p>如果把 Claude Code 当成只会补全的模型，就会错过它最有价值的闭环能力：观察代码、提出计划、执行修改、运行验证、根据失败继续迭代。</p>
+      <h3>管理 context：先探索，再计划，再编码</h3>
+      <p>文章反复强调 context window 会快速填满。无关日志、反复纠错、过长规则和混乱历史都会让模型后续判断变差。</p>
+      <p>更稳的工作流是让 Claude 先 explore：读目录结构、定位相关文件、理解测试与约束；随后让它写 plan，把修改范围和验证方式说清；最后再让它动手 code。</p>
+      <p>这种流程看似慢一点，但能减少大幅返工。尤其在复杂仓库中，先建立 shared map 比直接生成 patch 更重要。</p>
+      <h3>项目环境与 CLAUDE.md</h3>
+      <p>CLAUDE.md 的作用，是把项目级知识放到模型容易读取的位置：常用测试命令、build/lint 命令、代码风格、分支策略、目录约定、禁区和审查要求。</p>
+      <p>但它不是越长越好。过度详细或互相矛盾的 CLAUDE.md 会污染 context。好的文档应该短、具体、可执行，像给新同事的 onboarding note。</p>
+      <p>工具环境也同样重要。权限、CLI、MCP servers、hooks、skills、subagents 和 plugins 都在塑造 Claude 的行动空间。</p>
+      <h3>验证是完成的一部分</h3>
+      <p>文章建议给 Claude 明确可运行的验证方式：测试命令、构建命令、截图检查、脚本、fixture 或手工验收步骤。</p>
+      <p>没有验证，模型容易把“代码看起来合理”当作完成。给出验证路径后，Claude 可以在失败时读取错误、定位原因并继续修复。</p>
+      <p>对于 UI、数据迁移、复杂重构等任务，验证可能不是单一测试，而是一组 evidence：截图、日志、diff、单元测试、端到端 smoke 和人工验收清单。</p>
+      <h3>长会话与规模化使用</h3>
+      <p>长会话最大的风险是 context 污染。用户应尽早纠偏，而不是让错误方向累计几十轮。必要时使用 /clear、compaction、checkpoint 或新 session，把已确认事实带过去。</p>
+      <p>大功能可以先让 Claude 访谈用户，产出 self-contained spec，再基于 spec 实现。这样能把需求澄清与代码执行分离，减少实现阶段反复改需求。</p>
+      <p>规模化模式包括 non-interactive mode、多个 session 并行、按文件或模块 fan-out、auto mode 和独立 review。关键不是开更多 agent，而是让每个 session 有清楚边界和验收。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>Claude Code 最佳实践的核心，是把 agentic coding 变成可验证协作，而不是把需求丢给模型许愿。模型很强，但它仍依赖项目事实、工具反馈和用户边界。好的使用方式像带一位高效新同事入组：给上下文、给测试、给约定、早纠偏、让它证明完成。</p>
+      <p>这篇最佳实践的底层逻辑，是把 coding agent 当作一个需要 onboarding、反馈和验证的工程协作者。模型能力本身很重要，但真实效果更多取决于信息是否充分、任务是否有边界、环境是否可运行、完成是否可验证。很多“Claude 没做好”的案例，本质上是给它的上下文像口头愿望，而不是工程任务包。团队如果想稳定使用 Claude Code，应建设的不只是 prompt 技巧，而是一套协作协议：项目说明、验证命令、权限边界、review 流程和 session 管理。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
-        <li>给 Claude Code 复现步骤、日志、路径和验收命令。</li>
-        <li>先让它读代码和写计划，再批准实现。</li>
-        <li>维护精简的 CLAUDE.md，不要堆无关规则。</li>
+        <li>给 Claude Code 复现步骤、日志、路径、预期行为和验收命令。</li>
+        <li>先让它 explore 和 plan，再进入代码修改。</li>
+        <li>维护精简可执行的 CLAUDE.md，不要堆无关规则。</li>
         <li>大任务先写 spec，小任务直接给明确边界。</li>
-        <li>用测试、截图或脚本作为完成证据。</li>
+        <li>用测试、截图、构建或脚本作为完成证据，并在长会话中及时纠偏。</li>
       </ul>
     </section>
     <footer class="article-footer">

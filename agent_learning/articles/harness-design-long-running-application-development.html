@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,34 +45,42 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>这篇文章把 agentic coding 的重点从“模型会不会写代码”推进到“系统能不能承载持续开发”。长时应用任务横跨多个文件、测试循环和架构判断，harness 必须帮助 agent 维护目标、状态、工具反馈与验证闭环。</p>
+      <p>本文围绕长时应用开发讨论 harness 设计：如何把目标、状态、工具、验证和恢复机制组织起来，让 agent 能跨多轮持续推进真实软件工程任务。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>长时开发不是一次 prompt，而是持续规划、执行、观察和修正的闭环。</li>
-        <li>harness 应承载工作流、状态和验证，而不是替模型写死所有路径。</li>
-        <li>目标、计划、代码事实、执行日志和测试结果需要分层保存。</li>
-        <li>工具接口要可恢复，避免一次命令失败就丢失上下文。</li>
-        <li>checkpoint、diff、测试和运行日志是长任务的事实来源。</li>
+        <li>长时应用开发不是一次 prompt 能解决的问题，而是持续规划、执行、观察和修正的闭环。</li>
+        <li>harness 的职责是把模型能力包进可靠工作流，而不是替模型写死所有路径。</li>
+        <li>状态需要分层：任务目标、当前计划、已知约束、代码事实和验证结果应分别管理。</li>
+        <li>工具接口要支持可恢复操作，避免一次命令失败就丢失整轮上下文。</li>
+        <li>checkpoint、diff、测试和运行日志是长时 agent 的事实来源。</li>
+        <li>好的 harness 会限制破坏性动作，同时让低风险探索尽量顺畅。</li>
+        <li>context compaction 应保留决策原因和未完成问题，而不只是摘要聊天记录。</li>
         <li>人类介入点应放在需求澄清、架构选择、权限提升和发布前验证。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
+      <h2>正文</h2>
+      <h3>原文主线</h3>
+      <p>本文围绕长时应用开发讨论 harness 设计：如何把目标、状态、工具、验证和恢复机制组织起来，让 agent 能跨多轮持续推进真实软件工程任务。</p>
       <h3>为什么应用开发需要 harness</h3>
-      <p>真实应用开发会不断产生新信息：测试失败、依赖缺失、需求澄清、边界条件和代码风格约束。模型如果只依赖当前 context window，很容易在修复局部问题时忘记早期目标。</p>
-      <p>harness 的作用，是把这条长链路变成可观察、可恢复、可验证的系统。它不应该替模型做完所有决定，而应该给模型一个稳定工作台：能查事实、能动手、能验证、能回滚。</p>
-      <h3>状态分层与 context 管理</h3>
-      <p>长时任务里最危险的状态管理方式，是把所有东西都混在聊天历史里。用户目标变化慢，执行日志变化快，测试结果需要可追溯，开放问题需要被保留；这些信息应该分别管理。</p>
-      <p>compaction 也不该只压缩成泛泛摘要。更有价值的是保留为什么选择某条路径、哪些假设已验证、哪些命令失败过、哪些文件属于修改范围，以及下一步需要什么证据。</p>
-      <h3>验证与恢复</h3>
-      <p>没有测试命令、构建命令或手工验收步骤，agent 很容易把“代码看起来合理”误认为完成。长时 harness 应该在每个阶段提供局部验证，最终再做全局验收。</p>
-      <p>失败也应被设计进流程。命令超时、测试 flaky、权限不足和需求偏差都不应该让 agent 原地重复同一路径；checkpoint、rewind、resume 和清晰的错误分类能让探索成本可控。</p>
+      <p>应用开发任务往往跨越多个文件、多个测试循环和多个设计决策。模型如果只依赖当前 context window，很容易忘记早期约束，或者在修复一个 bug 时破坏另一处行为。harness 的作用，是把这种长链路工作组织成可观察、可恢复、可验证的系统。</p>
+      <p>与短任务不同，长时开发的难点不只是生成代码，而是持续维护问题边界。agent 需要知道当前目标是什么、哪些假设已经被验证、哪些命令失败过、哪些文件属于修改范围，以及何时应该停止。</p>
+      <h3>状态分层</h3>
+      <p>一个实用 harness 应把状态分成几类：用户目标、实现计划、项目事实、执行日志、测试结果和开放问题。用户目标通常变化慢，执行日志变化快；把它们混在同一个聊天历史里，会让 context 变得嘈杂。</p>
+      <p>更稳的做法是让 agent 在关键节点写出结构化 notes，例如当前策略、已修改文件、失败测试、下一步动作和需要用户判断的问题。compaction 时优先保留这些结构化事实。</p>
+      <h3>工具与验证</h3>
+      <p>开发 harness 的工具不应只是 shell。它还需要清晰的读文件、搜索、patch、测试、截图、服务启动和 diff 查看能力。每个工具返回值都应该帮助下一步决策，而不是把无关日志全部塞进 context。</p>
+      <p>验证是 harness 的中心。没有测试命令、构建命令或手工验收步骤，agent 会倾向于把“代码看起来合理”误认为完成。长时任务里，每个阶段都应该有局部验证，最终再做全局验证。</p>
+      <h3>恢复与人类介入</h3>
+      <p>长任务一定会失败：命令超时、依赖缺失、测试 flaky、需求理解偏差、权限不足。harness 应把失败转化为可恢复状态，而不是让 agent 不断重试同一路径。checkpoint 和 rewind 可以让探索保持低成本。</p>
+      <p>人类介入不应只在失败后出现。更好的点位是：需求含糊时、需要修改公共接口时、需要提升权限时、需要删除数据时、以及准备发布前。这样 harness 既保护系统，也不会把 agent 绑到无法行动。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>这篇文章的核心，是把 agentic coding 看成运行时工程，而不是 prompt 技巧。模型能力越强，越需要一个不抢方向盘但能维持秩序的外部结构。harness 把不可控的长程交互拆成目标、状态、工具、验证和恢复几个层次，使 agent 的聪明能持续发挥，而不是在上下文膨胀和工具失败中逐渐失焦。</p>
+      <p>这篇主题的关键，是把 agentic coding 从“模型会写代码”推进到“系统能持续承载开发过程”。长时任务中，真正稀缺的不是单次生成能力，而是连续性：目标连续、状态连续、验证连续、责任边界连续。harness 就是这种连续性的工程化载体。它不应该过度控制模型，而应该给模型一个可靠的工作台：能查事实、能动手、能验证、能回滚、能在不确定时找人。做到这一点，agent 才能从代码补全工具变成真正的开发协作者。</p>
     </section>
     <section>
       <h2>落地启示</h2>

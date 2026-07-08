@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,43 +45,57 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>开放式研究很难写死流程。问题会沿着资料不断分叉，早期搜索路径会影响最终结论。多 agent 架构用并行 subagents 扩展搜索广度和上下文容量。</p>
+      <p>这篇文章介绍 Claude Research 背后的 production multi-agent architecture：一个 lead research agent 负责计划、拆分和综合，多个 subagents 并行搜索，最后由 citation agent 将结论对齐到来源。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>系统采用 orchestrator-worker 架构，由 lead agent 协调专门 subagents。</li>
-        <li>lead agent 计划工作、创建 subagents、审查结果并决定是否继续研究。</li>
-        <li>citation agent 将最终报告声明映射回来源位置。</li>
-        <li>多 agent 系统通常比 chat 交互使用更多 token，成本显著更高。</li>
-        <li>它适合高价值、强并行、信息超出单一 context window 的任务。</li>
-        <li>生产可靠性需要 checkpoints、tracing、resume 和确定性 retry。</li>
+        <li>系统采用 orchestrator-worker 架构：lead agent 协调 specialized subagents 并行搜索。</li>
+        <li>在 Anthropic 内部 research eval 中，多 agent research 相比 single-agent Claude Opus 4 提升 90.2%。</li>
+        <li>BrowseComp 分析中，token usage 解释了 80% 的 performance variance；token usage、tool calls 和 model choice 合计解释 95%。</li>
+        <li>agents 通常使用约 4x chat token，multi-agent systems 约 15x chat token。</li>
+        <li>多 agent 最适合高价值、强并行、信息超过一个 context window、工具复杂的任务。</li>
+        <li>lead agent 计划、写 Memory、创建 subagents、审查结果，并决定是否继续研究。</li>
+        <li>citation agent 将最终 claims 映射回 source locations。</li>
+        <li>生产可靠性需要 checkpoints、tracing、restart/resume、deterministic retry 和不中断运行 agent 的部署策略。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
-      <h3>为什么研究适合多 agent</h3>
-      <p>研究任务有路径依赖。一个线索会引出另一个线索，过早收敛会漏掉关键来源。单一 agent 容易受 context window 和搜索宽度限制。</p>
-      <p>多 agent 可以让不同 subagents 并行探索不同方向，再由 lead agent 综合判断。这相当于用额外 token 换搜索广度。</p>
-      <h3>架构形态</h3>
-      <p>lead agent 负责理解问题、拆分研究方向、维护 Memory、创建 subagents、审查结果，并判断是否需要继续搜索。</p>
-      <p>citation agent 则负责把最终报告中的 claim 映射回来源位置，降低长报告中引用漂移的风险。</p>
-      <h3>成本与可靠性</h3>
-      <p>多 agent 不适合所有任务。它会消耗远高于普通 chat 的 token，且容易出现过度 spawn、重复搜索、无限探索和工具选择不佳。</p>
-      <p>生产系统需要 checkpoint、trace、restart/resume、确定性 retry 和不破坏运行中 agent 的部署策略。</p>
+      <h2>正文</h2>
+      <h3>为什么开放研究适合多 agent</h3>
+      <p>开放式 research 的路径高度依赖早期发现。一个线索会引出另一个线索，过早选择单一路径可能漏掉关键来源。</p>
+      <p>单 agent 的瓶颈是搜索广度和 context window。它可以深入一条线索，但很难同时保留多个方向的细节。</p>
+      <p>多 agent 架构用额外 token 换并行探索：subagents 各自搜索不同方向，lead agent 再综合证据。</p>
+      <h3>orchestrator-worker 架构</h3>
+      <p>系统核心是 lead research agent。它理解用户问题、制定计划、把中间状态写入 Memory、创建 subagents，并根据结果决定是否继续研究。</p>
+      <p>subagents 负责并行搜索、阅读来源、提取证据和返回局部结论。它们拥有独立 context window，因此不会互相污染，也能在各自方向上深入。</p>
+      <p>最终还有 citation agent，把报告中的具体 claim 映射回 source locations，降低长报告中引用漂移或无来源断言的风险。</p>
+      <h3>性能与成本信号</h3>
+      <p>文章给出几个重要数字：多 agent research 在内部 eval 中相比 single-agent Claude Opus 4 提升 90.2%。这说明开放研究任务确实受益于并行探索和更大 context 总量。</p>
+      <p>但成本也明显上升。agents 通常用约 4x chat token，multi-agent systems 约 15x chat token。BrowseComp 分析中，token usage 解释了 80% 的 performance variance；token usage、tool calls、model choice 合计解释 95%。</p>
+      <p>这些数字共同说明：多 agent 的优势很大程度来自投入更多 search effort。它适合高价值任务，不适合所有查询默认开启。</p>
+      <h3>早期失败与 prompt 策略</h3>
+      <p>早期系统会过度 spawn subagents、无休止搜索、重复工作、写过长查询，或者选择不合适工具。这些不是模型单点问题，而是 delegation policy 不清晰。</p>
+      <p>prompting 需要教 lead agent 如何分工、如何按 query complexity 调整 effort、如何先 broad 再 narrow，以及如何用 thinking scratchpad 记录计划。</p>
+      <p>多 agent 成败不在于能不能创建 subagent，而在于 lead 是否知道什么时候创建、创建几个、如何合并、何时停止。</p>
+      <h3>生产可靠性</h3>
+      <p>长时间运行的多 agent 系统必须支持 checkpoints、tracing、restart/resume 和 deterministic retry。否则一次子任务失败或部署更新就可能破坏整个 research session。</p>
+      <p>部署策略也要保护正在运行的 agents。产品系统不能假设所有 agent 都是短请求；它们可能运行很久，拥有中间状态和未完成工作。</p>
+      <p>这使 multi-agent research 同时是模型问题、harness 问题和分布式系统问题。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>多 agent 架构的本质，是用并行上下文和额外 token 扩展探索空间。它不是越多越好，而是适合那些价值高、信息分散、工具复杂、需要广度优先探索的任务。真正的工程难点不是 spawn subagents，而是控制何时分工、何时停止、如何合并证据、如何验证引用。</p>
+      <p>多 agent research 的核心不是“agent 越多越聪明”，而是用并行 context 和额外 token 扩展搜索空间。它把研究任务拆成可并发探索的方向，再通过 lead agent 和 citation agent 收敛。真正稀缺的是 orchestration：如何决定 effort、避免重复、控制成本、验证引用、保存中间状态。对工程团队来说，多 agent 架构只有在任务价值足以支付 15x token 级别成本时才合理；否则它会把复杂度和账单一起放大。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
-        <li>只在高价值、强并行任务上使用多 agent。</li>
-        <li>让 lead agent 明确 delegation 策略和停止条件。</li>
-        <li>为 subagents 提供不同搜索方向，避免重复工作。</li>
-        <li>引入 citation pass，把最终 claim 对齐到来源。</li>
-        <li>保留 trace 和 checkpoints，支持长任务恢复。</li>
+        <li>只在高价值、强并行、信息分散的任务上使用多 agent。</li>
+        <li>让 lead agent 明确 delegation 策略、预算和停止条件。</li>
+        <li>为 subagents 分配不同搜索方向，避免重复工作。</li>
+        <li>引入 citation pass，把最终 claim 对齐到来源位置。</li>
+        <li>保留 trace、Memory 和 checkpoints，支持长任务恢复与复盘。</li>
       </ul>
     </section>
     <footer class="article-footer">

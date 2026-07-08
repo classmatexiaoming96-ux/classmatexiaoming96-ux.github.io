@@ -18,10 +18,11 @@
   .article-original-title { color: #999; margin: 0; font-size: 16px; }
   .article-content section { margin: 34px 0; }
   .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
-  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
   .article-content p, .article-content li { color: #c0c0c8; }
   .article-content ul { padding-left: 22px; }
   .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
   pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
   code { font-family: 'JetBrains Mono', monospace; }
   blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
@@ -44,43 +45,55 @@
     </header>
     <section>
       <h2>导读</h2>
-      <p>prompt engineering 更关注模型被怎样指令，context engineering 更关注模型在某一刻能看到什么信息。对 agent 来说，context 是工作内存、证据包、工具结果和历史决策的组合。</p>
+      <p>prompt engineering 关心怎样指令模型；context engineering 关心模型在行动前看见什么。对 agent 来说，context 是任务目标、工具结果、历史决策、外部证据和开放问题组成的工作界面。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
     </section>
     <section>
       <h2>核心观点</h2>
       <ul>
-        <li>context engineering 与 prompt engineering 不同，重点是信息供给和组织。</li>
-        <li>agent 能力受限于可见 context 的相关性、时效性和密度。</li>
-        <li>有效 context 应包含任务目标、约束、证据、工具状态和未解决问题。</li>
-        <li>检索、压缩、memory、session log 和 agentic search 都是 context 工程手段。</li>
-        <li>上下文过少会让模型猜，过多会稀释注意力和浪费 token。</li>
-        <li>长时 agent 需要让 context 可恢复、可查询、可更新。</li>
+        <li>context engineering 与 prompt engineering 不同，重点是信息供给、组织、检索和压缩。</li>
+        <li>agent 能力受可见 context 的相关性、时效性、可信度和密度限制。</li>
+        <li>有效 context 应包含任务目标、约束、证据、工具状态、历史决策和未解决问题。</li>
+        <li>context retrieval 与 agentic search 让模型按需补充证据，而不是依赖一次性输入。</li>
+        <li>context 过少会让模型猜，过多会稀释注意力并浪费 token。</li>
+        <li>长时 agent 需要可恢复、可查询、可更新的 session 和 memory。</li>
       </ul>
     </section>
     <section>
-      <h2>正文解读</h2>
-      <h3>context engineering vs prompt engineering</h3>
-      <p>prompt engineering 常常关注一句指令怎么写。context engineering 关心的是，在模型生成下一步之前，它能看到哪些事实、哪些工具结果、哪些限制、哪些历史决策。</p>
-      <p>对 agent 来说，这个区别很关键。模型可能知道怎么推理，但如果拿到的是过期、噪声或缺失的上下文，就会做出错误行动。</p>
-      <h3>有效 context 的解剖</h3>
-      <p>高质量 context 通常包含用户目标、当前计划、已验证事实、未解决问题、工具状态、外部证据和可执行约束。它不只是更多文本，而是更合适的信息密度。</p>
-      <p>过多上下文会稀释注意力，过少上下文会迫使模型猜测。好的系统会按任务阶段动态选择信息，而不是把所有历史都塞进窗口。</p>
-      <h3>检索和 agentic search</h3>
-      <p>检索不是一次性动作。agent 需要在任务推进中不断提出新问题、寻找证据、更新假设，并把关键发现写回 memory 或 session。</p>
-      <p>这让 context engineering 与 harness 设计紧密相连：系统要决定什么被保存、什么被压缩、什么可重新查询，以及什么时候需要主动补证据。</p>
+      <h2>正文</h2>
+      <h3>Context engineering vs. prompt engineering</h3>
+      <p>文章首先区分两个概念。prompt engineering 主要是写好指令；context engineering 则是决定哪些信息进入模型的工作窗口、以什么顺序出现、哪些信息被压缩或检索。</p>
+      <p>对 agent 而言，这个差异比普通聊天更重要。agent 会根据 context 调工具、改文件、发请求或做外部动作；错误 context 会直接变成错误行动。</p>
+      <p>因此，context engineering 是 agent harness 的核心职责，而不是 prompt 的附属品。</p>
+      <h3>Why context engineering matters</h3>
+      <p>模型并不是直接面对世界，而是面对系统提供的信息切片。这个切片如果缺证据、过期、冗长或混入不可信指令，模型能力就会被明显限制。</p>
+      <p>长任务中尤其如此。早期决策、失败尝试、用户约束、工具结果和当前计划会不断累积；如果它们只存在聊天历史里，context window 很快会被噪声淹没。</p>
+      <p>好的 context 策略让模型在每一轮看到足够完成下一步的信息，又不被历史细节拖住。</p>
+      <h3>The anatomy of effective context</h3>
+      <p>有效 context 通常包括六类信息：用户目标、硬约束、已验证事实、工具状态、开放问题和下一步计划。不同任务阶段需要不同权重。</p>
+      <p>证据的可信度也要显式处理。用户指令、内部文档、网页内容、工具返回、模型自己的 memory，并不拥有同等地位。agent 需要知道哪些是授权指令，哪些只是外部材料。</p>
+      <p>context 的顺序和密度也重要。高价值信息应靠近模型当前决策点；长日志应先被工具或检索系统压缩成可操作摘要。</p>
+      <h3>Context retrieval and agentic search</h3>
+      <p>检索不是一次性填充 prompt。agent 会在任务推进中产生新问题，并需要主动搜索、验证、更新假设。</p>
+      <p>agentic search 的关键，是把检索结果重新写回可用 context：哪些事实改变了计划、哪些来源可靠、哪些问题仍未解决。</p>
+      <p>这让 context engineering 与 eval 结合起来：团队需要评估 context 策略是否让正确证据在正确时刻出现。</p>
+      <h3>Conclusion</h3>
+      <p>文章最终把 context engineering 定位为构建 capable agents 的基础设施。模型越强，越需要高质量 context 来发挥能力。</p>
+      <p>这不是一次 prompt 优化，而是持续系统设计：memory、retrieval、compaction、session log、tool result formatting 和 trust boundary 都是同一问题的不同侧面。</p>
+      <p>如果说 prompt 是模型的任务说明，context 就是它理解世界的窗口。窗口设计不好，模型再强也会看错。</p>
     </section>
     <section>
       <h2>深度解读</h2>
-      <p>context engineering 的核心是承认模型不是直接面对世界，而是面对被系统组织过的信息界面。agent 产品的质量，很大一部分取决于这个界面是否把正确事实放在正确时刻。未来模型更强以后，context 仍然重要，因为更强推理会更依赖高质量证据，而不是更能忍受噪声。</p>
+      <p>context engineering 的关键洞见是：agent 失败常常不是因为它不会推理，而是因为它看见的信息不对。相比继续调一句 system prompt，更高杠杆的工作往往是重构信息流：哪些事实持久化、哪些结果压缩、哪些证据可重新检索、哪些外部文本不能当作指令。未来 agent 产品的护城河，很可能来自 context pipeline，而不是单一模型调用。</p>
     </section>
     <section>
       <h2>落地启示</h2>
       <ul>
-        <li>把任务目标、约束、证据和开放问题分层管理。</li>
-        <li>为长任务维护 session log，而不是只依赖当前窗口。</li>
-        <li>用检索和 memory 提供可恢复上下文。</li>
-        <li>压缩时保留决策原因和验证状态。</li>
-        <li>通过 eval 测 context 策略，而不是只调 prompt。</li>
+        <li>把目标、约束、证据、工具状态和开放问题分层管理。</li>
+        <li>为 tool result 设计高信号摘要，避免把长日志直接塞进 context。</li>
+        <li>区分用户授权指令与外部不可信内容，降低 prompt injection 风险。</li>
+        <li>用 session log 和 memory 支持长任务恢复，而不是只依赖当前窗口。</li>
+        <li>把 context 策略纳入 eval，测证据召回、错误恢复和 token 成本。</li>
       </ul>
     </section>
     <footer class="article-footer">
