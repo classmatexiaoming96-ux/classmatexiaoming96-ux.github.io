@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-08</title>
+<meta name="description" content="今天的 AI 叙事从“更大模型”转向“更可承受的系统”：开源模型挤压推理利润，本地小模型与本地优先工具升温，企业和政府则继续追问 AI 堆栈的韧性、治理与真实成本。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-08</span>
+      <span class="sep">·</span>
+      <span>星期三</span>
+      <span class="edition">第 49 期</span>
+    </div>
+    <p class="mh-intro">今天的 AI 叙事从“更大模型”转向“更可承受的系统”：开源模型挤压推理利润，本地小模型与本地优先工具升温，企业和政府则继续追问 AI 堆栈的韧性、治理与真实成本。</p>
+    <div class="stats">
+      <div class="stat"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News</span></div>
+    <a class="lead" href="https://martinalderson.com/posts/the-upcoming-ai-margin-collapse-part-1-glm-5-2/" target="_blank" rel="noopener">
+      <span class="tag">成本</span>
+      <h3>GLM 5.2 引发关于 AI 毛利坍塌的讨论</h3>
+      <p>HN 今日最高热度讨论集中在模型能力商品化和推理价格压力上。社区关注点不是单个模型胜负，而是开源与低价模型会如何压缩应用层、API 平台和云厂商的利润空间。</p>
+      <div class="src">◷ <b>Hacker News</b> <span class="dotsep">·</span> 今日热议</div>
+    </a>
+    <div class="rows">
+      <a class="row" href="https://news.google.com/rss/articles/CBMilgFBVV95cUxNVmJ4Q2FHYW1lM0hoRkF5bTkzMl9FX0JKeFR4ZFBUblUyajRqRlNQdk9QTE5UTTc2eFVKT3RVNGIzZXdxVlFSOHBHcGdmWkFmMkNsV2xMV09IcGJQd25RRGlCWFpDRUxPV0VzSTRVUjEzSEhOZzNFQXN1X0VTVnp1a2NvekFoa0JsZVQzMlgtQTVfRDlTZEE?oc=5" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>金融稳定委员会发布 AI 稳健实践开场意见</h4>
+          <p>金融监管侧继续把 AI 纳入系统性风险框架，重点不再只是模型能力，而是治理、可解释性、供应链依赖和事故响应。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Financial Stability Board</b> <span class="dotsep">·</span> 7月7日 <span class="dotsep">·</span> <span class="tag">监管</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPa2hsbG52T01yZFNCUmNQN2k5alNLaWtEOFZNTmdzeVVFWU5sY0JuZDFXTEhNMElPZnNtSkV2cFc3NzZ1WnNSaWstMV85RFNzX01vTUs5cm4ySUVUSGF4SGtkX3NKYVZ2VWV6Z1g0TlFkdUNwcWo2QnVabldkeUJCM2ZHNlM1cENTb2txa3hQZExRc2lKTG1ITmlZcFhQUVVGM1RaRDNablozV01HT2fSAbMBQVVfeXFMTXpDczJJT3JlLUlIX2hPZmZ5N1BDNWxKSm5ZcTBmelpia3NERFZhX3pzdm5kY0NNa0VZeFdkSVRUV1p1RkhRcHM5THY5azZRUk56MUFYS3BVWF9oZUFuOTBJLVQybFJVWW8zT3hJTEpxQXdEQlUxS09EM3VVeXFFUk1na2t1NWdZZkJZaEFlMkFvY0F4MlJFQmlIN1VxT2lId3kwZExIZ3ROX3VvRE9FaVZGZ0E?oc=5" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>AI 支出热潮推高美国贸易逆差</h4>
+          <p>Al Jazeera 报道称，AI 相关资本开支正在体现在进口和贸易数据中。算力基础设施已从科技公司叙事，进入宏观经济指标。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Al Jazeera</b> <span class="dotsep">·</span> 7月7日 <span class="dotsep">·</span> <span class="tag">宏观</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMiogFBVV95cUxQSzJXSEVEQjRGT3NaYVMyQzdENVB3MVJVZFRVU2Z6UkJMNGhWYVY0ZU8yZlY1dzhwamtQMVVRR0VNdldIa2IwZlJ4TFF3UUZPcDRFd1NvUzFSOHFQZlRHa2twVF80am1HQVc4YmF6WTRBaC1yY1NkeERfMlJNY2Y5MEZzRHE1WkZhbTBQYUlOZXpCV2d2WXZJMVRJRFlqTXl5V0E?oc=5" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>“害怕开源 AI”被认为正在让出竞争空间</h4>
+          <p>R Street Institute 的评论把开源模型视为地缘科技竞争的一部分：如果只用风险框架压制开放生态，可能反而削弱本土开发者和企业的迭代速度。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">R Street Institute</b> <span class="dotsep">·</span> 7月7日 <span class="dotsep">·</span> <span class="tag">开源</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNR1U0TVo3RzFLd29DY3g3dXZnMk54aGZlOWdZU3pQVWkydUVsYXZJR2MxNHAybmI2cUhoYW5kZzFsVEE5UkJyYjlwbVJfYnl4TTc3VnNIcDVxNzRwUVdSNGhPbEwzZmJfbUszRkNOajl3WFdIMnFEUk51ODZfQldkOXlRd1RDcXVWSmxKbFZ2c0pranlTQU9QdW5aeEd0ZjBGbDVZ?oc=5" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>企业开始讨论 AI Stack 的不确定性设计</h4>
+          <p>Bain 将 AI 堆栈韧性作为企业议题：模型、云、合规和成本都可能变化，系统设计需要预留替换、降级和治理接口。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Bain &amp; Company</b> <span class="dotsep">·</span> 7月8日 <span class="dotsep">·</span> <span class="tag">韧性</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
+    <div class="rows">
+      <a class="row" href="https://spectrum.ieee.org/small-language-models-ai-pharmaceuticals" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>小模型在网络不稳定地区获得更多关注</h4>
+          <p>IEEE Spectrum 相关讨论说明，小模型的价值不只在便宜，也在低延迟、可离线和部署可控。对医疗、教育和边缘设备场景，这可能比最高榜单分数更重要。</p>
+          <div class="quote">“社区焦点正在从“模型最大”转向“系统在真实环境中能不能持续运行”。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 263 <span class="dotsep">·</span> 💬 78</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://odra.dev/slopfix/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>“每周 1 万美元删除 AI 生成代码”引发工程质量讨论</h4>
+          <p>这条讨论把 AI 编程的隐性成本摆到台面：生成速度变快后，架构债、测试缺口和维护成本可能集中在后期爆发。</p>
+          <div class="quote">“AI 代码不是免费午餐；真正昂贵的是没人理解却已经上线的代码。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 235 <span class="dotsep">·</span> 💬 133</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>OfficeCLI 让 Agent 直接读写 Office 文件</h4>
+          <p>Office 文档、表格和幻灯片仍是企业工作流核心对象。围绕这些格式做稳定 CLI，正在成为 agent 工具链的实用层。</p>
+          <div class="quote">“Agent 真正进入办公室，不是靠聊天窗口，而是靠可靠地操作 Word、Excel 和 PowerPoint。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 212 <span class="dotsep">·</span> 💬 62</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://tomtunguz.com/ai-spend-breakeven-2029/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>AI 成本什么时候超过工程师？</h4>
+          <p>SaaS 与云成本讨论继续升温。团队开始重新计算“用 AI 替代人力”的边界：当推理、审核和返工成本叠加，ROI 会变得更细。</p>
+          <div class="quote">“AI 预算正在从试验线进入财务线，工程团队需要会算账。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 125 <span class="dotsep">·</span> 💬 113</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://github.com/rowboatlabs/rowboat" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Rowboat：本地优先的 Claude Desktop 替代方案</h4>
+          <p>本地优先和可控上下文成为 agent 桌面产品的差异化方向。相比云端封闭体验，开发者更关心数据、工具和扩展点能否留在自己机器上。</p>
+          <div class="quote">“桌面 agent 的竞争点正在从界面转向本地控制权。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Show HN</b> <span class="dotsep">·</span> ▲ 101 <span class="dotsep">·</span> 💬 26</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
+    <div class="cards">
+      <a class="card" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧰</span>
+          <h4>OfficeCLI</h4>
+        </div>
+        <p class="tagline">给 AI Agent 使用的 Office 文档命令行工具</p>
+        <p>让 agent 以更低 token 和时间成本读取、编辑 Word、Excel、PowerPoint，代表了“把企业文件格式变成工具 API”的趋势。</p>
+        <div><span class="tag">Agent 工具</span></div>
+      </a>
+      <a class="card" href="https://github.com/rowboatlabs/rowboat" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🖥️</span>
+          <h4>Rowboat</h4>
+        </div>
+        <p class="tagline">本地优先 Claude Desktop 替代方案</p>
+        <p>面向希望在本地管理模型、工具和上下文的开发者，强调可控和可扩展。</p>
+        <div><span class="tag">本地优先</span></div>
+      </a>
+      <a class="card" href="https://github.com/makerchecker/MakerChecker" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🛡️</span>
+          <h4>MakerChecker</h4>
+        </div>
+        <p class="tagline">扫描 AI Agent 的危险能力</p>
+        <p>将 agent 安全从提示词审查推进到能力检测，适合在发布前做红队式能力检查。</p>
+        <div><span class="tag">Agent 安全</span></div>
+      </a>
+      <a class="card" href="https://shellular.dev/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">📱</span>
+          <h4>Shellular</h4>
+        </div>
+        <p class="tagline">从手机运行 Claude Code、Codex 和 Pi</p>
+        <p>把移动设备变成远程 agent 控制台，说明开发者正在把 coding agent 融入碎片化工作场景。</p>
+        <div><span class="tag">移动工作流</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" href="https://github.com/MadsLorentzen/ai-job-search" target="_blank" rel="noopener">
+      <div>
+        <div class="name">MadsLorentzen / <b>ai-job-search</b></div>
+        <div class="desc">基于 Claude Code 的 AI 求职申请框架，可评估岗位、定制简历、写求职信并准备面试。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 11,246</div>
+        <div class="today">▲ 2,514 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/Zackriya-Solutions/meetily" target="_blank" rel="noopener">
+      <div>
+        <div class="name">Zackriya-Solutions / <b>meetily</b></div>
+        <div class="desc">本地优先的 AI 会议助手，支持 Parakeet/Whisper 转写、说话人分离和 Ollama 总结。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#dea584"></span>Rust</span> <span class="dotsep">·</span> <span class="tag">Local AI</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 20,844</div>
+        <div class="today">▲ 1,777 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">addyosmani / <b>agent-skills</b></div>
+        <div class="desc">面向 AI coding agent 的生产级工程技能集合，强调把经验沉淀成可复用操作手册。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>Markdown</span> <span class="dotsep">·</span> <span class="tag">Coding Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 72,246</div>
+        <div class="today">▲ 1,317 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/TencentCloud/CubeSandbox" target="_blank" rel="noopener">
+      <div>
+        <div class="name">TencentCloud / <b>CubeSandbox</b></div>
+        <div class="desc">面向 AI Agent 的即时、并发、安全、轻量沙箱，适合代码执行和隔离工作负载。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Sandbox</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 8,503</div>
+        <div class="today">▲ 664 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+      <div>
+        <div class="name">iOfficeAI / <b>OfficeCLI</b></div>
+        <div class="desc">为 AI Agent 设计的 Office 套件命令行接口，支持读取、编辑和自动化办公文档。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Office Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 10,142</div>
+        <div class="today">▲ 893 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/bradautomates/claude-video" target="_blank" rel="noopener">
+      <div>
+        <div class="name">bradautomates / <b>claude-video</b></div>
+        <div class="desc">为 Claude 增加观看视频能力，自动下载、抽帧、转写并交给模型分析。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Multimodal</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 5,244</div>
+        <div class="today">▲ 965 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <a class="back" href="index.html">← 返回 · 浏览其他日报</a>
+      <span class="made">生成于 2026-07-08 10:37 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，社区热议来自 Hacker News / Reddit，
+      开源热门来自 GitHub Trending，产品与概念由上述信源综合提炼。摘要为机器辅助整理，链接指向原始信源；
+      如有出入请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
