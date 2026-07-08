@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI agents 的 eval 入门 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-01-09</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">AI agents 的 eval 入门</h1>
+      <p class="article-original-title">原文：Demystifying evals for AI agents</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>agent eval 不是给单轮回答打分。agent 会计划、调用工具、观察结果、修改环境并继续行动，真正的风险常常藏在中间轨迹里。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>好的 eval 来自真实用户任务，并有明确成功标准。</li>
+        <li>最终答案、工具轨迹、成本、延迟、失败恢复和安全性都应纳入指标。</li>
+        <li>回归集应覆盖高频任务、边缘任务、历史失败和安全边界。</li>
+        <li>LLM judge 有用，但需要 rubric、校准集和人工抽检。</li>
+        <li>eval 应区分能力问题、工具问题、prompt 问题和产品约束问题。</li>
+        <li>最小可用 eval 可以从几十个真实案例和人工判分开始。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>agent eval 为什么特殊</h3>
+      <p>传统 LLM eval 常常是输入问题、输出答案、判定对错。agent eval 更难，因为它要评估行为过程：调用了什么工具、是否访问了正确账户、是否修改了不该动的文件。</p>
+      <p>最终答案正确并不代表过程安全。一个客服 agent 可能给出正确退款结论，却途中读取了错误用户数据；coding agent 可能测试通过，却改了不该改的公共接口。</p>
+      <h3>从真实任务开始</h3>
+      <p>最有效的 eval 来自用户请求、客服记录、开发工单、历史 bug 和失败案例。每个任务都需要明确什么算完成、哪些动作禁止、哪些信息必须引用。</p>
+      <p>早期不需要庞大数据集。几十个高质量案例，加上清晰 rubric 和人工复核，已经能让产品迭代从 impression 转向事实。</p>
+      <h3>指标与 judge</h3>
+      <p>agent 指标应包括 success rate、tool call 数、token 成本、延迟、错误恢复、权限请求和政策遵守。不同产品权重不同，研究、coding、客服各有核心风险。</p>
+      <p>LLM judge 能降低开放式评估成本，但必须配合 rubric、gold labels、校准和争议样本复查。高风险任务中，judge 只能做初筛。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>agent eval 的本质，是把“感觉它变好了”变成工程事实。失败可能来自模型、prompt、工具、权限、UI、环境或用户需求不清。没有 eval，团队只能围绕 demo impression 争论；有了 eval，才能知道每次修改改善了什么、牺牲了什么、是否引入回归。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>先收集真实任务，不要凭空编 benchmark。</li>
+        <li>为每个任务写成功标准和禁止动作。</li>
+        <li>保存完整 trajectory，方便失败归因。</li>
+        <li>把历史线上问题纳入回归集。</li>
+        <li>把自动硬指标、LLM judge 和人工抽检组合起来。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/demystifying-evals-ai-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/demystifying-evals-ai-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>对最近三个问题的 postmortem - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-09-17</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">对最近三个问题的 postmortem</h1>
+      <p class="article-original-title">原文：A postmortem of three recent issues</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>当用户说“AI 变笨了”时，问题未必来自模型本身。agent 产品质量可能被 prompt、context、tool policy、缓存、实验开关和基础设施共同影响。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>agent 产品问题通常不是单点 bug，而是多层变更叠加。</li>
+        <li>postmortem 应关注时间线、影响范围、根因、检测缺口和防复发措施。</li>
+        <li>用户感知质量下降可能来自 context、prompt、tool policy、缓存或基础设施。</li>
+        <li>多层系统需要分层指标，否则很难判断问题来自哪里。</li>
+        <li>灰度、canary、回滚和 feature flag 是 agent 产品发布的关键安全阀。</li>
+        <li>真实问题应反向更新 eval 回归集。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>为什么 agent postmortem 难</h3>
+      <p>传统软件故障常能定位到代码路径、配置或依赖。agent 产品更复杂：模型版本、system prompt、tool definitions、context 管理、缓存、权限策略、UI 和 infra 都可能改变体验。</p>
+      <p>一个小 prompt 变更可能让模型更保守；一次 tool result 格式调整可能影响后续计划；缓存异常可能让长会话表现突然变差。</p>
+      <h3>postmortem 应该记录什么</h3>
+      <p>有用的 postmortem 要回答发生了什么、何时开始、影响哪些用户、如何检测、直接原因和深层原因分别是什么、为什么没有提前发现、如何防复发。</p>
+      <p>对 agent 系统，还应补充 trace：模型输入、tool calls、tool results、context 组织、prompt 版本、模型版本和实验开关。</p>
+      <h3>防复发机制</h3>
+      <p>防复发不能只靠以后小心。需要分层 metrics、canary、灰度、自动回归 eval、feature flags、快速回滚和更细 trace。</p>
+      <p>每次真实问题都应成为未来回归集的一部分，否则系统会反复踩同类坑。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>agent 产品 postmortem 的价值，是把模糊的“AI 质量下降”拆成可行动工程事实。模型行为是概率性的，但产品质量不能因此变成玄学。只有保存 trace、指标和发布历史，团队才能知道变化来自模型、prompt、tool、context 还是 infra。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>为 agent 产品保存 prompt、模型、tool 和 context 版本。</li>
+        <li>建立线上质量指标和用户感知指标。</li>
+        <li>所有高影响变更走灰度和快速回滚。</li>
+        <li>把 postmortem 发现加入 eval 回归集。</li>
+        <li>公开复盘时区分已修复项和仍需监控项。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/postmortem-three-recent-issues" target="_blank" rel="noopener">https://www.anthropic.com/engineering/postmortem-three-recent-issues</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

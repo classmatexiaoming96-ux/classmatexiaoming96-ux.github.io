@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>构建有效的 agents - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2024-12-19</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">构建有效的 agents</h1>
+      <p class="article-original-title">原文：Building effective agents</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Anthropic 的经验是，最成功的 agent 实现往往不是最复杂的框架，而是简单、可组合、可调试的模式。复杂度应随着任务需要逐步增加。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>agentic systems 可分为 workflow 与 agent：前者预定义路径，后者动态决定过程。</li>
+        <li>构建 LLM 应用时应先找最简单可行方案。</li>
+        <li>agentic systems 常以延迟和成本换取任务表现。</li>
+        <li>框架能降低入门成本，但也可能遮蔽 prompt 和 response，增加调试难度。</li>
+        <li>常见模式包括 prompt chaining、routing、parallelization、orchestrator-worker 和 evaluator-optimizer。</li>
+        <li>工具 prompt engineering 是 agent 成败的关键组成。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>什么时候用 agent</h3>
+      <p>如果单次 LLM call 加检索和 examples 已经能解决问题，就不必引入完整 agent。agentic systems 往往增加延迟、成本和故障面。</p>
+      <p>workflow 适合路径明确、可控性强的任务；agent 适合需要灵活决策、工具选择和开放探索的任务。</p>
+      <h3>简单模式优先</h3>
+      <p>prompt chaining、routing、parallelization、orchestrator-worker、evaluator-optimizer 都是可组合 building blocks。团队可以先用少量代码实现，再在真实任务中验证。</p>
+      <p>框架有价值，但开发者需要理解底层 prompt、tool schema 和响应。否则框架抽象会让调试变难，并诱导过早复杂化。</p>
+      <h3>工具和实践</h3>
+      <p>工具应被当作 agent 的行动界面，而不是随手暴露的 API。名称、描述、参数、返回值和错误信息都会影响模型是否正确使用。</p>
+      <p>最终目标不是展示复杂架构，而是让系统在真实任务上可靠完成、可观察、可调试、可控制成本。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章之所以长期重要，是因为它给 agent 热潮降温：有效 agent 不等于堆框架和多轮循环。好的系统从任务结构出发，先用简单 workflow 解决确定部分，再把需要动态决策的部分交给 agent。复杂度是成本，不是成就。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>先验证单次调用或简单 workflow 是否足够。</li>
+        <li>只在灵活性和开放探索确实带来收益时引入 agent。</li>
+        <li>使用框架时仍要能看到 prompt、工具调用和响应。</li>
+        <li>把 agent 模式当成 building blocks，而不是完整大框架。</li>
+        <li>持续用真实任务 eval 成本、延迟和成功率。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/building-effective-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

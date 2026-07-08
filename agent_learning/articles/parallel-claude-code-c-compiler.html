@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 Claude Code 团队构建 C 编译器 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-02-05</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">用 Claude Code 团队构建 C 编译器</h1>
+      <p class="article-original-title">原文：Building a C compiler with a team of parallel Claude Codes</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>C 编译器足够复杂：它需要语言规范、模块架构、边界条件和大量测试。把多个 Claude Code session 当成并行工程团队，是观察 agent 协作边界的好实验。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>C 编译器能考验 agent 的规范阅读、架构一致性和长程状态管理。</li>
+        <li>parallel sessions 可以分工实现 lexer、parser、type checker、codegen 和测试。</li>
+        <li>lead session 需要维护架构文档、共享 AST 约定和验收标准。</li>
+        <li>并行开发的主要风险是接口漂移、重复实现和测试覆盖不一致。</li>
+        <li>集成比单点实现更难，需要频繁 merge 和全量回归。</li>
+        <li>人类仍应控制架构边界和最终验收。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>为什么是 C 编译器</h3>
+      <p>编译器项目包含词法、语法、类型、诊断、IR、代码生成和运行时测试。每个子系统都可以独立推进，但整体必须共享同一套抽象。</p>
+      <p>C 语言还有历史包袱和大量边界情况，agent 不能只靠模板生成，必须持续查规范、构造测试和修复回归。</p>
+      <h3>把 Claude Code 当成团队</h3>
+      <p>parallel Claude Code 的核心收益是上下文隔离和并行探索。worker session 可以深挖一个模块，不必把全部细节塞给同一个 agent。</p>
+      <p>但并行不等于自由开工。lead session 需要承担技术负责人角色：拆任务、定义接口、维护设计文档、收敛实现，并决定什么时候集成。</p>
+      <h3>接口与验证</h3>
+      <p>编译器协作的关键是共享契约：token 类型、AST 节点、symbol table、type representation、diagnostic format 和 IR schema 都要尽早固定。</p>
+      <p>验证也必须分层。lexer golden tests、parser snapshot、type error cases、codegen smoke tests 和端到端执行测试共同构成集成安全网。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这类实验最有价值的结论，不是 Claude 能否写出一个玩具编译器，而是多 agent 编程仍然需要组织设计。没有共享事实来源、接口契约和集成责任，并行 agent 会生成许多局部合理但整体冲突的代码。未来 agent 团队可能很强，但它们仍需要技术负责人、架构边界和持续验证。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>给多 agent 项目指定 lead，负责设计文档和接口裁决。</li>
+        <li>把共享 AST、错误格式和测试协议放在所有 worker 都能读取的位置。</li>
+        <li>让 worker 小批量交付，避免长时间分叉后一次性合并。</li>
+        <li>每个子模块都要求自带测试，lead 负责全量回归。</li>
+        <li>并行前先固定“什么不能各自发明”。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/parallel-claude-code-c-compiler" target="_blank" rel="noopener">https://www.anthropic.com/engineering/parallel-claude-code-c-compiler</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

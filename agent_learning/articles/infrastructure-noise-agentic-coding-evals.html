@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>量化 agentic coding eval 中的基础设施噪声 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-02-05</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">量化 agentic coding eval 中的基础设施噪声</h1>
+      <p class="article-original-title">原文：Quantifying infrastructure noise in agentic coding evaluations</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>coding agent 的评测不像选择题。它要 checkout 仓库、安装依赖、运行测试、修改文件和提交 patch。任何基础设施不稳定都会污染最终分数，因此可靠 eval 必须把噪声显式建模。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>agentic coding eval 同时测模型、工具、sandbox、依赖、测试和判分脚本。</li>
+        <li>同一个 patch 可能因 flaky test 或环境差异得到不同结果。</li>
+        <li>基础设施噪声会掩盖小模型差异，也可能制造虚假 leaderboard 波动。</li>
+        <li>失败应区分模型错误、工具错误、环境错误、测试错误和判分错误。</li>
+        <li>重复运行、环境快照和端到端 trace 是量化噪声的基础。</li>
+        <li>能否诊断基础设施问题，本身也是 coding agent 能力的一部分。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>噪声来自哪里</h3>
+      <p>真实代码评测链路很长：仓库 checkout、依赖安装、shell 命令、沙箱限制、网络状态、时间限制、测试执行和判分脚本都会影响结果。任一环节不稳定，pass rate 都会混入非模型因素。</p>
+      <p>这类噪声比普通文本 benchmark 更难处理，因为执行代码就意味着依赖环境，而环境天然有不确定性。</p>
+      <h3>为什么必须量化</h3>
+      <p>如果两个模型只差一两个百分点，而评测环境自身波动也有类似幅度，那么直接比较就不可靠。更糟的是，优化测试策略或 retry 逻辑可能被误读为模型能力提升。</p>
+      <p>量化噪声不是为了消灭所有不确定性，而是让团队知道分数的置信范围：多少任务失败于安装，多少失败于 timeout，多少在重复运行中不稳定。</p>
+      <h3>从 eval 反哺 agent 设计</h3>
+      <p>基础设施问题不只是评测污染，也是真实开发的一部分。优秀 coding agent 应能识别 flaky test、重跑关键用例、缩小失败范围、检查依赖，并向用户说明不确定性。</p>
+      <p>因此 eval harness 一方面要控制环境噪声，另一方面也可以设计专门任务来评估 agent 对不可靠环境的诊断能力。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章把 coding agent leaderboard 拉回工程现实：我们测的从来不是纯模型，而是模型加运行时的系统。一个 pass rate 背后可能包含网络、依赖、测试和 retry 策略。真正有用的 eval 应该像生产可观测性一样分层、可复现、可追踪，否则团队可能以为自己提升了模型，实际只是调顺了环境。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>给 eval 失败建立 taxonomy，至少区分模型、工具、环境、测试和判分错误。</li>
+        <li>对代表性任务做重复运行，观察方差而不是只看单次结果。</li>
+        <li>固定容器、依赖和系统快照，降低不可解释波动。</li>
+        <li>保存完整 trace，让每次失败能被复盘。</li>
+        <li>把历史 flaky case 纳入回归集，防止环境问题被反复误判为模型问题。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/infrastructure-noise-agentic-coding-evals" target="_blank" rel="noopener">https://www.anthropic.com/engineering/infrastructure-noise-agentic-coding-evals</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

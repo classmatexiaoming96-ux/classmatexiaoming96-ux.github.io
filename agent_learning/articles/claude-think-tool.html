@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&quot;think&quot; 工具：让 Claude 能停下来思考 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-03-20</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">&quot;think&quot; 工具：让 Claude 能停下来思考</h1>
+      <p class="article-original-title">原文：The &quot;think&quot; tool: Enabling Claude to stop and think</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>"think" tool 是一个结构化 scratchpad，让 Claude 在复杂 tool-use workflow 中停下来分析。它不获取新信息、不改变外部状态，只帮助模型整理中途获得的信息。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>"think" tool 与 extended thinking 不同，它发生在工具调用链中途。</li>
+        <li>它适合长工具链、多轮对话、政策密集环境和代价高的顺序决策。</li>
+        <li>工具本身无副作用，只记录结构化推理。</li>
+        <li>在 tau-bench airline 任务中，配合优化提示显著提升表现。</li>
+        <li>最佳提示要求列出规则、检查必要信息、验证政策合规并审视工具结果。</li>
+        <li>简单指令遵循和并行工具调用通常不需要 think tool。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>为什么需要中途思考</h3>
+      <p>复杂工具任务的难点常发生在工具返回之后。模型需要把新信息与规则、用户目标和下一步动作对齐，而不是机械继续调用工具。</p>
+      <p>"think" tool 给了模型一个低风险空间，让它在行动前整理政策、检查缺失信息和评估工具结果。</p>
+      <h3>适合与不适合</h3>
+      <p>适合场景包括客服政策、航空改签、零售退货、长链路工具调用和顺序决策。每一步都可能改变后续选择，因此中途反思有价值。</p>
+      <p>不适合场景则是简单指令、单次工具调用或互不依赖的并行工具调用。此时额外 scratchpad 只会增加成本。</p>
+      <h3>与 extended thinking 的关系</h3>
+      <p>文章后来更新说明，多数情况下现代 extended thinking 更推荐。它能覆盖许多需要深度推理的场景。</p>
+      <p>但 think tool 作为设计模式仍有启发：当工具结果改变任务状态时，系统可以提供一个无副作用、可审计的中途推理节点。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章的价值不只在某个工具本身，而在一个 agent 设计模式：让模型在行动前有结构化停顿。工具调用系统容易鼓励模型连续行动，而高风险流程需要先核对规则、证据和缺口。无副作用 scratchpad 是一种低成本护栏，让 agent 的下一步更可解释。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>只在复杂顺序决策和政策密集流程中引入中途思考。</li>
+        <li>让 scratchpad 明确检查规则、缺失信息和工具结果。</li>
+        <li>不要让 think tool 获取信息或改变状态。</li>
+        <li>用 eval 判断它是否真的提升成功率。</li>
+        <li>能用 extended thinking 覆盖时，优先使用更现代的内建能力。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/claude-think-tool" target="_blank" rel="noopener">https://www.anthropic.com/engineering/claude-think-tool</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

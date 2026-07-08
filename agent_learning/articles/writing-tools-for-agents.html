@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>与 agents 一起为 agents 写工具 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-09-11</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">与 agents 一起为 agents 写工具</h1>
+      <p class="article-original-title">原文：Writing effective tools for agents — with agents</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>这篇文章讨论如何为 agents 写工具，也如何让 Claude Code 等 agent 帮你优化工具。核心观点是：工具不是给人类开发者看的函数，而是给非确定性 agent 使用的行动界面。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>工具是确定性系统与非确定性 agent 之间的新契约。</li>
+        <li>工具质量会直接限制 agent 能完成任务的范围。</li>
+        <li>应先原型化工具，再通过 agent eval 系统测量效果。</li>
+        <li>工具命名和 namespace 应定义清晰功能边界。</li>
+        <li>返回值要提供 meaningful context，而不是原始后端字段堆叠。</li>
+        <li>工具描述、schema 和返回格式都需要 prompt engineering。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>什么是给 agent 的工具</h3>
+      <p>传统函数面向确定性调用者：输入相同，输出相同。agent 则会在不确定上下文中决定是否调用工具、何时调用、传什么参数、如何解释结果。</p>
+      <p>因此工具设计不能只追求 API 完整性，而要追求 agent 可用性。一个对人类工程师清楚的函数，对模型未必清楚。</p>
+      <h3>如何写工具</h3>
+      <p>好的流程是先构建最小原型，让 agent 在真实任务中使用，再看失败轨迹：它是否选错工具、填错参数、误解返回、重复调用或忽略错误。</p>
+      <p>Claude Code 可以参与这个过程：生成 eval、分析 transcript、修改工具说明、压缩返回结果，并对比修改前后的成功率。</p>
+      <h3>有效工具的原则</h3>
+      <p>工具应选择正确粒度。太底层会迫使 agent 做过多编排，太高层会失去灵活性。namespace 要清楚，让模型理解边界。</p>
+      <p>返回结果要服务下一步决策。对 agent 来说，最有价值的不是全量字段，而是状态、关键证据、可选下一步和错误恢复信息。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章把 tool design 提升为 agent 产品的核心能力。未来软件接口不只服务人类和程序，也服务会推理但会犯错的模型。工具越符合 agent 的认知形状，模型越能可靠行动。反过来，糟糕工具会把强模型变成一个不断猜参数、误读结果的脆弱系统。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>用真实 agent 任务评估工具，而不是只看单元测试。</li>
+        <li>让工具名称、namespace 和 description 清晰传达用途。</li>
+        <li>把复杂后端细节隐藏在工具内部，返回任务相关语义。</li>
+        <li>为工具建立 eval，持续优化成功率和 token 成本。</li>
+        <li>让 Claude Code 帮忙分析 transcript 和改进工具说明。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/writing-tools-for-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/writing-tools-for-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

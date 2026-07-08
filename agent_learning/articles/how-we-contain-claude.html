@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我们如何在不同产品中约束 Claude - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-05-25</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">我们如何在不同产品中约束 Claude</h1>
+      <p class="article-original-title">原文：How we contain Claude across products</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>随着 Claude 进入聊天、编码、研究和工具执行场景，containment 不再是单一安全开关。不同产品有不同风险：读什么、能做什么、如何处理不可信输入、怎样记录和升级。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>不同产品中的 Claude 面临不同风险类型和行动边界。</li>
+        <li>防线通常由模型行为、harness policy 和系统隔离共同组成。</li>
+        <li>agent containment pattern 要限制文件、网络、工具、凭据和外部写入。</li>
+        <li>不可信输入会影响模型，因此必须区分用户指令、工具结果和外部内容。</li>
+        <li>可信度不是二元属性，而是随来源、权限和任务上下文变化。</li>
+        <li>containment 的目标是让 Claude 更有用，同时把失败后果限制在可承受范围。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>三类风险与三层防线</h3>
+      <p>Claude 在不同产品里可能面临数据泄露、越权行动、被不可信内容诱导等风险。单靠模型“听话”不足以覆盖这些场景。</p>
+      <p>更稳的防线是多层组合：模型层遵循政策，harness 层限制工具和权限，系统层用 sandbox、network policy、vault 和审计日志限制后果。</p>
+      <h3>contain agents 的模式</h3>
+      <p>agent 越能行动，越需要明确边界。文件系统、网络、工具、凭据和外部写入都应分层控制，让低风险探索顺畅，高风险动作需要显式授权。</p>
+      <p>这类模式不是为了压低能力，而是为了让 agent 在默认安全边界内更自主。</p>
+      <h3>信任 Claude 读到的内容</h3>
+      <p>agent 会读取网页、代码、issue、邮件、文档和工具结果，其中很多内容不应被当作指令。系统必须区分来自用户的授权指令与来自外部内容的非可信文本。</p>
+      <p>prompt injection 的难点在于它利用语言界面混淆数据和指令。containment 需要让这种混淆即便发生，也难以触达敏感能力。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章可以看作 Anthropic 对 agent 安全工程的总览。随着 Claude 从回答问题走向执行任务，安全不再是单点分类器，而是产品架构：模型、harness、工具、sandbox、凭据、审计共同定义行动空间。真正成熟的 containment 不是让 agent 什么都不能做，而是让它能在可解释、可恢复、可限制的范围内做更多事。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>把风险按读、写、外联、凭据和外部影响分层。</li>
+        <li>区分用户指令与外部内容，尤其是网页和工具返回。</li>
+        <li>用 sandbox 和 vault 限制 prompt injection 的后果。</li>
+        <li>为高风险工具加 policy、审批和审计。</li>
+        <li>按产品场景设计 containment，而不是套一套通用规则。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/how-we-contain-claude" target="_blank" rel="noopener">https://www.anthropic.com/engineering/how-we-contain-claude</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

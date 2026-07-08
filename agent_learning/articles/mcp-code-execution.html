@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP 代码执行：构建更高效的 agents - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-11-04</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">MCP 代码执行：构建更高效的 agents</h1>
+      <p class="article-original-title">原文：Code execution with MCP: Building more efficient agents</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>很多任务不该让模型在自然语言里硬算。MCP code execution 让 agent 在受控环境中运行代码，把数据处理、文件转换、统计验证和测试执行交给计算空间。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>代码执行让 agent 不只阅读数据，还能计算和验证。</li>
+        <li>把计算交给工具可减少 context token，避免模型手算。</li>
+        <li>执行环境必须 sandboxed，限制文件、网络、资源和凭据访问。</li>
+        <li>工具结果应返回摘要、关键输出和 artifact，而不是完整 stdout。</li>
+        <li>MCP 提供统一接口，让不同执行后端可被 agent 使用。</li>
+        <li>代码执行与 context engineering 互补。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>为什么 agent 需要代码执行</h3>
+      <p>处理大表格、比较日志、解析文件、运行统计、验证 API 返回和转换格式，都不适合让模型直接在 token 里完成。</p>
+      <p>更高效的方式是让模型写脚本、运行脚本、解释结果。agent 不必把数千行数据都读进 context，可以先过滤、聚合、抽样，再只读取高信号摘要。</p>
+      <h3>MCP 的作用</h3>
+      <p>MCP 把代码执行能力以统一工具形式暴露出来。后端可以是本地 sandbox、远程容器或专用数据环境，agent 只需要理解能力和约束。</p>
+      <p>这降低了集成成本，也允许企业把执行放在自己的安全边界内。</p>
+      <h3>边界和返回值</h3>
+      <p>代码执行是高风险能力。未经限制的执行环境可能读取敏感文件、访问网络、消耗资源或修改状态，因此要限制文件系统、网络、CPU、内存、时间和凭据。</p>
+      <p>返回值不应直接倾倒 stdout。好的结果包含 exit code、摘要、关键表格、错误类型、artifact 路径和下一步建议。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>MCP code execution 的长期意义，在于把 agent 从纯语言推理器变成可计算系统。很多所谓模型不擅长的任务，本来就不该让模型手算。关键不是给 agent 一台无限制机器，而是给它一套可审计、可限制、可恢复的计算工具。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>把大数据处理放到执行环境里，只把高信号结果送回模型。</li>
+        <li>按只读、临时写入、网络访问、持久化写入分层授权。</li>
+        <li>限制执行时间、资源和文件访问范围。</li>
+        <li>返回摘要和 artifact，而不是长 stdout。</li>
+        <li>用 trace 记录代码、输入、输出和产物。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/mcp-code-execution" target="_blank" rel="noopener">https://www.anthropic.com/engineering/mcp-code-execution</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

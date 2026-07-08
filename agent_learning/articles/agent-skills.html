@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 Agent Skills 武装 agents 应对真实世界 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-10-16</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">用 Agent Skills 武装 agents 应对真实世界</h1>
+      <p class="article-original-title">原文：Equipping agents for the real world with Agent Skills</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>真实工作需要组织知识：如何生成报表、部署服务、处理客户退款、转换文档、审查 PR。Agent Skills 的思路，是把这些可复用流程封装为 agent 可发现、可加载的能力。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>skills 把领域知识、流程、脚本和模板打包成可加载能力。</li>
+        <li>相比把所有说明塞进 system prompt，skills 支持按需加载。</li>
+        <li>skill 应包含触发条件、步骤、约束、引用材料和验证方式。</li>
+        <li>好的 skill 像给新人同事的操作手册，而不是抽象原则合集。</li>
+        <li>skills 适合重复任务：报表、部署、文档转换、代码审查和数据处理。</li>
+        <li>skill 质量需要 eval 和版本管理。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>为什么需要 skills</h3>
+      <p>通用模型可以推理，但真实业务还有大量本地流程。每次把这些流程手写进 prompt，不仅低效，也容易遗漏关键约束。</p>
+      <p>skill 让组织知识外部化：agent 根据任务触发 skill，读取说明、脚本、模板和检查方法，再按流程执行。</p>
+      <h3>skill 的结构</h3>
+      <p>一个好的 skill 应包括名称、描述、触发条件、操作步骤、约束、验证方法和必要引用材料。如果涉及文件格式、API 或安全边界，应提供具体模板和示例。</p>
+      <p>skill 不应只写宏大原则。它应该像给新同事的 runbook：什么时候用、先看什么、怎么做、怎么检查、不能做什么、出错时怎么办。</p>
+      <h3>治理与评估</h3>
+      <p>skills 会逐渐成为组织知识库，因此需要版本管理。每次修改 skill，都应检查 agent 是否更容易正确触发、是否减少错误、是否遵守约束。</p>
+      <p>也要避免 skill 膨胀。一个 skill 如果覆盖过多任务，会变成另一份噪声 prompt。更好的方式是小而专、可组合、可测试。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>Agent Skills 是 prompt engineering 产品化的一步。它承认组织能力不是单次提示词，而是流程、工具、模板、约束和经验的集合。模型提供通用推理，skills 提供本地知识和操作纪律。谁能把团队隐性流程沉淀成高质量 skills，谁就能更快让 agent 进入真实业务。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>把高频任务写成小而专的 skill，而不是堆进全局 prompt。</li>
+        <li>为 skill 配套示例、模板、验证方法和失败处理。</li>
+        <li>用 eval 检查触发是否准确、执行是否稳定。</li>
+        <li>把 skill 纳入版本管理和代码审查。</li>
+        <li>让 skill 与 MCP、tools、hooks 组合成完整工作环境。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/agent-skills" target="_blank" rel="noopener">https://www.anthropic.com/engineering/agent-skills</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Developer Platform 推出 advanced tool use - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-11-24</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">Claude Developer Platform 推出 advanced tool use</h1>
+      <p class="article-original-title">原文：Introducing advanced tool use on the Claude Developer Platform</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>advanced tool use 的重点不只是让 Claude 生成函数参数，而是让模型在多轮中选择工具、理解结果、处理错误、调整计划并继续行动。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>工具是 agent 的行动界面，也是 context 的一部分。</li>
+        <li>复杂应用需要多工具选择、结构化参数、错误恢复和连续 loop。</li>
+        <li>tool result 应提供下一步决策所需信息，而不是倾倒全部后端字段。</li>
+        <li>开发者需要设计工具描述、schema、权限和幂等性。</li>
+        <li>平台能力越强，越需要 eval 和 trace 来理解 agent 行为。</li>
+        <li>安全边界应包括输入验证、输出过滤、权限检查和审计日志。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>从 tool calling 到 tool use</h3>
+      <p>早期工具调用常被理解为模型生成 JSON 参数、开发者执行函数、再把结果返回。advanced tool use 更像一个 agent loop：模型要持续观察工具反馈并决定下一步。</p>
+      <p>这意味着工具不再是附属 API，而是模型能力呈现的一部分。工具设计质量会直接决定 agent 是否可靠。</p>
+      <h3>工具描述和 schema</h3>
+      <p>工具名称、description、参数名和返回格式都会进入模型 context。模糊 schema 会让模型填错参数，过长返回会污染上下文，不清晰错误会诱导重复失败。</p>
+      <p>复杂后端 API 可以在工具内部聚合，对模型暴露更贴近任务语义的接口。好的工具应少参数、高信号、返回可操作错误。</p>
+      <h3>安全与可观测性</h3>
+      <p>工具越强，越需要边界。外部写入、资金操作、权限变更、邮件发送等动作不能因为模型输出而直接授权。</p>
+      <p>trace 是理解工具型 agent 的核心。没有模型选择、参数、返回和后续决策的完整记录，advanced tool use 会变成黑箱自动化。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>advanced tool use 的真正价值，是把 agent loop 作为平台能力，而不是把函数调用当成语法糖。未来很多软件接口会同时面对人类和 agent：人类需要 UI，agent 需要语义清楚、反馈紧凑、权限明确的工具面。谁能把工具设计成模型容易正确使用的形状，谁就能更早把 LLM 能力转成业务自动化。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>把工具设计当作产品接口设计，而不是简单后端函数暴露。</li>
+        <li>返回结果要摘要化、可决策、可追溯。</li>
+        <li>为写操作设计幂等性、权限检查和审计日志。</li>
+        <li>记录完整 tool trace，支持失败复盘。</li>
+        <li>用 eval 检查模型是否会在正确时机选正确工具。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/advanced-tool-use" target="_blank" rel="noopener">https://www.anthropic.com/engineering/advanced-tool-use</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

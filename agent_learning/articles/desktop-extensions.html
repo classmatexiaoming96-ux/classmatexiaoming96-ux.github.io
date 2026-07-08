@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desktop Extensions：一键安装 MCP server - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-06-26</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">Desktop Extensions：一键安装 MCP server</h1>
+      <p class="article-original-title">原文：Desktop Extensions: One-click MCP server installation</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>MCP 让 Claude 能连接外部工具，但早期安装常要求用户编辑配置、安装依赖、处理路径和环境变量。Desktop Extensions 的目标，是把这些步骤产品化。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>MCP server 扩展了 Claude 与外部工具和数据源交互的能力。</li>
+        <li>安装和配置一直是 MCP 普及的主要门槛。</li>
+        <li>Desktop Extensions 将 server、配置、权限和说明打包，支持一键安装。</li>
+        <li>扩展需要声明能力、权限、数据访问范围和安全边界。</li>
+        <li>用户体验应包括发现、安装、更新、禁用、卸载和故障诊断。</li>
+        <li>一键安装降低摩擦，也要求更强审核、签名和信任模型。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>MCP 的安装摩擦</h3>
+      <p>开发者可以接受编辑 JSON、配置环境变量和处理路径，但普通用户不会。要让 MCP 进入真实工作流，安装体验必须像桌面插件一样简单。</p>
+      <p>Desktop Extensions 不是改变协议本身，而是补齐分发层和用户体验层。</p>
+      <h3>扩展包应该包含什么</h3>
+      <p>一个扩展不仅是可执行文件。它需要 manifest、名称、描述、版本、权限声明、启动命令、默认配置、图标、更新策略和文档。</p>
+      <p>权限说明尤其关键。文件系统扩展、邮件发送扩展和数据库扩展风险不同，安装界面应清楚展示访问范围和写入能力。</p>
+      <h3>生态与治理</h3>
+      <p>一键安装只是第一步。完整体验还包括启用、禁用、更新、卸载、查看日志、诊断连接失败和管理权限。</p>
+      <p>低摩擦分发也带来供应链风险。签名、审核、来源展示、版本 pinning 和企业允许列表会成为扩展生态基础设施。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>Desktop Extensions 的意义，是把 MCP 从开发者配置文件推进到用户可理解的产品形态。agent 生态要进入真实工作流，不能要求每个用户都懂 server command 和 JSON 配置。协议开放只是第一步，安装、权限和信任体验决定它能走多远。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>为 MCP server 提供 manifest、权限说明和默认配置。</li>
+        <li>支持启用、禁用、更新、卸载和日志诊断。</li>
+        <li>把权限风险用用户能理解的语言展示出来。</li>
+        <li>企业场景需要允许列表、版本 pinning 和审计。</li>
+        <li>把扩展分发当作产品体验，而不是文档附录。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/desktop-extensions" target="_blank" rel="noopener">https://www.anthropic.com/engineering/desktop-extensions</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

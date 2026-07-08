@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>引入 Contextual Retrieval - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2024-09-19</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">引入 Contextual Retrieval</h1>
+      <p class="article-original-title">原文：Introducing Contextual Retrieval</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>传统 RAG 把文档切成 chunks 后，很多文档级背景会丢失。Contextual Retrieval 的思路，是在索引前为每个 chunk 加上简短上下文说明，让检索更容易召回正确证据。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>传统 RAG 切块会让 chunk 失去文档级背景。</li>
+        <li>Contextual Retrieval 为每个 chunk 添加简短上下文说明。</li>
+        <li>上下文可由 Claude 预处理生成，并存入检索索引。</li>
+        <li>方法可与 embedding search、BM25 和 reranking 结合。</li>
+        <li>contextual embeddings 与 contextual BM25 处理不同检索信号。</li>
+        <li>上下文生成需要平衡信息量和 token/storage 成本。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>传统 RAG 的切块问题</h3>
+      <p>chunk 离开原文档后，代词指代、章节主题、表格含义、术语定义和时间范围都可能丢失。检索系统可能因此错过正确片段。</p>
+      <p>生成阶段拿到缺乏上下文的 chunk，也可能被迫猜测原文含义，增加幻觉风险。</p>
+      <h3>Contextual Retrieval 怎么做</h3>
+      <p>方法是在索引前为每个 chunk 生成简短说明，描述它来自哪份文档、处于什么位置、讨论什么内容。</p>
+      <p>这些上下文与原 chunk 一起进入索引，使 embedding 和 BM25 都能利用额外背景。</p>
+      <h3>组合与权衡</h3>
+      <p>embedding 擅长语义相似，BM25 擅长关键词精确匹配。Contextual Retrieval 让两者都获得更完整文本，再用 reranker 进一步排序。</p>
+      <p>成本上，需要为每个 chunk 生成和存储额外上下文，因此应通过 retrieval eval 衡量收益，而不是盲目加长。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>Contextual Retrieval 的洞见很朴素：检索失败常常不是模型不懂，而是我们把材料切碎后抹掉了意义。它把一部分理解提前到索引阶段，用模型为数据加语境，再让传统检索受益。企业知识库的竞争力越来越像信息架构能力，而不是只看生成模型大小。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>为 chunk 添加文档级上下文，而不是只保存原始片段。</li>
+        <li>结合 BM25、embedding 和 reranking，而不是二选一。</li>
+        <li>针对合同、财报、代码文档等类型设计不同上下文模板。</li>
+        <li>用 retrieval eval 测召回率和排序提升。</li>
+        <li>控制上下文长度，避免成本超过收益。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/news/contextual-retrieval" target="_blank" rel="noopener">https://www.anthropic.com/news/contextual-retrieval</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

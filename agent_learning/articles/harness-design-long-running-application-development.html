@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>长时应用开发的 Harness 设计 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-03-24</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">长时应用开发的 Harness 设计</h1>
+      <p class="article-original-title">原文：Harness design for long-running application development</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>这篇文章把 agentic coding 的重点从“模型会不会写代码”推进到“系统能不能承载持续开发”。长时应用任务横跨多个文件、测试循环和架构判断，harness 必须帮助 agent 维护目标、状态、工具反馈与验证闭环。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>长时开发不是一次 prompt，而是持续规划、执行、观察和修正的闭环。</li>
+        <li>harness 应承载工作流、状态和验证，而不是替模型写死所有路径。</li>
+        <li>目标、计划、代码事实、执行日志和测试结果需要分层保存。</li>
+        <li>工具接口要可恢复，避免一次命令失败就丢失上下文。</li>
+        <li>checkpoint、diff、测试和运行日志是长任务的事实来源。</li>
+        <li>人类介入点应放在需求澄清、架构选择、权限提升和发布前验证。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>为什么应用开发需要 harness</h3>
+      <p>真实应用开发会不断产生新信息：测试失败、依赖缺失、需求澄清、边界条件和代码风格约束。模型如果只依赖当前 context window，很容易在修复局部问题时忘记早期目标。</p>
+      <p>harness 的作用，是把这条长链路变成可观察、可恢复、可验证的系统。它不应该替模型做完所有决定，而应该给模型一个稳定工作台：能查事实、能动手、能验证、能回滚。</p>
+      <h3>状态分层与 context 管理</h3>
+      <p>长时任务里最危险的状态管理方式，是把所有东西都混在聊天历史里。用户目标变化慢，执行日志变化快，测试结果需要可追溯，开放问题需要被保留；这些信息应该分别管理。</p>
+      <p>compaction 也不该只压缩成泛泛摘要。更有价值的是保留为什么选择某条路径、哪些假设已验证、哪些命令失败过、哪些文件属于修改范围，以及下一步需要什么证据。</p>
+      <h3>验证与恢复</h3>
+      <p>没有测试命令、构建命令或手工验收步骤，agent 很容易把“代码看起来合理”误认为完成。长时 harness 应该在每个阶段提供局部验证，最终再做全局验收。</p>
+      <p>失败也应被设计进流程。命令超时、测试 flaky、权限不足和需求偏差都不应该让 agent 原地重复同一路径；checkpoint、rewind、resume 和清晰的错误分类能让探索成本可控。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章的核心，是把 agentic coding 看成运行时工程，而不是 prompt 技巧。模型能力越强，越需要一个不抢方向盘但能维持秩序的外部结构。harness 把不可控的长程交互拆成目标、状态、工具、验证和恢复几个层次，使 agent 的聪明能持续发挥，而不是在上下文膨胀和工具失败中逐渐失焦。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>给每个长时任务定义明确验收条件，而不是只等 agent 自报完成。</li>
+        <li>把关键事实写入结构化 notes 或 session log，避免只依赖压缩后的聊天历史。</li>
+        <li>为测试、截图、构建和 diff 设计一等工具，让验证成为默认路径。</li>
+        <li>对删除、发布、权限提升等动作设置明确人类确认点。</li>
+        <li>保留失败命令和失败原因，帮助后续恢复而不是重复踩坑。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/harness-design-long-running-application-development" target="_blank" rel="noopener">https://www.anthropic.com/engineering/harness-design-long-running-application-development</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code：agentic coding 最佳实践 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-04-18</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">Claude Code：agentic coding 最佳实践</h1>
+      <p class="article-original-title">原文：Claude Code: Best practices for agentic coding</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Claude Code 不是聊天框，它能读文件、运行命令、编辑代码并自主推进问题。让它表现稳定的关键，是管理 context、验证路径和项目环境。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>context window 会填满，性能会随噪声增加而下降。</li>
+        <li>强工作流是先探索、再计划、再编码。</li>
+        <li>prompt 应提供命令、日志、URL、路径、截图和期望行为等具体上下文。</li>
+        <li>CLAUDE.md 应记录项目约定、常用命令、测试说明和风格要求。</li>
+        <li>大功能可先让 Claude 访谈用户并写 self-contained spec。</li>
+        <li>长会话需要 early correction、clear、compaction、subagents 和 checkpoint。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>把 Claude Code 当成协作者</h3>
+      <p>Claude Code 能实际操作代码库，因此输入不应只有一句需求。给它错误日志、复现命令、相关路径、预期行为和约束，能显著减少猜测。</p>
+      <p>最佳流程通常是探索、计划、实现、验证。先让它理解代码形状，再让它改动，会比直接要求写功能更稳。</p>
+      <h3>环境和验证</h3>
+      <p>项目应提供明确测试命令、构建命令、lint 命令和本地运行方式。没有验证路径，coding agent 很容易停在“看起来合理”。</p>
+      <p>CLAUDE.md 可以沉淀项目约定，但不应过度膨胀。它应该写常用命令、代码风格、测试策略和不该触碰的边界。</p>
+      <h3>长会话管理</h3>
+      <p>长 session 会积累噪声。用户应尽早纠偏，必要时清理上下文、创建 checkpoint、拆分 subagent 或让 Claude 总结当前状态。</p>
+      <p>对大功能，先生成 spec 再实现，可以把需求讨论和编码执行分开，降低反复修改造成的 context 污染。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>Claude Code 最佳实践的核心，是把 agentic coding 变成可验证协作，而不是把需求丢给模型许愿。模型很强，但它仍依赖项目事实、工具反馈和用户边界。好的使用方式像带一位高效新同事入组：给上下文、给测试、给约定、早纠偏、让它证明完成。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>给 Claude Code 复现步骤、日志、路径和验收命令。</li>
+        <li>先让它读代码和写计划，再批准实现。</li>
+        <li>维护精简的 CLAUDE.md，不要堆无关规则。</li>
+        <li>大任务先写 spec，小任务直接给明确边界。</li>
+        <li>用测试、截图或脚本作为完成证据。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank" rel="noopener">https://www.anthropic.com/engineering/claude-code-best-practices</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

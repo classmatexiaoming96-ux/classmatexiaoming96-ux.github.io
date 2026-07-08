@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>面向 AI agents 的有效 context engineering - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-09-29</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">面向 AI agents 的有效 context engineering</h1>
+      <p class="article-original-title">原文：Effective context engineering for AI agents</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>prompt engineering 更关注模型被怎样指令，context engineering 更关注模型在某一刻能看到什么信息。对 agent 来说，context 是工作内存、证据包、工具结果和历史决策的组合。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>context engineering 与 prompt engineering 不同，重点是信息供给和组织。</li>
+        <li>agent 能力受限于可见 context 的相关性、时效性和密度。</li>
+        <li>有效 context 应包含任务目标、约束、证据、工具状态和未解决问题。</li>
+        <li>检索、压缩、memory、session log 和 agentic search 都是 context 工程手段。</li>
+        <li>上下文过少会让模型猜，过多会稀释注意力和浪费 token。</li>
+        <li>长时 agent 需要让 context 可恢复、可查询、可更新。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>context engineering vs prompt engineering</h3>
+      <p>prompt engineering 常常关注一句指令怎么写。context engineering 关心的是，在模型生成下一步之前，它能看到哪些事实、哪些工具结果、哪些限制、哪些历史决策。</p>
+      <p>对 agent 来说，这个区别很关键。模型可能知道怎么推理，但如果拿到的是过期、噪声或缺失的上下文，就会做出错误行动。</p>
+      <h3>有效 context 的解剖</h3>
+      <p>高质量 context 通常包含用户目标、当前计划、已验证事实、未解决问题、工具状态、外部证据和可执行约束。它不只是更多文本，而是更合适的信息密度。</p>
+      <p>过多上下文会稀释注意力，过少上下文会迫使模型猜测。好的系统会按任务阶段动态选择信息，而不是把所有历史都塞进窗口。</p>
+      <h3>检索和 agentic search</h3>
+      <p>检索不是一次性动作。agent 需要在任务推进中不断提出新问题、寻找证据、更新假设，并把关键发现写回 memory 或 session。</p>
+      <p>这让 context engineering 与 harness 设计紧密相连：系统要决定什么被保存、什么被压缩、什么可重新查询，以及什么时候需要主动补证据。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>context engineering 的核心是承认模型不是直接面对世界，而是面对被系统组织过的信息界面。agent 产品的质量，很大一部分取决于这个界面是否把正确事实放在正确时刻。未来模型更强以后，context 仍然重要，因为更强推理会更依赖高质量证据，而不是更能忍受噪声。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>把任务目标、约束、证据和开放问题分层管理。</li>
+        <li>为长任务维护 session log，而不是只依赖当前窗口。</li>
+        <li>用检索和 memory 提供可恢复上下文。</li>
+        <li>压缩时保留决策原因和验证状态。</li>
+        <li>通过 eval 测 context 策略，而不是只调 prompt。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

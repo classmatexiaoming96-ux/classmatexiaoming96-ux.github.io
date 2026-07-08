@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>超越权限提示：用 sandboxing 让 Claude Code 更安全 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 26px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2025-10-20</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">超越权限提示：用 sandboxing 让 Claude Code 更安全</h1>
+      <p class="article-original-title">原文：Beyond permission prompts: making Claude Code more secure with sandboxing</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Claude Code 需要执行命令、读写文件和调用工具。permission prompt 可以提醒用户，但不能成为唯一安全机制，因为人会疲劳，模型也可能被诱导提出看似合理的危险请求。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>permission prompt 能提醒用户，但不能替代技术隔离。</li>
+        <li>长期批准会产生疲劳，攻击也可能诱导模型请求危险操作。</li>
+        <li>sandboxing 把风险从每次判断转移到默认边界。</li>
+        <li>文件系统隔离可限制 agent 读取和修改的路径范围。</li>
+        <li>网络隔离可减少凭据外传、恶意下载和未授权请求。</li>
+        <li>凭据不应暴露给 Claude 生成代码运行的环境。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文解读</h2>
+      <h3>permission prompts 的局限</h3>
+      <p>如果每几分钟都弹出确认，用户会逐渐机械批准。prompt injection 也可能让模型把危险动作包装成合理请求。</p>
+      <p>因此安全不能只靠问用户。更稳的策略，是让环境默认限制在安全边界内，让低风险动作顺畅进行，高风险能力结构上不可达或需要明确授权。</p>
+      <h3>sandboxing 的作用</h3>
+      <p>sandboxing 通过文件系统、网络、进程、资源和凭据隔离，把 agent 的行动空间限制在任务需要的范围内。</p>
+      <p>即使模型被恶意内容影响，攻击者也更难读取敏感文件、外传 token 或修改不相关资源。</p>
+      <h3>安全与体验</h3>
+      <p>更强隔离不是为了让 agent 更笨重，而是为了让它更自主。低风险动作被 sandbox 包住，就可以减少无意义确认。</p>
+      <p>用户注意力应留给真正重要的决定：删除数据、外部写入、权限提升、发布和凭据访问。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇主题把 agent 安全从 UI 问题拉回系统边界问题。随着 coding agents 更自主，用户不可能审查每个命令的所有后果。sandboxing 的意义，是把可犯错空间缩小，让模型即便被诱导也只能在有限范围内行动。好的安全设计不是不断喊停，而是让安全成为默认环境。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>用 sandbox 默认限制文件和网络范围。</li>
+        <li>把凭据放在 vault、proxy 或资源绑定层，而不是放进可读环境变量。</li>
+        <li>为低风险读操作减少打扰，为高风险写操作保留确认。</li>
+        <li>保留审计日志，支持事后追踪。</li>
+        <li>把 prompt injection 检测与系统隔离结合使用。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/beyond-permission-prompts" target="_blank" rel="noopener">https://www.anthropic.com/engineering/beyond-permission-prompts</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
