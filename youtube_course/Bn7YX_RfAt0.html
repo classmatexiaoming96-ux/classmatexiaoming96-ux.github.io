@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 年 AI Agent 工具实测：n8n、Claude Code 与 Base44 怎么选？</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a4adc0;
+      --text-muted: #6f7890;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --accent-orange: #f6ad55;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --card-hover: rgba(255,255,255,0.075);
+      --code-bg: #11111a;
+    }
+    body {
+      background:
+        radial-gradient(circle at 12% 0%, rgba(99,179,237,0.18), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(159,122,234,0.16), transparent 30%),
+        linear-gradient(135deg, #111122 0%, var(--bg-primary) 48%, #08080d 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at center, black, transparent 78%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page { width: min(980px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 80px; position: relative; z-index: 1; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--accent); text-decoration: none; font-weight: 600;
+      border: 1px solid rgba(99,179,237,0.28);
+      background: rgba(99,179,237,0.06);
+      padding: 9px 14px; border-radius: 6px;
+      transition: background .2s, color .2s, transform .2s;
+      margin-bottom: 22px;
+    }
+    .back-link:hover { background: var(--accent); color: var(--bg-primary); transform: translateX(-2px); }
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    button:hover, .btn:hover { background: var(--accent); color: var(--bg-primary); }
+    .hero {
+      background: linear-gradient(145deg, rgba(22,22,31,0.96), rgba(17,17,26,0.9));
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.36);
+    }
+    .eyebrow { color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 0.78rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; }
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.06; letter-spacing: -0.04em; margin-bottom: 16px; }
+    .subtitle { color: var(--text-secondary); font-size: 1.08rem; max-width: 760px; margin-bottom: 20px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; }
+    .meta span {
+      font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--text-secondary);
+      border: 1px solid var(--card-border); background: rgba(255,255,255,0.04);
+      padding: 6px 10px; border-radius: 6px;
+    }
+    .video-wrap {
+      position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden;
+      border-radius: 12px; border: 1px solid var(--card-border);
+      background: #000; margin: 26px 0 0;
+    }
+    .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    .content-card:hover { background: var(--card-hover); border-color: rgba(99,179,237,0.22); }
+    .section { padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+    h2 { font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.25; margin-bottom: 16px; letter-spacing: -0.025em; }
+    h3 { font-size: 1.05rem; margin: 22px 0 10px; color: #f7fafc; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    code {
+      font-family: "JetBrains Mono", monospace;
+      background: rgba(255,255,255,0.06);
+      color: #bde3ff;
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159,122,234,0.08);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-secondary);
+    }
+    table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: .93rem; overflow: hidden; border-radius: 10px; }
+    th, td { border: 1px solid var(--card-border); padding: 12px 13px; text-align: left; vertical-align: top; }
+    th { background: rgba(99,179,237,0.12); color: var(--text-primary); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+    ul, ol { color: var(--text-secondary); padding-left: 22px; margin: 8px 0 16px; }
+    li { margin: 7px 0; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+    .mini-card { border: 1px solid var(--card-border); background: rgba(255,255,255,0.035); border-radius: 10px; padding: 16px; }
+    .mini-card .num { font-family: "JetBrains Mono", monospace; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+    .mini-card .title { font-weight: 700; margin-bottom: 6px; }
+    .timeline { display: grid; gap: 10px; margin-top: 16px; }
+    .time-row { display: grid; grid-template-columns: 92px 1fr; gap: 14px; align-items: baseline; padding: 12px 14px; border: 1px solid var(--card-border); border-radius: 10px; background: rgba(255,255,255,0.035); }
+    .time-row .t { font-family: "JetBrains Mono", monospace; color: var(--accent-green); font-size: .86rem; }
+    .recommendations { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .pill { color: var(--accent); border: 1px solid rgba(99,179,237,0.28); border-radius: 999px; padding: 8px 12px; text-decoration: none; background: rgba(99,179,237,0.06); font-size: .92rem; }
+    .pill:hover { background: rgba(99,179,237,0.14); }
+    .note { border: 1px solid rgba(246,173,85,0.22); background: rgba(246,173,85,0.08); border-radius: 10px; padding: 14px 16px; color: #f8d9b0; }
+    @media (max-width: 780px) {
+      .page { width: min(100% - 22px, 980px); padding-top: 22px; }
+      .hero { padding: 1.25rem; }
+      .content-card { padding: 1.1rem; }
+      .grid { grid-template-columns: 1fr; }
+      .time-row { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: .84rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">AI Agent Tools · 2026 Beginner Test</div>
+      <h1>2026 年 AI Agent 工具实测：从零做一个带 AI 的任务管理器</h1>
+      <p class="subtitle">英文原题：Best AI Agent Tools In 2026 (Beginner Friendly)。这期视频把 n8n、Claude Code、Base44 Super Agents 放进同一个任务里：只用提示词做一个能添加任务、登录隔离、并让 AI 自动排序优先级的应用。</p>
+      <div class="meta">
+        <span>频道：Mikey No Code</span>
+        <span>时长：16:45</span>
+        <span>Views：17,112</span>
+        <span>Video ID：Bn7YX_RfAt0</span>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/Bn7YX_RfAt0" title="Best AI Agent Tools In 2026 (Beginner Friendly)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </header>
+
+    <section class="content-card section">
+      <h2>一、问题引入：AI Agent 工具到底是在“替你工作”，还是只是在 demo 里好看？</h2>
+      <p>这期视频的切入点很直接：现在几乎每个 AI Agent 工具都在承诺“你描述想法，它帮你构建应用、自动化或完整工作流”。但真正的问题不是宣传页有多漂亮，而是一个没有技术背景的人能不能从空白开始，最后拿到一个可以交付、可以使用、不会卡在配置里的东西。</p>
+      <p>视频作者没有只看功能列表，而是设置了一个统一测试：做一个简单的 AI 任务管理器。这个应用要能添加任务、展示任务、标记完成，还要有一个 AI 助手按钮，可以把当前任务列表发给 AI，让它按优先级排序并把结果显示回应用里。这个任务足够小，不会把工具拖进复杂业务；但又足够完整，可以暴露“工作流工具”和“应用构建工具”的差别。</p>
+      <blockquote>
+        <p>这期视频最值得借鉴的地方，是它把“AI Agent 工具好不好用”拆成了可操作的测试：同一个目标、同一组提示词、同一类用户，从结果和摩擦成本两头看。</p>
+      </blockquote>
+      <div class="grid">
+        <div class="mini-card">
+          <div class="num">01</div>
+          <div class="title">测试对象</div>
+          <p>n8n、Claude Code、Base44 Super Agents。它们都能被称为 agent 工具，但定位完全不同。</p>
+        </div>
+        <div class="mini-card">
+          <div class="num">02</div>
+          <div class="title">测试任务</div>
+          <p>构建一个带登录、任务列表、AI 优先级排序的任务管理器。</p>
+        </div>
+        <div class="mini-card">
+          <div class="num">03</div>
+          <div class="title">核心评判</div>
+          <p>不只看“能不能做出来”，还看从零开始要补多少配置、修多少问题。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card section">
+      <h2>二、核心概念解释：别把三类工具混成一类</h2>
+      <p>如果只用“AI Agent 工具”这个大词，n8n、Claude Code、Base44 会被错误地放在同一个篮子里。视频真正说明的是：它们解决的是三种不同层级的问题。</p>
+      <h3>n8n：工作流自动化，不是面向用户的完整 App Builder</h3>
+      <p>n8n 的优势是节点式自动化：连接外部服务、组合触发器、把输入传给 AI、再把输出传回某个地方。它非常适合技术团队做复杂流程编排，但视频里也暴露了它的边界：它可以生成一个“任务输入 → AI 排序 → 返回结果”的流程，却不自然地生成一个完整产品。最终结果更像一个表单和工作流，而不是可交给用户使用的任务管理器。</p>
+      <h3>Claude Code：开发者控制力强，但默认要求你会开发</h3>
+      <p>Claude Code 能在开发环境里写代码、改代码、运行命令，因此它更接近“开发者身边的工程助理”。它可以构建真正的全栈应用，也能在配置完成后接入 AI 功能。但视频里的关键摩擦是：你要面对终端、技术栈选择、运行错误、API key 和项目配置。这些对开发者是日常，对零基础用户就是门槛。</p>
+      <h3>Base44 Super Agents：牺牲部分底层控制，换取端到端完成度</h3>
+      <p>Base44 在视频里被定位为更适合非技术用户的路线：认证、AI 助手、发布和应用框架都内置在平台里。用户不用自己决定技术栈，也不用配置外部 API key。视频测试中，它用两个提示词在几分钟内生成了可用应用，这也是作者最后更看好它的原因。</p>
+      <p class="note">学习这个视频时，别急着问“哪个最强”。更好的问题是：我的任务需要的是工作流、开发者级代码控制，还是面向非技术用户的一站式应用生成？</p>
+    </section>
+
+    <section class="content-card section">
+      <h2>三、关键论点与实操步骤：同一个任务，三种路径</h2>
+      <h3>1. 统一任务：先把评价标准固定住</h3>
+      <p>视频把提示词拆成三段：第一段生成任务管理器本体，第二段加入用户登录与任务隔离，第三段加入 AI 助手。对 Base44，登录步骤被跳过，因为平台已经内置认证；对 n8n，则任务被改写为“创建一个能输入任务列表、让 AI 排序并返回结果的工作流”。</p>
+      <p>这个设计很聪明：如果每个工具都用最适合自己的 demo，结果无法比较；但如果完全不考虑工具定位，又会不公平。视频的折中方式是保留同一个用户目标，同时允许 n8n 以工作流方式完成。</p>
+
+      <h3>2. n8n：能完成任务，但结果停在工作流层</h3>
+      <p>n8n 的 AI Agent 能生成流程，但第一次漏掉了输入表单这个基础环节，后面还需要重新提示和修 runtime 问题。最后它确实可以让用户输入任务并得到排序结果，但没有真正的应用界面、用户体系和产品感。对技术团队来说这可能够用；对“想做一个 app 的普通用户”来说，它没有走完最后一公里。</p>
+
+      <h3>3. Claude Code：能做成完整应用，但过程偏开发者</h3>
+      <p>Claude Code 的优势在于它能进入真实开发环境，生成代码、修改代码、运行项目。视频里的结论不是 Claude Code 不强，而是它的强项属于开发者：你需要知道如何处理初始技术栈、命令行错误、依赖安装和 AI API key。换句话说，它适合“想保持工程控制权的人”，不适合“完全不想碰技术细节的人”。</p>
+
+      <h3>4. Base44：最符合“初学者友好”的定义</h3>
+      <p>Base44 的测试路径最短：第一条提示词生成任务管理器，第二条提示词把 AI 助手嵌入进去。认证不用单独做，AI 也已经在平台内，排序按钮和结果展示都直接出现在应用里。视频强调的不是它能不能覆盖复杂工程场景，而是它把普通用户最容易卡住的环节都拿掉了。</p>
+
+      <blockquote>
+        <p>视频里的核心判断可以转述成一句话：三者都能“完成一部分任务”，但只有 Base44 在这个测试里让零基础用户最接近“一次性拿到可用产品”。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card section">
+      <h2>四、对比表格：三类工具怎么选</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工具</th>
+            <th>最适合的场景</th>
+            <th>视频中的优点</th>
+            <th>主要风险 / 摩擦</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>n8n</strong></td>
+            <td>内部流程自动化、服务连接、AI workflow 编排。</td>
+            <td>开源、灵活、适合节点式自动化；有 self-hosted 路线。</td>
+            <td>不是完整应用构建器；AI 生成流程漏了输入表单，还要修运行问题。</td>
+            <td>如果你要的是“后台流程”，选它；如果你要面向用户的 app，不要期待它一步到位。</td>
+          </tr>
+          <tr>
+            <td><strong>Claude Code</strong></td>
+            <td>开发者构建全栈应用、希望保留代码控制权。</td>
+            <td>能写、改、运行代码；配置好后可以做出真正应用。</td>
+            <td>需要终端、技术栈判断、API key、调错能力；初学者容易卡住。</td>
+            <td>适合会开发或愿意学开发的人；不适合完全零技术背景的快速原型。</td>
+          </tr>
+          <tr>
+            <td><strong>Base44 Super Agents</strong></td>
+            <td>非技术创业者、创作者、想快速验证 SaaS/App 想法的人。</td>
+            <td>认证、AI 助手、应用框架都内置；两条提示词、约几分钟完成可用结果。</td>
+            <td>平台抽象更强，底层控制力和可迁移性需要另行评估。</td>
+            <td>如果目标是最快拿到可用产品原型，视频把它评为最友好选择。</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>这张表背后的判断逻辑是：工具强弱不应该只按能力上限排序，还要按用户当前水平、任务类型、可接受的配置成本来排序。视频里 n8n 和 Claude Code 都不是“失败品”，只是它们解决的问题并不是“零基础快速做完整 app”。</p>
+    </section>
+
+    <section class="content-card section">
+      <h2>五、引用块：视频里真正有迁移价值的观点</h2>
+      <blockquote>
+        <p>不要只看 AI 工具的 demo，要看它在真实任务里漏掉什么、修复成本多高、最后结果能不能交付。</p>
+      </blockquote>
+      <blockquote>
+        <p>Claude Code 的价值在控制力；Base44 的价值在减少决策；n8n 的价值在自动化流程。三者不是同一种产品。</p>
+      </blockquote>
+      <blockquote>
+        <p>对初学者来说，最大的门槛往往不是提示词，而是技术栈、API key、部署、认证这些“提示词之外”的环节。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card section">
+      <h2>六、时间戳目录</h2>
+      <p>字幕来自 YouTube 英文自动字幕，自动字幕有重复片段，下列时间点按视频内容脉络整理，适合作为快速复看索引。</p>
+      <div class="timeline">
+        <div class="time-row"><span class="t">00:00</span><span>开场：为什么要实测 AI Agent 工具，而不是只看宣传 demo。</span></div>
+        <div class="time-row"><span class="t">01:20</span><span>统一测试任务：做一个带任务列表、登录隔离、AI 优先级排序的任务管理器。</span></div>
+        <div class="time-row"><span class="t">02:15</span><span>提示词设计：应用本体、用户认证、AI 助手三段式；n8n 改为工作流任务。</span></div>
+        <div class="time-row"><span class="t">03:20</span><span>n8n 测试：适合工作流自动化，但不是完整 app builder。</span></div>
+        <div class="time-row"><span class="t">05:00</span><span>n8n 结果：需要补输入表单、修运行问题，最终更像基础表单和流程。</span></div>
+        <div class="time-row"><span class="t">06:20</span><span>Claude Code 测试：进入真实开发环境，能生成和运行代码。</span></div>
+        <div class="time-row"><span class="t">08:10</span><span>Claude Code 结果：应用能成型，但技术栈、终端和 API key 给初学者带来摩擦。</span></div>
+        <div class="time-row"><span class="t">10:20</span><span>Base44 Super Agents 测试：认证和 AI 能力内置，直接通过提示词生成应用。</span></div>
+        <div class="time-row"><span class="t">12:00</span><span>Base44 结果：两条提示词、约 5 分钟，任务管理和 AI 排序都能工作。</span></div>
+        <div class="time-row"><span class="t">14:00</span><span>总结对比：n8n 完成工作流，Claude Code 完成应用但偏开发者，Base44 最适合零基础。</span></div>
+        <div class="time-row"><span class="t">15:30</span><span>最终判断：如果目标是从想法快速到可用产品，Base44 在这次测试中胜出。</span></div>
+      </div>
+    </section>
+
+    <section class="content-card section">
+      <h2>七、推荐学习路径与延伸阅读</h2>
+      <p>这期视频适合放在“AI Agent 工具选型”的入口位置。看完之后，不建议马上盲目追某个工具，而是先把自己的目标分清楚：你是在做流程自动化、做真实软件项目，还是做面向用户的快速产品原型？</p>
+      <ol>
+        <li>如果你要把 CRM、表格、邮件、Webhook、数据库串起来，优先学习 n8n 或同类 workflow 工具。</li>
+        <li>如果你能接受代码仓库、终端、依赖、API key，Claude Code 这类 coding agent 更有长期控制力。</li>
+        <li>如果你是创作者、运营、创业者，想先验证一个 app 是否有人用，Base44 这类一站式平台能减少很多启动阻力。</li>
+      </ol>
+      <div class="recommendations">
+        <a class="pill" href="index.html">返回课程列表</a>
+        <a class="pill" href="2R-niMsB0QY.html">继续看：AI 工具工作流课程</a>
+        <a class="pill" href="4TvH-OZhwxI.html">继续看：Agent 编程相关课程</a>
+        <a class="pill" href="LNkAW4SSgdY.html">继续看：AI 开发工具实践</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
