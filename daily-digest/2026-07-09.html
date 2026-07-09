@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-09</title>
+<meta name="description" content="今天的 AI 主线集中在三个方向：模型产品继续向实时交互推进，Agent 安全问题从概念变成具体漏洞，机器人与开发工具链则把“AI 能做什么”继续推向物理世界和工程现场。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-09</span>
+      <span class="sep">·</span>
+      <span>星期四</span>
+      <span class="edition">第 50 期</span>
+    </div>
+    <p class="mh-intro">今天的 AI 主线集中在三个方向：模型产品继续向实时交互推进，Agent 安全问题从概念变成具体漏洞，机器人与开发工具链则把“AI 能做什么”继续推向物理世界和工程现场。</p>
+    <div class="stats">
+      <div class="stat"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">产品 / 概念</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News</span></div>
+    <a class="lead" href="https://openai.com/index/introducing-gpt-live/" target="_blank" rel="noopener">
+      <span class="tag">模型</span>
+      <h3>OpenAI 推出 GPT-Live，实时交互成为社区焦点</h3>
+      <p>GPT-Live 在 Hacker News 获得最高讨论热度，社区关注点从单轮生成转向低延迟、多模态和持续会话体验。对开发者来说，这意味着产品形态会更像在线协作者，而不是一次性 API 调用。</p>
+      <div class="src">◷ <b>Hacker News / OpenAI</b> <span class="dotsep">·</span> 今日热议</div>
+    </a>
+    <div class="rows">
+      <a class="row" href="https://noma.security/blog/gitlost-how-we-tricked-githubs-ai-agent-into-leaking-private-repos/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>GitLost 披露：研究者诱导 GitHub AI Agent 泄露私有仓库</h4>
+          <p>Noma Security 的案例把 Agent 权限边界问题推到台前：当 AI 代理能访问代码和工具时，提示注入、权限混淆和日志外泄会变成真实攻击面。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News / Noma Security</b> <span class="dotsep">·</span> 今日热议 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://mistral.ai/news/robostral-navigate/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Mistral 发布 Robostral Navigate 机器人导航模型</h4>
+          <p>Mistral 把模型能力推进到机器人导航场景，社区讨论集中在“模型是否能可靠理解环境与行动约束”。这条线代表 AI 从屏幕应用继续走向物理世界。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News / Mistral AI</b> <span class="dotsep">·</span> 今日热议 <span class="dotsep">·</span> <span class="tag">机器人</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://odra.dev/slopfix/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>“每周 1 万美元删除 AI 生成代码”引发质量争论</h4>
+          <p>Slopfix 的文章把 AI 代码债务问题讲得很刺眼：生成代码越容易，后续清理、验证和重构的成本就越不该被忽略。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News / Odra</b> <span class="dotsep">·</span> 今日热议 <span class="dotsep">·</span> <span class="tag">代码</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMimgFBVV95cUxPcGJhT0kxaFBBMGRuSEF6Q1RCMnVfMVZWTFFQQzJXcy1GV2plSVVScG5QSjFJU210Wm9la2pOaVROUy1nbDE2eklnRFlVWVhrU1VXVnNmaWEwV3VlRmwybDYxTVZIMzFYbTNZRjdwSjk1VzR3a3FoZHNsb1h2NUZLcElsQXgtUGJKS3BCOHotaGlMZzRJRFowaVV3?oc=5" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>美国两党法案拟研究 AI 对老年群体的影响</h4>
+          <p>围绕 AI 与老年人的联邦研究提案显示，政策讨论正在从“AI 是否危险”细化到具体人群、具体服务和可解释责任。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">KOLD / Google News</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">政策</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMirwFBVV95cUxNd1RjZVpISVJjbTRmOFdWNWZHOWZhMWtQTGZ4V2FUUlg5c04wd2NhaXl5dmlpVElFVWhWVEtYbWdSelF5ZUMwWEpnZHdQQ05WQnYwTnlsaVJEaEs1SnplQS01VDRsbnFaVEpaWGdZTTJzODJ5LTFTLTNxUmo4RVVLSW1CakhBNy1Cckl3Y1l1UG5iVjFHMS1OMEZLMG13VHRyN1FrYkRrXzBvcXg5OVFZ0gG0AUFVX3lxTE14QUdZdXo0YmcxSS1TX0VCUDJWY1M0Y3I0aDR1QXhINmpZekhUOG1mQzNoTThvSkZoSmE0ZXdiNnlmZjdYN0JVZ3BZTXF3dmRueUc4LVlfY29mNGlBZmJ1X2gwRGx2VzBia0o1UTRibG1zc2F6dU5YQWtjaWJnWk91YThDby1SODkwMmQzemtCaXdEWGNGMmMzWVlnMV9tZU5UOXRqNEN5cVp1eVNydzl1eXliZg?oc=5" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>多所高校继续推出 AI 学术项目与跨学科课程</h4>
+          <p>Fresno State、Syracuse 等高校的 AI 项目新闻显示，AI 教育正在从计算机系扩散到跨学科基础能力。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google News</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">教育</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
+    <div class="rows">
+      <a class="row" href="https://openai.com/index/introducing-gpt-live/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>GPT-Live 点燃实时 AI 产品讨论</h4>
+          <p>开发者讨论焦点不是单纯“模型更强”，而是实时响应、会话状态和产品交互如何重塑应用。</p>
+          <div class="quote">“实时能力让 AI 更像陪你工作的进程，而不是等待请求的函数。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 605 <span class="dotsep">·</span> 💬 415</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://noma.security/blog/gitlost-how-we-tricked-githubs-ai-agent-into-leaking-private-repos/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>GitLost 案例让 Agent 权限治理升温</h4>
+          <p>私有仓库泄露案例把 AI agent 的工具权限、访问审计和隔离策略推成今天最实用的安全话题。</p>
+          <div class="quote">“给 Agent 工具之前，先问它失败时能碰到什么。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 508 <span class="dotsep">·</span> 💬 192</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://odra.dev/slopfix/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AI 代码清理服务引发“生成债务”讨论</h4>
+          <p>高热讨论说明团队已经开始为 AI 生成代码的后验成本付费：删除、验证和重构可能成为新预算项。</p>
+          <div class="quote">“代码生成省下的是第一小时，不一定省下后面的一周。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 297 <span class="dotsep">·</span> 💬 231</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://github.com/rowboatlabs/rowboat" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Rowboat：本地优先 Claude Desktop 替代方案受关注</h4>
+          <p>本地优先工具继续吃到隐私、可控和低依赖红利，尤其适合不想把所有上下文都交给云端桌面应用的用户。</p>
+          <div class="quote">“本地优先不是怀旧，而是把上下文所有权拿回来。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Show HN</b> <span class="dotsep">·</span> ▲ 212 <span class="dotsep">·</span> 💬 91</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://microsoft.github.io/flint-chart/#/" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Microsoft Flint 把 AI Agent 可视化变成语言</h4>
+          <p>Flint 的讨论说明 Agent 工程需要的不只是更强执行器，也需要能解释、观察和沟通的可视化层。</p>
+          <div class="quote">“Agent 越复杂，越需要能被人看懂的中间表示。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Show HN</b> <span class="dotsep">·</span> ▲ 211 <span class="dotsep">·</span> 💬 78</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
+    <div class="cards">
+      <a class="card" href="https://openai.com/index/introducing-gpt-live/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">⚡</span>
+          <h4>GPT-Live</h4>
+        </div>
+        <p class="tagline">实时交互型 AI 能力</p>
+        <p>把模型产品从“请求-响应”推向低延迟持续交互，适合语音、协作和实时代理场景。</p>
+        <div><span class="tag">模型产品</span></div>
+      </a>
+      <a class="card" href="https://mistral.ai/news/robostral-navigate/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧭</span>
+          <h4>Robostral Navigate</h4>
+        </div>
+        <p class="tagline">面向机器人导航的模型</p>
+        <p>Mistral 把模型发布重点放到机器人导航，代表 AI 模型继续向具身智能和物理世界决策扩展。</p>
+        <div><span class="tag">机器人</span></div>
+      </a>
+      <a class="card" href="https://github.com/rowboatlabs/rowboat" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🖥️</span>
+          <h4>Rowboat</h4>
+        </div>
+        <p class="tagline">本地优先 Claude Desktop 替代方案</p>
+        <p>开源、本地优先路线，主打把桌面 AI 上下文和数据控制留在用户机器上。</p>
+        <div><span class="tag">本地优先</span></div>
+      </a>
+      <a class="card" href="https://microsoft.github.io/flint-chart/#/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">📊</span>
+          <h4>Flint</h4>
+        </div>
+        <p class="tagline">AI Agent 可视化语言</p>
+        <p>微软发布的可视化语言，用来描述和呈现 Agent 行为，让复杂流程更容易被人审阅。</p>
+        <div><span class="tag">可视化</span></div>
+      </a>
+      <a class="card" href="https://github.com/makerchecker/MakerChecker" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🛡️</span>
+          <h4>MakerChecker</h4>
+        </div>
+        <p class="tagline">扫描 AI Agent 危险能力</p>
+        <p>面向 Agent 安全评估的小工具，适合在授权、工具调用和执行能力扩大前做风险检查。</p>
+        <div><span class="tag">安全</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">addyosmani / <b>agent-skills</b></div>
+        <div class="desc">围绕 Agent 技能设计与复用的热门仓库，今日新增星数突出，说明技能化工作流仍是开发者关注点。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>Markdown</span> <span class="dotsep">·</span> <span class="tag">Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 74,276</div>
+        <div class="today">▲ 1,297 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/TencentCloud/TencentDB-Agent-Memory" target="_blank" rel="noopener">
+      <div>
+        <div class="name">TencentCloud / <b>TencentDB-Agent-Memory</b></div>
+        <div class="desc">腾讯云开源的 Agent Memory 项目，聚焦长期记忆与数据库能力结合，贴近企业 Agent 落地。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Memory</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 7,708</div>
+        <div class="today">▲ 318 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+      <div>
+        <div class="name">iOfficeAI / <b>OfficeCLI</b></div>
+        <div class="desc">面向办公文档自动化的 CLI 工具，今日上涨明显，反映 Agent 与 Office 工作流结合正在升温。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Office</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 12,017</div>
+        <div class="today">▲ 1,717 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/rowboatlabs/rowboat" target="_blank" rel="noopener">
+      <div>
+        <div class="name">rowboatlabs / <b>rowboat</b></div>
+        <div class="desc">本地优先 Claude Desktop 替代方案，在 Show HN 与 GitHub 同时获得关注。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Local-first</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 新上榜</div>
+        <div class="today">▲ Show HN 212 pts today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/wonderwhy-er/DesktopCommanderMCP" target="_blank" rel="noopener">
+      <div>
+        <div class="name">wonderwhy-er / <b>DesktopCommanderMCP</b></div>
+        <div class="desc">桌面控制型 MCP 工具，适合连接本地文件、命令和 Agent 桌面自动化场景。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">MCP</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 6,395</div>
+        <div class="today">▲ 28 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/tiliondev/fortress" target="_blank" rel="noopener">
+      <div>
+        <div class="name">tiliondev / <b>fortress</b></div>
+        <div class="desc">为 Agent 减少网页阻断的 stealth Chromium 工具，折射出浏览器自动化仍是 Agent 落地难点之一。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Browser</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ Show HN</div>
+        <div class="today">▲ 43 pts today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <a class="back" href="index.html">← 返回 · 浏览其他日报</a>
+      <span class="made">生成于 2026-07-09 10:31 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，社区热议来自 Hacker News / Reddit，
+      开源热门来自 GitHub Trending，产品与概念由上述信源综合提炼。摘要为机器辅助整理，链接指向原始信源；
+      如有出入请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
