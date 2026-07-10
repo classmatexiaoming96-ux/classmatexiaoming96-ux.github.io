@@ -29,10 +29,11 @@
     </div>
     <p class="mh-intro">今天的 AI 主线从模型能力继续转向产品化与工程治理：OpenAI 把实时语音推到 GPT-Live，Anthropic 复盘 Claude Code 的成长路径，Meta 试图用付费模型服务追赶，而社区正集中讨论远程 Agent 的可靠性、权限边界和人机协作成本。</p>
     <div class="stats">
-      <div class="stat"><div class="n">5</div><div class="l">今日要闻</div></div>
-      <div class="stat"><div class="n">4</div><div class="l">社区热议</div></div>
-      <div class="stat"><div class="n">4</div><div class="l">产品 / 概念</div></div>
-      <div class="stat"><div class="n">6</div><div class="l">开源热门</div></div>
+      <div class="stat stat-headlines"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">3</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">4</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
     </div>
   </header>
 
@@ -84,8 +85,41 @@
     </div>
   </section>
 
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.08768v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>UniClawBench：面向真实任务的主动式 Agent 通用基准</h4>
+          <p><b>为什么值得看：</b>它不再只用静态沙箱和单轮问答评估 Agent，而是在实时 Docker 环境中设计 400 个双语任务，并用执行者、隐藏监督者和用户 Agent 组成闭环评测，更接近真实世界的可靠性问题。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Zhekai Chen、Chengqi Duan、Kaiyue Sun 等</b> <span class="dotsep">·</span> 2026-07-09 <span class="dotsep">·</span> <span class="tag">cs.CL · Agent Evaluation</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.08763v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>OpenCoF：让视频生成模型通过“帧链”进行推理</h4>
+          <p><b>为什么值得看：</b>论文把 Chain-of-Thought 扩展成时间连续的 Chain-of-Frame，提供 OpenCoF-17K 数据集并研究视觉、文本推理 token 如何在扩散过程里组织中间状态，为“生成即推理”提供了可复现实验路径。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Xinyan Chen、Ziyu Guo、Renrui Zhang 等</b> <span class="dotsep">·</span> 2026-07-09 <span class="dotsep">·</span> <span class="tag">cs.CV · cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.08758v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Ideas Have Genomes：评测 AI 能否理解科研思想的继承与变异</h4>
+          <p><b>为什么值得看：</b>IG-Bench 把论文思想拆成有证据的 Idea Genome，并追踪继承、修复、重组与新增。14 个 LLM 科学家系统的最好谱系推理准确率仍只有 27.3%，暴露了当前 AI 科研助手的组合推理瓶颈。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yifan Zhou、Qihao Yang、Yan Li 等</b> <span class="dotsep">·</span> 2026-07-09 <span class="dotsep">·</span> <span class="tag">cs.AI · AI for Science</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
   <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
-    <div class="sec-head"><span class="sec-no">02</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
     <div class="rows">
       <a class="row" href="https://news.ycombinator.com/item?id=47148454" target="_blank" rel="noopener">
         <div class="idx">01</div>
@@ -131,49 +165,49 @@
   </section>
 
   <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
-    <div class="sec-head"><span class="sec-no">03</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
     <div class="cards">
-      <a class="card" href="https://openai.com/news/company-announcements/" target="_blank" rel="noopener">
+      <a class="card" href="https://microsoft.github.io/flint-chart/" target="_blank" rel="noopener">
         <div class="ct">
-          <span class="ico">🎙</span>
-          <h4>GPT-Live</h4>
+          <span class="ico">📊</span>
+          <h4>Flint</h4>
         </div>
-        <p class="tagline">把实时语音从演示变成可组合能力</p>
-        <p>低延迟、可打断和连续上下文让语音 Agent 更接近真实协作界面，开发者需要同步重做状态管理与安全确认。</p>
-        <div><span class="tag">实时交互</span></div>
+        <p class="tagline">Microsoft 为 AI Agent 设计的可视化语言</p>
+        <p>Flint 让 Agent 用声明式语言生成和修改图表，重点解决自然语言意图、可验证数据变换与可交互可视化之间的落差。</p>
+        <div><span class="tag">Agent Visualization</span></div>
       </a>
-      <a class="card" href="https://news.ycombinator.com/item?id=47148454" target="_blank" rel="noopener">
+      <a class="card" href="https://github.com/Rodiun/frugon" target="_blank" rel="noopener">
         <div class="ct">
-          <span class="ico">🧭</span>
-          <h4>Claude Code Remote Control</h4>
+          <span class="ico">💸</span>
+          <h4>Frugon</h4>
         </div>
-        <p class="tagline">远程触发编码任务，也暴露长任务可靠性问题</p>
-        <p>产品把编码会话延伸到移动端，但中断、恢复和可观测性成为用户最先遇到的工程门槛。</p>
-        <div><span class="tag">Coding Agent</span></div>
+        <p class="tagline">在本地判断哪些 LLM 调用可以换成便宜模型</p>
+        <p>它读取 JSONL 调用日志，按模型、token 和质量采样估算路由节省空间；数据与密钥保持在本机，适合优化多模型成本。</p>
+        <div><span class="tag">LLM Cost</span></div>
       </a>
-      <a class="card" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+      <a class="card" href="https://github.com/ronak-create/FableCut" target="_blank" rel="noopener">
         <div class="ct">
-          <span class="ico">🗂</span>
-          <h4>OfficeCLI</h4>
+          <span class="ico">🎬</span>
+          <h4>FableCut</h4>
         </div>
-        <p class="tagline">为 Agent 提供原生文档自动化接口</p>
-        <p>用单一命令行界面读写 Word、Excel 和 PowerPoint，代表办公软件正在被重新包装成 Agent 可调用的工具层。</p>
-        <div><span class="tag">开发工具</span></div>
+        <p class="tagline">让 Agent 通过 JSON 时间线、MCP 与 REST 驱动视频编辑</p>
+        <p>零依赖浏览器编辑器把剪辑动作暴露为机器可操作接口，同时保留实时预览，代表创作工具正在转向 Agent-native 控制面。</p>
+        <div><span class="tag">Creative Agent</span></div>
       </a>
-      <a class="card" href="https://github.com/vxcontrol/pentagi" target="_blank" rel="noopener">
+      <a class="card" href="https://kastra.ai/" target="_blank" rel="noopener">
         <div class="ct">
-          <span class="ico">🛡</span>
-          <h4>PentAGI</h4>
+          <span class="ico">🧱</span>
+          <h4>Kastra</h4>
         </div>
-        <p class="tagline">把渗透测试工作流交给自治 Agent</p>
-        <p>安全 Agent 的价值不只在自动发现问题，还在隔离执行、证据留存和人工审批边界是否清晰。</p>
-        <div><span class="tag">Agent 安全</span></div>
+        <p class="tagline">为 Claude Code、Cursor 与 Codex 增加执行策略门禁</p>
+        <p>它把命令、文件和网络访问策略放到 Agent 执行链路中，目标是在不完全关闭自治能力的前提下保留组织级治理边界。</p>
+        <div><span class="tag">Execution Governance</span></div>
       </a>
     </div>
   </section>
 
   <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
-    <div class="sec-head"><span class="sec-no">04</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
     <a class="repo" href="https://github.com/MadsLorentzen/ai-job-search" target="_blank" rel="noopener">
       <div>
         <div class="name">MadsLorentzen / <b>ai-job-search</b></div>
@@ -246,10 +280,10 @@
   <footer class="foot">
     <div class="foot-top">
       <a class="back" href="index.html">← 返回 · 浏览其他日报</a>
-      <span class="made">生成于 2026-07-10 10:30 · daily-digest skill</span>
+      <span class="made">更新于 2026-07-10 11:36 · daily-digest skill</span>
     </div>
     <p class="disclaimer">
-      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，社区热议来自 Hacker News / Reddit，
+      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，AI 论文来自 arXiv，社区热议来自 Hacker News / Reddit，
       开源热门来自 GitHub Trending，产品与概念由上述信源综合提炼。摘要为机器辅助整理，链接指向原始信源；
       如有出入请以原文为准。
     </p>
