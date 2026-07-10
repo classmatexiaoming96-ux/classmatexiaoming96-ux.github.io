@@ -4,8 +4,8 @@ window.DIGESTS = [
     "date": "2026-07-10",
     "weekday": "星期五",
     "edition": 51,
-    "title": "实时模型、Claude Code 与 Agent 治理同日升温",
-    "intro": "今天的 AI 主线从模型能力继续转向产品化与工程治理：OpenAI 把实时语音推到 GPT-Live，Anthropic 复盘 Claude Code 的成长路径，Meta 试图用付费模型服务追赶，而社区正集中讨论远程 Agent 的可靠性、权限边界和人机协作成本。"
+    "title": "GPT-5.6、Claude Code 与 Agent 治理同日升温",
+    "intro": "今天的 AI 主线从模型升级延伸到产品化与工程治理：OpenAI 推出 GPT-5.6，Anthropic 复盘 Claude Code 的成长路径，Meta 规划 Muse Spark 付费访问，而社区继续讨论远程 Agent 的可靠性、权限边界和人机协作成本。"
   },
   {
     "date": "2026-07-09",
