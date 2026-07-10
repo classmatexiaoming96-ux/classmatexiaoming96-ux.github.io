@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-10</title>
+<meta name="description" content="今天的 AI 主线从模型能力继续转向产品化与工程治理：OpenAI 把实时语音推到 GPT-Live，Anthropic 复盘 Claude Code 的成长路径，Meta 试图用付费模型服务追赶，而社区正集中讨论远程 Agent 的可靠性、权限边界和人机协作成本。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-10</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 51 期</span>
+    </div>
+    <p class="mh-intro">今天的 AI 主线从模型能力继续转向产品化与工程治理：OpenAI 把实时语音推到 GPT-Live，Anthropic 复盘 Claude Code 的成长路径，Meta 试图用付费模型服务追赶，而社区正集中讨论远程 Agent 的可靠性、权限边界和人机协作成本。</p>
+    <div class="stats">
+      <div class="stat"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">社区热议</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News</span></div>
+    <a class="lead" href="https://openai.com/news/company-announcements/" target="_blank" rel="noopener">
+      <span class="tag">产品</span>
+      <h3>OpenAI 发布 GPT-Live，实时语音交互成为新产品主轴</h3>
+      <p>OpenAI 将低延迟语音交互作为独立产品能力推出，实时、多模态和可打断式体验继续从演示走向开发者可用的基础设施。</p>
+      <div class="src">◷ <b>OpenAI</b> <span class="dotsep">·</span> 2 天前</div>
+    </a>
+    <div class="rows">
+      <a class="row" href="https://www.anthropic.com/news" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Anthropic 复盘 Claude Code：从内部 CLI 到主力编码 Agent</h4>
+          <p>官方长文回顾 Claude Code 的工程演进，重点不只是模型能力，而是工具调用、长任务执行和开发者工作流如何共同塑造产品。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Anthropic</b> <span class="dotsep">·</span> 4 天前 <span class="dotsep">·</span> <span class="tag">工程</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.axios.com/newsletters/axios-closer-41148026-0f2b-4191-b48f-84cd7859c9d0" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Meta 为 Muse Spark 规划付费访问，模型竞争进入商业化深水区</h4>
+          <p>Meta 正尝试通过面向开发者的付费模型访问补齐商业化路径，竞争焦点从发布参数转向稳定供给、渠道和单位经济性。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Axios</b> <span class="dotsep">·</span> 今天 <span class="dotsep">·</span> <span class="tag">商业</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.axios.com/2026/07/07/report-ai-safety-pledges" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AI 安全指数称主要实验室弱化部分自愿承诺</h4>
+          <p>Future of Life Institute 的最新评估认为，模型能力继续提升的同时，多家实验室对暂停阈值和风险治理的承诺出现后退，凸显自愿治理的脆弱性。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Axios</b> <span class="dotsep">·</span> 3 天前 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.un.org/independent-international-scientific-panel-ai/sites/default/files/2026-07/en_Preliminary%20Report_.pdf" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>联合国发布 AI 科学小组初步报告，强调收益分配与治理缺口</h4>
+          <p>报告把算力集中、能力扩散与社会收益分配放在同一框架下，提醒政策讨论不能只追逐模型排名，还要处理基础设施和制度的不对称。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">United Nations</b> <span class="dotsep">·</span> 本周 <span class="dotsep">·</span> <span class="tag">治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
+    <div class="rows">
+      <a class="row" href="https://news.ycombinator.com/item?id=47148454" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Claude Code Remote Control 首日反馈：远程控制不等于可靠自治</h4>
+          <p>讨论集中在中断失效、会话重连、计划模式卡住和可观测性不足。远程入口扩大了使用场景，也放大了长任务状态机的工程缺口。</p>
+          <div class="quote">“能在手机上发起任务很吸引人，但生产环境真正需要的是可中断、可恢复、可审计。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 536 <span class="dotsep">·</span> 💬 315</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.ycombinator.com/item?id=47289440" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>如何给高强度编码 Agent 使用设定边界</h4>
+          <p>开发者开始讨论长时间沉浸式使用的注意力成本。社区共识是把探索期与交付期分开，并为 Agent 设置明确的停止条件和复盘窗口。</p>
+          <div class="quote">“新鲜感能帮助建立工具心智模型，但持续无边界使用会把探索变成消耗。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 35 <span class="dotsep">·</span> 💬 29</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.ycombinator.com/item?id=47750069" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Codex 与 Claude Code 的选择，正在从榜单转向工作流匹配</h4>
+          <p>近期讨论更关注长任务稳定性、成本、UI 与现有工具链兼容性，而不是争论单一模型的绝对胜负。</p>
+          <div class="quote">“代码质量差距缩小时，任务管理、审查习惯和使用额度会决定真实生产力。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 12 <span class="dotsep">·</span> 💬 17</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.reddit.com/r/LocalLLaMA/comments/1uaebfe/best_local_agents_jun_2026/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>本地 Agent 讨论回归基础：可靠工具选择比多 Agent 编排更重要</h4>
+          <p>LocalLLaMA 社区的经验帖强调，真正的 Agent 核心仍是稳定判断何时调用工具、怎样验证结果，而不是堆叠更多角色和提示词。</p>
+          <div class="quote">“先让一个 Agent 稳定调用一个工具，再谈复杂编排。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Reddit · LocalLLaMA</b> <span class="dotsep">·</span> ▲ 1 <span class="dotsep">·</span> 💬 </div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
+    <div class="cards">
+      <a class="card" href="https://openai.com/news/company-announcements/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎙</span>
+          <h4>GPT-Live</h4>
+        </div>
+        <p class="tagline">把实时语音从演示变成可组合能力</p>
+        <p>低延迟、可打断和连续上下文让语音 Agent 更接近真实协作界面，开发者需要同步重做状态管理与安全确认。</p>
+        <div><span class="tag">实时交互</span></div>
+      </a>
+      <a class="card" href="https://news.ycombinator.com/item?id=47148454" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧭</span>
+          <h4>Claude Code Remote Control</h4>
+        </div>
+        <p class="tagline">远程触发编码任务，也暴露长任务可靠性问题</p>
+        <p>产品把编码会话延伸到移动端，但中断、恢复和可观测性成为用户最先遇到的工程门槛。</p>
+        <div><span class="tag">Coding Agent</span></div>
+      </a>
+      <a class="card" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🗂</span>
+          <h4>OfficeCLI</h4>
+        </div>
+        <p class="tagline">为 Agent 提供原生文档自动化接口</p>
+        <p>用单一命令行界面读写 Word、Excel 和 PowerPoint，代表办公软件正在被重新包装成 Agent 可调用的工具层。</p>
+        <div><span class="tag">开发工具</span></div>
+      </a>
+      <a class="card" href="https://github.com/vxcontrol/pentagi" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🛡</span>
+          <h4>PentAGI</h4>
+        </div>
+        <p class="tagline">把渗透测试工作流交给自治 Agent</p>
+        <p>安全 Agent 的价值不只在自动发现问题，还在隔离执行、证据留存和人工审批边界是否清晰。</p>
+        <div><span class="tag">Agent 安全</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" href="https://github.com/MadsLorentzen/ai-job-search" target="_blank" rel="noopener">
+      <div>
+        <div class="name">MadsLorentzen / <b>ai-job-search</b></div>
+        <div class="desc">基于 Claude Code 的求职自动化框架，可评估岗位、定制简历与准备面试。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 18,709</div>
+        <div class="today">▲ 3,728 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/addyosmani/agent-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">addyosmani / <b>agent-skills</b></div>
+        <div class="desc">面向 AI 编码 Agent 的生产级工程技能集合。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span> <span class="dotsep">·</span> <span class="tag">Skills</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 75,781</div>
+        <div class="today">▲ 2,582 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/iOfficeAI/OfficeCLI" target="_blank" rel="noopener">
+      <div>
+        <div class="name">iOfficeAI / <b>OfficeCLI</b></div>
+        <div class="desc">让 Agent 通过单一二进制读写和自动化 Office 文档。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>C#</span> <span class="dotsep">·</span> <span class="tag">Automation</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 13,330</div>
+        <div class="today">▲ 1,923 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/vxcontrol/pentagi" target="_blank" rel="noopener">
+      <div>
+        <div class="name">vxcontrol / <b>pentagi</b></div>
+        <div class="desc">面向复杂渗透测试任务的全自治 AI Agent 系统。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Security</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 19,326</div>
+        <div class="today">▲ 543 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/bradautomates/claude-video" target="_blank" rel="noopener">
+      <div>
+        <div class="name">bradautomates / <b>claude-video</b></div>
+        <div class="desc">为 Claude 提供视频下载、抽帧、转录与理解的一体化工作流。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Multimodal</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 6,638</div>
+        <div class="today">▲ 727 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/kyutai-labs/pocket-tts" target="_blank" rel="noopener">
+      <div>
+        <div class="name">kyutai-labs / <b>pocket-tts</b></div>
+        <div class="desc">可在 CPU 上运行的轻量级文本转语音模型。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Voice</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 6,940</div>
+        <div class="today">▲ 273 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <a class="back" href="index.html">← 返回 · 浏览其他日报</a>
+      <span class="made">生成于 2026-07-10 10:30 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，社区热议来自 Hacker News / Reddit，
+      开源热门来自 GitHub Trending，产品与概念由上述信源综合提炼。摘要为机器辅助整理，链接指向原始信源；
+      如有出入请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
