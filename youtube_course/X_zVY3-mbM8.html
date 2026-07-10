@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 2026 完整入门：从工作目录、子智能体到自动化部署</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a4adc0;
+      --text-muted: #6f7890;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --accent-orange: #f6ad55;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --card-hover: rgba(255,255,255,0.075);
+      --code-bg: #11111a;
+    }
+    body {
+      background:
+        radial-gradient(circle at 12% 0%, rgba(99,179,237,0.18), transparent 28%),
+        radial-gradient(circle at 88% 8%, rgba(159,122,234,0.16), transparent 30%),
+        linear-gradient(135deg, #111122 0%, var(--bg-primary) 48%, #08080d 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at center, black, transparent 78%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page { width: min(980px, calc(100% - 32px)); margin: 0 auto; padding: 36px 0 80px; position: relative; z-index: 1; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--accent); text-decoration: none; font-weight: 600;
+      border: 1px solid rgba(99,179,237,0.28);
+      background: rgba(99,179,237,0.06);
+      padding: 9px 14px; border-radius: 6px;
+      transition: background .2s, color .2s, transform .2s;
+      margin-bottom: 22px;
+    }
+    .back-link:hover { background: var(--accent); color: var(--bg-primary); transform: translateX(-2px); }
+    button, .btn {
+      background: transparent; border: 1px solid var(--accent); color: var(--accent);
+      padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer;
+      transition: background 0.2s, color 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px; font-weight: 600;
+    }
+    button:hover, .btn:hover { background: var(--accent); color: var(--bg-primary); }
+    .hero {
+      background: linear-gradient(145deg, rgba(22,22,31,0.96), rgba(17,17,26,0.9));
+      border: 1px solid var(--card-border); border-radius: 12px; padding: 2rem;
+      backdrop-filter: blur(12px); margin-bottom: 2rem; box-shadow: 0 24px 80px rgba(0,0,0,0.36);
+    }
+    .eyebrow { color: var(--accent); font-family: "JetBrains Mono", monospace; font-size: 0.78rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 14px; }
+    h1 { font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.06; letter-spacing: -0.04em; margin-bottom: 16px; }
+    .subtitle { color: var(--text-secondary); font-size: 1.08rem; max-width: 800px; margin-bottom: 20px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; }
+    .meta span { font-family: "JetBrains Mono", monospace; font-size: .78rem; color: var(--text-secondary); border: 1px solid var(--card-border); background: rgba(255,255,255,0.04); padding: 6px 10px; border-radius: 6px; }
+    .video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; border: 1px solid var(--card-border); background: #000; margin: 26px 0 0; }
+    .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .content-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; backdrop-filter: blur(12px); }
+    .content-card:hover { background: var(--card-hover); border-color: rgba(99,179,237,0.22); }
+    .section { padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+    h2 { font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.25; margin-bottom: 16px; letter-spacing: -0.025em; }
+    h3 { font-size: 1.05rem; margin: 22px 0 10px; color: #f7fafc; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    code { font-family: "JetBrains Mono", monospace; background: rgba(255,255,255,0.06); color: #bde3ff; border: 1px solid rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; }
+    pre { background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px; overflow: auto; margin: 16px 0; color: #c9e8ff; font-family: "JetBrains Mono", monospace; font-size: .88rem; white-space: pre-wrap; }
+    blockquote { margin: 20px 0; padding: 16px 18px; border-left: 3px solid var(--accent-purple); background: rgba(159,122,234,0.08); border-radius: 0 10px 10px 0; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: .93rem; overflow: hidden; border-radius: 10px; }
+    th, td { border: 1px solid var(--card-border); padding: 12px 13px; text-align: left; vertical-align: top; }
+    th { background: rgba(99,179,237,0.12); color: var(--text-primary); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+    ul, ol { color: var(--text-secondary); padding-left: 22px; margin: 8px 0 16px; }
+    li { margin: 7px 0; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+    .mini-card { border: 1px solid var(--card-border); background: rgba(255,255,255,0.035); border-radius: 10px; padding: 16px; }
+    .mini-card .num { font-family: "JetBrains Mono", monospace; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+    .mini-card .title { font-weight: 700; margin-bottom: 6px; }
+    .timeline { display: grid; gap: 10px; margin-top: 16px; }
+    .time-row { display: grid; grid-template-columns: 92px 1fr; gap: 14px; align-items: baseline; padding: 12px 14px; border: 1px solid var(--card-border); border-radius: 10px; background: rgba(255,255,255,0.035); }
+    .time-row .t { font-family: "JetBrains Mono", monospace; color: var(--accent-green); font-size: .86rem; }
+    .recommendations { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .pill { color: var(--accent); border: 1px solid rgba(99,179,237,0.28); border-radius: 999px; padding: 8px 12px; text-decoration: none; background: rgba(99,179,237,0.06); font-size: .92rem; }
+    .pill:hover { background: rgba(99,179,237,0.14); }
+    .note { border: 1px solid rgba(246,173,85,0.22); background: rgba(246,173,85,0.08); border-radius: 10px; padding: 14px 16px; color: #f8d9b0; }
+    @media (max-width: 780px) {
+      .page { width: min(100% - 22px, 980px); padding-top: 22px; }
+      .hero { padding: 1.25rem; }
+      .content-card { padding: 1.1rem; }
+      .grid { grid-template-columns: 1fr; }
+      .time-row { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: .84rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">Claude Code · Beginner to Automation · 2026</div>
+      <h1>Claude Code 2026 完整入门：从工作目录、子智能体到自动化部署</h1>
+      <p class="subtitle">英文原题：FULL Claude Code Tutorial For Beginners in 2026! (Become a PRO)。这是一条面向零代码背景用户的一小时全流程课程：安装与目录组织只是起点，真正的主线是如何用上下文文件、计划模式、子智能体、连接器、权限和定时例程，把一次聊天变成可复用的工作系统。</p>
+      <div class="meta">
+        <span>频道：AI Foundations</span>
+        <span>时长：1:00:54</span>
+        <span>Views：40,473</span>
+        <span>发布日期：2026-06-30</span>
+        <span>Video ID：X_zVY3-mbM8</span>
+      </div>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/X_zVY3-mbM8" title="FULL Claude Code Tutorial For Beginners in 2026! (Become a PRO)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </header>
+
+    <section class="content-card section">
+      <h2>一、问题引入：为什么“会提问”还不等于“会用 Claude Code”？</h2>
+      <p>很多人第一次打开 Claude Code，会把它当成一个更能写代码的聊天框：输入一句需求，等待答案，然后复制结果。视频试图纠正的正是这个使用习惯。Claude Code 的价值不只来自模型本身，而来自它能在一个明确的工作目录里读取文件、建立上下文、并行分派任务、调用外部工具，并把结果真正写回项目。只要工作边界清晰，它就不再是“告诉你怎么做”，而是“在你的工作区里把事情做完”。</p>
+      <p>课程从安装 Git、选择工作目录讲起，看起来基础，却是在为后面的自动化奠定边界：Agent 能看到什么文件、能修改什么内容、哪些规则会被长期记住，都取决于目录结构和上下文文件。没有这层基础，连接再多工具、创建再多例程，也只是把不确定性放大。</p>
+      <blockquote>
+        <p>这条课程最重要的转变可以概括为：不要只给 Claude 一个问题，要给它一个有边界的工作环境、足够的上下文和可验证的结果定义。</p>
+      </blockquote>
+      <div class="grid">
+        <div class="mini-card"><div class="num">01</div><div class="title">工作区</div><p>让文件、项目、规则与产出有固定落点，避免每次会话都从零解释。</p></div>
+        <div class="mini-card"><div class="num">02</div><div class="title">执行层</div><p>用计划、斜杠命令和子智能体拆任务，让复杂工作可以并行又可检查。</p></div>
+        <div class="mini-card"><div class="num">03</div><div class="title">自动化层</div><p>用连接器、权限与例程，把一次成功的流程变成周期性、可通知的系统。</p></div>
+      </div>
+    </section>
+
+    <section class="content-card section">
+      <h2>二、核心概念：先理解 Claude Code 的五层工作模型</h2>
+      <h3>1. 工作目录不是文件夹选择器，而是权限和上下文的边界</h3>
+      <p>视频先让用户创建专门的工作文件夹，再把 Claude Code 指向它。这个动作决定了 Agent 默认围绕哪组资料工作。比较稳妥的做法是按业务或项目划分目录：运营自动化、个人网站、客户交付各自独立。这样既减少无关上下文，也能防止一个任务意外碰到另一套文件。</p>
+      <h3>2. Markdown 文件是低成本的长期说明书</h3>
+      <p>课程把 Markdown 当作“让 Claude 理解你”的基础介质。项目目标、品牌语气、常用流程、输出模板与约束都可以写成结构化说明。重点不是文件后缀，而是把长期不变的信息从临时对话中抽离。每次任务只需要补充本次变量，Agent 就能在一致的规则下继续工作。</p>
+      <h3>3. Outcome Prompting：描述终点，不要过早替 Agent 规定每一步</h3>
+      <p>视频倡导用结果导向的提示：说明最终交付物、判断成功的标准、可用资料和禁止事项。对于不熟悉技术栈的用户，这比编造一串实现步骤更可靠。Agent 可以先检查目录、提出计划，再根据真实项目选择实现方式；用户则把精力放在业务判断和验收上。</p>
+      <h3>4. 计划模式把“写代码”延迟到“理解问题”之后</h3>
+      <p>当任务涉及网站、自动化或多文件修改时，先进入计划模式，让 Claude 盘点现状、提出结构、列出依赖和风险。视频后半段部署网站时再次使用这一模式：先确定页面目标、视觉系统和托管方式，再允许执行。它不是形式主义，而是用较低成本提前发现方向错误。</p>
+      <h3>5. 子智能体是并行工作单元，不是越多越好</h3>
+      <p>课程用四个元素研究演示子智能体：主 Agent 把独立主题分给不同执行单元，最后汇总成多个 Markdown 文档。适合并行的任务必须彼此低耦合，例如竞品调研、资料分类、多个独立页面；如果多个 Agent 同时修改同一份文件，合并成本可能高于并行收益。</p>
+      <p class="note">实操原则：目录先隔离、规则写进文件、复杂任务先计划、只有真正独立的子任务才并行。这个顺序比“先把所有权限都打开”安全得多。</p>
+    </section>
+
+    <section class="content-card section">
+      <h2>三、关键实操：从一次提示词搭出可复用工作系统</h2>
+      <h3>步骤一：创建清晰的目录层级</h3>
+      <p>课程建议把资料按职责分层，例如公司概况、客户、内容、项目和自动化输出。目录名应让人和 Agent 都能快速理解，避免把所有文件扔在根目录。真正执行前，可以先让 Claude 扫描现有文件，只输出重组建议；确认后再移动，减少误改。</p>
+      <pre>workspace/
+├── context/          # 品牌、业务、术语与长期规则
+├── projects/         # 每个项目独立目录
+├── operations/       # SOP、例行流程与模板
+├── research/         # 调研原料和中间结果
+└── outputs/          # 最终可交付成果</pre>
+      <h3>步骤二：把模糊想法改写为可验收的任务</h3>
+      <p>一个有效任务至少包含四项：目标、输入、边界和完成标准。例如“帮我做网站”太宽；“基于 context/brand.md 为个人咨询业务做一个单页网站，保留现有文案事实，移动端可读，先给计划，完成后本地预览并列出改动文件”就更容易获得稳定结果。</p>
+      <pre>目标：生成一个可部署的个人站首页。
+输入：context/brand.md、assets/ 中已有图片。
+边界：只修改 projects/site/；不发布、不购买服务。
+完成标准：移动端布局正常、本地构建通过、给出预览与文件清单。</pre>
+      <h3>步骤三：用斜杠命令切换工作阶段</h3>
+      <p>视频介绍了命令菜单和计划模式。对初学者而言，不必背下所有命令，只要建立阶段意识：先了解和计划，再执行，最后检查上下文与改动。如果发现方向不对，应尽早中止或回到计划，而不是让 Agent 在错误目标上继续消耗时间。</p>
+      <h3>步骤四：只把独立任务交给子智能体</h3>
+      <p>竞品研究是典型并行案例：为每个竞品分配一个子任务，要求使用同一套字段采集资料，最后由主 Agent 比较。输出结构统一非常关键，否则汇总时会得到四份无法横向比较的报告。对网站开发，可以把“文案审校”“无障碍检查”“部署说明”并行，但核心页面文件最好保持单一写入者。</p>
+      <h3>步骤五：先生成可检查的 Artifact，再决定下一步动作</h3>
+      <p>课程展示了文档、表格和视觉结果等产物。把中间结论写成文件的意义是可审阅、可版本化、可复用。与其让 Agent 在对话里说“研究完成”，不如要求生成带来源的 Markdown 报告；与其直接发送邮件，不如先生成草稿，人工确认后再调用写入工具。</p>
+      <blockquote>
+        <p>自动化最稳健的路线不是一步到位，而是把“生成草稿—人工验收—执行外部动作”逐渐固化；只有稳定、可逆的部分才继续放宽权限。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card section">
+      <h2>四、连接器、权限与自动化：能力越强，边界越要明确</h2>
+      <h3>连接器让 Claude 从文件系统走向真实业务工具</h3>
+      <p>视频演示连接日历等外部服务，并区分读取和写入动作。连接器的价值在于减少复制粘贴：Agent 可以读取日程、资料库或代码平台，再把结果写入指定位置。但“已连接”不等于“应该让它做任何事”。先列出可接受的动作，再按最小权限授权，是更可靠的落地顺序。</p>
+      <h3>读权限与写权限要分开设计</h3>
+      <p>读操作通常用于收集信息，风险相对可控；写操作可能创建日历事件、修改文档、发送消息或部署网站，影响外部系统。对写操作，课程虽然强调便利性，实际使用仍应增加确认点：收件人、时间、金额、公开范围和删除动作都应在执行前展示摘要。</p>
+      <h3>例程适合稳定重复的流程，不适合模糊决策</h3>
+      <p>视频把 Claude Routines 用于定时运行与通知。合适的例程包括每天整理固定信源、每周汇总项目状态、定时检查待办；不合适的例程是“替我处理所有重要邮件”这类边界不清的目标。一个例程应有明确触发时间、固定数据源、结构化输出、失败处理和通知方式。</p>
+      <h3>通知不是自动化的附属品，而是可观察性</h3>
+      <p>后台任务最容易出现“看似运行、实际卡住”。把成功摘要、失败原因和产物链接发送到固定位置，才能知道例程有没有完成。对于会产生外部影响的自动化，还应记录执行时间、输入范围和动作结果，让后续可以追踪。</p>
+      <table>
+        <thead><tr><th>能力</th><th>适用场景</th><th>主要优点</th><th>风险</th><th>建议</th></tr></thead>
+        <tbody>
+          <tr><td>工作目录 + Markdown 上下文</td><td>长期项目、品牌规则、客户交付</td><td>可读、可版本化、容易审查</td><td>过期信息持续影响结果</td><td>标注更新时间，定期清理冲突规则</td></tr>
+          <tr><td>计划模式</td><td>多文件改动、网站、架构调整</td><td>先对齐方向，降低返工</td><td>计划过细会拖慢小任务</td><td>高风险任务必用，小修复可简化</td></tr>
+          <tr><td>子智能体</td><td>竞品调研、独立模块检查</td><td>并行加速、隔离上下文</td><td>重复工作、写入冲突</td><td>统一输出格式，避免多人写同一文件</td></tr>
+          <tr><td>只读连接器</td><td>日历汇总、知识库检索、状态收集</td><td>减少手动搬运信息</td><td>可能读取过宽范围</td><td>最小授权，敏感数据先过滤</td></tr>
+          <tr><td>写入连接器</td><td>创建草稿、更新任务、受控发布</td><td>闭环执行，真正节省时间</td><td>误发、误改或公开错误</td><td>保留确认点与撤销方案</td></tr>
+          <tr><td>定时例程</td><td>日报、周报、固定监控</td><td>稳定重复、无需人工触发</td><td>静默失败、数据源变化</td><td>必须有日志、失败通知和幂等设计</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card section">
+      <h2>五、从原型到上线：网站部署案例里的工程启示</h2>
+      <p>课程后半段用个人网站演示从计划、设计系统、页面审阅、重新调整风格到 Netlify 部署。表面上这是一个建站教程，真正可迁移的经验是：把构建和部署拆开。先在独立项目目录完成页面，确认内容与样式，再连接托管平台。这样即使设计需要推倒重来，也不会污染自动化运营目录或提前发布半成品。</p>
+      <h3>先声明设计系统，减少“看起来像 AI 生成”的随机感</h3>
+      <p>视频在计划阶段讨论颜色、字体、版式和参考风格。对 Agent 来说，“高级一点”“更酷”不是可执行约束；明确背景色、强调色、圆角、间距、字体和组件规则，才能让多个页面保持一致。设计系统本质上也是上下文文件，应和业务规则一样可复用。</p>
+      <h3>审阅计划时优先检查结构，而不是微调像素</h3>
+      <p>页面生成前先确认信息架构：谁是目标用户、首屏传达什么、行动按钮是什么、哪些证据支持信任。结构正确后再调整色彩和动效。否则一个视觉漂亮但叙事错误的页面仍然无法解决业务问题。</p>
+      <h3>部署前要加入最小质量门禁</h3>
+      <p>课程强调部署可以很简单，但真实项目仍应检查构建成功、链接可访问、移动端布局、敏感信息和域名配置。让 Agent 输出改动列表并运行验证，比直接说“帮我上线”更安全。托管平台的写权限也应只作用于指定项目。</p>
+      <h3>上线不是结束，而是反馈循环的开始</h3>
+      <p>部署后的页面需要真实设备检查、内容更新和访问反馈。可以把后续迭代也结构化：收集问题、按影响排序、先计划、局部修改、再验证。这样的循环才是 Agentic Engineering，而不是一次性 Vibe Coding。</p>
+    </section>
+
+    <section class="content-card section">
+      <h2>六、把课程压缩成一套可执行的 7 天练习</h2>
+      <ol>
+        <li><strong>第 1 天：</strong>建立一个只包含非敏感资料的练习目录，让 Claude 读取并说明文件结构，不做写入。</li>
+        <li><strong>第 2 天：</strong>写一份项目上下文 Markdown，包含目标、术语、语气、禁止事项和完成标准。</li>
+        <li><strong>第 3 天：</strong>选一个多步骤任务，只让 Claude 输出计划；人工挑出缺失依赖和风险。</li>
+        <li><strong>第 4 天：</strong>执行一个小型产出任务，要求完成后自检并给出变更文件清单。</li>
+        <li><strong>第 5 天：</strong>把三个独立调研主题分给子智能体，统一结果字段，再由主 Agent 汇总。</li>
+        <li><strong>第 6 天：</strong>连接一个只读工具，完成一次信息汇总；记录它实际读取了什么。</li>
+        <li><strong>第 7 天：</strong>把已稳定的流程做成例程，只生成草稿和通知，不自动执行高风险写入。</li>
+      </ol>
+      <p>这套练习刻意把权限提升放在最后。先证明文件工作流稳定，再连接外部工具；先证明单次任务可验收，再设置定时执行。这样能区分“模型偶尔做对”和“系统可以长期运行”。</p>
+      <blockquote>
+        <p>真正的熟练不是让 Claude 一次做更多，而是让每一步都有清晰输入、可见输出、有限权限和失败后的恢复路径。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card section">
+      <h2>七、时间戳目录：按需要跳转观看</h2>
+      <div class="timeline">
+        <div class="time-row"><span class="t">00:00</span><span>课程概览：从基础使用走向自动化与部署。</span></div>
+        <div class="time-row"><span class="t">00:52</span><span>订阅方案与下载，说明 Claude Code 和普通聊天功能的差异。</span></div>
+        <div class="time-row"><span class="t">03:00</span><span>安装 Git，为后续项目和部署准备版本管理基础。</span></div>
+        <div class="time-row"><span class="t">05:16</span><span>选择工作目录，建立 Agent 的文件与上下文边界。</span></div>
+        <div class="time-row"><span class="t">06:50</span><span>提示词基础与结果导向提示。</span></div>
+        <div class="time-row"><span class="t">09:46</span><span>让 Claude 定位具体文件，理解 Markdown 上下文。</span></div>
+        <div class="time-row"><span class="t">12:42</span><span>斜杠命令与工作阶段切换。</span></div>
+        <div class="time-row"><span class="t">15:57</span><span>子智能体并行研究与结果回收。</span></div>
+        <div class="time-row"><span class="t">18:53</span><span>创建可审阅的 Artifact，而不是只保留聊天答案。</span></div>
+        <div class="time-row"><span class="t">21:30</span><span>整理目录与构建 Claude Code 工作系统。</span></div>
+        <div class="time-row"><span class="t">23:40</span><span>Claude Code Operating System：用上下文和模板承载长期业务。</span></div>
+        <div class="time-row"><span class="t">30:34</span><span>连接外部工具，理解认证和可用动作。</span></div>
+        <div class="time-row"><span class="t">33:15</span><span>区分读取与写入权限，控制 Agent 的行动边界。</span></div>
+        <div class="time-row"><span class="t">34:45</span><span>调用工具完成真实任务，并观察执行结果。</span></div>
+        <div class="time-row"><span class="t">39:28</span><span>创建 Claude Routines，设置周期任务与通知。</span></div>
+        <div class="time-row"><span class="t">45:15</span><span>掌握自动化的方法：从稳定小流程开始迭代。</span></div>
+        <div class="time-row"><span class="t">46:46</span><span>网站项目、计划模式与独立工作目录。</span></div>
+        <div class="time-row"><span class="t">51:00</span><span>声明设计系统，审阅和调整网站方案。</span></div>
+        <div class="time-row"><span class="t">55:35</span><span>连接 Netlify 并部署网站。</span></div>
+        <div class="time-row"><span class="t">58:42</span><span>下一步学习路径与持续迭代建议。</span></div>
+      </div>
+    </section>
+
+    <section class="content-card section">
+      <h2>八、相关推荐</h2>
+      <p>如果你想继续补齐官方工程实践、MCP 工具连接与生产级 Vibe Coding，可以从下面几条课程继续。</p>
+      <div class="recommendations">
+        <a class="pill" href="index.html">查看全部课程</a>
+        <a class="pill" href="gv0WHhKelSE.html">Claude Code 最佳实践</a>
+        <a class="pill" href="HNzH5Us1Rvg.html">MCP 201 进阶</a>
+        <a class="pill" href="fHWFF_pnqDk.html">Vibe Coding in Production</a>
+        <a class="pill" href="B44bXmzU60s.html">MCP 虚拟文件系统</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
