@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>渲染与导出链路 · 深度解析 · FableCut</title>
+<meta name="description" content="FableCut Canvas 合成、像素处理、SVG/AI mask、音频混音与 ffmpeg 快导出的源码级拆解。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..900&family=Hanken+Grotesk:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+/* LAYOUT SHELL START — Do NOT edit; copy as-is */
+/* ============================================================
+   GitHub Trending · Source-level Observatory
+   Layout Shell · v1.0
+   Based on openclaw.html / kimi-code.html
+   ============================================================ */
+
+:root {
+  /* surfaces — 暗色玻璃面板（统一锚点） */
+  --ink:        #07080c;
+  --ink-1:      #0a0b12;
+  --ink-2:      #10121c;
+  --ink-3:      #161a28;
+  --panel:      rgba(20, 22, 34, 0.62);
+  --panel-2:    rgba(13, 15, 24, 0.85);
+
+  /* project accent — 新项目只许改这 3 个值，其他颜色都用 --signal/--phosphor 等通用变量 */
+  --star:       #e8825a;   /* 项目专属主色（hex by project） */
+  --star-soft:  #f0a585;
+  --star-deep:  #c0653f;
+
+  /* 通用语义色 — 不许改 */
+  --signal:     #54d6e0;   /* cyan — data / signal */
+  --signal-soft:#8eebf2;
+  --phosphor:   #7fcf9e;   /* green — live / running */
+  --rose:       #f08a8a;   /* error / isError */
+  --violet:     #b3a4f0;
+
+  /* text scale */
+  --text:       #ece7da;
+  --text-2:     #b9bdca;
+  --text-dim:   #79809a;
+  --text-faint: #4a5172;
+
+  /* lines & glow */
+  --line:       rgba(255,255,255,0.085);
+  --line-2:     rgba(255,255,255,0.05);
+  --line-amber: rgba(232,130,90,0.34);
+  --line-cyan:  rgba(84,214,224,0.30);
+  --glow-amber: rgba(232,130,90,0.24);
+  --glow-cyan:  rgba(84,214,224,0.18);
+
+  /* fonts */
+  --serif: "Fraunces", Georgia, serif;
+  --sans:  "Hanken Grotesk", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, monospace;
+
+  /* layout tokens */
+  --maxw: 1500px;
+  --nav-w: 270px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 145px; }
+body { background: var(--ink); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* ── background layers ──────────────────────────────────────── */
+.bg-stars, .bg-glow, .bg-grid, .bg-grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+}
+.bg-stars { opacity: .55; }
+.bg-glow  { background: radial-gradient(ellipse at 20% 0%, var(--glow-amber), transparent 60%); }
+.bg-grid  {
+  background-image:
+    linear-gradient(var(--line-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  opacity: .35;
+}
+.bg-grain { opacity: .35; mix-blend-mode: overlay; }
+
+/* ── shell ─────────────────────────────────────────────────── */
+.shell {
+  display: grid;
+  grid-template-columns: var(--nav-w) 1fr;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/* ── side nav (sticky + scroll-spy) ────────────────────────── */
+.nav {
+  position: sticky; top: 0; align-self: start; height: 100vh;
+  padding: 30px 22px 30px 30px;
+  display: flex; flex-direction: column; gap: 22px;
+  border-right: 1px solid var(--line-2);
+}
+.nav-brand { display: flex; flex-direction: column; gap: 6px; }
+.nav-brand .glyph { font-family: var(--serif); font-size: 22px; letter-spacing: -.02em; }
+.nav-brand .glyph b { color: var(--star); font-weight: 600; font-style: italic; }
+.nav-brand .sub   { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+.nav-ver          { font-family: var(--mono); font-size: 10px; color: var(--text-faint); }
+
+.nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.nav-list a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 6px;
+  color: var(--text-dim); text-decoration: none; font-size: 13px;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.nav-list a .idx { font-family: var(--mono); font-size: 10px; color: var(--text-faint); width: 16px; flex: none; }
+.nav-list a:hover { color: var(--text); background: rgba(255,255,255,0.025); }
+.nav-list a.active { color: var(--star); background: linear-gradient(90deg, rgba(232,130,90,0.12), transparent); }
+.nav-list a.active .idx { color: var(--star); }
+.nav-list a.active::before {
+  content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--star); margin-right: 4px; box-shadow: 0 0 8px var(--star);
+}
+
+.nav-foot { margin-top: auto; font-family: var(--mono); font-size: 10px; color: var(--text-faint); line-height: 1.7; }
+.nav-foot a { color: var(--text-dim); text-decoration: none; }
+.nav-foot a:hover { color: var(--signal); }
+
+/* ── mobile bar (hidden on desktop) ────────────────────────── */
+.mobile-bar { display: none; }
+@media (max-width: 960px) {
+  .mobile-bar {
+    display: flex; position: sticky; top: 0; z-index: 50;
+    align-items: center; justify-content: space-between;
+    padding: 14px 20px; background: var(--panel-2); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line-2);
+  }
+  .shell { grid-template-columns: 1fr; }
+  .nav { display: none; }
+}
+
+/* ── main content ──────────────────────────────────────────── */
+.main { min-width: 0; padding: 0 clamp(20px,5vw,84px) 120px; }
+
+/* ── hero ──────────────────────────────────────────────────── */
+.hero { padding: 80px 0 60px; border-bottom: 1px solid var(--line); }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  color: var(--star); text-transform: uppercase; margin-bottom: 18px;
+}
+.hero-title {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05; letter-spacing: -.025em; margin-bottom: 22px;
+}
+.hero-title em { font-style: italic; color: var(--star); }
+.hero-desc { color: var(--text-2); font-size: 17px; line-height: 1.6; max-width: 580px; }
+.hero-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 54px;
+}
+.stat { padding: 16px 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.stat-num { font-family: var(--serif); font-size: 26px; color: var(--star); margin-bottom: 4px; }
+.stat-lbl { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: .08em; text-transform: uppercase; }
+
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── sections ─────────────────────────────────────────────── */
+section.sec { padding: 60px 0; border-bottom: 1px solid var(--line-2); }
+.sec-no {
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  letter-spacing: .12em; margin-bottom: 10px;
+}
+.sec-no b { color: var(--star); font-weight: 500; }
+h2.sec-title {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.5vw, 38px);
+  letter-spacing: -.02em; margin-bottom: 28px;
+}
+h2.sec-title em { font-style: italic; color: var(--star); }
+
+h3 {
+  font-family: var(--sans); font-weight: 500; font-size: 20px;
+  letter-spacing: -.01em; margin: 48px 0 14px;
+  display: flex; align-items: baseline; gap: 10px;
+}
+h3 .arr { color: var(--star); font-family: var(--mono); font-size: 14px; }
+
+/* ── deep-link (H3 末尾的子页面入口) ─────────────────────── */
+.deep-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px; padding: 8px 14px;
+  border: 1px solid var(--line-amber); border-radius: 8px;
+  font-family: var(--mono); font-size: 11px; color: var(--star);
+  text-decoration: none; background: rgba(232,130,90,0.06);
+  transition: background .25s var(--ease), border-color .25s var(--ease);
+}
+.deep-link:hover { background: rgba(232,130,90,0.16); border-color: var(--star); }
+.deep-link::after { content: '→'; font-family: var(--mono); }
+
+/* ── prose ─────────────────────────────────────────────────── */
+p { color: var(--text-2); font-size: 15.5px; line-height: 1.75; margin: 14px 0; }
+p strong { color: var(--text); font-weight: 600; }
+p code, li code { font-family: var(--mono); font-size: 13px; padding: 2px 6px; border-radius: 4px; background: var(--ink-3); color: var(--star-soft); }
+a { color: var(--signal); text-decoration: none; border-bottom: 1px dotted rgba(84,214,224,0.4); }
+a:hover { color: var(--signal-soft); border-bottom-color: var(--signal); }
+
+ul, ol { padding-left: 22px; margin: 14px 0; }
+li { color: var(--text-2); font-size: 15.5px; line-height: 1.75; margin: 6px 0; }
+li::marker { color: var(--star); }
+
+/* ── code blocks (with line numbers) ──────────────────────── */
+.code-wrap {
+  margin: 18px 0; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--ink-1); overflow: hidden;
+}
+.code-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px; background: var(--ink-2); border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+}
+.code-bar .src { color: var(--signal); }
+pre.code {
+  margin: 0; padding: 14px 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.65;
+  color: var(--text);
+}
+pre.code .ln {
+  display: inline-block; width: 48px; padding-right: 12px;
+  text-align: right; color: var(--text-faint); user-select: none;
+  border-right: 1px solid var(--line-2);
+}
+pre.code .k  { color: var(--violet); }       /* keyword */
+pre.code .s  { color: var(--phosphor); }     /* string */
+pre.code .n  { color: var(--star-soft); }    /* number */
+pre.code .c  { color: var(--text-faint); font-style: italic; }  /* comment */
+pre.code .t  { color: var(--signal); }       /* type */
+
+/* ── flow diagram (ASCII art 容器) ────────────────────────── */
+.flow {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.55;
+  color: var(--text-2); white-space: pre;
+  padding: 22px 24px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--ink-1);
+  overflow-x: auto;
+}
+.flow-stage { color: var(--star); font-weight: 600; }
+.flow-arr   { color: var(--signal); }
+.flow-node  { color: var(--phosphor); }
+
+/* ── mermaid containers ────────────────────────────────────── */
+.mermaid { margin: 22px 0; text-align: center; }
+
+/* ── callout boxes ─────────────────────────────────────────── */
+.callout {
+  margin: 18px 0; padding: 14px 18px;
+  border-left: 3px solid var(--star); border-radius: 4px;
+  background: var(--panel); color: var(--text-2);
+  font-size: 14.5px; line-height: 1.65;
+}
+.callout.warn { border-left-color: var(--rose); }
+.callout.info { border-left-color: var(--signal); }
+.callout strong { color: var(--star); }
+
+/* ── grids ─────────────────────────────────────────────────── */
+.g2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+@media (max-width: 760px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+
+.card {
+  padding: 18px 20px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--panel); transition: border-color .25s var(--ease);
+}
+.card:hover { border-color: var(--line-amber); }
+.card-h { font-size: 14px; color: var(--text); margin-bottom: 6px; }
+.card-d { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+
+/* ── footer ────────────────────────────────────────────────── */
+.foot {
+  margin-top: 80px; padding: 30px 0; border-top: 1px solid var(--line-2);
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.foot a { color: var(--text-dim); }
+.foot a:hover { color: var(--star); }
+
+/* ── utility ───────────────────────────────────────────────── */
+.copy {
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  background: transparent; border: 1px solid var(--line); padding: 3px 8px;
+  border-radius: 4px; cursor: pointer;
+}
+.copy:hover { color: var(--star); border-color: var(--star); }
+/* LAYOUT SHELL END */
+:root { --star: #e8825a; --star-soft: #f0a585; --star-deep: #c0653f; }
+</style>
+</head>
+<body>
+<canvas class="bg-stars" id="stars"></canvas>
+<div class="bg-glow"></div>
+<div class="bg-grid"></div>
+<svg class="bg-grain"><filter id="gr"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#gr)" opacity="0.4"/></svg>
+<div class="mobile-bar"><div class="glyph">Fable<b>Cut</b></div><select id="msel" aria-label="跳转章节"></select></div>
+<div class="shell">
+  <aside class="nav">
+    <div class="nav-brand"><div class="glyph">Fable<b>Cut</b></div><div class="sub">源码级架构解析 · sources/</div></div>
+    <span class="nav-ver">JavaScript · Browser NLE · MCP</span>
+    <nav><ul class="nav-list" id="navlist"><li><a href="#intro"><span class="idx">00</span>导入链</a></li><li><a href="#core-impl"><span class="idx">01</span>核心实现</a></li><li><a href="#flow"><span class="idx">02</span>关键流程</a></li><li><a href="#edge"><span class="idx">03</span>边界与失败</a></li><li><a href="#related"><span class="idx">04</span>关联模块</a></li></ul></nav>
+    <div class="nav-foot"><div><a href="../fablecut.html">← FableCut 主页面</a></div><div><a href="../index.html">全部分析</a></div><div>Generated · 2026-07-11</div></div>
+  </aside>
+  <main class="main">
+
+    <div class="hero"><div class="hero-eyebrow">§ · Nested detail page</div><h1 class="hero-title">渲染与导出链路 <em>深度解析</em></h1><p class="hero-desc">这页拆 FableCut 的画面合成、像素处理、SVG/AI mask 准备、音频离线混音以及服务端 ffmpeg 编码。</p></div>
+    <section class="sec" id="intro"><div class="sec-no">§ <b>00</b> · IMPORT CHAIN</div><h2 class="sec-title">从 clip props 到<em>画面</em></h2>
+      <p>渲染链路从属性插值开始：clip 的 keyframes、transition 和默认 props 共同决定当前帧。默认属性表见 <code>sources/fablecut/app.js:23</code>；可动画属性见 <code>sources/fablecut/app.js:47</code>；evalProps 起点见 <code>sources/fablecut/app.js:1460</code>；transition 应用见 <code>sources/fablecut/app.js:1503</code>；drawFrame 入口见 <code>sources/fablecut/app.js:1824</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/app.js:1460-1500</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">1460</span>  const p = { ...DEFAULT_PROPS, ...c.props };
+<span class="ln">1461</span>  const local = t - c.start;
+<span class="ln">1462</span>  if (c.keyframes) {
+<span class="ln">1463</span>    for (const [k, kfs] of Object.entries(c.keyframes)) {
+<span class="ln">1464</span>      if (!Array.isArray(kfs) || !kfs.length) continue;
+<span class="ln">1465</span>      let v;
+<span class="ln">1466</span>      if (local &lt;= kfs[0].t) v = kfs[0].v;
+<span class="ln">1467</span>      else if (local &gt;= kfs[kfs.length - 1].t) v = kfs[kfs.length - 1].v;
+<span class="ln">1468</span>      else for (let i = 0; i &lt; kfs.length - 1; i++) {
+<span class="ln">1469</span>        const a = kfs[i], b = kfs[i + 1];
+<span class="ln">1470</span>        if (local &gt;= a.t &amp;&amp; local &lt;= b.t) {
+<span class="ln">1471</span>          const u = (local - a.t) / Math.max(1e-6, b.t - a.t);
+<span class="ln">1472</span>          const ez = EASE[b.ease || &quot;ease-in-out&quot;] || EASE.linear;
+<span class="ln">1473</span>          v = a.v + (b.v - a.v) * ez(u);
+<span class="ln">1474</span>          break;
+<span class="ln">1475</span>        }
+<span class="ln">1476</span>      }
+<span class="ln">1477</span>      if (typeof v === &quot;number&quot; &amp;&amp; !isNaN(v)) p[k] = v;
+<span class="ln">1478</span>    }
+<span class="ln">1479</span>  }
+<span class="ln">1480</span>  applyFilterPreset(p);
+<span class="ln">1481</span>  const W = els.preview.width, H = els.preview.height;
+<span class="ln">1482</span>  const tin = c.transitionIn, tout = c.transitionOut;
+<span class="ln">1483</span>  if (tin &amp;&amp; tin.duration &gt; 0 &amp;&amp; local &lt; tin.duration)
+<span class="ln">1484</span>    applyTransition(p, tin.type, 1 - EASE[&quot;ease-out&quot;](clamp(local / tin.duration, 0, 1)), W, H, -1);
+<span class="ln">1485</span>  if (tout &amp;&amp; tout.duration &gt; 0 &amp;&amp; local &gt; c.duration - tout.duration)
+<span class="ln">1486</span>    applyTransition(p, tout.type,
+<span class="ln">1487</span>      EASE[&quot;ease-in&quot;](clamp((local - (c.duration - tout.duration)) / tout.duration, 0, 1)), W, H, 1);
+<span class="ln">1488</span>  return p;
+<span class="ln">1489</span>}
+<span class="ln">1490</span>/* Merge a named look into evaluated props: % props scale, additive props add. */
+<span class="ln">1491</span>function applyFilterPreset(p) {
+<span class="ln">1492</span>  const fp = FILTER_PRESETS[p.filterPreset];
+<span class="ln">1493</span>  if (!fp || p.filterPreset === &quot;none&quot;) return;
+<span class="ln">1494</span>  for (const [k, v] of Object.entries(fp)) {
+<span class="ln">1495</span>    if (k === &quot;brightness&quot; || k === &quot;contrast&quot; || k === &quot;saturation&quot;)
+<span class="ln">1496</span>      p[k] = (+p[k] || 100) * v / 100;
+<span class="ln">1497</span>    else if (k === &quot;grayscale&quot; || k === &quot;sepia&quot; || k === &quot;vignette&quot; || k === &quot;invert&quot;)
+<span class="ln">1498</span>      p[k] = clamp((+p[k] || 0) + v, 0, 100);
+<span class="ln">1499</span>    else p[k] = (+p[k] || 0) + v;   // hue, temperature, tint, blur
+<span class="ln">1500</span>  }</pre>
+      </div>
+    </section>
+    <section class="sec" id="core-impl"><div class="sec-no">§ <b>01</b> · CORE IMPL</div><h2 class="sec-title">核心实现，<em>逐段</em>拆</h2>
+      <h3><span class="arr">▸</span>转场和 SVG 帧冻结</h3>
+      <p>转场包含 fade、slide、zoom、wipe、iris、spin、blur、whip、glitch、pop 等效果；SVG clip 则会在指定时间点替换变量并 rasterize。transition switch 开始见 <code>sources/fablecut/app.js:1503</code>；fade 分支见 <code>sources/fablecut/app.js:1507</code>；wipe 分支见 <code>sources/fablecut/app.js:1518</code>；SVG frame cache见 <code>sources/fablecut/app.js:1554</code>；rasterizeSvgFrame见 <code>sources/fablecut/app.js:1600</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/app.js:1503-1629</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">1503</span>function applyTransition(p, type, k, W, H, dir) {
+<span class="ln">1504</span>  if (!(k &gt; 0)) return;
+<span class="ln">1505</span>  switch (type) {
+<span class="ln">1506</span>    case &quot;fade&quot;: case &quot;dissolve&quot;:
+<span class="ln">1507</span>      p.opacity *= 1 - k; p.volume *= 1 - k; break;
+<span class="ln">1508</span>    case &quot;slide-left&quot;:  p.x = (+p.x || 0) - dir * k * W; break;
+<span class="ln">1509</span>    case &quot;slide-right&quot;: p.x = (+p.x || 0) + dir * k * W; break;
+<span class="ln">1510</span>    case &quot;slide-up&quot;:    p.y = (+p.y || 0) - dir * k * H; break;
+<span class="ln">1511</span>    case &quot;slide-down&quot;:  p.y = (+p.y || 0) + dir * k * H; break;
+<span class="ln">1512</span>    case &quot;zoom&quot;:
+<span class="ln">1513</span>      p.scale = (+p.scale || 1) * (1 - 0.6 * k); p.opacity *= 1 - k; break;
+<span class="ln">1514</span>    case &quot;wipe&quot;: case &quot;wipe-left&quot;: p._wipe = k; p._wipeDir = &quot;left&quot;; break;
+<span class="ln">1515</span>    case &quot;wipe-right&quot;: p._wipe = k; p._wipeDir = &quot;right&quot;; break;
+<span class="ln">1516</span>    case &quot;wipe-up&quot;:    p._wipe = k; p._wipeDir = &quot;up&quot;; break;
+<span class="ln">1517</span>    case &quot;wipe-down&quot;:  p._wipe = k; p._wipeDir = &quot;down&quot;; break;
+<span class="ln">1518</span>    case &quot;iris&quot;: p._iris = k; break;
+<span class="ln">1519</span>    case &quot;spin&quot;:
+<span class="ln">1520</span>      p.rotation = (+p.rotation || 0) + dir * k * 200;
+<span class="ln">1521</span>      p.scale = (+p.scale || 1) * (1 - 0.4 * k);
+<span class="ln">1522</span>      p.opacity *= 1 - k; break;
+<span class="ln">1523</span>    case &quot;blur&quot;:
+<span class="ln">1524</span>      p.blur = (+p.blur || 0) + k * 24;
+<span class="ln">1525</span>      p.opacity *= 1 - k * k; p.volume *= 1 - k; break;
+<span class="ln">1526</span>    case &quot;whip&quot;:
+<span class="ln">1527</span>      p.x = (+p.x || 0) - dir * EASE[&quot;ease-in&quot;](k) * W * 1.4;
+<span class="ln">1528</span>      p.blur = (+p.blur || 0) + k * 16; break;
+<span class="ln">1529</span>    case &quot;glitch&quot;: { // RGB split + horizontal jitter, deterministic
+<span class="ln">1530</span>      const j = Math.sin(k * 61.7) * Math.sin(k * 23.3);
+<span class="ln">1531</span>      p.rgbSplit = (+p.rgbSplit || 0) + k * 14;
+<span class="ln">1532</span>      p.x = (+p.x || 0) + j * k * W * 0.06;
+<span class="ln">1533</span>      p.opacity *= 1 - k * k;
+<span class="ln">1534</span>      break;
+<span class="ln">1535</span>    }
+<span class="ln">1536</span>    case &quot;pop&quot;: // overshoot scale (backOut) — sticker/caption entrance
+<span class="ln">1537</span>      p.scale = (+p.scale || 1) * Math.max(0.001, backOut(1 - k));
+<span class="ln">1538</span>      p.opacity *= Math.min(1, (1 - k) * 2.5);
+<span class="ln">1539</span>      break;
+<span class="ln">1540</span>  }
+<span class="ln">1541</span>}
+<span class="ln">1542</span>/* Rebase clip-local keyframe times by -offset, dropping ones outside [0, dur] */
+<span class="ln">1543</span>function shiftKF(kfs, offset, dur) {
+<span class="ln">1544</span>  if (!kfs) return undefined;
+<span class="ln">1545</span>  const out = {};
+<span class="ln">1546</span>  for (const [k, arr] of Object.entries(kfs)) {
+<span class="ln">1547</span>    const a = arr.map((kf) =&gt; ({ ...kf, t: +(kf.t - offset).toFixed(4) }))
+<span class="ln">1548</span>      .filter((kf) =&gt; kf.t &gt;= -1e-3 &amp;&amp; kf.t &lt;= dur + 1e-3);
+<span class="ln">1549</span>    if (a.length) out[k] = a;
+<span class="ln">1550</span>  }
+<span class="ln">1551</span>  return Object.keys(out).length ? out : undefined;
+<span class="ln">1552</span>}
+<span class="ln">1553</span>
+<span class="ln">1554</span>/* ═════════════════ SVG CLIPS (Claude-authored animated vectors) ═════════════
+<span class="ln">1555</span>   Animated SVGs use CSS @keyframes. The compositor freezes them at any time t
+<span class="ln">1556</span>   by injecting `animation-play-state:paused` + a negative animation-delay,
+<span class="ln">1557</span>   then rasterizing through an &lt;img&gt;. Convention for staggered starts:
+<span class="ln">1558</span>   authors set `--d: 0.4s` on an element instead of a literal animation-delay. */
+<span class="ln">1559</span>function parseSvgSize(txt) {
+<span class="ln">1560</span>  const num = (s) =&gt; { const v = parseFloat(s); return isFinite(v) &amp;&amp; v &gt; 0 ? v : 0; };
+<span class="ln">1561</span>  const attr = (name) =&gt; (txt.match(new RegExp(`&lt;svg[^&gt;]*\\s${name}=&quot;([^&quot;%]+)&quot;`, &quot;i&quot;)) || [])[1];
+<span class="ln">1562</span>  let w = num(attr(&quot;width&quot;)), h = num(attr(&quot;height&quot;));
+<span class="ln">1563</span>  if (!w || !h) {
+<span class="ln">1564</span>    const vb = (txt.match(/&lt;svg[^&gt;]*\sviewBox=&quot;([^&quot;]+)&quot;/i) || [])[1];
+<span class="ln">1565</span>    if (vb) { const p = vb.trim().split(/[\s,]+/); w = num(p[2]); h = num(p[3]); }
+<span class="ln">1566</span>  }
+<span class="ln">1567</span>  return { width: w || 800, height: h || 600 };
+<span class="ln">1568</span>}
+<span class="ln">1569</span>async function loadSvgMedia(m) {
+<span class="ln">1570</span>  const txt = await (await fetch(m.src)).text();
+<span class="ln">1571</span>  const { width, height } = parseSvgSize(txt);
+<span class="ln">1572</span>  m.width = width; m.height = height;
+<span class="ln">1573</span>  const aux = runtime.mediaAux.get(m.id) || {};
+<span class="ln">1574</span>  aux.svgText = txt;
+<span class="ln">1575</span>  aux.svgAnimated = /@keyframes|animation\s*:/i.test(txt);
+<span class="ln">1576</span>  aux.svgFrames = new Map(); // quantized t -&gt; HTMLImageElement (small LRU)
+<span class="ln">1577</span>  aux.svgPending = null;
+<span class="ln">1578</span>  runtime.mediaAux.set(m.id, aux);
+<span class="ln">1579</span>  if (!aux.svgAnimated) aux.img = await loadImage(m.src);
+<span class="ln">1580</span>  state.dirtyTimeline = true;
+<span class="ln">1581</span>}
+<span class="ln">1582</span>function svgUrlAt(aux, t) {
+<span class="ln">1583</span>  const style = `&lt;style&gt;*{animation-play-state:paused!important;` +
+<span class="ln">1584</span>    `animation-delay:calc(var(--d,0s) - ${t.toFixed(4)}s)!important}&lt;/style&gt;`;
+<span class="ln">1585</span>  const txt = aux.svgText.replace(/(&lt;svg[^&gt;]*&gt;)/i, `$1${style}`);
+<span class="ln">1586</span>  return &quot;data:image/svg+xml;charset=utf-8,&quot; + encodeURIComponent(txt);
+<span class="ln">1587</span>}
+<span class="ln">1588</span>function renderSvgFrame(aux, t) {
+<span class="ln">1589</span>  return new Promise((resolve, reject) =&gt; {
+<span class="ln">1590</span>    const img = new Image();
+<span class="ln">1591</span>    img.onload = () =&gt; resolve(img);
+<span class="ln">1592</span>    img.onerror = () =&gt; reject(new Error(&quot;svg raster failed&quot;));
+<span class="ln">1593</span>    img.src = svgUrlAt(aux, t);
+<span class="ln">1594</span>  });
+<span class="ln">1595</span>}
+<span class="ln">1596</span>/* Preview path: returns the best already-rasterized frame and schedules the
+<span class="ln">1597</span>   exact one; export path awaits prepareSvgFrame() instead. */
+<span class="ln">1598</span>function getSvgImage(c, t) {
+<span class="ln">1599</span>  const aux = runtime.mediaAux.get(c.mediaId);
+<span class="ln">1600</span>  if (!aux || !aux.svgText) return null;
+<span class="ln">1601</span>  if (!aux.svgAnimated) return aux.img || null;
+<span class="ln">1602</span>  const local = Math.max(0, mediaTimeAt(c, t));
+<span class="ln">1603</span>  const q = Math.round(local * project.fps) / project.fps;
+<span class="ln">1604</span>  const hit = aux.svgFrames.get(q);
+<span class="ln">1605</span>  if (hit) return hit;
+<span class="ln">1606</span>  if (!aux.svgPending) {
+<span class="ln">1607</span>    aux.svgPending = renderSvgFrame(aux, q).then((img) =&gt; {
+<span class="ln">1608</span>      aux.svgFrames.set(q, img);
+<span class="ln">1609</span>      if (aux.svgFrames.size &gt; 90) aux.svgFrames.delete(aux.svgFrames.keys().next().value);
+<span class="ln">1610</span>      aux.lastImg = img;
+<span class="ln">1611</span>    }).catch(() =&gt; {}).finally(() =&gt; { aux.svgPending = null; });
+<span class="ln">1612</span>  }
+<span class="ln">1613</span>  return aux.lastImg || null; // may be one frame stale during preview
+<span class="ln">1614</span>}
+<span class="ln">1615</span>async function prepareSvgFrame(c, t) {
+<span class="ln">1616</span>  const aux = runtime.mediaAux.get(c.mediaId);
+<span class="ln">1617</span>  if (!aux) return;
+<span class="ln">1618</span>  if (!aux.svgText) { try { await loadSvgMedia(getMedia(c.mediaId)); } catch { return; } }
+<span class="ln">1619</span>  if (!aux.svgAnimated) return;
+<span class="ln">1620</span>  const local = Math.max(0, mediaTimeAt(c, t));
+<span class="ln">1621</span>  const q = Math.round(local * project.fps) / project.fps;
+<span class="ln">1622</span>  if (aux.svgFrames.get(q)) return;
+<span class="ln">1623</span>  try {
+<span class="ln">1624</span>    const img = await renderSvgFrame(aux, q);
+<span class="ln">1625</span>    aux.svgFrames.set(q, img);
+<span class="ln">1626</span>    if (aux.svgFrames.size &gt; 90) aux.svgFrames.delete(aux.svgFrames.keys().next().value);
+<span class="ln">1627</span>    aux.lastImg = img;
+<span class="ln">1628</span>  } catch {}
+<span class="ln">1629</span>}</pre>
+      </div>
+      <h3><span class="arr">▸</span>AI mask 与像素管线</h3>
+      <p>背景移除 lazy-load MediaPipe；随后像素管线处理 chroma key、温度、tint、RGB split 等效果。segmentation module lazy load见 <code>sources/fablecut/app.js:1631</code>；mask cache 判断见 <code>sources/fablecut/app.js:1658</code>；requestMask 返回见 <code>sources/fablecut/app.js:1676</code>；processPixels 起点见 <code>sources/fablecut/app.js:1682</code>；chroma key 判断见 <code>sources/fablecut/app.js:1705</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/app.js:1631-1765</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">1631</span>/* ═════════════ AI BACKGROUND REMOVAL (MediaPipe selfie segmentation) ════════
+<span class="ln">1632</span>   Loaded lazily from CDN the first time a clip sets props.bgRemove. Produces a
+<span class="ln">1633</span>   per-clip person mask consumed by the pixel pipeline below. Degrades politely
+<span class="ln">1634</span>   when offline. */
+<span class="ln">1635</span>const bgSeg = { seg: null, loading: null, failed: false, queue: Promise.resolve(), masks: new Map() };
+<span class="ln">1636</span>function loadScript(src) {
+<span class="ln">1637</span>  return new Promise((res, rej) =&gt; {
+<span class="ln">1638</span>    const s = document.createElement(&quot;script&quot;);
+<span class="ln">1639</span>    s.src = src; s.onload = res; s.onerror = () =&gt; rej(new Error(&quot;script load failed: &quot; + src));
+<span class="ln">1640</span>    document.head.appendChild(s);
+<span class="ln">1641</span>  });
+<span class="ln">1642</span>}
+<span class="ln">1643</span>function ensureBgSeg() {
+<span class="ln">1644</span>  if (bgSeg.seg || bgSeg.failed) return bgSeg.loading || Promise.resolve();
+<span class="ln">1645</span>  if (!bgSeg.loading) {
+<span class="ln">1646</span>    const base = &quot;https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation&quot;;
+<span class="ln">1647</span>    bgSeg.loading = loadScript(`${base}/selfie_segmentation.js`).then(() =&gt; {
+<span class="ln">1648</span>      const seg = new SelfieSegmentation({ locateFile: (f) =&gt; `${base}/${f}` });
+<span class="ln">1649</span>      seg.setOptions({ modelSelection: 1 });
+<span class="ln">1650</span>      seg.onResults((r) =&gt; {
+<span class="ln">1651</span>        if (!bgSeg.currentClip) return;
+<span class="ln">1652</span>        let cv = bgSeg.masks.get(bgSeg.currentClip);
+<span class="ln">1653</span>        if (!cv) { cv = document.createElement(&quot;canvas&quot;); bgSeg.masks.set(bgSeg.currentClip, cv); }
+<span class="ln">1654</span>        cv.width = r.segmentationMask.width; cv.height = r.segmentationMask.height;
+<span class="ln">1655</span>        cv.getContext(&quot;2d&quot;).drawImage(r.segmentationMask, 0, 0);
+<span class="ln">1656</span>      });
+<span class="ln">1657</span>      bgSeg.seg = seg;
+<span class="ln">1658</span>    }).catch(() =&gt; {
+<span class="ln">1659</span>      bgSeg.failed = true;
+<span class="ln">1660</span>      toast(&quot;Background removal unavailable — couldn&#x27;t load MediaPipe (offline?). Using chroma key still works.&quot;);
+<span class="ln">1661</span>    });
+<span class="ln">1662</span>  }
+<span class="ln">1663</span>  return bgSeg.loading;
+<span class="ln">1664</span>}
+<span class="ln">1665</span>/* Serialize sends; returns a promise that resolves once the mask is refreshed.
+<span class="ln">1666</span>   Preview calls are dropped while one is in flight (masks lag a frame at most);
+<span class="ln">1667</span>   the exporter passes force=true and awaits the exact mask. */
+<span class="ln">1668</span>bgSeg.pending = 0;
+<span class="ln">1669</span>function requestMask(clipId, el, force = false) {
+<span class="ln">1670</span>  ensureBgSeg();
+<span class="ln">1671</span>  if (!bgSeg.seg) return bgSeg.loading || Promise.resolve();
+<span class="ln">1672</span>  if (!force &amp;&amp; bgSeg.pending &gt; 0) return Promise.resolve();
+<span class="ln">1673</span>  bgSeg.pending++;
+<span class="ln">1674</span>  bgSeg.queue = bgSeg.queue.then(async () =&gt; {
+<span class="ln">1675</span>    if ((el.videoWidth || el.naturalWidth || 0) === 0) return;
+<span class="ln">1676</span>    bgSeg.currentClip = clipId;
+<span class="ln">1677</span>    try { await bgSeg.seg.send({ image: el }); } catch {}
+<span class="ln">1678</span>  }).finally(() =&gt; { bgSeg.pending--; });
+<span class="ln">1679</span>  return bgSeg.queue;
+<span class="ln">1680</span>}
+<span class="ln">1681</span>
+<span class="ln">1682</span>/* ═══════════ PIXEL PIPELINE (chroma key · temperature · tint · mask) ═══════
+<span class="ln">1683</span>   Only used when a clip needs per-pixel work; everything else stays on the
+<span class="ln">1684</span>   fast CSS-filter path. Renders into a reusable scratch canvas at destination
+<span class="ln">1685</span>   resolution (capped), applies the mask + one pixel loop, hands back a canvas. */
+<span class="ln">1686</span>const scratch = document.createElement(&quot;canvas&quot;);
+<span class="ln">1687</span>const scratchCtx = scratch.getContext(&quot;2d&quot;, { willReadFrequently: true });
+<span class="ln">1688</span>/* film-grain tile, generated once */
+<span class="ln">1689</span>let grainTile = null;
+<span class="ln">1690</span>function getGrainTile() {
+<span class="ln">1691</span>  if (grainTile) return grainTile;
+<span class="ln">1692</span>  grainTile = document.createElement(&quot;canvas&quot;);
+<span class="ln">1693</span>  grainTile.width = grainTile.height = 256;
+<span class="ln">1694</span>  const g = grainTile.getContext(&quot;2d&quot;);
+<span class="ln">1695</span>  const img = g.createImageData(256, 256);
+<span class="ln">1696</span>  for (let i = 0; i &lt; img.data.length; i += 4) {
+<span class="ln">1697</span>    const v = 90 + Math.random() * 130;
+<span class="ln">1698</span>    img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+<span class="ln">1699</span>    img.data[i + 3] = 255;
+<span class="ln">1700</span>  }
+<span class="ln">1701</span>  g.putImageData(img, 0, 0);
+<span class="ln">1702</span>  return grainTile;
+<span class="ln">1703</span>}
+<span class="ln">1704</span>/* Draw a tiled grain overlay over a rect in the CURRENT transform space.
+<span class="ln">1705</span>   Phase jumps per frame so grain &quot;boils&quot; like film. */
+<span class="ln">1706</span>function drawGrain(amount, x, y, w, h, t) {
+<span class="ln">1707</span>  const keepA = ctx2d.globalAlpha, keepC = ctx2d.globalCompositeOperation;
+<span class="ln">1708</span>  const off = (Math.floor(t * project.fps) * 7919) % 256;
+<span class="ln">1709</span>  ctx2d.globalCompositeOperation = &quot;overlay&quot;;
+<span class="ln">1710</span>  ctx2d.globalAlpha = keepA * clamp(amount / 100, 0, 1) * 0.55;
+<span class="ln">1711</span>  ctx2d.save();
+<span class="ln">1712</span>  ctx2d.translate(-off, off);
+<span class="ln">1713</span>  ctx2d.fillStyle = ctx2d.createPattern(getGrainTile(), &quot;repeat&quot;);
+<span class="ln">1714</span>  ctx2d.fillRect(x + off, y - off, w, h);
+<span class="ln">1715</span>  ctx2d.restore();
+<span class="ln">1716</span>  ctx2d.globalAlpha = keepA;
+<span class="ln">1717</span>  ctx2d.globalCompositeOperation = keepC;
+<span class="ln">1718</span>}
+<span class="ln">1719</span>/* Adjustment layers: snapshot everything drawn so far, re-draw it through this
+<span class="ln">1720</span>   clip&#x27;s filter stack (Premiere-style). */
+<span class="ln">1721</span>const adjScratch = document.createElement(&quot;canvas&quot;);
+<span class="ln">1722</span>function drawAdjust(c, W, H, t) {
+<span class="ln">1723</span>  const p = evalProps(c, t);
+<span class="ln">1724</span>  if (adjScratch.width !== W) adjScratch.width = W;
+<span class="ln">1725</span>  if (adjScratch.height !== H) adjScratch.height = H;
+<span class="ln">1726</span>  const a = adjScratch.getContext(&quot;2d&quot;);
+<span class="ln">1727</span>  a.clearRect(0, 0, W, H);
+<span class="ln">1728</span>  a.drawImage(els.preview, 0, 0);
+<span class="ln">1729</span>  ctx2d.save();
+<span class="ln">1730</span>  ctx2d.setTransform(1, 0, 0, 1, 0, 0);
+<span class="ln">1731</span>  if (p.shake &gt; 0) { // whole-frame impact shake
+<span class="ln">1732</span>    const s = +p.shake, tt = t * clamp(+p.shakeSpeed || 8, 0.5, 40) * Math.PI * 2;
+<span class="ln">1733</span>    ctx2d.translate(
+<span class="ln">1734</span>      Math.sin(tt * 1.3) * s * 0.6 + Math.sin(tt * 2.71) * s * 0.4,
+<span class="ln">1735</span>      Math.cos(tt * 1.7) * s * 0.5 + Math.sin(tt * 3.13) * s * 0.35);
+<span class="ln">1736</span>  }
+<span class="ln">1737</span>  ctx2d.globalAlpha = clamp(p.opacity, 0, 1);
+<span class="ln">1738</span>  ctx2d.filter = buildFilter(p);
+<span class="ln">1739</span>  let src = adjScratch;
+<span class="ln">1740</span>  if (p.temperature || p.tint || p.rgbSplit &gt; 0)
+<span class="ln">1741</span>    src = pixelPass(c, { ...p, chromaKey: &quot;&quot;, bgRemove: false }, adjScratch, 0, 0, W, H, W, H);
+<span class="ln">1742</span>  ctx2d.drawImage(src, 0, 0, src.width, src.height, 0, 0, W, H);
+<span class="ln">1743</span>  ctx2d.filter = &quot;none&quot;;
+<span class="ln">1744</span>  if (p.vignette &gt; 0) {
+<span class="ln">1745</span>    const g = ctx2d.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.hypot(W, H) * 0.55);
+<span class="ln">1746</span>    g.addColorStop(0, &quot;rgba(0,0,0,0)&quot;);
+<span class="ln">1747</span>    g.addColorStop(1, `rgba(0,0,0,${clamp(p.vignette / 100, 0, 1) * 0.9})`);
+<span class="ln">1748</span>    ctx2d.fillStyle = g;
+<span class="ln">1749</span>    ctx2d.fillRect(0, 0, W, H);
+<span class="ln">1750</span>  }
+<span class="ln">1751</span>  if (p.grain &gt; 0) drawGrain(p.grain, 0, 0, W, H, t);
+<span class="ln">1752</span>  ctx2d.restore();
+<span class="ln">1753</span>}
+<span class="ln">1754</span>function needsPixelPass(p, c) {
+<span class="ln">1755</span>  return !!(p.chromaKey || p.temperature || p.tint || p.rgbSplit &gt; 0 ||
+<span class="ln">1756</span>            (p.bgRemove &amp;&amp; bgSeg.masks.get(c.id)));
+<span class="ln">1757</span>}
+<span class="ln">1758</span>function hexToRgb(hex) {
+<span class="ln">1759</span>  const n = parseInt(String(hex).replace(&quot;#&quot;, &quot;&quot;), 16) || 0;
+<span class="ln">1760</span>  return [(n &gt;&gt; 16) &amp; 255, (n &gt;&gt; 8) &amp; 255, n &amp; 255];
+<span class="ln">1761</span>}
+<span class="ln">1762</span>function pixelPass(c, p, src, sx, sy, sw, sh, dw, dh) {
+<span class="ln">1763</span>  const w = Math.max(2, Math.min(Math.round(dw), 1920));
+<span class="ln">1764</span>  const h = Math.max(2, Math.min(Math.round(dh), 1920));
+<span class="ln">1765</span>  if (scratch.width !== w) scratch.width = w;</pre>
+      </div>
+      <h3><span class="arr">▸</span>drawFrame 与 drawClip</h3>
+      <p><code>drawFrame</code> 会按轨道顺序过滤活跃 clip，<code>drawClip</code> 处理 transform、fit/crop、opacity、像素处理、vignette/grain。drawFrame 清屏见 <code>sources/fablecut/app.js:1824</code>；按 track 排序见 <code>sources/fablecut/app.js:1829</code>；drawClip 起点见 <code>sources/fablecut/app.js:1851</code>；transform 应用见 <code>sources/fablecut/app.js:1870</code>；pixel pass 输出见 <code>sources/fablecut/app.js:1910</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/app.js:1824-1936</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">1824</span>/* ── Compositor ── */
+<span class="ln">1825</span>function buildFilter(p) {
+<span class="ln">1826</span>  const parts = [];
+<span class="ln">1827</span>  if (p.brightness !== 100) parts.push(`brightness(${p.brightness}%)`);
+<span class="ln">1828</span>  if (p.contrast !== 100) parts.push(`contrast(${p.contrast}%)`);
+<span class="ln">1829</span>  if (p.saturation !== 100) parts.push(`saturate(${p.saturation}%)`);
+<span class="ln">1830</span>  if (p.hue) parts.push(`hue-rotate(${p.hue}deg)`);
+<span class="ln">1831</span>  if (p.blur) parts.push(`blur(${p.blur}px)`);
+<span class="ln">1832</span>  if (p.grayscale) parts.push(`grayscale(${p.grayscale}%)`);
+<span class="ln">1833</span>  if (p.sepia) parts.push(`sepia(${p.sepia}%)`);
+<span class="ln">1834</span>  if (p.invert) parts.push(`invert(${p.invert}%)`);
+<span class="ln">1835</span>  return parts.length ? parts.join(&quot; &quot;) : &quot;none&quot;;
+<span class="ln">1836</span>}
+<span class="ln">1837</span>function drawFrame(t = state.time) {
+<span class="ln">1838</span>  const W = els.preview.width, H = els.preview.height;
+<span class="ln">1839</span>  ctx2d.setTransform(1, 0, 0, 1, 0, 0);
+<span class="ln">1840</span>  ctx2d.filter = &quot;none&quot;; ctx2d.globalAlpha = 1;
+<span class="ln">1841</span>  ctx2d.fillStyle = project.background || &quot;#000&quot;; ctx2d.fillRect(0, 0, W, H);
+<span class="ln">1842</span>  // render video tracks bottom-up (V1 under V2)
+<span class="ln">1843</span>  const videoTracks = TRACKS.filter((tr) =&gt; tr.kind === &quot;video&quot;).reverse();
+<span class="ln">1844</span>  for (const tr of videoTracks) {
+<span class="ln">1845</span>    const clips = project.clips
+<span class="ln">1846</span>      .filter((c) =&gt; c.track === tr.id &amp;&amp; activeAt(c, t))
+<span class="ln">1847</span>      .sort((a, b) =&gt; a.start - b.start);
+<span class="ln">1848</span>    for (const c of clips) drawClip(c, W, H, t);
+<span class="ln">1849</span>  }
+<span class="ln">1850</span>}
+<span class="ln">1851</span>function drawClip(c, W, H, t) {
+<span class="ln">1852</span>  if (c.kind === &quot;adjust&quot;) { drawAdjust(c, W, H, t); return; }
+<span class="ln">1853</span>  const p = evalProps(c, t);
+<span class="ln">1854</span>  ctx2d.save();
+<span class="ln">1855</span>  if (p._wipe) {
+<span class="ln">1856</span>    ctx2d.beginPath();
+<span class="ln">1857</span>    const k = p._wipe;
+<span class="ln">1858</span>    if (p._wipeDir === &quot;right&quot;)     ctx2d.rect(W * k, 0, W * (1 - k), H);
+<span class="ln">1859</span>    else if (p._wipeDir === &quot;up&quot;)   ctx2d.rect(0, 0, W, H * (1 - k));
+<span class="ln">1860</span>    else if (p._wipeDir === &quot;down&quot;) ctx2d.rect(0, H * k, W, H * (1 - k));
+<span class="ln">1861</span>    else                            ctx2d.rect(0, 0, W * (1 - k), H);
+<span class="ln">1862</span>    ctx2d.clip();
+<span class="ln">1863</span>  }
+<span class="ln">1864</span>  if (p._iris != null) {
+<span class="ln">1865</span>    ctx2d.beginPath();
+<span class="ln">1866</span>    ctx2d.arc(W / 2, H / 2, Math.max(0.01, (1 - p._iris)) * Math.hypot(W, H) * 0.55, 0, Math.PI * 2);
+<span class="ln">1867</span>    ctx2d.clip();
+<span class="ln">1868</span>  }
+<span class="ln">1869</span>  ctx2d.globalAlpha = clamp(p.opacity, 0, 1);
+<span class="ln">1870</span>  if (p.blend &amp;&amp; p.blend !== &quot;normal&quot; &amp;&amp; BLEND_MODES.includes(p.blend))
+<span class="ln">1871</span>    ctx2d.globalCompositeOperation = p.blend === &quot;normal&quot; ? &quot;source-over&quot; : p.blend;
+<span class="ln">1872</span>  ctx2d.translate(W / 2 + (+p.x || 0), H / 2 + (+p.y || 0));
+<span class="ln">1873</span>  ctx2d.rotate((p.rotation || 0) * Math.PI / 180);
+<span class="ln">1874</span>  if (p.shake &gt; 0) { // deterministic multi-sine handheld/impact shake
+<span class="ln">1875</span>    const a = +p.shake, tt = t * clamp(+p.shakeSpeed || 8, 0.5, 40) * Math.PI * 2;
+<span class="ln">1876</span>    ctx2d.translate(
+<span class="ln">1877</span>      Math.sin(tt * 1.3) * a * 0.6 + Math.sin(tt * 2.71) * a * 0.4,
+<span class="ln">1878</span>      Math.cos(tt * 1.7) * a * 0.5 + Math.sin(tt * 3.13) * a * 0.35);
+<span class="ln">1879</span>    ctx2d.rotate(Math.sin(tt * 0.9) * a * 0.0022);
+<span class="ln">1880</span>  }
+<span class="ln">1881</span>  if (c.kind === &quot;text&quot;) {
+<span class="ln">1882</span>    drawText(c, p, t - c.start);
+<span class="ln">1883</span>    ctx2d.restore();
+<span class="ln">1884</span>    return;
+<span class="ln">1885</span>  }
+<span class="ln">1886</span>  let src = null, sw = 0, sh = 0;
+<span class="ln">1887</span>  if (c.kind === &quot;image&quot;) {
+<span class="ln">1888</span>    src = runtime.mediaAux.get(c.mediaId)?.img;
+<span class="ln">1889</span>    if (src) { sw = src.naturalWidth; sh = src.naturalHeight; }
+<span class="ln">1890</span>  } else if (c.kind === &quot;svg&quot;) {
+<span class="ln">1891</span>    src = getSvgImage(c, t);
+<span class="ln">1892</span>    if (src) { sw = src.naturalWidth || src.width; sh = src.naturalHeight || src.height; }
+<span class="ln">1893</span>  } else if (c.kind === &quot;video&quot;) {
+<span class="ln">1894</span>    src = getClipEl(c);
+<span class="ln">1895</span>    if (src) { sw = src.videoWidth; sh = src.videoHeight; }
+<span class="ln">1896</span>  }
+<span class="ln">1897</span>  if (src &amp;&amp; sw &amp;&amp; sh) {
+<span class="ln">1898</span>    // source crop (percent per edge)
+<span class="ln">1899</span>    const sx = sw * clamp(+p.cropL || 0, 0, 95) / 100;
+<span class="ln">1900</span>    const sy = sh * clamp(+p.cropT || 0, 0, 95) / 100;
+<span class="ln">1901</span>    const cw = Math.max(1, sw - sx - sw * clamp(+p.cropR || 0, 0, 95) / 100);
+<span class="ln">1902</span>    const ch = Math.max(1, sh - sy - sh * clamp(+p.cropB || 0, 0, 95) / 100);
+<span class="ln">1903</span>    // fit → destination size
+<span class="ln">1904</span>    const sc = p.scale || 1;
+<span class="ln">1905</span>    let dw, dh;
+<span class="ln">1906</span>    if (p.fit === &quot;cover&quot;)        { const f = Math.max(W / cw, H / ch) * sc; dw = cw * f; dh = ch * f; }
+<span class="ln">1907</span>    else if (p.fit === &quot;stretch&quot;) { dw = W * sc; dh = H * sc; }
+<span class="ln">1908</span>    else if (p.fit === &quot;none&quot;)    { dw = cw * sc; dh = ch * sc; }
+<span class="ln">1909</span>    else                          { const f = Math.min(W / cw, H / ch) * sc; dw = cw * f; dh = ch * f; }
+<span class="ln">1910</span>    if (p.flipH || p.flipV) ctx2d.scale(p.flipH ? -1 : 1, p.flipV ? -1 : 1);
+<span class="ln">1911</span>    if (p.cornerRadius &gt; 0) {
+<span class="ln">1912</span>      ctx2d.beginPath();
+<span class="ln">1913</span>      ctx2d.roundRect(-dw / 2, -dh / 2, dw, dh, Math.min(+p.cornerRadius, dw / 2, dh / 2));
+<span class="ln">1914</span>      ctx2d.clip();
+<span class="ln">1915</span>    }
+<span class="ln">1916</span>    if (p.bgRemove &amp;&amp; c.kind === &quot;video&quot;) requestMask(c.id, src); // refresh person mask
+<span class="ln">1917</span>    if (p.bgRemove &amp;&amp; c.kind === &quot;image&quot; &amp;&amp; !bgSeg.masks.get(c.id)) requestMask(c.id, src);
+<span class="ln">1918</span>    ctx2d.filter = buildFilter(p);
+<span class="ln">1919</span>    if (needsPixelPass(p, c)) {
+<span class="ln">1920</span>      const processed = pixelPass(c, p, src, sx, sy, cw, ch, dw, dh);
+<span class="ln">1921</span>      ctx2d.drawImage(processed, 0, 0, processed.width, processed.height, -dw / 2, -dh / 2, dw, dh);
+<span class="ln">1922</span>    } else {
+<span class="ln">1923</span>      ctx2d.drawImage(src, sx, sy, cw, ch, -dw / 2, -dh / 2, dw, dh);
+<span class="ln">1924</span>    }
+<span class="ln">1925</span>    ctx2d.filter = &quot;none&quot;;
+<span class="ln">1926</span>    if (p.vignette &gt; 0) {
+<span class="ln">1927</span>      const g = ctx2d.createRadialGradient(0, 0, Math.min(dw, dh) * 0.35, 0, 0, Math.hypot(dw, dh) * 0.55);
+<span class="ln">1928</span>      g.addColorStop(0, &quot;rgba(0,0,0,0)&quot;);
+<span class="ln">1929</span>      g.addColorStop(1, `rgba(0,0,0,${clamp(p.vignette / 100, 0, 1) * 0.9})`);
+<span class="ln">1930</span>      ctx2d.fillStyle = g;
+<span class="ln">1931</span>      ctx2d.fillRect(-dw / 2, -dh / 2, dw, dh);
+<span class="ln">1932</span>    }
+<span class="ln">1933</span>    if (p.grain &gt; 0) drawGrain(p.grain, -dw / 2, -dh / 2, dw, dh, t);
+<span class="ln">1934</span>  }
+<span class="ln">1935</span>  ctx2d.restore();
+<span class="ln">1936</span>}</pre>
+      </div>
+    </section>
+    <section class="sec" id="flow"><div class="sec-no">§ <b>02</b> · KEY FLOW</div><h2 class="sec-title">关键<em>流程</em></h2>
+      <div class="flow">timeline time t
+  ├─ seekVideosTo(t) → mediaTimeAt(c,t)
+  ├─ prepareFrameAssets(t) → SVG raster + AI mask
+  ├─ drawFrame(t) → canvas JPEG
+  ├─ POST /api/export/frame?id=...
+  └─ POST /api/export/end → ffmpeg mux MP4</div>
+      <p>快导出的策略是让浏览器继续负责逐帧视觉真相，服务端只做编码器。seekVideosTo 起点见 <code>sources/fablecut/app.js:2197</code>；renderAudioMix 起点见 <code>sources/fablecut/app.js:2227</code>；prepareFrameAssets 起点见 <code>sources/fablecut/app.js:2264</code>；fastExport 起点见 <code>sources/fablecut/app.js:2277</code>；POST frame见 <code>sources/fablecut/app.js:2313</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/app.js:2197-2323</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">2197</span>/* ── Fast export ── */
+<span class="ln">2198</span>let renderCancelled = false;
+<span class="ln">2199</span>function seekVideosTo(t) {
+<span class="ln">2200</span>  const waits = [];
+<span class="ln">2201</span>  for (const c of project.clips) {
+<span class="ln">2202</span>    if (c.kind !== &quot;video&quot;) continue;
+<span class="ln">2203</span>    const el = getClipEl(c); if (!el) continue;
+<span class="ln">2204</span>    if (!activeAt(c, t)) { if (!el.paused) el.pause(); continue; }
+<span class="ln">2205</span>    const mt = mediaTimeAt(c, t);
+<span class="ln">2206</span>    if (Math.abs(el.currentTime - mt) &lt; 1e-4 &amp;&amp; el.readyState &gt;= 2) continue;
+<span class="ln">2207</span>    waits.push(new Promise((res) =&gt; {
+<span class="ln">2208</span>      const done = () =&gt; { clearTimeout(tm); el.removeEventListener(&quot;seeked&quot;, done); res(); };
+<span class="ln">2209</span>      const tm = setTimeout(done, 1500);
+<span class="ln">2210</span>      el.addEventListener(&quot;seeked&quot;, done);
+<span class="ln">2211</span>      try { el.currentTime = mt; } catch { done(); }
+<span class="ln">2212</span>    }));
+<span class="ln">2213</span>  }
+<span class="ln">2214</span>  return Promise.all(waits);
+<span class="ln">2215</span>}
+<span class="ln">2216</span>function encodeWAV(buf) {
+<span class="ln">2217</span>  const ch = buf.numberOfChannels, len = buf.length, sr = buf.sampleRate;
+<span class="ln">2218</span>  const bytes = 44 + len * ch * 2;
+<span class="ln">2219</span>  const ab = new ArrayBuffer(bytes), v = new DataView(ab);
+<span class="ln">2220</span>  const wstr = (o, s) =&gt; { for (let i = 0; i &lt; s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+<span class="ln">2221</span>  wstr(0, &quot;RIFF&quot;); v.setUint32(4, bytes - 8, true); wstr(8, &quot;WAVE&quot;);
+<span class="ln">2222</span>  wstr(12, &quot;fmt &quot;); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+<span class="ln">2223</span>  v.setUint16(22, ch, true); v.setUint32(24, sr, true);
+<span class="ln">2224</span>  v.setUint32(28, sr * ch * 2, true); v.setUint16(32, ch * 2, true); v.setUint16(34, 16, true);
+<span class="ln">2225</span>  wstr(36, &quot;data&quot;); v.setUint32(40, len * ch * 2, true);
+<span class="ln">2226</span>  const chans = []; for (let c = 0; c &lt; ch; c++) chans.push(buf.getChannelData(c));
+<span class="ln">2227</span>  let o = 44;
+<span class="ln">2228</span>  for (let i = 0; i &lt; len; i++) for (let c = 0; c &lt; ch; c++) {
+<span class="ln">2229</span>    const s = clamp(chans[c][i], -1, 1);
+<span class="ln">2230</span>    v.setInt16(o, s &lt; 0 ? s * 0x8000 : s * 0x7fff, true); o += 2;
+<span class="ln">2231</span>  }
+<span class="ln">2232</span>  return new Blob([ab], { type: &quot;audio/wav&quot; });
+<span class="ln">2233</span>}
+<span class="ln">2234</span>/* Mix all audio-bearing clips offline, honoring volume keyframes + fades */
+<span class="ln">2235</span>async function renderAudioMix(dur) {
+<span class="ln">2236</span>  const jobs = [];
+<span class="ln">2237</span>  for (const c of project.clips) {
+<span class="ln">2238</span>    if (c.kind !== &quot;audio&quot; &amp;&amp; c.kind !== &quot;video&quot;) continue;
+<span class="ln">2239</span>    const m = getMedia(c.mediaId); if (!m) continue;
+<span class="ln">2240</span>    jobs.push(getAudioBuffer(m).then((buf) =&gt; ({ c, buf })).catch(() =&gt; null));
+<span class="ln">2241</span>  }
+<span class="ln">2242</span>  const sources = (await Promise.all(jobs)).filter(Boolean);
+<span class="ln">2243</span>  if (!sources.length) return null;
+<span class="ln">2244</span>  const sr = 48000;
+<span class="ln">2245</span>  const off = new OfflineAudioContext(2, Math.ceil(dur * sr) + 1, sr);
+<span class="ln">2246</span>  for (const { c, buf } of sources) {
+<span class="ln">2247</span>    const src = off.createBufferSource(); src.buffer = buf;
+<span class="ln">2248</span>    const g = off.createGain();
+<span class="ln">2249</span>    const n = Math.max(2, Math.ceil(c.duration * 30));
+<span class="ln">2250</span>    const curve = new Float32Array(n);
+<span class="ln">2251</span>    for (let i = 0; i &lt; n; i++)
+<span class="ln">2252</span>      curve[i] = clamp(evalProps(c, c.start + (i / (n - 1)) * c.duration).volume, 0, 4);
+<span class="ln">2253</span>    g.gain.setValueCurveAtTime(curve, Math.max(0, c.start), Math.max(0.01, c.duration));
+<span class="ln">2254</span>    src.connect(g); g.connect(off.destination);
+<span class="ln">2255</span>    if (hasSpeedRamp(c)) {
+<span class="ln">2256</span>      const rc = new Float32Array(n);
+<span class="ln">2257</span>      for (let i = 0; i &lt; n; i++)
+<span class="ln">2258</span>        rc[i] = clamp(kfChannel(c, &quot;speed&quot;, (i / (n - 1)) * c.duration, clipSpeed(c)), 0.1, 8);
+<span class="ln">2259</span>      src.playbackRate.setValueCurveAtTime(rc, Math.max(0, c.start), Math.max(0.01, c.duration));
+<span class="ln">2260</span>      src.start(Math.max(0, c.start), Math.max(0, c.in));
+<span class="ln">2261</span>      src.stop(Math.max(0, c.start) + c.duration);
+<span class="ln">2262</span>    } else {
+<span class="ln">2263</span>      const sp = clipSpeed(c);
+<span class="ln">2264</span>      src.playbackRate.value = sp;
+<span class="ln">2265</span>      src.start(Math.max(0, c.start), Math.max(0, c.in), c.duration * sp);
+<span class="ln">2266</span>    }
+<span class="ln">2267</span>  }
+<span class="ln">2268</span>  return encodeWAV(await off.startRendering());
+<span class="ln">2269</span>}
+<span class="ln">2270</span>/* Frame-exact asset prep for the fast exporter: rasterize the SVG frame for
+<span class="ln">2271</span>   this exact time, and refresh AI person masks synchronously. */
+<span class="ln">2272</span>async function prepareFrameAssets(t) {
+<span class="ln">2273</span>  for (const c of project.clips) {
+<span class="ln">2274</span>    if (!activeAt(c, t)) continue;
+<span class="ln">2275</span>    if (c.kind === &quot;svg&quot;) await prepareSvgFrame(c, t);
+<span class="ln">2276</span>    if (c.props?.bgRemove &amp;&amp; (c.kind === &quot;video&quot; || c.kind === &quot;image&quot;)) {
+<span class="ln">2277</span>      const el = c.kind === &quot;video&quot; ? getClipEl(c) : runtime.mediaAux.get(c.mediaId)?.img;
+<span class="ln">2278</span>      if (el) { try { await requestMask(c.id, el, true); } catch {} }
+<span class="ln">2279</span>    }
+<span class="ln">2280</span>  }
+<span class="ln">2281</span>}
+<span class="ln">2282</span>async function fastExport() {
+<span class="ln">2283</span>  if (state.exporting) return;
+<span class="ln">2284</span>  pause();
+<span class="ln">2285</span>  state.exporting = true; state.rendering = true; renderCancelled = false;
+<span class="ln">2286</span>  els.exportOverlay.classList.remove(&quot;hidden&quot;);
+<span class="ln">2287</span>  els.exportProgress.style.width = &quot;0%&quot;;
+<span class="ln">2288</span>  els.exportNote.textContent = &quot;Rendering frames → ffmpeg. You can switch tabs; export continues.&quot;;
+<span class="ln">2289</span>  const fps = project.fps, dur = Math.max(1 / fps, projDur());
+<span class="ln">2290</span>  const frames = Math.max(1, Math.round(dur * fps));
+<span class="ln">2291</span>  let sessId = null;
+<span class="ln">2292</span>  try {
+<span class="ln">2293</span>    els.exportTitle.textContent = &quot;Mixing audio…&quot;;
+<span class="ln">2294</span>    const wav = await renderAudioMix(dur);
+<span class="ln">2295</span>    if (renderCancelled) throw new Error(&quot;cancelled&quot;);
+<span class="ln">2296</span>    const begin = await fetch(&quot;/api/export/begin&quot;, {
+<span class="ln">2297</span>      method: &quot;POST&quot;, body: JSON.stringify({ fps, name: project.name.replace(/[^\w\- ]+/g, &quot;&quot;) || &quot;export&quot; }),
+<span class="ln">2298</span>    }).then((r) =&gt; r.json());
+<span class="ln">2299</span>    if (!begin.id) throw new Error(begin.error || &quot;export begin failed&quot;);
+<span class="ln">2300</span>    sessId = begin.id;
+<span class="ln">2301</span>    if (wav) {
+<span class="ln">2302</span>      const r = await fetch(&quot;/api/export/audio?id=&quot; + sessId, { method: &quot;POST&quot;, body: wav });
+<span class="ln">2303</span>      if (!r.ok) throw new Error(&quot;audio upload failed&quot;);
+<span class="ln">2304</span>    }
+<span class="ln">2305</span>    try { await document.fonts.ready; } catch {}
+<span class="ln">2306</span>    for (let f = 0; f &lt; frames; f++) {
+<span class="ln">2307</span>      if (renderCancelled) throw new Error(&quot;cancelled&quot;);
+<span class="ln">2308</span>      const t = f / fps;
+<span class="ln">2309</span>      state.time = t;                    // playhead follows the render
+<span class="ln">2310</span>      await seekVideosTo(t);
+<span class="ln">2311</span>      await prepareFrameAssets(t);       // exact SVG frames + AI masks
+<span class="ln">2312</span>      drawFrame(t);
+<span class="ln">2313</span>      const blob = await new Promise((res) =&gt; els.preview.toBlob(res, &quot;image/jpeg&quot;, 0.95));
+<span class="ln">2314</span>      const r = await fetch(&quot;/api/export/frame?id=&quot; + sessId, { method: &quot;POST&quot;, body: blob });
+<span class="ln">2315</span>      if (!r.ok) throw new Error((await r.json()).error || &quot;frame upload failed&quot;);
+<span class="ln">2316</span>      const pct = ((f + 1) / frames) * 100;
+<span class="ln">2317</span>      els.exportProgress.style.width = pct.toFixed(1) + &quot;%&quot;;
+<span class="ln">2318</span>      els.exportTitle.textContent = `Rendering… ${pct.toFixed(0)}%`;
+<span class="ln">2319</span>    }
+<span class="ln">2320</span>    els.exportTitle.textContent = &quot;Encoding…&quot;;
+<span class="ln">2321</span>    const end = await fetch(&quot;/api/export/end?id=&quot; + sessId, { method: &quot;POST&quot; }).then((r) =&gt; r.json());
+<span class="ln">2322</span>    if (!end.src) throw new Error(end.error || &quot;encode failed&quot;);
+<span class="ln">2323</span>    const a = document.createElement(&quot;a&quot;);</pre>
+      </div>
+    </section>
+    <section class="sec" id="edge"><div class="sec-no">§ <b>03</b> · EDGE CASES</div><h2 class="sec-title">边界 / <em>失败模式</em></h2>
+      <h3><span class="arr">▸</span>服务端编码会话</h3>
+      <p>服务端 export session 建临时目录，把 JPEG frame 写入 ffmpeg stdin，结束时选择是否带音频合成。export session map见 <code>sources/fablecut/server.js:123</code>；begin 创建 session见 <code>sources/fablecut/server.js:267</code>；frame 写入 stdin见 <code>sources/fablecut/server.js:283</code>；audio 上传见 <code>sources/fablecut/server.js:293</code>；end 编码完成见 <code>sources/fablecut/server.js:304</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/server.js:267-321</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">267</span>  /* API: fast export (browser-rendered frames → ffmpeg encode) */
+<span class="ln">268</span>  if (p === &quot;/api/export/ffmpeg&quot; &amp;&amp; req.method === &quot;GET&quot;) {
+<span class="ln">269</span>    sendJSON(res, 200, { available: HAS_FFMPEG });
+<span class="ln">270</span>    return;
+<span class="ln">271</span>  }
+<span class="ln">272</span>  if (p === &quot;/api/export/begin&quot; &amp;&amp; req.method === &quot;POST&quot;) {
+<span class="ln">273</span>    if (!HAS_FFMPEG) { sendJSON(res, 400, { error: &quot;ffmpeg not found on PATH&quot; }); return; }
+<span class="ln">274</span>    try {
+<span class="ln">275</span>      const opts = JSON.parse((await readBody(req)).toString(&quot;utf8&quot;) || &quot;{}&quot;);
+<span class="ln">276</span>      sendJSON(res, 200, { id: beginExport(opts.fps || 30, opts.name) });
+<span class="ln">277</span>    } catch (e) { sendJSON(res, 500, { error: String(e) }); }
+<span class="ln">278</span>    return;
+<span class="ln">279</span>  }
+<span class="ln">280</span>  if (p === &quot;/api/export/frame&quot; &amp;&amp; req.method === &quot;POST&quot;) {
+<span class="ln">281</span>    const sess = exportSessions.get(url.searchParams.get(&quot;id&quot;));
+<span class="ln">282</span>    if (!sess) { sendJSON(res, 404, { error: &quot;no such export session&quot; }); return; }
+<span class="ln">283</span>    try {
+<span class="ln">284</span>      const body = await readBody(req);
+<span class="ln">285</span>      if (sess.proc.exitCode !== null) throw new Error(&quot;ffmpeg exited: &quot; + sess.err());
+<span class="ln">286</span>      if (!sess.proc.stdin.write(body))
+<span class="ln">287</span>        await new Promise((r) =&gt; sess.proc.stdin.once(&quot;drain&quot;, r));
+<span class="ln">288</span>      sendJSON(res, 200, { ok: true });
+<span class="ln">289</span>    } catch (e) { sendJSON(res, 500, { error: String(e) }); }
+<span class="ln">290</span>    return;
+<span class="ln">291</span>  }
+<span class="ln">292</span>  if (p === &quot;/api/export/audio&quot; &amp;&amp; req.method === &quot;POST&quot;) {
+<span class="ln">293</span>    const sess = exportSessions.get(url.searchParams.get(&quot;id&quot;));
+<span class="ln">294</span>    if (!sess) { sendJSON(res, 404, { error: &quot;no such export session&quot; }); return; }
+<span class="ln">295</span>    try {
+<span class="ln">296</span>      sess.wav = path.join(sess.dir, &quot;audio.wav&quot;);
+<span class="ln">297</span>      fs.writeFileSync(sess.wav, await readBody(req));
+<span class="ln">298</span>      sendJSON(res, 200, { ok: true });
+<span class="ln">299</span>    } catch (e) { sendJSON(res, 500, { error: String(e) }); }
+<span class="ln">300</span>    return;
+<span class="ln">301</span>  }
+<span class="ln">302</span>  if (p === &quot;/api/export/end&quot; &amp;&amp; req.method === &quot;POST&quot;) {
+<span class="ln">303</span>    const id = url.searchParams.get(&quot;id&quot;);
+<span class="ln">304</span>    const sess = exportSessions.get(id);
+<span class="ln">305</span>    if (!sess) { sendJSON(res, 404, { error: &quot;no such export session&quot; }); return; }
+<span class="ln">306</span>    try {
+<span class="ln">307</span>      if (url.searchParams.get(&quot;discard&quot;)) { cleanupExport(id); sendJSON(res, 200, { ok: true }); return; }
+<span class="ln">308</span>      sess.proc.stdin.end();
+<span class="ln">309</span>      const code = await sess.done;
+<span class="ln">310</span>      if (code !== 0) throw new Error(&quot;ffmpeg encode failed: &quot; + sess.err());
+<span class="ln">311</span>      const out = uniquePath(EXPORTS_DIR, sess.name.replace(/\.mp4$/i, &quot;&quot;) + &quot;.mp4&quot;);
+<span class="ln">312</span>      if (sess.wav &amp;&amp; fs.existsSync(sess.wav))
+<span class="ln">313</span>        await run(&quot;ffmpeg&quot;, [&quot;-y&quot;, &quot;-i&quot;, sess.videoPath, &quot;-i&quot;, sess.wav,
+<span class="ln">314</span>          &quot;-c:v&quot;, &quot;copy&quot;, &quot;-c:a&quot;, &quot;aac&quot;, &quot;-b:a&quot;, &quot;192k&quot;, &quot;-shortest&quot;,
+<span class="ln">315</span>          &quot;-movflags&quot;, &quot;+faststart&quot;, out]);
+<span class="ln">316</span>      else
+<span class="ln">317</span>        await run(&quot;ffmpeg&quot;, [&quot;-y&quot;, &quot;-i&quot;, sess.videoPath, &quot;-c&quot;, &quot;copy&quot;, &quot;-movflags&quot;, &quot;+faststart&quot;, out]);
+<span class="ln">318</span>      cleanupExport(id);
+<span class="ln">319</span>      sendJSON(res, 200, { ok: true, src: &quot;/exports/&quot; + encodeURIComponent(path.basename(out)) });
+<span class="ln">320</span>    } catch (e) { cleanupExport(id); sendJSON(res, 500, { error: String(e) }); }
+<span class="ln">321</span>    return;</pre>
+      </div>
+      <h3><span class="arr">▸</span>MediaRecorder fallback</h3>
+      <p>当快导出不可用时，浏览器还有 MediaRecorder fallback；这说明项目对不同浏览器和缺 ffmpeg 环境有降级路径。fallback 标题见 <code>sources/fablecut/app.js:2335</code>；pickMime 候选见 <code>sources/fablecut/app.js:2337</code>；recorder 状态变量见 <code>sources/fablecut/app.js:2336</code>；server HAS_FFMPEG见 <code>sources/fablecut/server.js:32</code>；probe ffmpeg见 <code>sources/fablecut/app.js:235</code>。</p>
+      <ul><li>逐帧 seek 对长视频素材成本高，尤其是带 speed ramp 的 clip。</li><li>AI mask 在导出中同步刷新，质量稳定但增加 GPU/CPU 压力。</li><li>音频混音依赖浏览器 OfflineAudioContext，复杂素材数量多时会占内存。</li></ul>
+    </section>
+    <section class="sec" id="related"><div class="sec-no">§ <b>04</b> · RELATED</div><h2 class="sec-title">关联<em>模块</em></h2>
+      <div class="g2"><div class="card"><div class="card-h">analyze.js</div><div class="card-d">参考片分析为自动剪辑提供切点和节奏，但不直接参与渲染。</div></div><div class="card"><div class="card-h">server.js</div><div class="card-d">只保存和编码，不重新实现浏览器合成逻辑。</div></div><div class="card"><div class="card-h">mcp-server.js</div><div class="card-d">agent 通过修改 project JSON 间接影响渲染输出。</div></div><div class="card"><div class="card-h">style.css</div><div class="card-d">界面布局独立于渲染核心，便于 app.js 直接操控 canvas。</div></div></div>
+    </section>
+
+    <div class="foot"><span>Generated · 2026-07-11</span><span>Source · <a href="https://github.com/ronak-create/FableCut">ronak-create/FableCut</a></span></div>
+  </main>
+</div>
+<script>
+(() => {
+  const links = document.querySelectorAll('.nav-list a');
+  const map = new Map();
+  links.forEach(a => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (el) map.set(el, a); });
+  const setActive = (el) => { links.forEach(a => a.classList.remove('active')); if (el && map.get(el)) map.get(el).classList.add('active'); };
+  const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target); }), { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  map.forEach((_, el) => obs.observe(el));
+  const sel = document.getElementById('msel');
+  if (sel) { links.forEach(a => { const o = document.createElement('option'); o.value = a.getAttribute('href'); o.textContent = a.textContent.trim(); sel.appendChild(o); }); sel.addEventListener('change', e => location.href = e.target.value); }
+  const canvas = document.getElementById('stars');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const resize = () => { canvas.width = innerWidth; canvas.height = innerHeight; }; resize(); addEventListener('resize', resize);
+    const stars = Array.from({length:80}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.4+0.2, a: Math.random(), s: Math.random()*0.02+0.005 }));
+    const tick = () => { ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s => { s.a += s.s; if (s.a > 1 || s.a < 0.2) s.s *= -1; ctx.globalAlpha = s.a; ctx.fillStyle = '#f0a585'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); }); requestAnimationFrame(tick); }; tick();
+  }
+})();
+</script>
+</body>
+</html>

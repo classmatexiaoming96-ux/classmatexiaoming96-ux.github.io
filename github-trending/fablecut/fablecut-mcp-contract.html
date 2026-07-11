@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MCP 补丁契约 · 深度解析 · FableCut</title>
+<meta name="description" content="FableCut MCP 工具、patch_project、set_project、import_media 与 reference analysis 的源码级拆解。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,400..900&family=Hanken+Grotesk:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+/* LAYOUT SHELL START — Do NOT edit; copy as-is */
+/* ============================================================
+   GitHub Trending · Source-level Observatory
+   Layout Shell · v1.0
+   Based on openclaw.html / kimi-code.html
+   ============================================================ */
+
+:root {
+  /* surfaces — 暗色玻璃面板（统一锚点） */
+  --ink:        #07080c;
+  --ink-1:      #0a0b12;
+  --ink-2:      #10121c;
+  --ink-3:      #161a28;
+  --panel:      rgba(20, 22, 34, 0.62);
+  --panel-2:    rgba(13, 15, 24, 0.85);
+
+  /* project accent — 新项目只许改这 3 个值，其他颜色都用 --signal/--phosphor 等通用变量 */
+  --star:       #e8825a;   /* 项目专属主色（hex by project） */
+  --star-soft:  #f0a585;
+  --star-deep:  #c0653f;
+
+  /* 通用语义色 — 不许改 */
+  --signal:     #54d6e0;   /* cyan — data / signal */
+  --signal-soft:#8eebf2;
+  --phosphor:   #7fcf9e;   /* green — live / running */
+  --rose:       #f08a8a;   /* error / isError */
+  --violet:     #b3a4f0;
+
+  /* text scale */
+  --text:       #ece7da;
+  --text-2:     #b9bdca;
+  --text-dim:   #79809a;
+  --text-faint: #4a5172;
+
+  /* lines & glow */
+  --line:       rgba(255,255,255,0.085);
+  --line-2:     rgba(255,255,255,0.05);
+  --line-amber: rgba(232,130,90,0.34);
+  --line-cyan:  rgba(84,214,224,0.30);
+  --glow-amber: rgba(232,130,90,0.24);
+  --glow-cyan:  rgba(84,214,224,0.18);
+
+  /* fonts */
+  --serif: "Fraunces", Georgia, serif;
+  --sans:  "Hanken Grotesk", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, monospace;
+
+  /* layout tokens */
+  --maxw: 1500px;
+  --nav-w: 270px;
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 145px; }
+body { background: var(--ink); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* ── background layers ──────────────────────────────────────── */
+.bg-stars, .bg-glow, .bg-grid, .bg-grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: -1;
+}
+.bg-stars { opacity: .55; }
+.bg-glow  { background: radial-gradient(ellipse at 20% 0%, var(--glow-amber), transparent 60%); }
+.bg-grid  {
+  background-image:
+    linear-gradient(var(--line-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  opacity: .35;
+}
+.bg-grain { opacity: .35; mix-blend-mode: overlay; }
+
+/* ── shell ─────────────────────────────────────────────────── */
+.shell {
+  display: grid;
+  grid-template-columns: var(--nav-w) 1fr;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+/* ── side nav (sticky + scroll-spy) ────────────────────────── */
+.nav {
+  position: sticky; top: 0; align-self: start; height: 100vh;
+  padding: 30px 22px 30px 30px;
+  display: flex; flex-direction: column; gap: 22px;
+  border-right: 1px solid var(--line-2);
+}
+.nav-brand { display: flex; flex-direction: column; gap: 6px; }
+.nav-brand .glyph { font-family: var(--serif); font-size: 22px; letter-spacing: -.02em; }
+.nav-brand .glyph b { color: var(--star); font-weight: 600; font-style: italic; }
+.nav-brand .sub   { font-family: var(--mono); font-size: 11px; color: var(--text-faint); }
+.nav-ver          { font-family: var(--mono); font-size: 10px; color: var(--text-faint); }
+
+.nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+.nav-list a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 6px;
+  color: var(--text-dim); text-decoration: none; font-size: 13px;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.nav-list a .idx { font-family: var(--mono); font-size: 10px; color: var(--text-faint); width: 16px; flex: none; }
+.nav-list a:hover { color: var(--text); background: rgba(255,255,255,0.025); }
+.nav-list a.active { color: var(--star); background: linear-gradient(90deg, rgba(232,130,90,0.12), transparent); }
+.nav-list a.active .idx { color: var(--star); }
+.nav-list a.active::before {
+  content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--star); margin-right: 4px; box-shadow: 0 0 8px var(--star);
+}
+
+.nav-foot { margin-top: auto; font-family: var(--mono); font-size: 10px; color: var(--text-faint); line-height: 1.7; }
+.nav-foot a { color: var(--text-dim); text-decoration: none; }
+.nav-foot a:hover { color: var(--signal); }
+
+/* ── mobile bar (hidden on desktop) ────────────────────────── */
+.mobile-bar { display: none; }
+@media (max-width: 960px) {
+  .mobile-bar {
+    display: flex; position: sticky; top: 0; z-index: 50;
+    align-items: center; justify-content: space-between;
+    padding: 14px 20px; background: var(--panel-2); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line-2);
+  }
+  .shell { grid-template-columns: 1fr; }
+  .nav { display: none; }
+}
+
+/* ── main content ──────────────────────────────────────────── */
+.main { min-width: 0; padding: 0 clamp(20px,5vw,84px) 120px; }
+
+/* ── hero ──────────────────────────────────────────────────── */
+.hero { padding: 80px 0 60px; border-bottom: 1px solid var(--line); }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 48px; align-items: center; }
+.hero-eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  color: var(--star); text-transform: uppercase; margin-bottom: 18px;
+}
+.hero-title {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.05; letter-spacing: -.025em; margin-bottom: 22px;
+}
+.hero-title em { font-style: italic; color: var(--star); }
+.hero-desc { color: var(--text-2); font-size: 17px; line-height: 1.6; max-width: 580px; }
+.hero-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 54px;
+}
+.stat { padding: 16px 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.stat-num { font-family: var(--serif); font-size: 26px; color: var(--star); margin-bottom: 4px; }
+.stat-lbl { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: .08em; text-transform: uppercase; }
+
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── sections ─────────────────────────────────────────────── */
+section.sec { padding: 60px 0; border-bottom: 1px solid var(--line-2); }
+.sec-no {
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  letter-spacing: .12em; margin-bottom: 10px;
+}
+.sec-no b { color: var(--star); font-weight: 500; }
+h2.sec-title {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.5vw, 38px);
+  letter-spacing: -.02em; margin-bottom: 28px;
+}
+h2.sec-title em { font-style: italic; color: var(--star); }
+
+h3 {
+  font-family: var(--sans); font-weight: 500; font-size: 20px;
+  letter-spacing: -.01em; margin: 48px 0 14px;
+  display: flex; align-items: baseline; gap: 10px;
+}
+h3 .arr { color: var(--star); font-family: var(--mono); font-size: 14px; }
+
+/* ── deep-link (H3 末尾的子页面入口) ─────────────────────── */
+.deep-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px; padding: 8px 14px;
+  border: 1px solid var(--line-amber); border-radius: 8px;
+  font-family: var(--mono); font-size: 11px; color: var(--star);
+  text-decoration: none; background: rgba(232,130,90,0.06);
+  transition: background .25s var(--ease), border-color .25s var(--ease);
+}
+.deep-link:hover { background: rgba(232,130,90,0.16); border-color: var(--star); }
+.deep-link::after { content: '→'; font-family: var(--mono); }
+
+/* ── prose ─────────────────────────────────────────────────── */
+p { color: var(--text-2); font-size: 15.5px; line-height: 1.75; margin: 14px 0; }
+p strong { color: var(--text); font-weight: 600; }
+p code, li code { font-family: var(--mono); font-size: 13px; padding: 2px 6px; border-radius: 4px; background: var(--ink-3); color: var(--star-soft); }
+a { color: var(--signal); text-decoration: none; border-bottom: 1px dotted rgba(84,214,224,0.4); }
+a:hover { color: var(--signal-soft); border-bottom-color: var(--signal); }
+
+ul, ol { padding-left: 22px; margin: 14px 0; }
+li { color: var(--text-2); font-size: 15.5px; line-height: 1.75; margin: 6px 0; }
+li::marker { color: var(--star); }
+
+/* ── code blocks (with line numbers) ──────────────────────── */
+.code-wrap {
+  margin: 18px 0; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--ink-1); overflow: hidden;
+}
+.code-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px; background: var(--ink-2); border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+}
+.code-bar .src { color: var(--signal); }
+pre.code {
+  margin: 0; padding: 14px 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.65;
+  color: var(--text);
+}
+pre.code .ln {
+  display: inline-block; width: 48px; padding-right: 12px;
+  text-align: right; color: var(--text-faint); user-select: none;
+  border-right: 1px solid var(--line-2);
+}
+pre.code .k  { color: var(--violet); }       /* keyword */
+pre.code .s  { color: var(--phosphor); }     /* string */
+pre.code .n  { color: var(--star-soft); }    /* number */
+pre.code .c  { color: var(--text-faint); font-style: italic; }  /* comment */
+pre.code .t  { color: var(--signal); }       /* type */
+
+/* ── flow diagram (ASCII art 容器) ────────────────────────── */
+.flow {
+  font-family: var(--mono); font-size: 12.5px; line-height: 1.55;
+  color: var(--text-2); white-space: pre;
+  padding: 22px 24px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--ink-1);
+  overflow-x: auto;
+}
+.flow-stage { color: var(--star); font-weight: 600; }
+.flow-arr   { color: var(--signal); }
+.flow-node  { color: var(--phosphor); }
+
+/* ── mermaid containers ────────────────────────────────────── */
+.mermaid { margin: 22px 0; text-align: center; }
+
+/* ── callout boxes ─────────────────────────────────────────── */
+.callout {
+  margin: 18px 0; padding: 14px 18px;
+  border-left: 3px solid var(--star); border-radius: 4px;
+  background: var(--panel); color: var(--text-2);
+  font-size: 14.5px; line-height: 1.65;
+}
+.callout.warn { border-left-color: var(--rose); }
+.callout.info { border-left-color: var(--signal); }
+.callout strong { color: var(--star); }
+
+/* ── grids ─────────────────────────────────────────────────── */
+.g2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+@media (max-width: 760px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+
+.card {
+  padding: 18px 20px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--panel); transition: border-color .25s var(--ease);
+}
+.card:hover { border-color: var(--line-amber); }
+.card-h { font-size: 14px; color: var(--text); margin-bottom: 6px; }
+.card-d { font-size: 13px; color: var(--text-dim); line-height: 1.55; }
+
+/* ── footer ────────────────────────────────────────────────── */
+.foot {
+  margin-top: 80px; padding: 30px 0; border-top: 1px solid var(--line-2);
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.foot a { color: var(--text-dim); }
+.foot a:hover { color: var(--star); }
+
+/* ── utility ───────────────────────────────────────────────── */
+.copy {
+  font-family: var(--mono); font-size: 11px; color: var(--text-faint);
+  background: transparent; border: 1px solid var(--line); padding: 3px 8px;
+  border-radius: 4px; cursor: pointer;
+}
+.copy:hover { color: var(--star); border-color: var(--star); }
+/* LAYOUT SHELL END */
+:root { --star: #e8825a; --star-soft: #f0a585; --star-deep: #c0653f; }
+</style>
+</head>
+<body>
+<canvas class="bg-stars" id="stars"></canvas>
+<div class="bg-glow"></div>
+<div class="bg-grid"></div>
+<svg class="bg-grain"><filter id="gr"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#gr)" opacity="0.4"/></svg>
+<div class="mobile-bar"><div class="glyph">Fable<b>Cut</b></div><select id="msel" aria-label="跳转章节"></select></div>
+<div class="shell">
+  <aside class="nav">
+    <div class="nav-brand"><div class="glyph">Fable<b>Cut</b></div><div class="sub">源码级架构解析 · sources/</div></div>
+    <span class="nav-ver">JavaScript · Browser NLE · MCP</span>
+    <nav><ul class="nav-list" id="navlist"><li><a href="#intro"><span class="idx">00</span>导入与契约</a></li><li><a href="#core-impl"><span class="idx">01</span>核心实现</a></li><li><a href="#flow"><span class="idx">02</span>关键流程</a></li><li><a href="#edge"><span class="idx">03</span>边界与失败</a></li><li><a href="#related"><span class="idx">04</span>关联模块</a></li></ul></nav>
+    <div class="nav-foot"><div><a href="../fablecut.html">← FableCut 主页面</a></div><div><a href="../index.html">全部分析</a></div><div>Generated · 2026-07-11</div></div>
+  </aside>
+  <main class="main">
+
+    <div class="hero"><div class="hero-eyebrow">§ · Nested detail page</div><h1 class="hero-title">MCP 补丁契约 <em>深度解析</em></h1><p class="hero-desc">这页只看 FableCut 如何把视频编辑器变成 agent 可控工具：状态读取、项目视图压缩、结构化 patch、并发 revision 与参考片分析。</p></div>
+    <section class="sec" id="intro"><div class="sec-no">§ <b>00</b> · IMPORT CHAIN</div><h2 class="sec-title">导入链与<em>工具边界</em></h2>
+      <p>MCP 层开头就声明自己是 FableCut timeline automation server，提供 status、get_project、set_project、patch_project、analyze_reference、import_media 等工具。文件职责说明见 <code>sources/fablecut/mcp-server.js:1</code>；Node fs/path 引入见 <code>sources/fablecut/mcp-server.js:12</code>；ROOT 与 PROJECT_FILE见 <code>sources/fablecut/mcp-server.js:18</code>；readProject 读取见 <code>sources/fablecut/mcp-server.js:26</code>；writeProject 原子写见 <code>sources/fablecut/mcp-server.js:31</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/mcp-server.js:1-55</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">1</span>/* ═══════════════════════════════════════════════════════════════════════════
+<span class="ln">2</span>   FableCut MCP server — connects Claude (Code / Desktop) to the video editor.
+<span class="ln">3</span>   Zero-dependency stdio JSON-RPC (Model Context Protocol).
+<span class="ln">4</span>
+<span class="ln">5</span>   Register once for all Claude Code sessions:
+<span class="ln">6</span>     claude mcp add -s user fablecut -- node &quot;&lt;path-to&gt;/fablecut/mcp-server.js&quot;
+<span class="ln">7</span>
+<span class="ln">8</span>   Tools: fablecut_status, fablecut_docs, fablecut_get_project,
+<span class="ln">9</span>          fablecut_set_project, fablecut_patch_project, fablecut_import_media,
+<span class="ln">10</span>          fablecut_analyze_reference
+<span class="ln">11</span>   ═══════════════════════════════════════════════════════════════════════════ */
+<span class="ln">12</span>&quot;use strict&quot;;
+<span class="ln">13</span>const fs = require(&quot;fs&quot;);
+<span class="ln">14</span>const path = require(&quot;path&quot;);
+<span class="ln">15</span>const http = require(&quot;http&quot;);
+<span class="ln">16</span>const { spawn, spawnSync } = require(&quot;child_process&quot;);
+<span class="ln">17</span>
+<span class="ln">18</span>const ROOT = __dirname;
+<span class="ln">19</span>const PROJECT_FILE = path.join(ROOT, &quot;project.json&quot;);
+<span class="ln">20</span>const MEDIA_DIR = path.join(ROOT, &quot;media&quot;);
+<span class="ln">21</span>const PORT = process.env.FABLECUT_PORT || 7777;
+<span class="ln">22</span>const BASE = `http://localhost:${PORT}`;
+<span class="ln">23</span>
+<span class="ln">24</span>/* ── Helpers ── */
+<span class="ln">25</span>const sleep = (ms) =&gt; new Promise((r) =&gt; setTimeout(r, ms));
+<span class="ln">26</span>function readProject() {
+<span class="ln">27</span>  const raw = fs.readFileSync(PROJECT_FILE, &quot;utf8&quot;).replace(new RegExp(&quot;^\\uFEFF&quot;), &quot;&quot;);
+<span class="ln">28</span>  return JSON.parse(raw);
+<span class="ln">29</span>}
+<span class="ln">30</span>function writeProject(doc) {
+<span class="ln">31</span>  // atomic tmp+rename so the UI&#x27;s file watcher never sees a half-written doc
+<span class="ln">32</span>  const tmp = PROJECT_FILE + &quot;.mcp.tmp&quot;;
+<span class="ln">33</span>  fs.writeFileSync(tmp, JSON.stringify(doc, null, 2));
+<span class="ln">34</span>  fs.renameSync(tmp, PROJECT_FILE);
+<span class="ln">35</span>}
+<span class="ln">36</span>/* Optimistic concurrency: revision of project.json when this session last read
+<span class="ln">37</span>   the full document. If the file has moved past it by write time, someone else
+<span class="ln">38</span>   (usually the user, in the editor UI) edited in between — refuse to clobber. */
+<span class="ln">39</span>let lastReadRevision = null;
+<span class="ln">40</span>function httpOk(url) {
+<span class="ln">41</span>  return new Promise((resolve) =&gt; {
+<span class="ln">42</span>    const req = http.get(url, (r) =&gt; { r.resume(); resolve(r.statusCode &lt; 500); });
+<span class="ln">43</span>    req.on(&quot;error&quot;, () =&gt; resolve(false));
+<span class="ln">44</span>    req.setTimeout(1200, () =&gt; { req.destroy(); resolve(false); });
+<span class="ln">45</span>  });
+<span class="ln">46</span>}
+<span class="ln">47</span>async function ensureUIServer() {
+<span class="ln">48</span>  if (await httpOk(BASE + &quot;/api/project&quot;)) return true;
+<span class="ln">49</span>  spawn(process.execPath, [path.join(ROOT, &quot;server.js&quot;)],
+<span class="ln">50</span>    { cwd: ROOT, detached: true, stdio: &quot;ignore&quot; }).unref();
+<span class="ln">51</span>  for (let i = 0; i &lt; 12; i++) {
+<span class="ln">52</span>    await sleep(300);
+<span class="ln">53</span>    if (await httpOk(BASE + &quot;/api/project&quot;)) return true;
+<span class="ln">54</span>  }
+<span class="ln">55</span>  return false;</pre>
+      </div>
+    </section>
+    <section class="sec" id="core-impl"><div class="sec-no">§ <b>01</b> · CORE IMPL</div><h2 class="sec-title">核心实现，<em>逐段</em>拆</h2>
+      <h3><span class="arr">▸</span>工具 schema 是 agent 的安全边界</h3>
+      <p>FableCut 没让模型自由改文件，而是用 JSON schema 限定每个工具的输入。工具定义数组开始见 <code>sources/fablecut/mcp-server.js:74</code>；status 工具见 <code>sources/fablecut/mcp-server.js:77</code>；get_project 工具见 <code>sources/fablecut/mcp-server.js:84</code>；patch_project schema见 <code>sources/fablecut/mcp-server.js:97</code>；set_project schema见 <code>sources/fablecut/mcp-server.js:117</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/mcp-server.js:74-145</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">74</span>const TOOLS = [
+<span class="ln">75</span>  {
+<span class="ln">76</span>    name: &quot;fablecut_status&quot;,
+<span class="ln">77</span>    description: &quot;FableCut video editor: ensure the editor web server is running (auto-starts it), and get the editor URL, project summary and media library. Call this first in a session.&quot;,
+<span class="ln">78</span>    inputSchema: { type: &quot;object&quot;, properties: {} },
+<span class="ln">79</span>  },
+<span class="ln">80</span>  {
+<span class="ln">81</span>    name: &quot;fablecut_docs&quot;,
+<span class="ln">82</span>    description: &quot;Return the FableCut project schema documentation: clips, tracks, props, keyframe animation, transitions, and editing recipes. Read this before editing. TOKEN TIP: pass `section` to fetch only the &#x27;## …&#x27; section(s) you need (substring match, e.g. \&quot;props\&quot;, \&quot;Recipes\&quot;, \&quot;Remake\&quot;) instead of the whole manual.&quot;,
+<span class="ln">83</span>    inputSchema: {
+<span class="ln">84</span>      type: &quot;object&quot;,
+<span class="ln">85</span>      properties: { section: { type: &quot;string&quot;, description: &quot;Return only &#x27;## &#x27; sections whose heading contains this text (case-insensitive). Omit for the full document.&quot; } },
+<span class="ln">86</span>    },
+<span class="ln">87</span>  },
+<span class="ln">88</span>  {
+<span class="ln">89</span>    name: &quot;fablecut_get_project&quot;,
+<span class="ln">90</span>    description: &quot;Get the FableCut project (the timeline document). TOKEN TIP: pass compact:true for a one-line-per-clip summary (ids, tracks, timings, non-default props) — usually all you need to plan an edit; fetch the full JSON only when you must inspect exact keyframes.&quot;,
+<span class="ln">91</span>    inputSchema: {
+<span class="ln">92</span>      type: &quot;object&quot;,
+<span class="ln">93</span>      properties: { compact: { type: &quot;boolean&quot;, description: &quot;Return a compact human-readable summary instead of the full JSON&quot; } },
+<span class="ln">94</span>    },
+<span class="ln">95</span>  },
+<span class="ln">96</span>  {
+<span class="ln">97</span>    name: &quot;fablecut_patch_project&quot;,
+<span class="ln">98</span>    description: &quot;Apply targeted edits to the FableCut project WITHOUT round-tripping the whole document — PREFER THIS over get+set for every edit (it is ~10-100x cheaper in tokens and merge-safe by design: it re-reads the latest document from disk, applies your ops in order, bumps revision once, saves atomically). Ops: {op:&#x27;addClip&#x27;, clip:{…}} (id auto-generated if omitted) · {op:&#x27;updateClip&#x27;, id, set:{…}} · {op:&#x27;removeClip&#x27;, id} · {op:&#x27;addMedia&#x27;, media:{…}} · {op:&#x27;removeMedia&#x27;, id} · {op:&#x27;setProject&#x27;, set:{name|width|height|fps|background|markers}}. updateClip merge rules: top-level keys are replaced (keyframes/transitionIn/transitionOut wholesale), `props` merges key-by-key, and setting any key to null deletes it. All-or-nothing: an invalid op aborts the whole patch unsaved.&quot;,
+<span class="ln">99</span>    inputSchema: {
+<span class="ln">100</span>      type: &quot;object&quot;,
+<span class="ln">101</span>      properties: {
+<span class="ln">102</span>        ops: {
+<span class="ln">103</span>          type: &quot;array&quot;,
+<span class="ln">104</span>          items: { type: &quot;object&quot; },
+<span class="ln">105</span>          description: &quot;Edit operations, applied in order (see tool description for shapes)&quot;,
+<span class="ln">106</span>        },
+<span class="ln">107</span>      },
+<span class="ln">108</span>      required: [&quot;ops&quot;],
+<span class="ln">109</span>    },
+<span class="ln">110</span>  },
+<span class="ln">111</span>  {
+<span class="ln">112</span>    name: &quot;fablecut_set_project&quot;,
+<span class="ln">113</span>    description: &quot;Replace the FableCut project JSON. Pass the COMPLETE document (read with fablecut_get_project, modify, send back whole). Revision is auto-bumped; the open editor UI hot-reloads instantly so the user sees the edit live. CONFLICT-SAFE: if the project changed on disk since your last fablecut_get_project (e.g. the user tweaked something in the UI), the call errors instead of overwriting — re-read, re-apply your edit on top of the latest document, and retry.&quot;,
+<span class="ln">114</span>    inputSchema: {
+<span class="ln">115</span>      type: &quot;object&quot;,
+<span class="ln">116</span>      properties: {
+<span class="ln">117</span>        project: { type: &quot;object&quot;, description: &quot;The complete project document (see fablecut_docs for schema)&quot; },
+<span class="ln">118</span>        force: { type: &quot;boolean&quot;, description: &quot;Overwrite even if the project changed since it was last read (discards those external/user changes). Only when the user explicitly asks.&quot; },
+<span class="ln">119</span>      },
+<span class="ln">120</span>      required: [&quot;project&quot;],
+<span class="ln">121</span>    },
+<span class="ln">122</span>  },
+<span class="ln">123</span>  {
+<span class="ln">124</span>    name: &quot;fablecut_analyze_reference&quot;,
+<span class="ln">125</span>    description: &quot;Analyze a reference video into an EDIT BLUEPRINT so a similar edit can be rebuilt with different footage over the same music. Returns: shot boundaries (cuts) with per-shot audio energy, music beats + BPM, a loudness curve, the detected drop, and extracts the reference&#x27;s music track into media/ (registered in the project, ready to place on A1). Remake recipe: copy the reference&#x27;s width/height/fps to the project, write `beats` into project `markers`, lay the extracted music on A1, then place one clip per blueprint `shot` at the same start/duration — pick calm footage for low-energy shots and action for high-energy ones, and make the biggest moment land on `drop`. See the &#x27;Remake a reference video&#x27; section of fablecut_docs.&quot;,
+<span class="ln">126</span>    inputSchema: {
+<span class="ln">127</span>      type: &quot;object&quot;,
+<span class="ln">128</span>      properties: {
+<span class="ln">129</span>        path: { type: &quot;string&quot;, description: &quot;The reference video: an absolute file path (copied into media/ automatically) or an existing &#x27;/media/…&#x27; src&quot; },
+<span class="ln">130</span>        threshold: { type: &quot;number&quot;, description: &quot;Scene-cut sensitivity 0–1 (default: adaptive 0.30→0.20→0.12). Lower it if obvious cuts are missed, raise it if too many false cuts.&quot; },
+<span class="ln">131</span>        registerMusic: { type: &quot;boolean&quot;, description: &quot;Extract the reference&#x27;s music and register it as project media (default true)&quot; },
+<span class="ln">132</span>      },
+<span class="ln">133</span>      required: [&quot;path&quot;],
+<span class="ln">134</span>    },
+<span class="ln">135</span>  },
+<span class="ln">136</span>  {
+<span class="ln">137</span>    name: &quot;fablecut_import_media&quot;,
+<span class="ln">138</span>    description: &quot;Copy a local media file (video/audio/image) into FableCut&#x27;s media library and register it in the project. Returns the created media entry (use its id in clips).&quot;,
+<span class="ln">139</span>    inputSchema: {
+<span class="ln">140</span>      type: &quot;object&quot;,
+<span class="ln">141</span>      properties: { path: { type: &quot;string&quot;, description: &quot;Absolute path to the source file on disk&quot; } },
+<span class="ln">142</span>      required: [&quot;path&quot;],
+<span class="ln">143</span>    },
+<span class="ln">144</span>  },
+<span class="ln">145</span>];</pre>
+      </div>
+      <h3><span class="arr">▸</span>compactProjectView 控制上下文成本</h3>
+      <p>状态工具不会直接把完整项目扔回模型，而是把 clips/media/markers 压成摘要。status 返回 running 与 url见 <code>sources/fablecut/mcp-server.js:148</code>；get_project full 参数见 <code>sources/fablecut/mcp-server.js:173</code>；compactProjectView 起点见 <code>sources/fablecut/mcp-server.js:183</code>；clip 字段裁剪见 <code>sources/fablecut/mcp-server.js:200</code>；media 字段裁剪见 <code>sources/fablecut/mcp-server.js:215</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/mcp-server.js:148-236</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">148</span>async function callTool(name, args) {
+<span class="ln">149</span>  switch (name) {
+<span class="ln">150</span>    case &quot;fablecut_status&quot;: {
+<span class="ln">151</span>      const up = await ensureUIServer();
+<span class="ln">152</span>      const proj = readProject();
+<span class="ln">153</span>      const dur = proj.clips.reduce((m, c) =&gt; Math.max(m, c.start + c.duration), 0);
+<span class="ln">154</span>      const files = fs.existsSync(MEDIA_DIR)
+<span class="ln">155</span>        ? fs.readdirSync(MEDIA_DIR).filter((f) =&gt; fs.statSync(path.join(MEDIA_DIR, f)).isFile())
+<span class="ln">156</span>        : [];
+<span class="ln">157</span>      const libSummary = [&quot;sfx&quot;, &quot;elements&quot;, &quot;svg&quot;, &quot;fonts&quot;].map((d) =&gt; {
+<span class="ln">158</span>        const dir = path.join(ROOT, &quot;library&quot;, d);
+<span class="ln">159</span>        const n = fs.existsSync(dir) ? fs.readdirSync(dir).length : 0;
+<span class="ln">160</span>        return `${d}: ${n}`;
+<span class="ln">161</span>      }).join(&quot;, &quot;);
+<span class="ln">162</span>      const cap = (arr, n) =&gt; arr.length &gt; n ? arr.slice(0, n).concat(`… +${arr.length - n} more`) : arr;
+<span class="ln">163</span>      return [
+<span class="ln">164</span>        `Editor server: ${up ? &quot;RUNNING — open &quot; + BASE + &quot; in a browser to watch edits live&quot; : &quot;FAILED TO START (check node / port &quot; + PORT + &quot;)&quot;}`,
+<span class="ln">165</span>        `Project: &quot;${proj.name}&quot; — ${proj.width}x${proj.height} @ ${proj.fps}fps, ${proj.clips.length} clip(s), ${dur.toFixed(2)}s, revision ${proj.revision}`,
+<span class="ln">166</span>        `Registered media: ${cap(proj.media.map((m) =&gt; `${m.id} (${m.kind}, ${m.name}${m.duration ? &quot;, &quot; + m.duration + &quot;s&quot; : &quot;&quot;})`), 25).join(&quot;; &quot;) || &quot;none&quot;}`,
+<span class="ln">167</span>        `Files in media/: ${cap(files, 25).join(&quot;, &quot;) || &quot;none&quot;}`,
+<span class="ln">168</span>        `Library assets (./library): ${libSummary}`,
+<span class="ln">169</span>        `Project file: ${PROJECT_FILE}`,
+<span class="ln">170</span>        `Tips: fablecut_docs (use \`section\`) for the schema · fablecut_get_project {compact:true} to see the timeline · fablecut_patch_project for edits (cheapest).`,
+<span class="ln">171</span>      ].join(&quot;\n&quot;);
+<span class="ln">172</span>    }
+<span class="ln">173</span>    case &quot;fablecut_docs&quot;: {
+<span class="ln">174</span>      const md = fs.readFileSync(path.join(ROOT, &quot;CLAUDE.md&quot;), &quot;utf8&quot;);
+<span class="ln">175</span>      if (!args.section) return md;
+<span class="ln">176</span>      const q = args.section.toLowerCase();
+<span class="ln">177</span>      const parts = md.split(/^(?=## )/m);
+<span class="ln">178</span>      const hits = parts.filter((s) =&gt; s.startsWith(&quot;## &quot;) &amp;&amp; s.slice(0, s.indexOf(&quot;\n&quot;)).toLowerCase().includes(q));
+<span class="ln">179</span>      return hits.length ? hits.join(&quot;\n&quot;) :
+<span class="ln">180</span>        `No &#x27;## &#x27; section matches &quot;${args.section}&quot;. Headings: ` +
+<span class="ln">181</span>        parts.filter((s) =&gt; s.startsWith(&quot;## &quot;)).map((s) =&gt; s.slice(3, s.indexOf(&quot;\n&quot;))).join(&quot; · &quot;);
+<span class="ln">182</span>    }
+<span class="ln">183</span>    case &quot;fablecut_get_project&quot;: {
+<span class="ln">184</span>      const doc = readProject();
+<span class="ln">185</span>      lastReadRevision = doc.revision || 0;
+<span class="ln">186</span>      if (!args.compact) return JSON.stringify(doc);
+<span class="ln">187</span>      // the UI persists default-valued props on every clip; hide them so the
+<span class="ln">188</span>      // compact view only shows what actually deviates
+<span class="ln">189</span>      const DEFAULTS = {
+<span class="ln">190</span>        x: 0, y: 0, scale: 1, rotation: 0, opacity: 1, volume: 1, speed: 1,
+<span class="ln">191</span>        blend: &quot;normal&quot;, fit: &quot;contain&quot;, cropL: 0, cropR: 0, cropT: 0, cropB: 0,
+<span class="ln">192</span>        cornerRadius: 0, flipH: false, flipV: false, filterPreset: &quot;none&quot;,
+<span class="ln">193</span>        brightness: 100, contrast: 100, saturation: 100, hue: 0, temperature: 0,
+<span class="ln">194</span>        tint: 0, blur: 0, grayscale: 0, sepia: 0, invert: 0, vignette: 0,
+<span class="ln">195</span>        shake: 0, shakeSpeed: 8, rgbSplit: 0, grain: 0,
+<span class="ln">196</span>        chromaKey: &quot;&quot;, chromaTolerance: 26, chromaSoftness: 12, bgRemove: false,
+<span class="ln">197</span>        text: &quot;Title&quot;, fontSize: 72, color: &quot;#ffffff&quot;, color2: &quot;&quot;, font: &quot;Segoe UI&quot;,
+<span class="ln">198</span>        bold: true, weight: 0, italic: false, uppercase: false, align: &quot;center&quot;,
+<span class="ln">199</span>        letterSpacing: 0, lineHeight: 1.2, textShadow: 12, glow: 0, glowColor: &quot;&quot;,
+<span class="ln">200</span>        strokeWidth: 0, strokeColor: &quot;#000&quot;, bgColor: &quot;#000&quot;, bgOpacity: 0,
+<span class="ln">201</span>        textAnim: &quot;none&quot;, wordRate: 0.15,
+<span class="ln">202</span>      };
+<span class="ln">203</span>      const hex = (v) =&gt; typeof v === &quot;string&quot; &amp;&amp; /^#[0-9a-f]{3}$/i.test(v)
+<span class="ln">204</span>        ? &quot;#&quot; + [...v.slice(1)].map((c) =&gt; c + c).join(&quot;&quot;).toLowerCase()
+<span class="ln">205</span>        : (typeof v === &quot;string&quot; &amp;&amp; /^#[0-9a-f]{6}$/i.test(v) ? v.toLowerCase() : v);
+<span class="ln">206</span>      const fmtProps = (o, kind) =&gt; {
+<span class="ln">207</span>        if (!o) return &quot;&quot;;
+<span class="ln">208</span>        const kept = {};
+<span class="ln">209</span>        for (const [k, v] of Object.entries(o)) {
+<span class="ln">210</span>          if (kind !== &quot;text&quot; &amp;&amp; k === &quot;text&quot; &amp;&amp; v === &quot;Title&quot;) continue;
+<span class="ln">211</span>          if (hex(DEFAULTS[k]) !== hex(v)) kept[k] = v;
+<span class="ln">212</span>        }
+<span class="ln">213</span>        return Object.keys(kept).length ? &quot; &quot; + JSON.stringify(kept) : &quot;&quot;;
+<span class="ln">214</span>      };
+<span class="ln">215</span>      const lines = [
+<span class="ln">216</span>        `&quot;${doc.name}&quot; ${doc.width}x${doc.height}@${doc.fps} rev:${doc.revision}` +
+<span class="ln">217</span>        (doc.background ? ` bg:${doc.background}` : &quot;&quot;) +
+<span class="ln">218</span>        (doc.markers?.length ? ` markers:${doc.markers.length} [${doc.markers.slice(0, 12).map((m) =&gt; m.t).join(&quot;,&quot;)}${doc.markers.length &gt; 12 ? &quot;,…&quot; : &quot;&quot;}]` : &quot;&quot;),
+<span class="ln">219</span>        `MEDIA (${doc.media.length}):`,
+<span class="ln">220</span>        ...doc.media.map((m) =&gt; `  ${m.id} ${m.kind} &quot;${m.name}&quot;${m.duration ? &quot; &quot; + m.duration + &quot;s&quot; : &quot;&quot;}`),
+<span class="ln">221</span>        `CLIPS (${doc.clips.length}), by track/time:`,
+<span class="ln">222</span>        ...doc.clips
+<span class="ln">223</span>          .slice()
+<span class="ln">224</span>          .sort((a, b) =&gt; (a.track === b.track ? a.start - b.start : String(a.track).localeCompare(b.track)))
+<span class="ln">225</span>          .map((c) =&gt; {
+<span class="ln">226</span>            const kf = c.keyframes ? &quot; kf:&quot; + Object.entries(c.keyframes).map(([k, v]) =&gt; `${k}(${v.length})`).join(&quot;,&quot;) : &quot;&quot;;
+<span class="ln">227</span>            const tr = (c.transitionIn ? ` in:${c.transitionIn.type}/${c.transitionIn.duration}` : &quot;&quot;) +
+<span class="ln">228</span>                       (c.transitionOut ? ` out:${c.transitionOut.type}/${c.transitionOut.duration}` : &quot;&quot;);
+<span class="ln">229</span>            const r3 = (n) =&gt; Math.round(n * 1000) / 1000;
+<span class="ln">230</span>            return `  ${c.id} ${c.track} ${r3(c.start)}s+${r3(c.duration)}s ${c.kind}` +
+<span class="ln">231</span>              (c.mediaId ? `(${c.mediaId}${c.in ? ` in:${r3(c.in)}` : &quot;&quot;})` : &quot;&quot;) +
+<span class="ln">232</span>              (c.name ? ` &quot;${c.name}&quot;` : &quot;&quot;) + fmtProps(c.props, c.kind) + kf + tr;
+<span class="ln">233</span>          }),
+<span class="ln">234</span>        `(compact view — full JSON: fablecut_get_project without compact; edit via fablecut_patch_project)`,
+<span class="ln">235</span>      ];
+<span class="ln">236</span>      return lines.join(&quot;\n&quot;);</pre>
+      </div>
+      <h3><span class="arr">▸</span>patch ops 的真实语义</h3>
+      <p><code>patch_project</code> 会读当前项目、遍历 ops、对 media/clips/project 做局部修改，最后 revision++ 写回。patch_project 分支见 <code>sources/fablecut/mcp-server.js:238</code>；addClip 需要 id/kind/mediaId见 <code>sources/fablecut/mcp-server.js:247</code>；updateClip 合并 props见 <code>sources/fablecut/mcp-server.js:261</code>；removeClip 过滤数组见 <code>sources/fablecut/mcp-server.js:281</code>；写回并返回 project见 <code>sources/fablecut/mcp-server.js:314</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/mcp-server.js:238-317</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">238</span>    case &quot;fablecut_patch_project&quot;: {
+<span class="ln">239</span>      const ops = args.ops;
+<span class="ln">240</span>      if (!Array.isArray(ops) || !ops.length) throw new Error(&quot;`ops` must be a non-empty array&quot;);
+<span class="ln">241</span>      const proj = readProject();
+<span class="ln">242</span>      const notes = [];
+<span class="ln">243</span>      const mergeInto = (target, set) =&gt; {
+<span class="ln">244</span>        for (const [k, v] of Object.entries(set || {})) {
+<span class="ln">245</span>          if (v === null) delete target[k];
+<span class="ln">246</span>          else if (k === &quot;props&quot; &amp;&amp; target.props &amp;&amp; typeof v === &quot;object&quot; &amp;&amp; !Array.isArray(v)) {
+<span class="ln">247</span>            for (const [pk, pv] of Object.entries(v)) {
+<span class="ln">248</span>              if (pv === null) delete target.props[pk]; else target.props[pk] = pv;
+<span class="ln">249</span>            }
+<span class="ln">250</span>          } else target[k] = v;
+<span class="ln">251</span>        }
+<span class="ln">252</span>      };
+<span class="ln">253</span>      for (const op of ops) {
+<span class="ln">254</span>        switch (op.op) {
+<span class="ln">255</span>          case &quot;addClip&quot;: {
+<span class="ln">256</span>            const c = op.clip;
+<span class="ln">257</span>            if (!c || !c.track || typeof c.start !== &quot;number&quot; || typeof c.duration !== &quot;number&quot;)
+<span class="ln">258</span>              throw new Error(&quot;addClip needs clip{track, start, duration}&quot;);
+<span class="ln">259</span>            c.id = c.id || &quot;c_&quot; + uid();
+<span class="ln">260</span>            if (proj.clips.some((x) =&gt; x.id === c.id)) throw new Error(&quot;addClip: duplicate clip id &quot; + c.id);
+<span class="ln">261</span>            if (c.kind !== &quot;text&quot; &amp;&amp; c.kind !== &quot;adjust&quot; &amp;&amp; !proj.media.some((m) =&gt; m.id === c.mediaId))
+<span class="ln">262</span>              throw new Error(`addClip: unknown mediaId ${c.mediaId}`);
+<span class="ln">263</span>            proj.clips.push(c);
+<span class="ln">264</span>            notes.push(&quot;+&quot; + c.id);
+<span class="ln">265</span>            break;
+<span class="ln">266</span>          }
+<span class="ln">267</span>          case &quot;updateClip&quot;: {
+<span class="ln">268</span>            const c = proj.clips.find((x) =&gt; x.id === op.id);
+<span class="ln">269</span>            if (!c) throw new Error(&quot;updateClip: no clip &quot; + op.id);
+<span class="ln">270</span>            mergeInto(c, op.set);
+<span class="ln">271</span>            notes.push(&quot;~&quot; + op.id);
+<span class="ln">272</span>            break;
+<span class="ln">273</span>          }
+<span class="ln">274</span>          case &quot;removeClip&quot;: {
+<span class="ln">275</span>            const n = proj.clips.length;
+<span class="ln">276</span>            proj.clips = proj.clips.filter((x) =&gt; x.id !== op.id);
+<span class="ln">277</span>            if (proj.clips.length === n) throw new Error(&quot;removeClip: no clip &quot; + op.id);
+<span class="ln">278</span>            notes.push(&quot;-&quot; + op.id);
+<span class="ln">279</span>            break;
+<span class="ln">280</span>          }
+<span class="ln">281</span>          case &quot;addMedia&quot;: {
+<span class="ln">282</span>            const m = op.media;
+<span class="ln">283</span>            if (!m || !m.src || !m.kind) throw new Error(&quot;addMedia needs media{src, kind}&quot;);
+<span class="ln">284</span>            m.id = m.id || &quot;m_&quot; + uid();
+<span class="ln">285</span>            if (proj.media.some((x) =&gt; x.id === m.id)) throw new Error(&quot;addMedia: duplicate media id &quot; + m.id);
+<span class="ln">286</span>            m.name = m.name || path.basename(decodeURIComponent(m.src));
+<span class="ln">287</span>            proj.media.push(m);
+<span class="ln">288</span>            notes.push(&quot;+&quot; + m.id);
+<span class="ln">289</span>            break;
+<span class="ln">290</span>          }
+<span class="ln">291</span>          case &quot;removeMedia&quot;: {
+<span class="ln">292</span>            const used = proj.clips.find((c) =&gt; c.mediaId === op.id);
+<span class="ln">293</span>            if (used) throw new Error(`removeMedia: media ${op.id} is used by clip ${used.id}`);
+<span class="ln">294</span>            const n = proj.media.length;
+<span class="ln">295</span>            proj.media = proj.media.filter((x) =&gt; x.id !== op.id);
+<span class="ln">296</span>            if (proj.media.length === n) throw new Error(&quot;removeMedia: no media &quot; + op.id);
+<span class="ln">297</span>            notes.push(&quot;-&quot; + op.id);
+<span class="ln">298</span>            break;
+<span class="ln">299</span>          }
+<span class="ln">300</span>          case &quot;setProject&quot;: {
+<span class="ln">301</span>            const allowed = [&quot;name&quot;, &quot;width&quot;, &quot;height&quot;, &quot;fps&quot;, &quot;background&quot;, &quot;markers&quot;];
+<span class="ln">302</span>            for (const [k, v] of Object.entries(op.set || {})) {
+<span class="ln">303</span>              if (!allowed.includes(k)) throw new Error(`setProject: &#x27;${k}&#x27; not settable (allowed: ${allowed.join(&quot;, &quot;)})`);
+<span class="ln">304</span>              if (v === null) delete proj[k]; else proj[k] = v;
+<span class="ln">305</span>            }
+<span class="ln">306</span>            notes.push(&quot;~project&quot;);
+<span class="ln">307</span>            break;
+<span class="ln">308</span>          }
+<span class="ln">309</span>          default:
+<span class="ln">310</span>            throw new Error(&quot;Unknown op: &quot; + op.op + &quot; (addClip|updateClip|removeClip|addMedia|removeMedia|setProject)&quot;);
+<span class="ln">311</span>        }
+<span class="ln">312</span>      }
+<span class="ln">313</span>      proj.revision = (proj.revision || 0) + 1;
+<span class="ln">314</span>      writeProject(proj);
+<span class="ln">315</span>      lastReadRevision = proj.revision;
+<span class="ln">316</span>      return `Patched (revision ${proj.revision}): ${notes.join(&quot; &quot;)}. Now ${proj.clips.length} clip(s), ${proj.media.length} media. UI hot-reloaded.`;
+<span class="ln">317</span>    }</pre>
+      </div>
+    </section>
+    <section class="sec" id="flow"><div class="sec-no">§ <b>02</b> · KEY FLOW</div><h2 class="sec-title">关键<em>流程</em></h2>
+      <div class="flow"><span class="flow-node">Agent</span> calls fablecut_status → compact project summary
+   │
+   ├─ fablecut_import_media(localPath) → copy into media/ + add media row
+   │
+   ├─ fablecut_analyze_reference(localPath) → analyze.js → blueprint + music media
+   │
+   └─ fablecut_patch_project(ops[]) → project.json revision++ → Browser SSE sync</div>
+      <p>这条链路的妙处是所有 agent 写入都回到同一份 project.json，因此浏览器只要接收 SSE 并重新 applyProject 就能展示外部修改。服务端 watch 会广播见 <code>sources/fablecut/server.js:61</code>；浏览器 SSE 连接见 <code>sources/fablecut/app.js:293</code>；applyProject 清理 runtime见 <code>sources/fablecut/app.js:239</code>；MCP 写项目函数见 <code>sources/fablecut/mcp-server.js:31</code>；patch 写回触发 revision见 <code>sources/fablecut/mcp-server.js:314</code>。</p>
+    </section>
+    <section class="sec" id="edge"><div class="sec-no">§ <b>03</b> · EDGE CASES</div><h2 class="sec-title">边界 / <em>失败模式</em></h2>
+      <h3><span class="arr">▸</span>set_project 与 stale revision</h3>
+      <p>整项目替换更危险，所以 <code>set_project</code> 做 schema、clips/media 数组和 stale revision 检查。set_project 分支见 <code>sources/fablecut/mcp-server.js:318</code>；基础字段校验见 <code>sources/fablecut/mcp-server.js:322</code>；数组校验见 <code>sources/fablecut/mcp-server.js:326</code>；stale revision 判断见 <code>sources/fablecut/mcp-server.js:331</code>；新 revision 写入见 <code>sources/fablecut/mcp-server.js:342</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/mcp-server.js:318-349</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">318</span>    case &quot;fablecut_set_project&quot;: {
+<span class="ln">319</span>      const doc = args.project;
+<span class="ln">320</span>      if (!doc || typeof doc !== &quot;object&quot;) throw new Error(&quot;`project` must be an object&quot;);
+<span class="ln">321</span>      if (!Array.isArray(doc.clips) || !Array.isArray(doc.media))
+<span class="ln">322</span>        throw new Error(&quot;project must contain `clips` and `media` arrays&quot;);
+<span class="ln">323</span>      for (const c of doc.clips) {
+<span class="ln">324</span>        if (!c.id || !c.track || typeof c.start !== &quot;number&quot; || typeof c.duration !== &quot;number&quot;)
+<span class="ln">325</span>          throw new Error(`clip ${c.id || &quot;?&quot;} needs id, track, numeric start and duration`);
+<span class="ln">326</span>        if (c.kind !== &quot;text&quot; &amp;&amp; c.kind !== &quot;adjust&quot; &amp;&amp; !doc.media.some((m) =&gt; m.id === c.mediaId))
+<span class="ln">327</span>          throw new Error(`clip ${c.id} references unknown mediaId ${c.mediaId}`);
+<span class="ln">328</span>      }
+<span class="ln">329</span>      let cur = { revision: 0 };
+<span class="ln">330</span>      try { cur = readProject(); } catch {}
+<span class="ln">331</span>      const curRev = cur.revision || 0;
+<span class="ln">332</span>      // strict check when this session read via the tool; otherwise fall back to
+<span class="ln">333</span>      // the revision baked into the submitted doc (e.g. it was read as a file)
+<span class="ln">334</span>      const stale = lastReadRevision !== null
+<span class="ln">335</span>        ? curRev !== lastReadRevision
+<span class="ln">336</span>        : (doc.revision || 0) &lt; curRev;
+<span class="ln">337</span>      if (stale &amp;&amp; !args.force) {
+<span class="ln">338</span>        throw new Error(
+<span class="ln">339</span>          `CONFLICT — not saved. project.json is at revision ${curRev}, but this edit was based on ` +
+<span class="ln">340</span>          `revision ${lastReadRevision ?? (doc.revision || 0)}: the project changed in between ` +
+<span class="ln">341</span>          `(the user probably tweaked something in the editor UI). ` +
+<span class="ln">342</span>          `Call fablecut_get_project, re-apply your edit on top of the latest document, then save again. ` +
+<span class="ln">343</span>          `Pass force:true only if the user explicitly wants those changes discarded.`);
+<span class="ln">344</span>      }
+<span class="ln">345</span>      doc.revision = Math.max(curRev + 1, (doc.revision || 0));
+<span class="ln">346</span>      writeProject(doc);
+<span class="ln">347</span>      lastReadRevision = doc.revision;
+<span class="ln">348</span>      return `Saved (revision ${doc.revision}). ${doc.clips.length} clip(s). The editor UI (if open at ${BASE}) has hot-reloaded.`;
+<span class="ln">349</span>    }</pre>
+      </div>
+      <h3><span class="arr">▸</span>本地路径导入的信任假设</h3>
+      <p><code>import_media</code> 适合本地 agent 环境：它检查路径存在，把文件复制到 media 目录，再向项目注册。import_media 分支见 <code>sources/fablecut/mcp-server.js:401</code>；stat localPath见 <code>sources/fablecut/mcp-server.js:405</code>；copyFile 到媒体目录见 <code>sources/fablecut/mcp-server.js:411</code>；media 对象字段见 <code>sources/fablecut/mcp-server.js:413</code>；revision++ 写回见 <code>sources/fablecut/mcp-server.js:418</code>。</p>
+      
+      <div class="code-wrap">
+        <div class="code-bar"><span><span class="src">sources/fablecut/mcp-server.js:401-420</span></span><span>JavaScript</span></div>
+        <pre class="code"><span class="ln">401</span>    case &quot;fablecut_import_media&quot;: {
+<span class="ln">402</span>      const src = args.path;
+<span class="ln">403</span>      if (!src || !fs.existsSync(src) || !fs.statSync(src).isFile())
+<span class="ln">404</span>        throw new Error(&quot;File not found: &quot; + src);
+<span class="ln">405</span>      const ext = path.extname(src).toLowerCase();
+<span class="ln">406</span>      const kind = KIND_BY_EXT[ext];
+<span class="ln">407</span>      if (!kind) throw new Error(`Unsupported extension ${ext}`);
+<span class="ln">408</span>      if (!fs.existsSync(MEDIA_DIR)) fs.mkdirSync(MEDIA_DIR);
+<span class="ln">409</span>      let base = path.basename(src).replace(/[^\w.\- ()\[\]]+/g, &quot;_&quot;);
+<span class="ln">410</span>      let target = path.join(MEDIA_DIR, base);
+<span class="ln">411</span>      let i = 1;
+<span class="ln">412</span>      const stem = path.basename(base, ext);
+<span class="ln">413</span>      while (fs.existsSync(target)) target = path.join(MEDIA_DIR, `${stem}_${i++}${ext}`);
+<span class="ln">414</span>      fs.copyFileSync(src, target);
+<span class="ln">415</span>      const entry = {
+<span class="ln">416</span>        id: &quot;m_&quot; + uid(),
+<span class="ln">417</span>        name: path.basename(target),
+<span class="ln">418</span>        kind,
+<span class="ln">419</span>        src: &quot;/media/&quot; + encodeURIComponent(path.basename(target)),
+<span class="ln">420</span>        duration: kind === &quot;image&quot; ? undefined : ffprobeDuration(target),</pre>
+      </div>
+      <ul><li>它不是多租户安全 API：调用者能让 server 复制本机路径，因此要放在可信 agent 会话里。</li><li>冲突控制是 revision 粒度，不是 clip 字段级 CRDT；并发 agent 应串行化 patch。</li><li>schema 收窄了输入面，但 props 内部仍是灵活对象，适合创作工具，不适合强监管数据模型。</li></ul>
+    </section>
+    <section class="sec" id="related"><div class="sec-no">§ <b>04</b> · RELATED</div><h2 class="sec-title">关联<em>模块</em></h2>
+      <div class="g2"><div class="card"><div class="card-h">server.js</div><div class="card-d">SSE 和 project.json revision 是 MCP 写入能被 UI 看到的关键。</div></div><div class="card"><div class="card-h">app.js</div><div class="card-d">applyProject / scheduleSave 让手工编辑和 agent 编辑共享同一套状态语义。</div></div><div class="card"><div class="card-h">analyze.js</div><div class="card-d">把参考视频转换成 recipe，为 agent 自动铺 timeline 提供节奏信息。</div></div><div class="card"><div class="card-h">project.json</div><div class="card-d">真正的公共协议；所有工具最终围绕它读写。</div></div></div>
+    </section>
+
+    <div class="foot"><span>Generated · 2026-07-11</span><span>Source · <a href="https://github.com/ronak-create/FableCut">ronak-create/FableCut</a></span></div>
+  </main>
+</div>
+<script>
+(() => {
+  const links = document.querySelectorAll('.nav-list a');
+  const map = new Map();
+  links.forEach(a => { const el = document.getElementById(a.getAttribute('href').slice(1)); if (el) map.set(el, a); });
+  const setActive = (el) => { links.forEach(a => a.classList.remove('active')); if (el && map.get(el)) map.get(el).classList.add('active'); };
+  const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target); }), { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  map.forEach((_, el) => obs.observe(el));
+  const sel = document.getElementById('msel');
+  if (sel) { links.forEach(a => { const o = document.createElement('option'); o.value = a.getAttribute('href'); o.textContent = a.textContent.trim(); sel.appendChild(o); }); sel.addEventListener('change', e => location.href = e.target.value); }
+  const canvas = document.getElementById('stars');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    const resize = () => { canvas.width = innerWidth; canvas.height = innerHeight; }; resize(); addEventListener('resize', resize);
+    const stars = Array.from({length:80}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.4+0.2, a: Math.random(), s: Math.random()*0.02+0.005 }));
+    const tick = () => { ctx.clearRect(0,0,canvas.width,canvas.height); stars.forEach(s => { s.a += s.s; if (s.a > 1 || s.a < 0.2) s.s *= -1; ctx.globalAlpha = s.a; ctx.fillStyle = '#f0a585'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); }); requestAnimationFrame(tick); }; tick();
+  }
+})();
+</script>
+</body>
+</html>
