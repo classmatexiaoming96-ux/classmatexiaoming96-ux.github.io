@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本地 AI Coding Agent 终于够用了：Qwen3-Coder + LM Studio + OpenCode 实战</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a6a6bb;
+      --text-muted: #68687f;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-green: #68d391;
+      --accent-purple: #9f7aea;
+      --gradient-start: #151528;
+      --gradient-end: #0a0a0f;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.75;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 28px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.32;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle { color: var(--text-secondary); margin-bottom: 18px; font-size: 0.98rem; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+    .meta-badge.green { color: var(--accent-green); border-color: rgba(104, 211, 145, 0.2); background: rgba(104, 211, 145, 0.08); }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #000;
+      margin: 20px 0 8px;
+    }
+
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.6rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0.85;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 4px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2 .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    h3 { font-size: 1rem; margin: 24px 0 10px; color: var(--text-primary); }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+
+    ul, ol { color: var(--text-secondary); padding-left: 24px; margin: 0 0 14px; }
+    li { margin-bottom: 8px; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 15px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.07);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.015); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-cyan);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .time-row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .time-code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-green);
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .btn, button {
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .btn:hover, button:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+    }
+
+    footer {
+      text-align: center;
+      padding: 38px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 24px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.45rem; }
+      .hero, .content-card { padding: 1.2rem; }
+      table { font-size: 0.78rem; }
+      .time-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 返回课程列表</a>
+    <section class="hero">
+      <h1 class="page-title">本地 AI Coding Agent 终于够用了：Qwen3-Coder + LM Studio + OpenCode 实战</h1>
+      <p class="subtitle">Local AI Coding Agents Are Finally Good Enough</p>
+      <div class="page-meta">
+        <span class="meta-badge time">⏱ 16:55</span>
+        <span class="meta-badge source">📺 Code with Beto</span>
+        <span class="meta-badge green">👀 5,923 views</span>
+        <span class="meta-badge">🗓 2026-07-09</span>
+      </div>
+      <p>这支视频不是又一次“本地模型可以聊天了”的演示，而是把本地模型推进到更难的一档：让它接入真实代码库、读取上下文、识别截图、调用工具、生成文件，并在没有云端 API 的情况下完成一个可用的 coding-agent 工作流。</p>
+      <div class="video-wrap">
+        <iframe src="https://www.youtube.com/embed/Zof2Oaj14rk" title="Local AI Coding Agents Are Finally Good Enough" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </section>
+  </header>
+
+  <main style="position: relative; z-index: 1;">
+    <section class="content-card">
+      <h2><span class="num">一</span>问题引入：本地 LLM 真正难的是“能不能干活”</h2>
+      <p>过去两年，“本地运行大模型”经常停在一个很尴尬的位置：模型能启动，能聊天，能回答一些常识问题，但一旦进入真实开发任务就露馅。它可能上下文窗口不够，工具调用不稳定，代码库理解浅，或者一跑复杂任务就把机器拖到不可用。</p>
+      <p>视频开头把这个痛点说得很直接：如果你试过在电脑上跑本地 LLM，大概率体验不佳。作者认为变化点来自一个新的 27B 级别模型：视频里称作 <strong>Qwen 3.6 27B</strong>，并强调它针对 agentic coding、视觉输入、多模态和较低显存占用做了优化。字幕里还反复提到 <strong>MLX</strong>，也就是 Apple 生态下运行本地模型的框架，使 Mac 上的本地推理更可靠。</p>
+      <blockquote>视频的核心判断可以转述为：本地模型以前“能跑”，现在开始“能接近开发助理地干活”；它还不能替代最强云端模型，但已经足够处理一批真实、离线、隐私敏感或额度之外的 coding task。</blockquote>
+      <p>这点对开发者很实用。云端模型依然强，但它有三个硬约束：联网依赖、费用/额度、代码隐私。一个能在本地稳定跑的 coding agent，就像给电脑装了一个低成本、随时可用、可以看你本地文件的副驾驶。它不一定负责最复杂的架构决策，但很适合做 refactor、查代码、搭页面、写小工具、读截图、验证想法。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">二</span>核心概念：这不是“聊天模型”，而是本地 Agent 栈</h2>
+      <p>要理解这支视频，先不要把它看成单个模型的评测。更准确的说法是：作者演示了一条本地 Agent 栈，从模型下载、推理服务、工具协议到 coding-agent 前端，最后串成一个能操作代码库的闭环。</p>
+      <h3>1. LM Studio：本地模型的运行时和 API 层</h3>
+      <p>LM Studio 在视频里承担两个角色。第一，它是模型下载和加载界面；作者建议启用 developer mode，然后在模型搜索页找到目标模型并下载。字幕里提到模型体积大约 20GB，这意味着它不是随手给轻薄本准备的小模型。</p>
+      <p>第二，LM Studio 会把本地模型暴露成可连接的接口。这个接口很关键，因为 OpenCode 这类 coding-agent 工具不是直接“点开模型文件”，而是连到一个本地服务，用类似 OpenAI-compatible endpoint 的方式发请求。作者在 developer tab 里查看 token 生成、请求日志和并发设置，这些都说明 LM Studio 实际上是本地推理服务器。</p>
+      <h3>2. OpenCode：把本地模型接进代码工作流</h3>
+      <p>视频里作者把本地模型接到 OpenCode。这里的重点不是 OpenCode 本身，而是“本地模型要像云端 coding 模型一样服务于工程工具”：它需要读代码库、调用工具、写文件、理解项目结构，并在多轮任务里保留足够上下文。</p>
+      <p>为了让视觉能力可用，作者还提醒要在配置 JSON 里传入 modalities。这个细节很重要：很多模型“支持视觉”只是模型能力声明，真正进入 coding workflow 时，还要工具层知道可以传图片、截图或多模态消息。</p>
+      <h3>3. MLX：Apple Silicon 上的性能底座</h3>
+      <p>字幕多次提到 MLX 的新版本让模型更可靠。对于 Mac 用户，MLX 不是页面上可见的 Agent 组件，却是性能和稳定性的底层变量。作者的体验是，同样机器上其他模型更慢，而这个模型借助 MLX 支持表现更好。</p>
+      <p>这也解释了为什么视频里既强调模型能力，也反复强调硬件配置。一个本地 coding agent 不是“安装就万事大吉”，它是模型、运行时、显存、工具协议和前端工具共同决定的体验。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">三</span>实操步骤：从下载模型到接入代码库</h2>
+      <h3>步骤 1：确认机器是否扛得住</h3>
+      <p>作者先谈硬件门槛。他使用的是 Apple M3 Ultra，提到 96GB 统一内存和 80 核 GPU 级别的机器；同时也说自己在一台 18GB 内存的 MacBook Pro 上没跑起来。字幕里虽然口误提到 RTX 4090，但上下文是在讲 Mac，真正要抓住的是内存压力：16GB 可能非常紧，24GB 才勉强像入门线，复杂 coding-agent 任务最好更高。</p>
+      <p>这对实践者的含义是：如果你只是想本地聊天，小模型即可；如果你想让模型读代码库、开多会话、处理截图、调用工具，显存/统一内存会成为第一瓶颈。视频中后段还出现机器风扇变响、Mac Studio 发热、复杂任务接近 10 分钟的描述，这些都提醒我们不要把本地 Agent 想得太轻。</p>
+      <h3>步骤 2：在 LM Studio 下载并加载模型</h3>
+      <p>作者的路径是打开 LM Studio，启用 developer mode，进入模型搜索页，搜索并下载对应模型。下载后在聊天页加载模型，并进入开发者标签查看实时日志。这里有两个设置值得留意：上下文窗口和并发数。作者提到可以把 max concurrencies 设为 4，意味着同一台机器上可以跑多个会话，但这会进一步吃内存和算力。</p>
+      <p>他还提到 cache quantization：开启后输出可能更快，但可能损伤质量。对于 coding-agent 场景，我会把它当成“延迟优化”，不是默认选项。先追求稳定和正确，再调速度。</p>
+      <h3>步骤 3：开启本地 API，并配置 OpenCode</h3>
+      <p>当模型在 LM Studio 中运行后，下一步是把它作为本地模型提供给 OpenCode。视频里作者展示了配置文件，并提到 OpenCode 期望连接到某些 endpoint。虽然字幕没有完整保留 JSON，但流程很清楚：在 OpenCode 的配置中新增本地 provider/model，指向 LM Studio 提供的本地接口。</p>
+      <p>如果要让图片输入可用，还需要在配置中声明 modalities。视频中的一个演示是截取应用里的图标，然后问模型这些图标对应哪些 SF Symbols 名称。模型能根据截图给出结果，说明多模态链路从截图输入到本地模型再到 Agent 前端是打通的。</p>
+      <h3>步骤 4：把它放进真实项目，而不是只跑 toy prompt</h3>
+      <p>视频最有价值的部分不是问天气，而是在作者自己的 AI tattoo 应用项目中实测。作者先展示它曾经让 Agent 新增一个 dev tab；之后又要求它显示开发者专用的用户信息卡片，包括 ID、认证状态、tier、entitlements 等信息。模型读取代码库，理解 Better Auth 相关配置，找到 server/client 之间的数据关系，然后生成页面内容。</p>
+      <blockquote>这类演示的价值不在于页面多漂亮，而在于它证明本地 Agent 可以扫描真实代码库、跨文件理解上下文、执行 31 次工具调用，并把结果落到应用中。</blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">四</span>决策矩阵：什么时候值得用本地 Coding Agent？</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>场景</th>
+            <th>本地 Agent 的优点</th>
+            <th>主要风险</th>
+            <th>建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>隐私敏感代码库</td>
+            <td>代码不必上传云端，适合内部项目、客户数据、实验性仓库</td>
+            <td>模型能力弱于顶级云端模型，复杂架构判断可能不稳</td>
+            <td>适合读代码、改小功能、生成局部实现；重大改动仍需人工审查</td>
+          </tr>
+          <tr>
+            <td>云端额度耗尽或离线环境</td>
+            <td>不依赖 API quota，飞机、弱网、临时断网时也能继续工作</td>
+            <td>本地资源占用高，笔记本可能发热、降频、续航下降</td>
+            <td>把它作为备用工程助理，处理低到中等复杂度任务</td>
+          </tr>
+          <tr>
+            <td>多模态轻任务</td>
+            <td>能看截图、识别 UI 图标、解释屏幕状态</td>
+            <td>视觉理解可能不如云端前沿模型，细节识别需要复核</td>
+            <td>适合“看图说结构”“识别图标名”“解释 UI 状态”这类低风险任务</td>
+          </tr>
+          <tr>
+            <td>大型代码重构</td>
+            <td>可反复读本地文件，成本低，不怕多轮探索</td>
+            <td>上下文管理、工具调用、长任务规划仍可能卡住</td>
+            <td>拆成小任务，让本地 Agent 先探索和生成 patch，再由更强模型或人工评审</td>
+          </tr>
+          <tr>
+            <td>需要最高正确性的生产修复</td>
+            <td>可以先本地收集线索，减少云端成本</td>
+            <td>错误 patch 的代价高，本地模型可能自信但漏边界</td>
+            <td>不要单独放权；用它做辅助，不做最终决策者</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>我的判断是：本地 coding agent 的合理定位不是“替换 Claude/ChatGPT/Codex”，而是成为开发工具箱里的第二层。第一层是快速、便宜、隐私友好的日常协作；当任务进入复杂推理、跨系统设计、生产风险评估时，再切到更强的云端模型。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">五</span>关键论点：能力进步来自“完整工作流”，不是单项 benchmark</h2>
+      <p>视频里提到了 benchmark，对比方向是 agentic terminal / agentic coding，并说这个 27B 模型的表现接近某些旧一代前沿云端模型。这个信息有参考价值，但真正打动人的不是表格，而是几个完整任务。</p>
+      <h3>从天气查询到工具调用</h3>
+      <p>作者先用天气问题测试工具调用。他让模型查 Bentonville, Arkansas 的天气，并在 LM Studio 日志里观察请求和 token 生成。这类测试不是为了天气答案，而是验证本地模型是否能用工具、是否能把调用过程暴露在开发者视野里。</p>
+      <h3>从截图到 SF Symbols</h3>
+      <p>作者截取应用里的图标，让模型识别 SF Symbols 名称。对 iOS/macOS 开发者来说，这是一个非常日常的小任务：你看到 UI 里的 icon，但不确定准确 symbol 名称。本地视觉模型如果能直接回答，就能省掉查文档和试错时间。</p>
+      <h3>从代码库扫描到真实页面改动</h3>
+      <p>最硬的一段是让 Agent 在 AI tattoo 项目里新增 dev-only user info card。字幕里提到模型执行了 31 次 tool calls，抓取整个 codebase 信息，知道项目用了 Better Auth，理解 server、client、配置之间的关系，并把认证用户、email、verified、创建时间、tier、entitlements 等信息展示出来。</p>
+      <p>这类能力说明本地 Agent 已经越过“补全几行代码”的阶段，开始触碰到 Agentic Engineering 的基本面：它能读、能查、能改、能把结果放回项目。但视频也诚实保留了瑕疵：生成的 UI 没放进 scroll view，机器发热明显，任务耗时接近 10 分钟。这些限制让结论更可信。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">六</span>时间戳目录：按视频脉络快速复盘</h2>
+      <div class="timeline">
+        <div class="time-row"><span class="time-code">00:00</span><span>提出问题：过去本地 LLM 体验糟糕，但新的 27B agentic coding 模型让体验发生变化。</span></div>
+        <div class="time-row"><span class="time-code">01:10</span><span>展示模型定位：面向 agentic coding、多模态、低显存占用，并借助 MLX 在 Mac 上更稳定。</span></div>
+        <div class="time-row"><span class="time-code">02:20</span><span>讨论硬件门槛：M3 Ultra / 96GB 内存可顺畅运行，18GB MacBook Pro 级别可能不够。</span></div>
+        <div class="time-row"><span class="time-code">03:40</span><span>进入 LM Studio：启用 developer mode，搜索并下载目标模型，加载到本地聊天与 API 环境。</span></div>
+        <div class="time-row"><span class="time-code">05:10</span><span>查看 LM Studio developer tab：观察 token、日志、上下文窗口、并发和 cache quantization 设置。</span></div>
+        <div class="time-row"><span class="time-code">06:30</span><span>配置 OpenCode：连接 LM Studio 本地 endpoint，并说明视觉能力需要配置 modalities。</span></div>
+        <div class="time-row"><span class="time-code">08:00</span><span>实测截图理解：截取应用图标，让模型识别 SF Symbols 名称。</span></div>
+        <div class="time-row"><span class="time-code">09:40</span><span>进入真实代码库：在 AI tattoo 应用中要求 Agent 新增开发者专用用户信息卡。</span></div>
+        <div class="time-row"><span class="time-code">11:30</span><span>展示复杂工具调用：模型扫描代码库、读取认证配置、执行大量 tool calls，生成页面改动。</span></div>
+        <div class="time-row"><span class="time-code">13:30</span><span>演示 LM Link / Locally AI：用手机连接本地电脑上的模型，形成局域网式个人模型入口。</span></div>
+        <div class="time-row"><span class="time-code">15:00</span><span>总结限制和前景：本地模型会发热、耗时，但已能处理真实 coding 和多模态任务。</span></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">七</span>落地建议：把本地 Agent 当成“低风险副驾驶”</h2>
+      <p>如果你准备照着视频搭一套，我建议按风险从低到高分层使用。</p>
+      <ol>
+        <li><strong>先跑只读任务。</strong>让模型解释项目结构、总结某个目录、找某类文件、读日志、识别截图。这能验证上下文理解和工具链稳定性。</li>
+        <li><strong>再跑小 patch。</strong>例如改一段文案、加一个开发者面板、补一个脚本、生成测试样例。每次改动后都用 git diff 人工审查。</li>
+        <li><strong>最后再尝试多步骤任务。</strong>比如跨文件重构、自动生成小页面、扫描代码库后提出方案。这时要限制范围，并要求它先计划、再改动、最后运行测试。</li>
+      </ol>
+      <blockquote>本地 Agent 的最大价值不是“免费替代所有云端模型”，而是在你不想上传代码、不想消耗额度、或只是想快速探索时，给你一个足够能干的本地协作者。</blockquote>
+      <p>视频里的作者最后甚至玩笑式地说，自己开始思考是否可以取消某些订阅，把复杂 agentic task 留给更强云端模型，把简单 refactor、复制移动、英语润色和日常查询交给本地模型。这个结论很人味：不是模型参数赢了，而是工作流开始划算了。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">八</span>相关推荐</h2>
+      <p>如果你想继续沿着“本地 Agent / coding workflow / Agent 工程”往下看，可以从这些课程接着读：</p>
+      <div class="recommendations">
+        <a class="btn" href="index.html">返回课程列表</a>
+        <a class="btn" href="4TvH-OZhwxI.html">AI Agents 2026 实操平台对比</a>
+        <a class="btn" href="LNkAW4SSgdY.html">2026 AI Agents 完整指南</a>
+        <a class="btn" href="mWvtOHlZM-I.html">工具、技能还是子智能体？</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=Zof2Oaj14rk" target="_blank">▶ 原视频</a>
+  </footer>
+</body>
+</html>
