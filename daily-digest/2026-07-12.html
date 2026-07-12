@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-12</title>
+<meta name="description" content="周日的 AI 讨论从“能力展示”转向“边界验证”：GPT-5.6 的数学证明冲上 HN，AI 滥用、隐私和数据中心排放同步引发反弹；另一边，FableCut、DesktopCommanderMCP、Stitch Skills、SQLSure 等工具继续把 Agent 推向可操作、可约束的工程现场。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-12</span>
+      <span class="sep">·</span>
+      <span>星期日</span>
+      <span class="edition">第 53 期</span>
+    </div>
+    <p class="mh-intro">周日的 AI 讨论从“能力展示”转向“边界验证”：GPT-5.6 的数学证明冲上 HN，AI 滥用、隐私和数据中心排放同步引发反弹；另一边，FableCut、DesktopCommanderMCP、Stitch Skills、SQLSure 等工具继续把 Agent 推向可操作、可约束的工程现场。</p>
+    <div class="stats">
+      <div class="stat"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">产品 / 概念</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News</span></div>
+    <a class="lead" href="https://cdn.openai.com/pdf/04d1d1e4-bc75-476a-97cf-49055cd98d31/cdc_proof.pdf" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>GPT-5.6 生成 Cycle Double Cover Conjecture 证明，引发社区验证热</h3>
+      <p>OpenAI CDN 上的一份 GPT-5.6 Sol Ultra 数学证明 PDF 登上 Hacker News 热榜。讨论焦点不只是模型是否“证明了定理”，而是数学、审稿、形式化验证和模型可解释性如何协同处理这类高风险能力展示。</p>
+      <div class="src">◷ <b>Hacker News / OpenAI CDN</b> <span class="dotsep">·</span> 今日热议</div>
+    </a>
+    <div class="rows">
+      <a class="row" href="https://casp.ac/reports/ai-enabled-terrorism" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>研究报告追踪 Boko Haram 如何使用前沿 AI</h4>
+          <p>CASP 报告把 AI 安全讨论从抽象风险推向具体滥用案例：恐怖组织如何利用前沿模型做宣传、翻译、操作指导和信息战，将成为政策与模型访问治理的压力测试。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">CASP / Hacker News</b> <span class="dotsep">·</span> 社区热榜 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.bbc.com/news/articles/c2dy6e8klw0o" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Meta 因 Instagram 公共图片 AI 功能遭反弹后紧急收回</h4>
+          <p>Meta 新 AI 图片功能上线数日即因自动访问公共 Instagram 图片引发隐私争议，被迫调整。消费者 AI 产品正在从“能不能做”进入“默认权限是否合理”的阶段。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">BBC / Google News</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">隐私</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.windowscentral.com/microsoft/dropping-greenwashing-credits-and-expanding-ai-datacenters-caused-microsofts-25-percent-emissions-jump" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Microsoft 报告显示 AI 数据中心推动排放上升 25%</h4>
+          <p>微软最新气候数据再次把 AI 扩张的能源成本推到台前。企业 AI 的竞争不只是模型榜单，也包括数据中心选址、电力结构、碳账本和投资人对长期 capex 的容忍度。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Windows Central / HN</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">能源</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxPdjdTQkxDNGtjS3VsOXdicHJCcEJsQmZ3UFo5MTBMRDZzMzQzT0lKMUVZM0FfUXROdER4NXpkcHNsMzJtcnI5bjUyc0R0YTFSOWlTQkpKejE2dTExQzhYVVBQTHYtRXlybUY1MkdwVXVTanlvdlF0ZEJXMEhkeTJ0QmtLWHdBVmZQZGpDT3ZtTTFRdmc5M29haGJCUHl1SDN2S2FKdEMxT3l2NFFUTGpvMkRwSFB0UW5WTnIw?oc=5" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>伊利诺伊教育部门发布学校 AI 使用指南</h4>
+          <p>学校场景继续从禁用转向治理：如何规定教师、学生和校方使用 AI 的边界，正在成为教育系统的现实管理问题。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">WHIG / Google News</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">教育</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNZHpjek1CU2RJbGhCVDZuYVJoZ2FxM0lkclNDTkpBakFpcTB6NWdMaVhsQ3lxemJ6TXZBYXotZWJNMmNZOVdmTDlUYmFiZVBDcE4wV1J0RTZYcWVQaXloNzhEcGZfTWZrOERDd0w4LTN5S2UySmFkeXozZlZJWGFzTjlWRkFsMkd4ZXhsSVBaaHJCcmQzVXN1bUpqc3BFSFE2LVU0NlUtRjlsTXBSZl82empqM2dsVkMySXB5Tk02TGV5T2JhZWlNdmlKQXZ4Znh0SjNwUGw5UHNDcHFEZFV3?oc=5" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>FTC 拟议政策关注 AI 系统准确性被压制的问题</h4>
+          <p>监管机构开始关注企业是否会故意降低或压制 AI 系统准确性，以规避责任、成本或竞争压力。AI 治理正在从模型能力转向产品激励和信息披露。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google News</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
+    <div class="rows">
+      <a class="row" href="https://nevo-project.epfl.ch/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>AI 生成视频能否精准刺激目标脑区？</h4>
+          <p>EPFL 的 NEVO 项目引发大量讨论：生成式视频不只用于内容生产，也可能成为神经刺激和认知实验工具。社区关注点集中在实验可重复性、伦理边界和个体化刺激风险。</p>
+          <div class="quote">“当生成模型开始优化人的脑反应，推荐系统和神经科学之间的边界会突然变得很薄。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 288 <span class="dotsep">·</span> 💬 </div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.mixfont.com/ghost-font" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Ghost Font：人能读、AI 不易读的字体</h4>
+          <p>Ghost Font 用字体设计对抗机器读取，成为今天最有趣的“低技术反 AI”讨论。它提醒大家：反爬、版权和模型训练冲突不一定都通过法律解决，也可能通过界面层策略表达。</p>
+          <div class="quote">“不是所有 AI 对抗都需要复杂模型；有时候字体本身就是协议。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 201 <span class="dotsep">·</span> 💬 </div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://blog.yaelwrites.com/stop-telling-me-to-ask-an-llm/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Stop Telling Me to Ask an LLM</h4>
+          <p>这篇文章击中了开发者社区的疲劳点：把所有问题都转给 LLM 并不等于帮忙。讨论里反复出现的共识是，LLM 应该是工具而不是默认社交响应。</p>
+          <div class="quote">““问问 LLM”正在变成一种新的“我不想处理这个问题”。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 168 <span class="dotsep">·</span> 💬 </div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.tryai.dev/blog/gpt-5.6-build-off-12-models" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>12 个模型同场构建 4 个应用，GPT-5.6 与 Grok/Claude/Muse Spark 被横向比较</h4>
+          <p>社区对模型评测继续从跑分转向真实任务构建：同样的 app spec 下，模型在 UI 完整度、错误处理、迭代稳定性上的差异比单次 benchmark 更有信息量。</p>
+          <div class="quote">“下一阶段模型评测会越来越像产品验收，而不是答题比赛。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 153 <span class="dotsep">·</span> 💬 </div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.iroh.computer/blog/mesh-llm" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Mesh LLM：基于 iroh 的分布式 AI 计算</h4>
+          <p>Mesh LLM 把本地/边缘节点协同推理的想象再次推上台面。随着模型成本上升，社区对去中心化推理、局域网算力和隐私推理的兴趣在回升。</p>
+          <div class="quote">“如果云端推理越来越贵，下一轮优化可能发生在网络拓扑而不只是量化。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 126 <span class="dotsep">·</span> 💬 </div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
+    <div class="cards">
+      <a class="card" href="https://github.com/ronak-create/FableCut" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎞️</span>
+          <h4>FableCut</h4>
+        </div>
+        <p class="tagline">浏览器视频编辑器，AI agents 可通过 JSON timeline 驱动</p>
+        <p>零依赖浏览器 NLE，把剪辑时间线暴露成 agent 可操作的数据结构，并提供 MCP/REST 控制面。昨天已做源码拆解，今天仍在 HN Show HN 热榜。</p>
+        <div><span class="tag">Agent 工具</span></div>
+      </a>
+      <a class="card" href="https://news.ycombinator.com/item?id=48847834" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧰</span>
+          <h4>Reverse-engineering web apps into agent tools</h4>
+        </div>
+        <p class="tagline">把现有 Web 应用反向变成 agent 可调用工具</p>
+        <p>这个方向很关键：大量企业软件没有 MCP/REST 友好接口，自动化工具需要从页面行为、表单、DOM 和网络请求中提炼可复用动作。</p>
+        <div><span class="tag">Agent 接口</span></div>
+      </a>
+      <a class="card" href="https://github.com/swellweb/reame" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🖥️</span>
+          <h4>Reame</h4>
+        </div>
+        <p class="tagline">越跑越快的 CPU inference server</p>
+        <p>Reame 主打 CPU 推理服务在运行中逐步加速，适合观察本地推理服务如何在没有大 GPU 的环境里做缓存、热路径和调度优化。</p>
+        <div><span class="tag">本地推理</span></div>
+      </a>
+      <a class="card" href="https://github.com/animesh-94/Onboard-CLI" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧭</span>
+          <h4>Onboard-CLI</h4>
+        </div>
+        <p class="tagline">LLM + AST 代码库可视化工具</p>
+        <p>用 AST 结构给 LLM 代码理解补确定性上下文，和 CodeGraph/CodeAlmanac 这类“给 agent 建项目地图”的工具在同一条趋势线上。</p>
+        <div><span class="tag">代码理解</span></div>
+      </a>
+      <a class="card" href="https://github.com/sqlsure/sqlsure" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🛡️</span>
+          <h4>SQLSure</h4>
+        </div>
+        <p class="tagline">AI 生成 SQL 的确定性语义检查</p>
+        <p>当 agent 开始写 SQL，问题不只是语法正确，而是语义是否危险、结果是否符合约束。SQLSure 代表了“AI 输出后的确定性校验层”。</p>
+        <div><span class="tag">质量门禁</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" href="https://github.com/davila7/claude-code-templates" target="_blank" rel="noopener">
+      <div>
+        <div class="name">davila7 / <b>claude-code-templates</b></div>
+        <div class="desc">Claude Code 模板、命令、子智能体和工作流集合，继续在 agent 工具生态里保持高热度。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Claude Code</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 29,047</div>
+        <div class="today">▲ 232 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/google-labs-code/stitch-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">google-labs-code / <b>stitch-skills</b></div>
+        <div class="desc">Google Labs 的 skills 仓库，显示“可分发技能包”正在成为 AI 编程工具的重要能力单元。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Skills</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 7,101</div>
+        <div class="today">▲ 340 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/openai/plugins" target="_blank" rel="noopener">
+      <div>
+        <div class="name">openai / <b>plugins</b></div>
+        <div class="desc">OpenAI plugins 相关代码继续上榜，反映插件化工具接口和 agent 能力扩展仍有长尾关注。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span> <span class="dotsep">·</span> <span class="tag">Plugins</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 4,437</div>
+        <div class="today">▲ 29 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/wonderwhy-er/DesktopCommanderMCP" target="_blank" rel="noopener">
+      <div>
+        <div class="name">wonderwhy-er / <b>DesktopCommanderMCP</b></div>
+        <div class="desc">通过 MCP 让模型操作桌面与文件系统，是“agent 执行真实电脑任务”的代表性工具。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">MCP</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 7,794</div>
+        <div class="today">▲ 909 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/DayuanJiang/next-ai-draw-io" target="_blank" rel="noopener">
+      <div>
+        <div class="name">DayuanJiang / <b>next-ai-draw-io</b></div>
+        <div class="desc">基于 Next.js 的 AI 绘图/图表工具，适合观察生成式 UI 与可视化编辑器结合。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">AI UI</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 33,316</div>
+        <div class="today">▲ — today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/anthropics/claude-cookbooks" target="_blank" rel="noopener">
+      <div>
+        <div class="name">anthropics / <b>claude-cookbooks</b></div>
+        <div class="desc">Anthropic 官方 cookbooks，覆盖 Claude 应用模式、工具调用与工程实践，是开发者落地 Claude 的主要示例库。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#DA5B0B"></span>Jupyter Notebook</span> <span class="dotsep">·</span> <span class="tag">Examples</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 47,977</div>
+        <div class="today">▲ — today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <a class="back" href="index.html">← 返回 · 浏览其他日报</a>
+      <span class="made">生成于 2026-07-12 11:19 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，社区热议来自 Hacker News / Reddit，
+      开源热门来自 GitHub Trending，产品与概念由上述信源综合提炼。摘要为机器辅助整理，链接指向原始信源；
+      如有出入请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
