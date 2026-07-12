@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude + Base44 入门：用结构化提示词构建网站与 AI 应用</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-2: #a78bfa;
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #fb7185;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --code-bg: rgba(15, 23, 42, 0.88);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 0%, rgba(99,179,237,.14), transparent 28%), var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.78;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .page { width: min(1120px, calc(100vw - 40px)); margin: 0 auto; padding: 28px 0 72px; }
+    .back { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 22px; color: var(--accent); font-size: 14px; }
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    button:hover, .btn:hover { background: var(--accent); color: var(--bg-primary); }
+    .hero {
+      background: linear-gradient(135deg, rgba(22,22,31,.96), rgba(10,10,15,.92));
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(24px, 5vw, 48px);
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    .eyebrow { color: var(--accent); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
+    h1 { font-size: clamp(32px, 5vw, 58px); line-height: 1.08; margin: 14px 0 16px; letter-spacing: -.03em; }
+    .subtitle { color: var(--text-muted); font-size: 18px; max-width: 860px; margin: 0; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .pill { border: 1px solid var(--card-border); background: var(--card-bg); border-radius: 999px; padding: 6px 12px; color: var(--text-muted); font-size: 13px; }
+    .video { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 12px; border: 1px solid var(--card-border); background: #000; margin: 28px 0; }
+    .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .layout { display: grid; grid-template-columns: 280px 1fr; gap: 28px; align-items: start; }
+    .toc { position: sticky; top: 18px; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 18px; }
+    .toc h2 { font-size: 15px; margin: 0 0 12px; color: var(--text-primary); }
+    .toc a { display: block; color: var(--text-muted); font-size: 14px; padding: 7px 0; border-top: 1px solid rgba(255,255,255,.05); }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(20px, 4vw, 34px);
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { font-size: clamp(24px, 3vw, 34px); line-height: 1.2; margin: 0 0 18px; letter-spacing: -.02em; }
+    h3 { margin: 28px 0 10px; font-size: 21px; }
+    p { color: var(--text-muted); margin: 12px 0; }
+    strong { color: var(--text-primary); }
+    .lead { font-size: 18px; color: #cbd5e1; }
+    blockquote { margin: 22px 0; border-left: 3px solid var(--accent); background: rgba(99,179,237,.08); padding: 16px 18px; border-radius: 8px; color: #dbeafe; }
+    table { width: 100%; border-collapse: collapse; margin: 22px 0; overflow: hidden; border-radius: 10px; border: 1px solid var(--card-border); }
+    th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.07); color: var(--text-muted); }
+    th { background: rgba(99,179,237,.10); color: var(--text-primary); font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+    tr:last-child td { border-bottom: 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 18px 0; }
+    .mini { background: rgba(255,255,255,.035); border: 1px solid var(--card-border); border-radius: 10px; padding: 16px; }
+    .mini b { display: block; margin-bottom: 6px; color: var(--text-primary); }
+    .steps { counter-reset: step; list-style: none; padding: 0; }
+    .steps li { counter-increment: step; position: relative; padding: 14px 16px 14px 54px; margin: 10px 0; background: rgba(255,255,255,.035); border: 1px solid var(--card-border); border-radius: 10px; color: var(--text-muted); }
+    .steps li::before { content: counter(step); position: absolute; left: 16px; top: 14px; width: 25px; height: 25px; border-radius: 50%; background: var(--accent); color: var(--bg-primary); display: grid; place-items: center; font-weight: 800; }
+    .prompt { background: var(--code-bg); border: 1px solid rgba(99,179,237,.22); border-radius: 10px; padding: 16px; overflow-x: auto; color: #dbeafe; font-family: "SFMono-Regular", Consolas, monospace; font-size: 13px; white-space: pre-wrap; }
+    .timestamp { display: grid; grid-template-columns: 86px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .timestamp b { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .related { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .related a { background: rgba(255,255,255,.035); border: 1px solid var(--card-border); border-radius: 10px; padding: 14px; color: var(--text-primary); }
+    .related small { display: block; color: var(--text-muted); margin-top: 5px; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .toc { position: static; } .grid, .related { grid-template-columns: 1fr; } .page { width: min(100vw - 24px, 1120px); } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="eyebrow">Claude / Base44 / Structured Prompting</div>
+      <h1>Claude + Base44 入门：用结构化提示词构建网站与 AI 应用</h1>
+      <p class="subtitle">英文原题：Claude Code Tutorial for Beginners: Build Website with AI (2026)</p>
+      <div class="meta">
+        <span class="pill">频道：Mikey Website</span>
+        <span class="pill">时长：32:21</span>
+        <span class="pill">播放量：12,908</span>
+        <span class="pill">视频 ID：OdSXY4YgmZA</span>
+      </div>
+    </section>
+
+    <div class="video">
+      <iframe src="https://www.youtube.com/embed/OdSXY4YgmZA" title="Claude Code Tutorial for Beginners: Build Website with AI (2026)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <div class="layout">
+      <aside class="toc">
+        <h2>章节导航</h2>
+        <a href="#why">一、为什么这节课值得看</a>
+        <a href="#concepts">二、核心概念</a>
+        <a href="#portfolio">三、项目一：Portfolio</a>
+        <a href="#tracker">四、项目二：Calorie Tracker</a>
+        <a href="#matrix">五、决策矩阵</a>
+        <a href="#quotes">六、关键判断</a>
+        <a href="#timestamps">七、时间戳目录</a>
+        <a href="#related">八、相关推荐</a>
+      </aside>
+
+      <div>
+        <section class="content-card" id="why">
+          <h2>一、问题引入：新手不是“不懂代码”，而是缺少可执行的构建对话</h2>
+          <p class="lead">这支视频的核心并不是“AI 会替你写代码”，而是更实际的一点：当工具可以从自然语言生成页面、数据库、表单和 AI 功能时，初学者真正需要先掌握的，是如何把想法拆成清晰的产品结构。</p>
+          <p>传统 Web 学习路线通常要求先学 HTML、CSS、JavaScript、框架、数据库、部署，然后才开始做完整项目。视频的立场是：这条路线仍然有价值，但不再是唯一入口。借助 Base44 这样的 AI App Builder 和 Claude 这样的推理模型，初学者可以先通过“清楚描述产品”来完成第一个可运行应用，再逐步补齐技术细节。</p>
+          <p>视频用了两个项目做对照：第一个是专业个人作品集网站，重点在布局、视觉层级、交互和转化；第二个是卡路里追踪器，重点在数据表、实时计算、周报、重置逻辑和 AI 分析。这种安排很适合作为“AI 建站/应用生成”的入门课，因为它同时覆盖了展示型页面和数据驱动应用两类常见需求。</p>
+          <blockquote>这节课真正要训练的不是复制某个提示词，而是学会在生成之前先说清楚：页面有哪些区块、数据如何流动、用户要完成什么动作、结果如何验收。</blockquote>
+        </section>
+
+        <section class="content-card" id="concepts">
+          <h2>二、核心概念：Prompt 不是一句命令，而是一份轻量产品规格</h2>
+          <p>视频反复强调一个动作：不要一上来就让模型“帮我做个网站”。更好的做法，是先用一分钟规划结构，再把结构、视觉、数据和验收标准写进提示词。对初学者来说，这比背框架 API 更容易上手，也更接近真实的软件需求表达。</p>
+          <div class="grid">
+            <div class="mini"><b>结构先行</b><p>先列出页面或应用的核心模块：Hero、About、Portfolio、Contact，或者 Meal Form、Summary、Weekly Grid、AI Insights。</p></div>
+            <div class="mini"><b>视觉明确</b><p>告诉模型要什么风格：暗色 editorial、charcoal slate、清晰字体层级、锐利卡片边框、足够留白。</p></div>
+            <div class="mini"><b>数据字段清楚</b><p>有表单就明确字段，有计算就明确公式，有数据库就明确记录对象，避免让模型猜业务规则。</p></div>
+            <div class="mini"><b>逐轮迭代</b><p>先生成基础版本，再用 follow-up prompt 添加 hover、警告状态、重置按钮、AI 分析等增量能力。</p></div>
+          </div>
+          <h3>视频中的基础工作流</h3>
+          <ol class="steps">
+            <li><strong>选择模型：</strong>在 Base44 工作区里确认 Claude/Opus 模型处于激活状态，避免后续生成质量不稳定。</li>
+            <li><strong>写产品蓝图：</strong>用“第一、第二、第三、第四”的顺序列出模块和数据关系。</li>
+            <li><strong>生成首版：</strong>让 Base44 根据结构生成页面、表单、数据库或仪表盘。</li>
+            <li><strong>测试预览：</strong>切换桌面、平板、移动端，检查排版、响应式、按钮、表单和数据更新。</li>
+            <li><strong>局部修复：</strong>出现错误时复制错误信息或描述问题，让 Claude 做定点修复，而不是整项目重来。</li>
+          </ol>
+        </section>
+
+        <section class="content-card" id="portfolio">
+          <h2>三、项目一：专业 Portfolio 网站，从“页面结构”开始</h2>
+          <p>第一个项目是单页作品集网站。它的价值在于让新手理解：即使是一个看似简单的网站，也不应该只写“做得高级一点”。视频把它拆成四个明确区块：Hero、About、Portfolio Grid、Contact Form。</p>
+          <h3>1. 先定义页面骨架</h3>
+          <p>Hero 负责第一屏的定位和行动按钮；About 用两栏布局讲职业背景与执行原则；Portfolio 用三列项目卡展示能力；Contact 用表单收集询盘并写入内部数据库。这个拆法把视觉页面变成了可生成的结构化规格。</p>
+          <div class="prompt">请构建一个高质量响应式个人作品集网站。页面为单页结构，包含四个区块：
+1. Hero：主标题、说明文字、Let's connect 按钮；
+2. About：左侧为执行原则，右侧为技术技能矩阵；
+3. Portfolio：三列响应式项目卡，包含图标、标题、描述、View Blueprint 按钮；
+4. Contact：姓名、邮箱、项目详情表单，并将提交内容保存到内部数据库。
+整体风格使用暗色 editorial aesthetic、charcoal slate 背景、锐利边框和充足留白。</div>
+          <h3>2. 首版之后再做交互修饰</h3>
+          <p>视频没有在首个提示词里塞满所有细节，而是在页面生成后继续追加交互：按钮和卡片 hover 时微缩放，边框出现移动霓虹线。这种做法很实用，因为首版先验证结构，第二轮再提升质感，模型也更容易理解改动范围。</p>
+          <h3>3. 验收不是“看起来还行”</h3>
+          <p>作者建议在预览里切换桌面、平板、移动端，逐段检查标题是否清楚、留白是否稳定、表单是否能保存、卡片 hover 是否自然。这个动作对 AI 生成页面尤其重要：模型会生成“看似完整”的 UI，但真正可交付必须经过视口、交互和数据三个层面的检查。</p>
+        </section>
+
+        <section class="content-card" id="tracker">
+          <h2>四、项目二：卡路里追踪器，进入数据驱动应用</h2>
+          <p>第二个项目比作品集更接近真实应用。它不只是页面展示，而是需要处理用户输入、数据库记录、实时汇总、条件样式、历史表格和 AI 分析。这个项目展示了 AI App Builder 能把自然语言需求转换成应用逻辑，但前提仍然是需求足够清楚。</p>
+          <h3>1. 先搭应用壳，再补核心功能</h3>
+          <p>第一轮提示只要求生成一个暗色 dashboard shell：干净容器、清晰标签、可承载追踪指标。第二轮才加入真正功能：Meal Logging Form、每日卡路里汇总、宏量营养素统计、7 天历史表格。这个顺序降低了复杂度，也方便逐步验收。</p>
+          <h3>2. 数据字段必须显式</h3>
+          <p>视频明确列出 meal name、calories、protein、carbs、fat 等字段，并要求保存到内部 daily meals 数据表。这里的经验是：只要涉及数据，就不要让模型自由发挥字段名称。字段越明确，后续计算、图表和 AI 分析越稳定。</p>
+          <h3>3. 从工具到“智能工具”</h3>
+          <p>第三轮加入 AI insights：按钮点击后把当前 meal database table 发送给 Claude，让模型分析饮食模式、宏量平衡，并输出三条个性化建议。这个功能说明了 Base44 的优势：它把模型调用、数据读取和 UI 输出封装起来，用户通过提示词描述意图，就能获得 AI 功能原型。</p>
+          <blockquote>对 AI 生成应用来说，最危险的不是“模型不会写”，而是需求方没有把数据、状态和验收方式说清楚。</blockquote>
+        </section>
+
+        <section class="content-card" id="matrix">
+          <h2>五、对比表格 / 决策矩阵：什么时候用哪种提示策略</h2>
+          <table>
+            <thead>
+              <tr><th>场景</th><th>推荐提示方式</th><th>优点</th><th>风险</th><th>决策建议</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>展示型网站</td><td>先写页面区块 + 视觉风格</td><td>模型容易一次生成完整布局</td><td>如果没有明确 CTA 和内容层级，页面会显得泛泛</td><td>先列 Hero、About、Proof、Contact，再要求响应式检查</td></tr>
+              <tr><td>数据录入工具</td><td>明确字段、表名、保存行为</td><td>便于生成表单、数据库和列表视图</td><td>字段模糊会导致后续计算无法稳定</td><td>用字段清单替代自然语言描述，例如 calories/protein/carbs/fat</td></tr>
+              <tr><td>实时计算仪表盘</td><td>写清楚聚合逻辑和目标值</td><td>能生成进度条、汇总卡、条件样式</td><td>目标单位不清会造成错误计算</td><td>把“固定目标 2000 kcal”和刷新时机写进 prompt</td></tr>
+              <tr><td>AI 分析功能</td><td>说明输入数据、分析任务、输出格式</td><td>让模型反馈更贴近用户记录</td><td>如果不限制输出，会变成泛泛建议</td><td>要求三条 insight，并指定输出卡片标题与样式</td></tr>
+              <tr><td>修复错误</td><td>复制错误或描述具体失败点</td><td>改动范围小，保留已有成果</td><td>重新写大 prompt 容易引入新问题</td><td>优先 follow-up prompt，只有新业务/新数据库才开新项目</td></tr>
+            </tbody>
+          </table>
+          <h3>可直接复用的提示词骨架</h3>
+          <div class="prompt">请先不要直接开始写复杂功能。请基于以下规格生成一个可测试的应用版本：
+- 目标用户：...
+- 核心任务：...
+- 页面/模块：第一 ...；第二 ...；第三 ...；第四 ...
+- 数据字段：...
+- 视觉风格：...
+- 交互要求：...
+- 验收标准：桌面/移动端正常；表单能保存；计算能实时更新；错误状态有明确反馈。</div>
+        </section>
+
+        <section class="content-card" id="quotes">
+          <h2>六、引用块：视频里最值得带走的三个判断</h2>
+          <blockquote>不要把 AI 当成魔法按钮；把它当成一个需要清晰规格的实现伙伴。</blockquote>
+          <blockquote>短而模糊的提示词省了输入时间，却会在返工、修复和重做里把时间还回去。</blockquote>
+          <blockquote>当项目目标、数据结构和视觉方向都明确时，自然语言就可以成为产品原型的第一种工程语言。</blockquote>
+          <p>这些判断并不是鼓励跳过基础知识。更准确地说，它们改变了学习顺序：先通过 AI 完成可见项目，获得反馈和成就感；再回头学习代码、数据库、部署、性能和安全，就会更有上下文。</p>
+        </section>
+
+        <section class="content-card" id="timestamps">
+          <h2>七、时间戳目录：按视频脉络复盘</h2>
+          <div class="timestamp"><b>00:00</b><span>打破传统 Web 学习路线：不必等“学完所有技术”才开始构建真实项目。</span></div>
+          <div class="timestamp"><b>01:20</b><span>介绍课程目标：用 Claude/Base44 从零构建两个项目，并训练结构化提示词工作流。</span></div>
+          <div class="timestamp"><b>03:00</b><span>模型选择：在 Base44 中确认 Claude/Opus 模型，保证生成质量和复杂任务执行能力。</span></div>
+          <div class="timestamp"><b>05:10</b><span>项目一规划：作品集网站的四个核心区块和暗色 editorial 视觉方向。</span></div>
+          <div class="timestamp"><b>08:00</b><span>输入完整 Portfolio 提示词，生成 Hero、About、Portfolio Grid、Contact Form 和数据库保存。</span></div>
+          <div class="timestamp"><b>11:30</b><span>用 follow-up prompt 增加 hover、缩放、霓虹边框等交互细节，并检查响应式。</span></div>
+          <div class="timestamp"><b>15:20</b><span>项目二规划：卡路里追踪器的表单、实时计算、宏量统计、周视图和数据规则。</span></div>
+          <div class="timestamp"><b>18:30</b><span>先生成 dashboard shell，再追加 meal logging form、daily summary、macro breakdown 和 weekly grid。</span></div>
+          <div class="timestamp"><b>23:00</b><span>测试数据库连接、样例餐食输入、卡路里进度条和历史表格更新。</span></div>
+          <div class="timestamp"><b>25:00</b><span>追加超标红色警告、reset day 按钮和条件样式。</span></div>
+          <div class="timestamp"><b>27:00</b><span>加入 AI insights：把 meal database table 交给 Claude 分析，输出营养建议。</span></div>
+          <div class="timestamp"><b>30:00</b><span>总结提示词习惯：先规划、按序号组织需求、用局部 follow-up 修复错误。</span></div>
+        </section>
+
+        <section class="content-card" id="related">
+          <h2>八、相关推荐</h2>
+          <p>如果你想把这节课继续延伸，可以从以下课程继续看：</p>
+          <div class="related">
+            <a href="X_zVY3-mbM8.html">Claude Code 2026 完整入门<small>工作目录、子智能体、连接器权限与自动化部署</small></a>
+            <a href="Bn7YX_RfAt0.html">n8n、Claude Code 与 Base44 怎么选？<small>同一任务下比较三类 AI Agent 工具</small></a>
+            <a href="Zof2Oaj14rk.html">本地 AI Coding Agent 终于够用了<small>Qwen3-Coder、LM Studio 与 OpenCode 的本地开发流</small></a>
+          </div>
+          <p style="margin-top:20px"><a class="btn" href="index.html">返回全部 YouTube 技术课程</a></p>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
