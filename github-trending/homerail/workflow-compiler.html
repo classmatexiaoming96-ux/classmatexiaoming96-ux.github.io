@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HomeRail WorkflowSpec v1 编译器源码拆解</title>
+<meta name="description" content="从 YAML 诊断到 canonical IR 与 hash 的源码分析。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet" />
+
+<style>
+:root{--bg:#090b10;--ink:#eef5ff;--muted:#9fafc3;--panel:#111722;--panel-2:#151e2c;--line:#263247;--star:#8ee3ff;--accent:#ffcf6b;--green:#7ddc96;--rose:#ff8c9a;--ease:cubic-bezier(.2,.8,.2,1);--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:"Fraunces",Georgia,serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(142,227,255,.12),transparent 30%),linear-gradient(180deg,#090b10 0%,#0c1018 60%,#090b10 100%);color:var(--ink);font-family:var(--sans);line-height:1.72}.bg-stars{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.42) 1px,transparent 1px);background-size:34px 34px;opacity:.1}.shell{width:min(1120px,calc(100% - 36px));margin:0 auto}.nav{position:sticky;top:0;z-index:20;background:rgba(9,11,16,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}.nav .shell{height:64px;display:flex;align-items:center;justify-content:space-between}.brand{color:var(--ink);text-decoration:none;font-weight:800;letter-spacing:0}.nav a{color:var(--muted);text-decoration:none;margin-left:20px}.nav a:hover{color:var(--star)}.hero{padding:92px 0 54px}.eyebrow{color:var(--star);font-family:var(--mono);font-size:13px}.hero h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:1.02;margin:18px 0}.hero .lead{font-size:clamp(1.02rem,2vw,1.26rem);max-width:860px;color:#c9d7ea}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}.stat{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:8px}.stat strong{display:block;font-size:1.35rem;color:var(--ink)}.stat span{color:var(--muted);font-size:.9rem}.section{padding:36px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(17,23,34,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:24px}.panel h3,.prose h3{font-size:1.3rem;line-height:1.25;margin:0 0 12px;color:var(--ink)}.prose{max-width:920px}.prose p{color:#c7d4e6;margin:0 0 18px}.prose code,.panel code{font-family:var(--mono);font-size:.92em;color:#d9f6ff;background:rgba(142,227,255,.08);border:1px solid rgba(142,227,255,.16);border-radius:5px;padding:1px 5px}.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:24px 0}.flow div{border:1px solid rgba(142,227,255,.18);background:rgba(142,227,255,.06);border-radius:8px;padding:14px;min-height:96px}.flow b{display:block;color:var(--star);margin-bottom:8px}.code-wrap{background:#070a0f;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;margin:18px 0 28px}.code-head{display:flex;gap:8px;align-items:center;height:36px;border-bottom:1px solid rgba(255,255,255,.08);padding:0 12px;color:var(--muted);font-family:var(--mono);font-size:12px}.code-head i{width:10px;height:10px;border-radius:50%;background:var(--rose)}.code-head i:nth-child(2){background:var(--accent)}.code-head i:nth-child(3){background:var(--green)}pre{margin:0;overflow:auto;padding:16px 18px;color:#dbeafe;font-family:var(--mono);font-size:13px;line-height:1.55}.deep-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.deep-link{display:block;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:8px;padding:16px;text-decoration:none;color:var(--ink);transition:transform .2s var(--ease),border-color .2s var(--ease)}.deep-link:hover{transform:translateY(-2px);border-color:rgba(142,227,255,.45)}.deep-link small{display:block;color:var(--muted);margin-top:4px}.callout{border-left:3px solid var(--accent);background:rgba(255,207,107,.08);padding:14px 16px;border-radius:0 8px 8px 0;margin:18px 0;color:#f5dfac}.tag{display:inline-flex;margin:0 8px 8px 0;padding:4px 9px;border-radius:999px;background:rgba(125,220,150,.09);border:1px solid rgba(125,220,150,.2);color:#c8f5d2;font-size:13px}footer{border-top:1px solid rgba(255,255,255,.08);padding:36px 0;color:var(--muted)}@media(max-width:800px){.stats,.grid,.flow,.deep-links{grid-template-columns:1fr}.nav .shell{height:auto;min-height:64px;align-items:flex-start;flex-direction:column;padding:12px 0}.nav a{margin:6px 12px 0 0}.hero{padding-top:54px}}
+</style>
+
+</head>
+<body>
+<div class="bg-stars"></div>
+<nav class="nav"><div class="shell"><a class="brand" href="../homerail.html">HomeRail 源码解析</a><div><a href="../index.html">趋势首页</a><a href="https://github.com/xiaotianfotos/homerail" target="_blank" rel="noopener">GitHub</a></div></div></nav>
+
+<header class="hero"><div class="shell"><div class="eyebrow">HomeRail deep dive · Workflow compiler</div><h1>WorkflowSpec v1：从 YAML 到 canonical IR 的护栏</h1><p class="lead">这一页聚焦编译器：源位置、schema 诊断、语义检查、contract、canonical hash 和测试覆盖。</p></div></header>
+<main><section class="section"><div class="shell prose">
+<h3>解析阶段保留源码坐标</h3>
+<p>编译器不是把 YAML parse 成对象就完事；它用 LineCounter 和 YAML Document 保存 path 到 line/column 的映射。sourcePosition、diagnostic 和 parseSource 分别在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:146</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:160</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:167</code>。这让错误能回到用户写的 workflow 文件，而不是只返回“invalid input”。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/workflow-spec-v1.ts · 146-217</span></div><pre><code> 146  function sourcePosition(context: SourceContext, path: string): { line?: number; column?: number } {
+ 147    let parts = pointerParts(path);
+ 148    while (parts.length &gt;= 0) {
+ 149      const node = context.document.getIn(parts, true);
+ 150      if (isNode(node) &amp;&amp; node.range) {
+ 151        const position = context.lineCounter.linePos(node.range[0]);
+ 152        return { line: position.line, column: position.col };
+ 153      }
+ 154      if (parts.length === 0) break;
+ 155      parts = parts.slice(0, -1);
+ 156    }
+ 157    return {};
+ 158  }
+ 159  
+ 160  function diagnostic(
+ 161    context: SourceContext,
+ 162    value: Omit&lt;WorkflowDiagnostic, &quot;line&quot; | &quot;column&quot;&gt;,
+ 163  ): WorkflowDiagnostic {
+ 164    return { ...value, ...sourcePosition(context, value.path) };
+ 165  }
+ 166  
+ 167  function parseSource(source: string): {
+ 168    context?: SourceContext;
+ 169    value?: unknown;
+ 170    diagnostics: WorkflowDiagnostic[];
+ 171  } {
+ 172    const lineCounter = new LineCounter();
+ 173    const document = parseDocument(source, {
+ 174      lineCounter,
+ 175      prettyErrors: false,
+ 176      strict: true,
+ 177      uniqueKeys: true,
+ 178    });
+ 179    const diagnostics: WorkflowDiagnostic[] = [];
+ 180    for (const error of document.errors) {
+ 181      const position = error.pos?.[0] !== undefined ? lineCounter.linePos(error.pos[0]) : undefined;
+ 182      diagnostics.push({
+ 183        severity: &quot;error&quot;,
+ 184        code: &quot;DAG_PARSE_INVALID_SOURCE&quot;,
+ 185        path: &quot;/&quot;,
+ 186        message: error.message,
+ 187        ...(position ? { line: position.line, column: position.col } : {}),
+ 188      });
+ 189    }
+ 190    for (const warning of document.warnings) {
+ 191      const position = warning.pos?.[0] !== undefined ? lineCounter.linePos(warning.pos[0]) : undefined;
+ 192      diagnostics.push({
+ 193        severity: &quot;error&quot;,
+ 194        code: &quot;DAG_PARSE_UNSUPPORTED_YAML&quot;,
+ 195        path: &quot;/&quot;,
+ 196        message: warning.message,
+ 197        ...(position ? { line: position.line, column: position.col } : {}),
+ 198      });
+ 199    }
+ 200    if (diagnostics.length &gt; 0) return { diagnostics };
+ 201    try {
+ 202      return {
+ 203        context: { document, lineCounter },
+ 204        value: document.toJS({ maxAliasCount: 0 }),
+ 205        diagnostics,
+ 206      };
+ 207    } catch (error) {
+ 208      return {
+ 209        diagnostics: [{
+ 210          severity: &quot;error&quot;,
+ 211          code: &quot;DAG_PARSE_INVALID_SOURCE&quot;,
+ 212          path: &quot;/&quot;,
+ 213          message: error instanceof Error ? error.message : String(error),
+ 214        }],
+ 215      };
+ 216    }
+ 217  }</code></pre></div>
+<h3>Schema 只管形状，semanticDiagnostics 管行为</h3>
+<p>TypeBox schema 错误会转换成 DAG_SCHEMA_UNKNOWN_FIELD、DAG_SCHEMA_REQUIRED_FIELD 或 DAG_SCHEMA_INVALID_FIELD，见 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:219</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:226</code>。真正的 workflow 行为约束由 semanticDiagnostics 做，包括 unknown agent、depends_on、自依赖、contract 引用、condition routes、join threshold、foreach/while port，集中在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:261</code> 到 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:351</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/workflow-spec-v1.ts · 219-351</span></div><pre><code> 219  function schemaErrorCode(message: string): string {
+ 220    const normalized = message.toLowerCase();
+ 221    if (normalized.includes(&quot;unexpected property&quot;)) return &quot;DAG_SCHEMA_UNKNOWN_FIELD&quot;;
+ 222    if (normalized.includes(&quot;required property&quot;)) return &quot;DAG_SCHEMA_REQUIRED_FIELD&quot;;
+ 223    return &quot;DAG_SCHEMA_INVALID_FIELD&quot;;
+ 224  }
+ 225  
+ 226  function schemaDiagnostics(context: SourceContext, value: unknown): WorkflowDiagnostic[] {
+ 227    return [...Value.Errors(WorkflowSpecV1Schema, value)].map((error) =&gt; diagnostic(context, {
+ 228      severity: &quot;error&quot;,
+ 229      code: schemaErrorCode(error.message),
+ 230      path: error.path || &quot;/&quot;,
+ 231      message: error.message,
+ 232    }));
+ 233  }
+ 234  
+ 235  function splitPortReference(reference: string): { node: string; port: string } {
+ 236    if (reference === &quot;$run.input&quot;) return { node: &quot;$run&quot;, port: &quot;input&quot; };
+ 237    const index = reference.lastIndexOf(&quot;.&quot;);
+ 238    return { node: reference.slice(0, index), port: reference.slice(index + 1) };
+ 239  }
+ 240  
+ 241  function portEntries(ports: Record&lt;string, { contract?: string; description?: string }&gt; | undefined): CanonicalPort[] {
+ 242    return Object.entries(ports ?? {})
+ 243      .sort(([left], [right]) =&gt; left.localeCompare(right))
+ 244      .map(([name, port]) =&gt; ({
+ 245        name,
+ 246        ...(port.contract ? { contract: port.contract } : {}),
+ 247        ...(port.description ? { description: port.description } : {}),
+ 248      }));
+ 249  }
+ 250  
+ 251  function nodePorts(node: WorkflowSpecV1Node, direction: &quot;inputs&quot; | &quot;outputs&quot;): Record&lt;string, { contract?: string }&gt; {
+ 252    if (direction === &quot;inputs&quot;) return node.inputs ?? {};
+ 253    if (node.kind === &quot;terminal&quot;) return {};
+ 254    return node.outputs ?? {};
+ 255  }
+ 256  
+ 257  function isFeedbackEdge(edge: WorkflowSpecV1Edge): edge is Extract&lt;WorkflowSpecV1Edge, { kind: &quot;feedback&quot; }&gt; {
+ 258    return &quot;kind&quot; in edge &amp;&amp; edge.kind === &quot;feedback&quot;;
+ 259  }
+ 260  
+ 261  function semanticDiagnostics(context: SourceContext, workflow: WorkflowSpecV1): WorkflowDiagnostic[] {
+ 262    const diagnostics: WorkflowDiagnostic[] = [];
+ 263    const nodes = workflow.spec.nodes;
+ 264    const agents = workflow.spec.agents;
+ 265    const contracts = workflow.spec.contracts ?? {};
+ 266  
+ 267    const add = (path: string, code: string, message: string, hint?: string) =&gt; {
+ 268      diagnostics.push(diagnostic(context, {
+ 269        severity: &quot;error&quot;,
+ 270        code,
+ 271        path,
+ 272        message,
+ 273        ...(hint ? { hint } : {}),
+ 274      }));
+ 275    };
+ 276  
+ 277    for (const [contractName, contract] of Object.entries(contracts)) {
+ 278      const validation = validateJsonContractSchema(contract);
+ 279      if (!validation.valid) {
+ 280        add(
+ 281          `/spec/contracts/${contractName}`,
+ 282          &quot;DAG_SEMANTIC_INVALID_CONTRACT&quot;,
+ 283          `invalid JSON Schema contract &#x27;${contractName}&#x27;: ${validation.details}`,
+ 284        );
+ 285      }
+ 286    }
+ 287  
+ 288    for (const [nodeId, node] of Object.entries(nodes)) {
+ 289      const nodePath = `/spec/nodes/${nodeId}`;
+ 290      if (node.kind === &quot;agent&quot; &amp;&amp; !agents[node.agent]) {
+ 291        add(`${nodePath}/agent`, &quot;DAG_SEMANTIC_UNKNOWN_AGENT&quot;, `unknown agent &#x27;${node.agent}&#x27;`);
+ 292      }
+ 293      for (const dependency of node.depends_on ?? []) {
+ 294        if (!nodes[dependency]) {
+ 295          add(`${nodePath}/depends_on`, &quot;DAG_SEMANTIC_UNKNOWN_NODE&quot;, `unknown dependency &#x27;${dependency}&#x27;`);
+ 296        } else if (dependency === nodeId) {
+ 297          add(`${nodePath}/depends_on`, &quot;DAG_SEMANTIC_SELF_DEPENDENCY&quot;, &quot;a node cannot depend on itself&quot;);
+ 298        }
+ 299      }
+ 300      for (const direction of [&quot;inputs&quot;, &quot;outputs&quot;] as const) {
+ 301        for (const [portName, port] of Object.entries(nodePorts(node, direction))) {
+ 302          if (port.contract &amp;&amp; !contracts[port.contract]) {
+ 303            add(
+ 304              `${nodePath}/${direction}/${portName}/contract`,
+ 305              &quot;DAG_SEMANTIC_UNKNOWN_CONTRACT&quot;,
+ 306              `unknown contract &#x27;${port.contract}&#x27;`,
+ 307            );
+ 308          }
+ 309        }
+ 310      }
+ 311      if (node.kind === &quot;condition&quot;) {
+ 312        const outputs = nodePorts(node, &quot;outputs&quot;);
+ 313        for (const [value, port] of Object.entries(node.config.routes)) {
+ 314          if (!outputs[port]) {
+ 315            add(`${nodePath}/config/routes/${value}`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${port}&#x27;`);
+ 316          }
+ 317        }
+ 318        if (node.config.default &amp;&amp; !outputs[node.config.default]) {
+ 319          add(`${nodePath}/config/default`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${node.config.default}&#x27;`);
+ 320        }
+ 321      }
+ 322      if (node.kind === &quot;join&quot;) {
+ 323        if (node.config.mode === &quot;n_of_m&quot; &amp;&amp; node.config.threshold === undefined) {
+ 324          add(`${nodePath}/config/threshold`, &quot;DAG_SEMANTIC_REQUIRED_THRESHOLD&quot;, &quot;n_of_m join requires threshold&quot;);
+ 325        }
+ 326        if (node.config.mode !== &quot;n_of_m&quot; &amp;&amp; node.config.threshold !== undefined) {
+ 327          add(`${nodePath}/config/threshold`, &quot;DAG_SEMANTIC_INVALID_THRESHOLD&quot;, &quot;threshold is only valid for n_of_m join&quot;);
+ 328        }
+ 329      }
+ 330      if (node.kind === &quot;foreach&quot;) {
+ 331        const inputs = nodePorts(node, &quot;inputs&quot;);
+ 332        const outputs = nodePorts(node, &quot;outputs&quot;);
+ 333        if (!inputs[node.config.input]) {
+ 334          add(`${nodePath}/config/input`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown input port &#x27;${node.config.input}&#x27;`);
+ 335        }
+ 336        for (const key of [&quot;item_port&quot;, &quot;done_port&quot;] as const) {
+ 337          const port = node.config[key];
+ 338          if (!outputs[port]) add(`${nodePath}/config/${key}`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${port}&#x27;`);
+ 339        }
+ 340        if (!inputs[node.config.result_port]) {
+ 341          add(`${nodePath}/config/result_port`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown input port &#x27;${node.config.result_port}&#x27;`);
+ 342        }
+ 343      }
+ 344      if (node.kind === &quot;while&quot;) {
+ 345        const outputs = nodePorts(node, &quot;outputs&quot;);
+ 346        for (const key of [&quot;continue_port&quot;, &quot;done_port&quot;, &quot;exhausted_port&quot;] as const) {
+ 347          const port = node.config[key];
+ 348          if (port &amp;&amp; !outputs[port]) add(`${nodePath}/config/${key}`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${port}&#x27;`);
+ 349        }
+ 350      }
+ 351    }</code></pre></div>
+<h3>Edge 诊断是防止工作流失控的主战场</h3>
+<p>edge 检查覆盖 source/target node、端口存在和 contract mismatch：edge 拆解从 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:363</code> 开始，端口与 contract 校验落在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:380</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:388</code>。更偏运行安全的规则继续往下走，$run.input 必须有 contract，非 join 禁止隐式 fan-in，feedback target 只能是 foreach/while，对应 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:396</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:407</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:413</code>。最后它还检查普通边不能成环、每个非 terminal 节点都必须能到 terminal，收束在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:449</code> 和 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:469</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/workflow-spec-v1.ts · 363-501</span></div><pre><code> 363    workflow.spec.edges.forEach((edge, index) =&gt; {
+ 364      const path = `/spec/edges/${index}`;
+ 365      const source = splitPortReference(edge.from);
+ 366      const target = splitPortReference(edge.to);
+ 367      const sourceNode = source.node === &quot;$run&quot; ? undefined : nodes[source.node];
+ 368      const targetNode = target.node === &quot;$run&quot; ? undefined : nodes[target.node];
+ 369      if (source.node !== &quot;$run&quot; &amp;&amp; !sourceNode) {
+ 370        add(`${path}/from`, &quot;DAG_SEMANTIC_UNKNOWN_NODE&quot;, `unknown source node &#x27;${source.node}&#x27;`);
+ 371      }
+ 372      if (source.node === &quot;$run&quot; &amp;&amp; edge.from !== &quot;$run.input&quot;) {
+ 373        add(`${path}/from`, &quot;DAG_SEMANTIC_INVALID_RUN_PORT&quot;, &quot;the only reserved run source is &#x27;$run.input&#x27;&quot;);
+ 374      }
+ 375      if (target.node === &quot;$run&quot;) {
+ 376        add(`${path}/to`, &quot;DAG_SEMANTIC_INVALID_RUN_TARGET&quot;, &quot;&#x27;$run.input&#x27; cannot be an edge target&quot;);
+ 377      } else if (!targetNode) {
+ 378        add(`${path}/to`, &quot;DAG_SEMANTIC_UNKNOWN_NODE&quot;, `unknown target node &#x27;${target.node}&#x27;`);
+ 379      }
+ 380      const sourcePort = sourceNode ? nodePorts(sourceNode, &quot;outputs&quot;)[source.port] : undefined;
+ 381      const targetPort = targetNode ? nodePorts(targetNode, &quot;inputs&quot;)[target.port] : undefined;
+ 382      if (sourceNode &amp;&amp; !sourcePort) {
+ 383        add(`${path}/from`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${edge.from}&#x27;`);
+ 384      }
+ 385      if (targetNode &amp;&amp; !targetPort) {
+ 386        add(`${path}/to`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown input port &#x27;${edge.to}&#x27;`);
+ 387      }
+ 388      if (sourcePort?.contract &amp;&amp; targetPort?.contract &amp;&amp; sourcePort.contract !== targetPort.contract) {
+ 389        add(
+ 390          path,
+ 391          &quot;DAG_SEMANTIC_CONTRACT_MISMATCH&quot;,
+ 392          `contract &#x27;${sourcePort.contract}&#x27; is not compatible with &#x27;${targetPort.contract}&#x27;`,
+ 393          &quot;v1 edges must connect ports that reference the same named contract&quot;,
+ 394        );
+ 395      }
+ 396      if (edge.from === &quot;$run.input&quot; &amp;&amp; targetPort?.contract === undefined) {
+ 397        add(`${path}/to`, &quot;DAG_SEMANTIC_RUN_INPUT_CONTRACT_REQUIRED&quot;, &quot;a $run.input target must declare a contract&quot;);
+ 398      }
+ 399      if (sourceNode &amp;&amp; targetNode) {
+ 400        incomingNodeEdges.set(target.node, (incomingNodeEdges.get(target.node) ?? 0) + 1);
+ 401        if (!isFeedbackEdge(edge)) {
+ 402          normalAdjacency.get(source.node)?.add(target.node);
+ 403        }
+ 404        reverseReachability.get(target.node)?.add(source.node);
+ 405      }
+ 406      const targetKey = `${target.node}.${target.port}`;
+ 407      if (!isFeedbackEdge(edge)) {
+ 408        targetPorts.set(targetKey, (targetPorts.get(targetKey) ?? 0) + 1);
+ 409        if (targetNode?.kind !== &quot;join&quot; &amp;&amp; (targetPorts.get(targetKey) ?? 0) &gt; 1) {
+ 410          add(`${path}/to`, &quot;DAG_SEMANTIC_IMPLICIT_FAN_IN&quot;, `multiple edges target &#x27;${targetKey}&#x27;; use an explicit join node`);
+ 411        }
+ 412      }
+ 413      if (isFeedbackEdge(edge) &amp;&amp; targetNode &amp;&amp; targetNode.kind !== &quot;foreach&quot; &amp;&amp; targetNode.kind !== &quot;while&quot;) {
+ 414        add(`${path}/to`, &quot;DAG_SEMANTIC_INVALID_FEEDBACK_TARGET&quot;, &quot;feedback edges may target only foreach or while nodes&quot;);
+ 415      }
+ 416    });
+ 417  
+ 418    for (const [nodeId, node] of Object.entries(nodes)) {
+ 419      if (node.kind === &quot;terminal&quot;) continue;
+ 420      for (const port of Object.keys(nodePorts(node, &quot;outputs&quot;))) {
+ 421        const outgoing = workflow.spec.edges.filter((edge) =&gt; splitPortReference(edge.from).node === nodeId &amp;&amp; splitPortReference(edge.from).port === port);
+ 422        if (outgoing.length === 0) {
+ 423          add(`/spec/nodes/${nodeId}/outputs/${port}`, &quot;DAG_SEMANTIC_UNROUTED_OUTPUT&quot;, `output port &#x27;${nodeId}.${port}&#x27; has no edge`);
+ 424          continue;
+ 425        }
+ 426        if (outgoing.some((edge) =&gt; {
+ 427          const target = splitPortReference(edge.to);
+ 428          return nodes[target.node]?.kind === &quot;terminal&quot;;
+ 429        }) &amp;&amp; outgoing.length &gt; 1) {
+ 430          add(
+ 431            `/spec/nodes/${nodeId}/outputs/${port}`,
+ 432            &quot;DAG_SEMANTIC_AMBIGUOUS_TERMINAL&quot;,
+ 433            `output port &#x27;${nodeId}.${port}&#x27; cannot target a terminal and another destination`,
+ 434          );
+ 435        }
+ 436      }
+ 437    }
+ 438  
+ 439    for (const [nodeId, node] of Object.entries(nodes)) {
+ 440      for (const dependency of node.depends_on ?? []) {
+ 441        if (nodes[dependency]) {
+ 442          normalAdjacency.get(dependency)?.add(nodeId);
+ 443          reverseReachability.get(nodeId)?.add(dependency);
+ 444          incomingNodeEdges.set(nodeId, (incomingNodeEdges.get(nodeId) ?? 0) + 1);
+ 445        }
+ 446      }
+ 447    }
+ 448  
+ 449    const visiting = new Set&lt;string&gt;();
+ 450    const visited = new Set&lt;string&gt;();
+ 451    const findCycle = (nodeId: string): boolean =&gt; {
+ 452      if (visiting.has(nodeId)) return true;
+ 453      if (visited.has(nodeId)) return false;
+ 454      visiting.add(nodeId);
+ 455      for (const next of normalAdjacency.get(nodeId) ?? []) {
+ 456        if (findCycle(next)) return true;
+ 457      }
+ 458      visiting.delete(nodeId);
+ 459      visited.add(nodeId);
+ 460      return false;
+ 461    };
+ 462    for (const nodeId of Object.keys(nodes).sort()) {
+ 463      if (findCycle(nodeId)) {
+ 464        add(&quot;/spec/edges&quot;, &quot;DAG_SEMANTIC_UNBOUNDED_CYCLE&quot;, &quot;normal data and control edges must be acyclic; use a bounded feedback edge&quot;);
+ 465        break;
+ 466      }
+ 467    }
+ 468  
+ 469    const terminalNodes = Object.entries(nodes)
+ 470      .filter(([, node]) =&gt; node.kind === &quot;terminal&quot;)
+ 471      .map(([id]) =&gt; id);
+ 472    if (terminalNodes.length === 0) {
+ 473      add(&quot;/spec/nodes&quot;, &quot;DAG_SEMANTIC_TERMINAL_REQUIRED&quot;, &quot;workflow must contain at least one terminal node&quot;);
+ 474    } else {
+ 475      const reachesTerminal = new Set(terminalNodes);
+ 476      const queue = [...terminalNodes];
+ 477      while (queue.length &gt; 0) {
+ 478        const current = queue.shift()!;
+ 479        for (const predecessor of reverseReachability.get(current) ?? []) {
+ 480          if (!reachesTerminal.has(predecessor)) {
+ 481            reachesTerminal.add(predecessor);
+ 482            queue.push(predecessor);
+ 483          }
+ 484        }
+ 485      }
+ 486      for (const [nodeId, node] of Object.entries(nodes)) {
+ 487        if (node.kind !== &quot;terminal&quot; &amp;&amp; !reachesTerminal.has(nodeId)) {
+ 488          add(`/spec/nodes/${nodeId}`, &quot;DAG_SEMANTIC_NO_TERMINAL_PATH&quot;, `node &#x27;${nodeId}&#x27; has no path to a terminal node`);
+ 489        }
+ 490      }
+ 491    }
+ 492  
+ 493    const policies = workflow.spec.policies;
+ 494    if (policies?.max_nodes !== undefined &amp;&amp; Object.keys(nodes).length &gt; policies.max_nodes) {
+ 495      add(&quot;/spec/policies/max_nodes&quot;, &quot;DAG_POLICY_NODE_LIMIT&quot;, &quot;workflow node count exceeds max_nodes&quot;);
+ 496    }
+ 497    if (policies?.max_edges !== undefined &amp;&amp; workflow.spec.edges.length &gt; policies.max_edges) {
+ 498      add(&quot;/spec/policies/max_edges&quot;, &quot;DAG_POLICY_EDGE_LIMIT&quot;, &quot;workflow edge count exceeds max_edges&quot;);
+ 499    }
+ 500  
+ 501    return diagnostics;</code></pre></div>
+<h3>Canonical IR：稳定排序 + hash</h3>
+<p>canonicalNode、canonicalEdge、deepSort、canonicalJson、hashCanonical 和 compileV1 组成了可审计版本的核心。节点、边、labels、annotations、contracts、agents、pattern parameters 都经过排序或深度排序，相关代码在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:504</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:524</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:540</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:550</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:558</code>。这让同一 workflow 的 canonical_hash 能用来绑定运行记录。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/workflow-spec-v1.ts · 504-625</span></div><pre><code> 504  function canonicalNode(id: string, node: WorkflowSpecV1Node): CanonicalNode {
+ 505    const base = {
+ 506      id,
+ 507      kind: node.kind,
+ 508      ...(node.description ? { description: node.description } : {}),
+ 509      depends_on: [...(node.depends_on ?? [])].sort(),
+ 510      inputs: portEntries(node.inputs),
+ 511      outputs: node.kind === &quot;terminal&quot; ? [] : portEntries(node.outputs),
+ 512    };
+ 513    if (node.kind === &quot;agent&quot;) return { ...base, agent: node.agent };
+ 514    if (node.kind === &quot;terminal&quot;) {
+ 515      return {
+ 516        ...base,
+ 517        outcome: node.outcome,
+ 518        ...(node.reason ? { reason: node.reason } : {}),
+ 519      };
+ 520    }
+ 521    return { ...base, config: deepSort(node.config) as Record&lt;string, unknown&gt; };
+ 522  }
+ 523  
+ 524  function canonicalEdge(edge: WorkflowSpecV1Edge, index: number): CanonicalEdge {
+ 525    const feedback = isFeedbackEdge(edge);
+ 526    const sourcePort = splitPortReference(edge.from).port;
+ 527    return {
+ 528      id: `edge-${String(index + 1).padStart(4, &quot;0&quot;)}`,
+ 529      kind: feedback ? &quot;feedback&quot; : &quot;data&quot;,
+ 530      from: splitPortReference(edge.from),
+ 531      to: splitPortReference(edge.to),
+ 532      condition: feedback
+ 533        ? &quot;on_success&quot;
+ 534        : edge.condition ?? (FAILURE_PORT_NAMES.has(sourcePort.toLowerCase()) ? &quot;on_failure&quot; : &quot;on_success&quot;),
+ 535      retry: { max_retries: feedback ? 0 : edge.retry?.max_retries ?? 0 },
+ 536      ...(feedback ? { max_traversals: edge.max_traversals } : {}),
+ 537    };
+ 538  }
+ 539  
+ 540  function deepSort(value: unknown): unknown {
+ 541    if (Array.isArray(value)) return value.map(deepSort);
+ 542    if (!value || typeof value !== &quot;object&quot;) return value;
+ 543    return Object.fromEntries(
+ 544      Object.entries(value as Record&lt;string, unknown&gt;)
+ 545        .sort(([left], [right]) =&gt; left.localeCompare(right))
+ 546        .map(([key, entry]) =&gt; [key, deepSort(entry)]),
+ 547    );
+ 548  }
+ 549  
+ 550  function canonicalJson(canonical: CanonicalWorkflowIR): string {
+ 551    return JSON.stringify(deepSort(canonical));
+ 552  }
+ 553  
+ 554  function hashCanonical(json: string): string {
+ 555    return createHash(&quot;sha256&quot;).update(json).digest(&quot;hex&quot;);
+ 556  }
+ 557  
+ 558  function compileV1(workflow: WorkflowSpecV1): CanonicalWorkflowIR {
+ 559    const nodes = Object.entries(workflow.spec.nodes)
+ 560      .sort(([left], [right]) =&gt; left.localeCompare(right))
+ 561      .map(([id, node]) =&gt; canonicalNode(id, node));
+ 562    const dataEdges = workflow.spec.edges.map(canonicalEdge);
+ 563    const controlEdges: CanonicalEdge[] = [];
+ 564    for (const node of nodes) {
+ 565      for (const dependency of node.depends_on) {
+ 566        controlEdges.push({
+ 567          id: &quot;&quot;,
+ 568          kind: &quot;control&quot;,
+ 569          from: { node: dependency, port: &quot;done&quot; },
+ 570          to: { node: node.id, port: &quot;task&quot; },
+ 571          condition: &quot;on_success&quot;,
+ 572          retry: { max_retries: 0 },
+ 573        });
+ 574      }
+ 575    }
+ 576    const edges = [...dataEdges, ...controlEdges]
+ 577      .sort((left, right) =&gt; {
+ 578        const leftKey = `${left.from.node}.${left.from.port}&gt;${left.to.node}.${left.to.port}:${left.kind}`;
+ 579        const rightKey = `${right.from.node}.${right.from.port}&gt;${right.to.node}.${right.to.port}:${right.kind}`;
+ 580        return leftKey.localeCompare(rightKey);
+ 581      })
+ 582      .map((edge, index) =&gt; ({ ...edge, id: `edge-${String(index + 1).padStart(4, &quot;0&quot;)}` }));
+ 583    const incoming = new Set(edges.filter((edge) =&gt; edge.from.node !== &quot;$run&quot; &amp;&amp; edge.kind !== &quot;feedback&quot;).map((edge) =&gt; edge.to.node));
+ 584    return {
+ 585      ir_version: &quot;1&quot;,
+ 586      source_api_version: WORKFLOW_API_VERSION,
+ 587      compiler_version: WORKFLOW_COMPILER_VERSION,
+ 588      workflow_id: workflow.metadata.id,
+ 589      name: workflow.metadata.name,
+ 590      ...(workflow.spec.description ? { description: workflow.spec.description } : {}),
+ 591      labels: deepSort(workflow.metadata.labels ?? {}) as Record&lt;string, string&gt;,
+ 592      annotations: deepSort(workflow.metadata.annotations ?? {}) as Record&lt;string, string&gt;,
+ 593      workspace: { mode: workflow.spec.workspace?.mode ?? &quot;isolated&quot; },
+ 594      contracts: deepSort(workflow.spec.contracts ?? {}) as Record&lt;string, unknown&gt;,
+ 595      agents: Object.fromEntries(Object.entries(workflow.spec.agents)
+ 596        .sort(([left], [right]) =&gt; left.localeCompare(right))
+ 597        .map(([id, agent]) =&gt; [id, {
+ 598          ...(agent.description ? { description: agent.description } : {}),
+ 599          ...(agent.system ? { system: agent.system } : {}),
+ 600          skills: [...(agent.skills ?? [])].sort(),
+ 601        }])),
+ 602      ...(workflow.spec.pattern ? {
+ 603        pattern: {
+ 604          id: workflow.spec.pattern.id,
+ 605          version: workflow.spec.pattern.version,
+ 606          ...(workflow.spec.pattern.source ? { source: workflow.spec.pattern.source } : {}),
+ 607          parameters: deepSort(workflow.spec.pattern.parameters ?? {}) as Record&lt;string, unknown&gt;,
+ 608        },
+ 609      } : {}),
+ 610      policies: {
+ 611        max_nodes: workflow.spec.policies?.max_nodes ?? 1000,
+ 612        max_edges: workflow.spec.policies?.max_edges ?? 10_000,
+ 613        max_parallelism: workflow.spec.policies?.max_parallelism ?? 32,
+ 614        max_dispatches: workflow.spec.policies?.max_dispatches ?? 30,
+ 615        max_handoffs: workflow.spec.policies?.max_handoffs ?? 50,
+ 616        max_corrections_per_node: workflow.spec.policies?.max_corrections_per_node ?? 2,
+ 617        max_edge_traversals: workflow.spec.policies?.max_edge_traversals ?? 3,
+ 618        max_tool_calls_per_node: workflow.spec.policies?.max_tool_calls_per_node ?? 0,
+ 619      },
+ 620      nodes,
+ 621      edges,
+ 622      entry_nodes: nodes.filter((node) =&gt; !incoming.has(node.id)).map((node) =&gt; node.id).sort(),
+ 623      terminal_nodes: nodes.filter((node) =&gt; node.kind === &quot;terminal&quot;).map((node) =&gt; node.id).sort(),
+ 624      feedback_edges: edges.filter((edge) =&gt; edge.kind === &quot;feedback&quot;).map((edge) =&gt; edge.id),
+ 625    };</code></pre></div>
+<h3>Runtime 测试证明 v1 不是纸面格式</h3>
+<p>测试从 upsert workflow、创建 run、handoff 到 loadRunMetadata 全链路验证 canonical revision；这条 happy path 在 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:97</code>，contract violation 与 run input contract 的负例分别在 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:127</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:162</code>。恢复能力也不是注释，cold recovery 测试在 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:175</code>。公开样例则覆盖 fan-out/join、condition、foreach 和 bounded while，分别落在 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:197</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:221</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:239</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:260</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/tests/workflow-spec-runtime.test.ts · 97-195</span></div><pre><code>  97    it(&quot;runs a synced v1 workflow from its immutable canonical revision&quot;, () =&gt; {
+  98      const synced = upsertDagWorkflowFromYaml({ yaml_text: workflowSource() });
+  99      syncDeterministicProfile(&quot;v1-runtime-success&quot;);
+ 100      const dispatcher = new FakeDAGDispatcher();
+ 101      const orchestrator = new ChangeOrchestrator(new GraphExecutor(dispatcher));
+ 102      const created = orchestrator.createAndRun({
+ 103        workflowId: &quot;v1-runtime-success&quot;,
+ 104        runId: &quot;v1-runtime-run&quot;,
+ 105        prompt: &quot;hello&quot;,
+ 106        profile: &quot;deterministic&quot;,
+ 107      });
+ 108  
+ 109      expect(created).toMatchObject({
+ 110        workflowRevision: 1,
+ 111        canonicalHash: synced.workflow.canonical_hash,
+ 112        sourceApiVersion: &quot;homerail.ai/v1&quot;,
+ 113        dispatched: 1,
+ 114      });
+ 115      expect(dispatcher.dispatched[0].inputs).toMatchObject({ task: [&quot;hello&quot;] });
+ 116  
+ 117      const completed = handoffActiveRun(created.runId, &quot;execute&quot;, &quot;result&quot;, &quot;verified&quot;);
+ 118      expect(completed?.status).toBe(&quot;completed&quot;);
+ 119      expect(loadRunMetadata(created.runId)).toMatchObject({
+ 120        status: &quot;completed&quot;,
+ 121        workflowRevision: 1,
+ 122        canonicalHash: synced.workflow.canonical_hash,
+ 123        contracts: { Text: { type: &quot;string&quot;, maxLength: 100 } },
+ 124      });
+ 125    });
+ 126  
+ 127    it(&quot;fails the node when a handoff violates its named contract&quot;, () =&gt; {
+ 128      upsertDagWorkflowFromYaml({ yaml_text: workflowSource() });
+ 129      syncDeterministicProfile(&quot;v1-runtime-success&quot;);
+ 130      const orchestrator = new ChangeOrchestrator(new GraphExecutor(new FakeDAGDispatcher()));
+ 131      const created = orchestrator.createAndRun({
+ 132        workflowId: &quot;v1-runtime-success&quot;,
+ 133        runId: &quot;v1-contract-failure&quot;,
+ 134        prompt: &quot;hello&quot;,
+ 135        profile: &quot;deterministic&quot;,
+ 136      });
+ 137  
+ 138      expect(() =&gt; handoffActiveRun(created.runId, &quot;execute&quot;, &quot;result&quot;, { invalid: true }))
+ 139        .toThrow(&quot;DAG_HANDOFF_CONTRACT_VIOLATION execute.result (Text)&quot;);
+ 140      expect(getActiveRun(created.runId)?.status).toBe(&quot;failed&quot;);
+ 141      expect(loadRunMetadata(created.runId)?.nodeStates.execute).toBe(&quot;FAILED&quot;);
+ 142    });
+ 143  
+ 144    it.each([
+ 145      [&quot;failure&quot;, &quot;failed&quot;],
+ 146      [&quot;cancelled&quot;, &quot;cancelled&quot;],
+ 147    ] as const)(&quot;honors explicit %s terminal outcome independently of port naming&quot;, (outcome, expected) =&gt; {
+ 148      upsertDagWorkflowFromYaml({ yaml_text: workflowSource(outcome) });
+ 149      syncDeterministicProfile(`v1-runtime-${outcome}`);
+ 150      const orchestrator = new ChangeOrchestrator(new GraphExecutor(new FakeDAGDispatcher()));
+ 151      const created = orchestrator.createAndRun({
+ 152        workflowId: `v1-runtime-${outcome}`,
+ 153        runId: `v1-terminal-${outcome}`,
+ 154        prompt: &quot;hello&quot;,
+ 155        profile: &quot;deterministic&quot;,
+ 156      });
+ 157  
+ 158      handoffActiveRun(created.runId, &quot;execute&quot;, &quot;result&quot;, &quot;finished&quot;);
+ 159      expect(getActiveRun(created.runId)?.status).toBe(expected);
+ 160    });
+ 161  
+ 162    it(&quot;rejects run input that does not satisfy the entry contract&quot;, () =&gt; {
+ 163      upsertDagWorkflowFromYaml({ yaml_text: workflowSource() });
+ 164      syncDeterministicProfile(&quot;v1-runtime-success&quot;);
+ 165      const orchestrator = new ChangeOrchestrator(new GraphExecutor(new FakeDAGDispatcher()));
+ 166  
+ 167      expect(() =&gt; orchestrator.createRun({
+ 168        workflowId: &quot;v1-runtime-success&quot;,
+ 169        runId: &quot;v1-invalid-input&quot;,
+ 170        prompt: JSON.stringify({ not: &quot;text&quot; }),
+ 171        profile: &quot;deterministic&quot;,
+ 172      })).toThrow(&quot;DAG_RUN_INPUT_CONTRACT_VIOLATION execute.task&quot;);
+ 173    });
+ 174  
+ 175    it(&quot;cold-recovers v1 provenance, contracts, and reserved run input&quot;, () =&gt; {
+ 176      const synced = upsertDagWorkflowFromYaml({ yaml_text: workflowSource() });
+ 177      syncDeterministicProfile(&quot;v1-runtime-success&quot;);
+ 178      const orchestrator = new ChangeOrchestrator(new GraphExecutor(new FakeDAGDispatcher()));
+ 179      orchestrator.createRun({
+ 180        workflowId: &quot;v1-runtime-success&quot;,
+ 181        runId: &quot;v1-cold-recovery&quot;,
+ 182        prompt: &quot;recover me&quot;,
+ 183        profile: &quot;deterministic&quot;,
+ 184      });
+ 185  
+ 186      _clearActiveRuns();
+ 187      expect(recoverAllActiveRuns()).toMatchObject({ recovered: [&quot;v1-cold-recovery&quot;] });
+ 188      expect(getActiveRun(&quot;v1-cold-recovery&quot;)).toMatchObject({
+ 189        workflowRevision: 1,
+ 190        canonicalHash: synced.workflow.canonical_hash,
+ 191        sourceApiVersion: &quot;homerail.ai/v1&quot;,
+ 192      });
+ 193      const envelope = buildCurrentDispatchEnvelope(&quot;v1-cold-recovery&quot;, &quot;execute&quot;);
+ 194      expect(envelope).toMatchObject({ ok: true, envelope: { inputs: { task: [&quot;recover me&quot;] } } });
+ 195    });</code></pre></div>
+</div></section></main>
+
+<footer><div class="shell">GitHub Trending Monitor · 源码级阅读 · 2026-07-12</div></footer>
+</body>
+</html>

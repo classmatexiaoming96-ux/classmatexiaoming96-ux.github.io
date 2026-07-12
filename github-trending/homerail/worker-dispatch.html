@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HomeRail Worker Dispatch 源码拆解</title>
+<meta name="description" content="能力匹配、隔离工作区、容器 provision 与 PromptRunner 源码分析。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet" />
+
+<style>
+:root{--bg:#090b10;--ink:#eef5ff;--muted:#9fafc3;--panel:#111722;--panel-2:#151e2c;--line:#263247;--star:#8ee3ff;--accent:#ffcf6b;--green:#7ddc96;--rose:#ff8c9a;--ease:cubic-bezier(.2,.8,.2,1);--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:"Fraunces",Georgia,serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(142,227,255,.12),transparent 30%),linear-gradient(180deg,#090b10 0%,#0c1018 60%,#090b10 100%);color:var(--ink);font-family:var(--sans);line-height:1.72}.bg-stars{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.42) 1px,transparent 1px);background-size:34px 34px;opacity:.1}.shell{width:min(1120px,calc(100% - 36px));margin:0 auto}.nav{position:sticky;top:0;z-index:20;background:rgba(9,11,16,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}.nav .shell{height:64px;display:flex;align-items:center;justify-content:space-between}.brand{color:var(--ink);text-decoration:none;font-weight:800;letter-spacing:0}.nav a{color:var(--muted);text-decoration:none;margin-left:20px}.nav a:hover{color:var(--star)}.hero{padding:92px 0 54px}.eyebrow{color:var(--star);font-family:var(--mono);font-size:13px}.hero h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:1.02;margin:18px 0}.hero .lead{font-size:clamp(1.02rem,2vw,1.26rem);max-width:860px;color:#c9d7ea}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}.stat{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:8px}.stat strong{display:block;font-size:1.35rem;color:var(--ink)}.stat span{color:var(--muted);font-size:.9rem}.section{padding:36px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(17,23,34,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:24px}.panel h3,.prose h3{font-size:1.3rem;line-height:1.25;margin:0 0 12px;color:var(--ink)}.prose{max-width:920px}.prose p{color:#c7d4e6;margin:0 0 18px}.prose code,.panel code{font-family:var(--mono);font-size:.92em;color:#d9f6ff;background:rgba(142,227,255,.08);border:1px solid rgba(142,227,255,.16);border-radius:5px;padding:1px 5px}.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:24px 0}.flow div{border:1px solid rgba(142,227,255,.18);background:rgba(142,227,255,.06);border-radius:8px;padding:14px;min-height:96px}.flow b{display:block;color:var(--star);margin-bottom:8px}.code-wrap{background:#070a0f;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;margin:18px 0 28px}.code-head{display:flex;gap:8px;align-items:center;height:36px;border-bottom:1px solid rgba(255,255,255,.08);padding:0 12px;color:var(--muted);font-family:var(--mono);font-size:12px}.code-head i{width:10px;height:10px;border-radius:50%;background:var(--rose)}.code-head i:nth-child(2){background:var(--accent)}.code-head i:nth-child(3){background:var(--green)}pre{margin:0;overflow:auto;padding:16px 18px;color:#dbeafe;font-family:var(--mono);font-size:13px;line-height:1.55}.deep-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.deep-link{display:block;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:8px;padding:16px;text-decoration:none;color:var(--ink);transition:transform .2s var(--ease),border-color .2s var(--ease)}.deep-link:hover{transform:translateY(-2px);border-color:rgba(142,227,255,.45)}.deep-link small{display:block;color:var(--muted);margin-top:4px}.callout{border-left:3px solid var(--accent);background:rgba(255,207,107,.08);padding:14px 16px;border-radius:0 8px 8px 0;margin:18px 0;color:#f5dfac}.tag{display:inline-flex;margin:0 8px 8px 0;padding:4px 9px;border-radius:999px;background:rgba(125,220,150,.09);border:1px solid rgba(125,220,150,.2);color:#c8f5d2;font-size:13px}footer{border-top:1px solid rgba(255,255,255,.08);padding:36px 0;color:var(--muted)}@media(max-width:800px){.stats,.grid,.flow,.deep-links{grid-template-columns:1fr}.nav .shell{height:auto;min-height:64px;align-items:flex-start;flex-direction:column;padding:12px 0}.nav a{margin:6px 12px 0 0}.hero{padding-top:54px}}
+</style>
+
+</head>
+<body>
+<div class="bg-stars"></div>
+<nav class="nav"><div class="shell"><a class="brand" href="../homerail.html">HomeRail 源码解析</a><div><a href="../index.html">趋势首页</a><a href="https://github.com/xiaotianfotos/homerail" target="_blank" rel="noopener">GitHub</a></div></div></nav>
+
+<header class="hero"><div class="shell"><div class="eyebrow">HomeRail deep dive · worker dispatch</div><h1>Worker 调度：能力匹配、隔离工作区与 PromptRunner</h1><p class="lead">这一页看 manager 如何把 DAG envelope 派发给 worker/node，以及 worker 如何把 agent 事件变成 DAG 事件。</p></div></header>
+<main><section class="section"><div class="shell prose">
+<h3>Manager HTTP server 把所有控制面挂在一起</h3>
+<p>server/http.ts 负责接 JSON/CORS、计算 manager/worker URL、创建 WsDispatchAdapter、GraphExecutor 和 ChangeOrchestrator，再把 inspection/mutation/sessions/LLM/voice/projects/git/MCP/memory/DAG/settings 等路由接进 Express。关键装配点在 <code>sources/homerail/homerail_manager/src/server/http.ts:33</code>、<code>sources/homerail/homerail_manager/src/server/http.ts:63</code>、<code>sources/homerail/homerail_manager/src/server/http.ts:115</code>、<code>sources/homerail/homerail_manager/src/server/http.ts:166</code>。WebSocket 的 manager command 也会校验 runId/command/sourceNodeId 后走 ChangeOrchestrator，见 <code>sources/homerail/homerail_manager/src/server/http.ts:244</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/server/http.ts · 115-164</span></div><pre><code> 115  export function createServer(
+ 116    port: number,
+ 117    wsOptions?: WorkerWebSocketOptions &amp; NodeWebSocketOptions,
+ 118    dispatcher?: DAGDispatcher,
+ 119    provisionerOptions?: WsDispatchAdapterOptions | false,
+ 120    managerAgentConfigOptions: ManagerAgentConfigRoutesOptions = {},
+ 121  ) {
+ 122    let server: http.Server;
+ 123    const workerImage = process.env.HOMERAIL_WORKER_IMAGE || &quot;homerail-worker:latest&quot;;
+ 124    const defaultProvisionerOptions: WsDispatchAdapterOptions = {
+ 125      provisioner: {
+ 126        image: workerImage,
+ 127        extraHosts: resolveManagerWorkerExtraHosts(),
+ 128        env: resolveWorkerRuntimeEnv(),
+ 129      },
+ 130      managerBaseUrl: () =&gt; {
+ 131        const addr = server?.address();
+ 132        const actualPort = typeof addr === &quot;object&quot; &amp;&amp; addr ? addr.port : port;
+ 133        return `http://127.0.0.1:${actualPort}`;
+ 134      },
+ 135      managerWorkerWsBaseUrl: () =&gt; {
+ 136        const addr = server?.address();
+ 137        const actualPort = typeof addr === &quot;object&quot; &amp;&amp; addr ? addr.port : port;
+ 138        return resolveManagerWorkerWsBaseUrl(actualPort);
+ 139      },
+ 140      projectId: process.env.HOMERAIL_PROJECT_ID ?? &quot;p1&quot;,
+ 141    };
+ 142    const adapterOptions =
+ 143      provisionerOptions === undefined
+ 144        ? defaultProvisionerOptions
+ 145        : provisionerOptions === false
+ 146          ? { provisioner: false as false }
+ 147          : provisionerOptions;
+ 148    const managerAgentContainerOptions =
+ 149      provisionerOptions === false
+ 150        ? undefined
+ 151        : {
+ 152            image: process.env.HOMERAIL_MANAGER_AGENT_IMAGE || workerImage,
+ 153            env: resolveManagerAgentRuntimeEnv(),
+ 154            extraHosts: resolveManagerWorkerExtraHosts(),
+ 155            managerRestUrl: () =&gt; {
+ 156              const addr = server?.address();
+ 157              const actualPort = typeof addr === &quot;object&quot; &amp;&amp; addr ? addr.port : port;
+ 158              return resolveManagerContainerRestUrl(actualPort);
+ 159            },
+ 160          };
+ 161    const actualDispatcher =
+ 162      dispatcher ?? new WsDispatchAdapter(adapterOptions);
+ 163    const graphExecutor = new GraphExecutor(actualDispatcher);
+ 164    const changeOrchestrator = new ChangeOrchestrator(graphExecutor);</code></pre></div>
+<h3>Dispatch 优先 worker，再 provision，再 fallback node</h3>
+<p>WsDispatchAdapter 先查 requiredCapabilities，并拒绝 provision 正在进行的节点；有匹配 worker 就直接派发，没有 worker 但声明了 capabilities 时会硬失败，不会偷跑到 node；没有 capability 要求时才尝试 Docker-capable node provision，最后才 fallback 到普通 node。源码证据是 <code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:134</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:139</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:144</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:165</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:175</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:189</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/ws-dispatch-adapter.ts · 134-223</span></div><pre><code> 134    dispatch(envelope: DispatchEnvelope): DispatchResult {
+ 135      const requiredCapabilities = envelope.requiredCapabilities
+ 136        ?.map((capability) =&gt; capability.trim())
+ 137        .filter((capability) =&gt; capability.length &gt; 0);
+ 138  
+ 139      const provisionKey = `${envelope.runId}:${envelope.nodeId}`;
+ 140      if (isProvisioning(envelope.runId, envelope.nodeId) || this.inflightProvisioning.has(provisionKey)) {
+ 141        return { status: &quot;skipped&quot;, reason: &quot;provisioning_in_progress&quot; };
+ 142      }
+ 143  
+ 144      const worker = this._selectOpenWorker(envelope);
+ 145      if (worker) {
+ 146        try {
+ 147          this._dispatchToWorker(envelope, worker.worker_id, worker.socket);
+ 148        } catch (err) {
+ 149          const reason = err instanceof Error ? err.message : String(err);
+ 150          emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 151            runId: envelope.runId,
+ 152            nodeId: envelope.nodeId,
+ 153            reason,
+ 154          });
+ 155          recordDispatchFailed(envelope.runId, envelope.nodeId);
+ 156          return { status: &quot;failed&quot;, reason, retryable: true };
+ 157        }
+ 158        return {
+ 159          status: &quot;dispatched&quot;,
+ 160          targetType: &quot;worker&quot;,
+ 161          targetId: worker.worker_id,
+ 162        };
+ 163      }
+ 164  
+ 165      if (requiredCapabilities &amp;&amp; requiredCapabilities.length &gt; 0) {
+ 166        const reason = `no available worker satisfies required capabilities: ${requiredCapabilitiesText(requiredCapabilities)}`;
+ 167        emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 168          runId: envelope.runId,
+ 169          nodeId: envelope.nodeId,
+ 170          reason,
+ 171        });
+ 172        return { status: &quot;failed&quot;, reason, retryable: false };
+ 173      }
+ 174  
+ 175      // Try to find a Docker-capable node for provisioning.
+ 176      if (this.provisionerOpts) {
+ 177        const nodes = getAllNodes();
+ 178        const dockerNode = nodes.find(
+ 179          (n) =&gt;
+ 180            n.socket.readyState === WebSocket.OPEN &amp;&amp;
+ 181            isDockerCapableNode(n),
+ 182        );
+ 183        if (dockerNode) {
+ 184          this._startProvisioning(envelope, dockerNode.node_id);
+ 185          return { status: &quot;skipped&quot;, reason: &quot;provisioning_in_progress&quot; };
+ 186        }
+ 187      }
+ 188  
+ 189      // Fallback: dispatch directly to any connected node (previous behavior)
+ 190      const nodes = getAllNodes();
+ 191      const node = nodes.find((n) =&gt; n.socket.readyState === WebSocket.OPEN);
+ 192      if (node) {
+ 193        try {
+ 194          this._dispatchToNode(envelope, node.node_id, node.socket);
+ 195        } catch (err) {
+ 196          const reason = err instanceof Error ? err.message : String(err);
+ 197          emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 198            runId: envelope.runId,
+ 199            nodeId: envelope.nodeId,
+ 200            reason,
+ 201          });
+ 202          recordDispatchFailed(envelope.runId, envelope.nodeId);
+ 203          return { status: &quot;failed&quot;, reason, retryable: true };
+ 204        }
+ 205        return {
+ 206          status: &quot;dispatched&quot;,
+ 207          targetType: &quot;node&quot;,
+ 208          targetId: node.node_id,
+ 209        };
+ 210      }
+ 211  
+ 212      // No worker, no node — fail
+ 213      emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 214        runId: envelope.runId,
+ 215        nodeId: envelope.nodeId,
+ 216        reason: &quot;no available worker or node&quot;,
+ 217      });
+ 218      return {
+ 219        status: &quot;failed&quot;,
+ 220        reason: &quot;no available worker or node&quot;,
+ 221        retryable: true,
+ 222      };
+ 223    }</code></pre></div>
+<h3>隔离工作区避免复用 generic worker</h3>
+<p>选择 worker 时，适配器会先找 run-scoped exact worker；如果 envelope.workspace.mode 是 isolated，就直接禁止 generic worker，要求 provisioned worker。run-scoped 前缀、exact id、isolated 判断和 round-robin generic 逻辑位于 <code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:225</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:237</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:241</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:244</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:246</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:252</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/ws-dispatch-adapter.ts · 225-303</span></div><pre><code> 225    private _selectOpenWorker(
+ 226      envelope: DispatchEnvelope,
+ 227    ):
+ 228      | { worker_id: string; socket: WebSocket }
+ 229      | undefined {
+ 230      const workers = getAllWorkers().filter(
+ 231        (w) =&gt;
+ 232          w.socket.readyState === WebSocket.OPEN &amp;&amp;
+ 233          hasCapabilities(w.capabilities, envelope.requiredCapabilities),
+ 234      );
+ 235      if (workers.length === 0) return undefined;
+ 236  
+ 237      const runScopedPrefix = `provisioned-${sanitizeProvisionedWorkerToken(envelope.runId)}-`;
+ 238      const exactRunScopedWorkerId = sanitizeProvisionedWorkerToken(
+ 239        `provisioned-${envelope.runId}-${envelope.nodeId}`,
+ 240      );
+ 241      const exactRunScopedWorker = workers.find((w) =&gt; w.worker_id === exactRunScopedWorkerId);
+ 242      if (exactRunScopedWorker) return exactRunScopedWorker;
+ 243  
+ 244      if (requiresIsolatedWorkspace(envelope)) return undefined;
+ 245  
+ 246      const genericWorkers = workers.filter((w) =&gt;
+ 247        !w.worker_id.startsWith(&quot;provisioned-&quot;) &amp;&amp;
+ 248        !w.worker_id.startsWith(runScopedPrefix)
+ 249      );
+ 250      if (genericWorkers.length === 0) return undefined;
+ 251  
+ 252      const worker = genericWorkers[this.nextWorkerIndex % genericWorkers.length];
+ 253      this.nextWorkerIndex = (this.nextWorkerIndex + 1) % genericWorkers.length;
+ 254      return worker;
+ 255    }
+ 256  
+ 257    private _dispatchToNode(
+ 258      envelope: DispatchEnvelope,
+ 259      nodeId: string,
+ 260      socket: WebSocket,
+ 261    ): void {
+ 262      const message = JSON.stringify({ type: &quot;prompt&quot;, envelope });
+ 263      socket.send(message);
+ 264      emit(&quot;dag:ws_dispatched&quot;, {
+ 265        runId: envelope.runId,
+ 266        nodeId: envelope.nodeId,
+ 267        targetType: &quot;node&quot;,
+ 268        targetId: nodeId,
+ 269      });
+ 270      appendChatEntry(envelope.runId, envelope.nodeId, {
+ 271        role: &quot;manager&quot;,
+ 272        type: &quot;prompt&quot;,
+ 273        targetId: nodeId,
+ 274        content: redactDispatchEnvelope(envelope),
+ 275        timestamp: Date.now(),
+ 276      });
+ 277      mirrorDispatchPrompt(envelope, &quot;node&quot;, nodeId);
+ 278      recordDispatch(envelope.runId, envelope.nodeId, &quot;node&quot;, nodeId);
+ 279    }
+ 280  
+ 281    private _dispatchToWorker(
+ 282      envelope: DispatchEnvelope,
+ 283      workerId: string,
+ 284      socket: WebSocket,
+ 285    ): void {
+ 286      const message = JSON.stringify({ type: &quot;prompt&quot;, envelope });
+ 287      socket.send(message);
+ 288      emit(&quot;dag:ws_dispatched&quot;, {
+ 289        runId: envelope.runId,
+ 290        nodeId: envelope.nodeId,
+ 291        targetType: &quot;worker&quot;,
+ 292        targetId: workerId,
+ 293      });
+ 294      appendChatEntry(envelope.runId, envelope.nodeId, {
+ 295        role: &quot;manager&quot;,
+ 296        type: &quot;prompt&quot;,
+ 297        targetId: workerId,
+ 298        content: redactDispatchEnvelope(envelope),
+ 299        timestamp: Date.now(),
+ 300      });
+ 301      mirrorDispatchPrompt(envelope, &quot;worker&quot;, workerId);
+ 302      recordDispatch(envelope.runId, envelope.nodeId, &quot;worker&quot;, workerId);
+ 303    }</code></pre></div>
+<h3>异步 provision 把 manager URL 和 agent backend 注入容器</h3>
+<p>provision 路径会记录 provisionKey、发出 dag:provisioning_requested、生成 workerId，把 AGENT_BACKEND、MANAGER_WORKER_WS_URL、HOMERAIL_WORKER_ID 注入容器环境，然后 fire-and-forget 调 provisionWorkerContainer。对应代码在 <code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:305</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:309</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:318</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:320</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:325</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:333</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/ws-dispatch-adapter.ts · 305-359</span></div><pre><code> 305    private _startProvisioning(
+ 306      envelope: DispatchEnvelope,
+ 307      dockerNodeId: string,
+ 308    ): void {
+ 309      const provisionKey = `${envelope.runId}:${envelope.nodeId}`;
+ 310      this.inflightProvisioning.add(provisionKey);
+ 311      recordProvisioning(envelope.runId, envelope.nodeId);
+ 312      emit(&quot;dag:provisioning_requested&quot;, {
+ 313        runId: envelope.runId,
+ 314        nodeId: envelope.nodeId,
+ 315        nodeIdForProvision: dockerNodeId,
+ 316      });
+ 317  
+ 318      const workspaceId = envelope.runId;
+ 319      const workerId = sanitizeProvisionedWorkerToken(`provisioned-${envelope.runId}-${envelope.nodeId}`);
+ 320      const agentBackend = normalizeAgentBackend(envelope.agentConfig.agent_type);
+ 321      const provisionerOpts: ProvisionerOptions = {
+ 322        ...this.provisionerOpts,
+ 323        image: envelope.image ?? this.provisionerOpts?.image,
+ 324        workspace: this.provisionerOpts?.workspace ?? envelope.workspace,
+ 325        env: {
+ 326          ...(this.provisionerOpts?.env ?? {}),
+ 327          ...(agentBackend ? { AGENT_BACKEND: agentBackend } : {}),
+ 328          MANAGER_WORKER_WS_URL: this.getManagerWorkerWsUrl(workerId),
+ 329          HOMERAIL_WORKER_ID: workerId,
+ 330        },
+ 331      };
+ 332  
+ 333      // Fire-and-forget async provisioning
+ 334      provisionWorkerContainer(
+ 335        dockerNodeId,
+ 336        workspaceId,
+ 337        workerId,
+ 338        this.getManagerBaseUrl(),
+ 339        provisionerOpts,
+ 340      )
+ 341        .then((result) =&gt; {
+ 342          this._onProvisioningSuccess(
+ 343            envelope,
+ 344            workerId,
+ 345            result.containerId,
+ 346            dockerNodeId,
+ 347          );
+ 348        })
+ 349        .catch((err: Error) =&gt; {
+ 350          this._onProvisioningFailure(
+ 351            envelope,
+ 352            dockerNodeId,
+ 353            err.message ?? String(err),
+ 354          );
+ 355        })
+ 356        .finally(() =&gt; {
+ 357          this.inflightProvisioning.delete(provisionKey);
+ 358        });
+ 359    }</code></pre></div>
+<h3>Worker 入口把 envelope 转成 PromptJob</h3>
+<p>worker 从 env 拼接 manager WebSocket URL 和 capabilities，连接后监听 task；收到 manager envelope 后提取 runId/nodeId/sessionId、agentConfig、LLM provider/model/baseUrl/protocol，选择 backend 并把 envelope.inputs flatten 成 task。这个转换链在 <code>sources/homerail/homerail_worker/src/index.ts:17</code>、<code>sources/homerail/homerail_worker/src/index.ts:36</code>、<code>sources/homerail/homerail_worker/src/index.ts:85</code>、<code>sources/homerail/homerail_worker/src/index.ts:99</code>、<code>sources/homerail/homerail_worker/src/index.ts:107</code>、<code>sources/homerail/homerail_worker/src/index.ts:114</code>、<code>sources/homerail/homerail_worker/src/index.ts:152</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_worker/src/index.ts · 85-183</span></div><pre><code>  85  client.on(&quot;task&quot;, async (msg) =&gt; {
+  86    const data = msg.data ?? msg;
+  87    const envelope = msg.envelope as Record&lt;string, unknown&gt; | undefined;
+  88  
+  89    // Prompt envelope from TS Manager: { type: &quot;prompt&quot;, envelope: { runId, nodeId, ... } }
+  90    const runId = envelope
+  91      ? String(envelope.runId ?? &quot;&quot;)
+  92      : String(data.run_id ?? process.env.HOMERAIL_RUN_ID ?? &quot;&quot;);
+  93    const nodeId = envelope
+  94      ? String(envelope.nodeId ?? &quot;&quot;)
+  95      : String((data.dag_config as Record&lt;string, unknown&gt;)?.node_id ?? (data.dagConfig as Record&lt;string, unknown&gt;)?.node_id ?? &quot;&quot;);
+  96    const sessionId = envelope &amp;&amp; typeof envelope.sessionId === &quot;string&quot; &amp;&amp; envelope.sessionId.trim()
+  97      ? envelope.sessionId.trim()
+  98      : undefined;
+  99    const agentConfig = (envelope?.agentConfig ?? {}) as Record&lt;string, unknown&gt;;
+ 100    const llmConfig = (agentConfig.llm ?? {}) as Record&lt;string, unknown&gt;;
+ 101    const agentType = String(agentConfig.agent_type ?? &quot;claude&quot;);
+ 102    const provider = String(llmConfig.provider ?? &quot;&quot;);
+ 103    const model = String(llmConfig.model ?? agentConfig.model ?? &quot;&quot;);
+ 104    const apiKey = typeof llmConfig.api_key === &quot;string&quot; ? llmConfig.api_key : undefined;
+ 105    const baseUrl = typeof llmConfig.base_url === &quot;string&quot; ? llmConfig.base_url : undefined;
+ 106    const protocol = typeof llmConfig.protocol === &quot;string&quot; ? llmConfig.protocol : undefined;
+ 107    const backend = resolveWorkerAgentBackend({
+ 108      agentType,
+ 109      envBackend: process.env.AGENT_BACKEND,
+ 110      hasManagerEnvelope: Boolean(envelope),
+ 111    });
+ 112    const checkpointResume = envelope ? parseCheckpointResume(envelope.checkpointResume) : undefined;
+ 113  
+ 114    // Task text: prefer envelope.inputs (flattened), then data.task/prompt
+ 115    let task: string;
+ 116    if (envelope) {
+ 117      const allContent = envelopeInputsToTaskText(envelope.inputs);
+ 118      task = allContent || String(agentConfig.system ?? &quot;&quot;);
+ 119    } else {
+ 120      task = String(data.task ?? data.prompt ?? &quot;&quot;);
+ 121    }
+ 122  
+ 123    const sender = String(data.sender ?? &quot;&quot;);
+ 124    const dagConfig: DagNodeConfig = envelope
+ 125      ? {
+ 126          node_id: nodeId,
+ 127          agent_type: agentType,
+ 128          model,
+ 129          outgoing_edges: ((envelope.outgoingEdges ?? []) as Array&lt;Record&lt;string, unknown&gt;&gt;).map((e) =&gt; ({
+ 130            from_port: String(e.from_port ?? &quot;&quot;),
+ 131            to_node: String(e.to_node ?? &quot;&quot;),
+ 132            to_port: String(e.to_port ?? &quot;&quot;),
+ 133          })),
+ 134          incoming_edges: [],
+ 135          graph_nodes: [nodeId],
+ 136          session_id: sessionId,
+ 137        }
+ 138      : (data.dag_config ?? data.dagConfig ?? {}) as DagNodeConfig;
+ 139    const systemPrompt = envelope
+ 140      ? (agentConfig.system as string | undefined)
+ 141      : (data.system_prompt as string | undefined);
+ 142  
+ 143    if (!task) {
+ 144      console.error(&quot;[homerail_worker] received task with empty body&quot;);
+ 145      return;
+ 146    }
+ 147  
+ 148    console.log(
+ 149      `[homerail_worker] task received: run=${runId} node=${dagConfig.node_id} backend=${backend} agent_type=${agentType} provider=${provider || &quot;&lt;unset&gt;&quot;} model=${model || &quot;&lt;unset&gt;&quot;}`,
+ 150    );
+ 151  
+ 152    const job: PromptJob = {
+ 153      task,
+ 154      sender,
+ 155      runId,
+ 156      dagConfig,
+ 157      systemPrompt,
+ 158      llmProvider: provider,
+ 159      llmProtocol: protocol,
+ 160      llmApiKey: apiKey,
+ 161      llmBaseUrl: baseUrl,
+ 162      checkpointResume,
+ 163    };
+ 164  
+ 165    const abortController = new AbortController();
+ 166    activePrompt = { runId, nodeId: dagConfig.node_id, abortController };
+ 167  
+ 168    try {
+ 169      await runPrompt(job, {
+ 170        wsSend: (d) =&gt; client.send(d),
+ 171        agentBackend: backend,
+ 172        abortSignal: abortController.signal,
+ 173        registerInboxHandler: (handler) =&gt; {
+ 174          if (activePrompt?.abortController === abortController) {
+ 175            activePrompt.deliverInbox = handler;
+ 176          }
+ 177          return () =&gt; {
+ 178            if (activePrompt?.abortController === abortController) {
+ 179              delete activePrompt.deliverInbox;
+ 180            }
+ 181          };
+ 182        },
+ 183      });</code></pre></div>
+<h3>PromptRunner 把 agent 事件重新协议化</h3>
+<p>PromptRunner 会保存 session、创建 DAG tools、audit writers，再构造 AgentRunContext；入口与准备工作分别在 <code>sources/homerail/homerail_worker/src/prompt-runner.ts:103</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:127</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:167</code>。进入运行循环后，它处理 text/debug/tool_use/tool_result/error/usage/done，并把这些事件重新包装回 manager 可消费的 stream，核心循环从 <code>sources/homerail/homerail_worker/src/prompt-runner.ts:228</code> 和 <code>sources/homerail/homerail_worker/src/prompt-runner.ts:256</code> 开始。一旦 DAG tool 触发 yielded，就 emitUsage 并停止继续跑；否则正常结束会发 node_error，最后发送 SESSION_END，这组收尾逻辑落在 <code>sources/homerail/homerail_worker/src/prompt-runner.ts:352</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:360</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:393</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_worker/src/prompt-runner.ts · 103-190</span></div><pre><code> 103  export async function runPrompt(
+ 104    job: PromptJob,
+ 105    deps: PromptRunnerDeps,
+ 106  ): Promise&lt;void&gt; {
+ 107    const { wsSend, agentBackend, auditDir } = deps;
+ 108    const sessionId = job.dagConfig.session_id ?? job.runId;
+ 109  
+ 110    function appendSessionTranscript(type: string, content?: unknown, metadata?: Record&lt;string, unknown&gt;): void {
+ 111      try {
+ 112        appendTranscriptEntry({
+ 113          type,
+ 114          runId: job.runId,
+ 115          nodeId: job.dagConfig.node_id,
+ 116          sessionId,
+ 117          timestamp: Date.now(),
+ 118          content,
+ 119          metadata,
+ 120        });
+ 121      } catch {
+ 122        // Session transcript persistence is best-effort. The manager DB run
+ 123        // state remains authoritative for scheduling.
+ 124      }
+ 125    }
+ 126  
+ 127    try {
+ 128      saveSession({
+ 129        sessionId,
+ 130        runId: job.runId,
+ 131        nodeId: job.dagConfig.node_id,
+ 132        messages: [{ role: &quot;user&quot;, content: job.task }],
+ 133        toolCallState: { inFlight: false },
+ 134        agentConfig: {
+ 135          provider: job.llmProvider,
+ 136          model: job.dagConfig.model,
+ 137          workspace: process.env.WORKSPACE ?? process.cwd(),
+ 138        },
+ 139        timestamp: Date.now(),
+ 140      });
+ 141    } catch {
+ 142      // Best-effort; never fail a worker turn because local session metadata
+ 143      // cannot be written.
+ 144    }
+ 145    if (job.checkpointResume) {
+ 146      appendSessionTranscript(
+ 147        &quot;checkpoint_resume&quot;,
+ 148        { instruction: job.checkpointResume.instruction },
+ 149        {
+ 150          parentSessionId: job.checkpointResume.parentSessionId,
+ 151          entryUuid: job.checkpointResume.entryUuid,
+ 152          attempt: job.checkpointResume.attempt,
+ 153        },
+ 154      );
+ 155    }
+ 156  
+ 157    // Test affordance: when AGENT_BACKEND=deterministic and
+ 158    // HOMERAIL_DETERMINISTIC_PROMPT_DELAY_MS is set, sleep before processing
+ 159    // the task. This gives a harness a chance to inject while the run is
+ 160    // still active. Default off.
+ 161    const delayEnv = process.env.HOMERAIL_DETERMINISTIC_PROMPT_DELAY_MS;
+ 162    const delayMs = delayEnv ? Number(delayEnv) : 0;
+ 163    if (delayMs &gt; 0 &amp;&amp; (agentBackend === &quot;deterministic&quot; || process.env.AGENT_BACKEND === &quot;deterministic&quot;)) {
+ 164      await new Promise((r) =&gt; setTimeout(r, delayMs));
+ 165    }
+ 166  
+ 167    // Create DAG tools state
+ 168    const dagState = createDagToolsState(job.dagConfig, job.runId, wsSend);
+ 169    const dagTools = createDagTools(dagState);
+ 170    const unregisterInboxHandler = deps.registerInboxHandler?.((content) =&gt; {
+ 171      deliverInbox(dagState, content);
+ 172    });
+ 173  
+ 174    // Create audit writers
+ 175    let audit: AuditWriters | null = null;
+ 176    try {
+ 177      audit = createAuditWriters(job.runId, auditDir);
+ 178    } catch {
+ 179      // Non-fatal — audit is best-effort
+ 180    }
+ 181  
+ 182    // Write initial transcript entry
+ 183    audit?.transcript.write({
+ 184      event: &quot;prompt_start&quot;,
+ 185      node_id: job.dagConfig.node_id,
+ 186      run_id: job.runId,
+ 187      sender: job.sender,
+ 188      task_preview: job.task.slice(0, 500),
+ 189    });
+ 190    appendSessionTranscript(&quot;prompt_start&quot;, { task_preview: job.task.slice(0, 500) });</code></pre></div>
+<h3>测试覆盖调度边界，而不只测 happy path</h3>
+<p>dispatch-capabilities 测试验证 required capability 只派给匹配 worker、敏感 key 不落 transcript、缺 capability 时不 fallback node、isolated workspace 触发 run-scoped provision、docker-api node 可 provision、provisioning 期间不重复 dispatch。具体测试点在 <code>sources/homerail/homerail_manager/tests/dispatch-capabilities.test.ts:112</code>、<code>sources/homerail/homerail_manager/tests/dispatch-capabilities.test.ts:147</code>、<code>sources/homerail/homerail_manager/tests/dispatch-capabilities.test.ts:182</code>、<code>sources/homerail/homerail_manager/tests/dispatch-capabilities.test.ts:206</code>、<code>sources/homerail/homerail_manager/tests/dispatch-capabilities.test.ts:276</code>、<code>sources/homerail/homerail_manager/tests/dispatch-capabilities.test.ts:318</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/tests/dispatch-capabilities.test.ts · 112-204</span></div><pre><code> 112    it(&quot;dispatches required-capability nodes only to matching workers&quot;, () =&gt; {
+ 113      const genericSocket = makeSocket();
+ 114      const hostSocket = makeSocket();
+ 115      registerWorker({
+ 116        worker_id: &quot;generic-worker&quot;,
+ 117        project_id: &quot;p1&quot;,
+ 118        socket: genericSocket,
+ 119        status: &quot;idle&quot;,
+ 120        capabilities: [&quot;docker-cli&quot;],
+ 121        registered_at: Date.now(),
+ 122        last_heartbeat: Date.now(),
+ 123      });
+ 124      registerWorker({
+ 125        worker_id: &quot;browser-worker&quot;,
+ 126        project_id: &quot;p1&quot;,
+ 127        socket: hostSocket,
+ 128        status: &quot;idle&quot;,
+ 129        capabilities: [&quot;browser&quot;, &quot;docker-cli&quot;],
+ 130        registered_at: Date.now(),
+ 131        last_heartbeat: Date.now(),
+ 132      });
+ 133  
+ 134      const result = new WsDispatchAdapter({ provisioner: false }).dispatch(
+ 135        makeEnvelope({ requiredCapabilities: [&quot;browser&quot;] }),
+ 136      );
+ 137  
+ 138      expect(result).toMatchObject({
+ 139        status: &quot;dispatched&quot;,
+ 140        targetType: &quot;worker&quot;,
+ 141        targetId: &quot;browser-worker&quot;,
+ 142      });
+ 143      expect(genericSocket.send).not.toHaveBeenCalled();
+ 144      expect(hostSocket.send).toHaveBeenCalledTimes(1);
+ 145    });
+ 146  
+ 147    it(&quot;mirrors dispatched prompts into the manager-side session store&quot;, () =&gt; {
+ 148      const socket = makeSocket();
+ 149      registerWorker({
+ 150        worker_id: &quot;session-worker&quot;,
+ 151        project_id: &quot;p1&quot;,
+ 152        socket,
+ 153        status: &quot;idle&quot;,
+ 154        capabilities: [],
+ 155        registered_at: Date.now(),
+ 156        last_heartbeat: Date.now(),
+ 157      });
+ 158  
+ 159      const result = new WsDispatchAdapter({ provisioner: false }).dispatch(
+ 160        makeEnvelope({
+ 161          sessionId: &quot;dispatch-session-1&quot;,
+ 162          inputs: { task: [&quot;inspect this&quot;] },
+ 163          agentConfig: {
+ 164            agent_type: &quot;claude-sdk&quot;,
+ 165            llm: { api_key: &quot;pk-should-not-persist&quot;, model: &quot;test-model&quot; },
+ 166          },
+ 167        }),
+ 168      );
+ 169  
+ 170      expect(result.status).toBe(&quot;dispatched&quot;);
+ 171      const transcript = loadSessionTranscript(&quot;dispatch-session-1&quot;);
+ 172      expect(transcript).toHaveLength(1);
+ 173      expect(transcript[0]).toMatchObject({
+ 174        type: &quot;prompt&quot;,
+ 175        runId: &quot;run-capabilities&quot;,
+ 176        nodeId: &quot;diagnose&quot;,
+ 177        sessionId: &quot;dispatch-session-1&quot;,
+ 178      });
+ 179      expect(JSON.stringify(transcript)).not.toContain(&quot;pk-should-not-persist&quot;);
+ 180    });
+ 181  
+ 182    it(&quot;does not fall back to a node when required worker capabilities are missing&quot;, () =&gt; {
+ 183      const nodeSocket = makeSocket();
+ 184      registerNode({
+ 185        node_id: &quot;docker-node&quot;,
+ 186        project_id: &quot;p1&quot;,
+ 187        socket: nodeSocket,
+ 188        status: &quot;connected&quot;,
+ 189        capabilities: [&quot;browser&quot;, &quot;docker-cli&quot;],
+ 190        registered_at: Date.now(),
+ 191        last_heartbeat: Date.now(),
+ 192        pending_requests: new Map(),
+ 193      });
+ 194  
+ 195      const result = new WsDispatchAdapter({ provisioner: false }).dispatch(
+ 196        makeEnvelope({ requiredCapabilities: [&quot;browser&quot;] }),
+ 197      );
+ 198  
+ 199      expect(result).toMatchObject({
+ 200        status: &quot;failed&quot;,
+ 201        reason: &quot;no available worker satisfies required capabilities: browser&quot;,
+ 202      });
+ 203      expect(nodeSocket.send).not.toHaveBeenCalled();
+ 204    });</code></pre></div>
+</div></section></main>
+
+<footer><div class="shell">GitHub Trending Monitor · 源码级阅读 · 2026-07-12</div></footer>
+</body>
+</html>

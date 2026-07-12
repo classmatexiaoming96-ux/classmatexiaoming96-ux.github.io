@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HomeRail 源码解析 · 本地多 Agent DAG 编排系统</title>
+<meta name="description" content="从源码拆解 HomeRail 的协议层、WorkflowSpec v1、DAG runtime、worker dispatch 与 PromptRunner。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet" />
+
+<style>
+:root{--bg:#090b10;--ink:#eef5ff;--muted:#9fafc3;--panel:#111722;--panel-2:#151e2c;--line:#263247;--star:#8ee3ff;--accent:#ffcf6b;--green:#7ddc96;--rose:#ff8c9a;--ease:cubic-bezier(.2,.8,.2,1);--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:"Fraunces",Georgia,serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(142,227,255,.12),transparent 30%),linear-gradient(180deg,#090b10 0%,#0c1018 60%,#090b10 100%);color:var(--ink);font-family:var(--sans);line-height:1.72}.bg-stars{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.42) 1px,transparent 1px);background-size:34px 34px;opacity:.1}.shell{width:min(1120px,calc(100% - 36px));margin:0 auto}.nav{position:sticky;top:0;z-index:20;background:rgba(9,11,16,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}.nav .shell{height:64px;display:flex;align-items:center;justify-content:space-between}.brand{color:var(--ink);text-decoration:none;font-weight:800;letter-spacing:0}.nav a{color:var(--muted);text-decoration:none;margin-left:20px}.nav a:hover{color:var(--star)}.hero{padding:92px 0 54px}.eyebrow{color:var(--star);font-family:var(--mono);font-size:13px}.hero h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:1.02;margin:18px 0}.hero .lead{font-size:clamp(1.02rem,2vw,1.26rem);max-width:860px;color:#c9d7ea}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}.stat{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:8px}.stat strong{display:block;font-size:1.35rem;color:var(--ink)}.stat span{color:var(--muted);font-size:.9rem}.section{padding:36px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(17,23,34,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:24px}.panel h3,.prose h3{font-size:1.3rem;line-height:1.25;margin:0 0 12px;color:var(--ink)}.prose{max-width:920px}.prose p{color:#c7d4e6;margin:0 0 18px}.prose code,.panel code{font-family:var(--mono);font-size:.92em;color:#d9f6ff;background:rgba(142,227,255,.08);border:1px solid rgba(142,227,255,.16);border-radius:5px;padding:1px 5px}.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:24px 0}.flow div{border:1px solid rgba(142,227,255,.18);background:rgba(142,227,255,.06);border-radius:8px;padding:14px;min-height:96px}.flow b{display:block;color:var(--star);margin-bottom:8px}.code-wrap{background:#070a0f;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;margin:18px 0 28px}.code-head{display:flex;gap:8px;align-items:center;height:36px;border-bottom:1px solid rgba(255,255,255,.08);padding:0 12px;color:var(--muted);font-family:var(--mono);font-size:12px}.code-head i{width:10px;height:10px;border-radius:50%;background:var(--rose)}.code-head i:nth-child(2){background:var(--accent)}.code-head i:nth-child(3){background:var(--green)}pre{margin:0;overflow:auto;padding:16px 18px;color:#dbeafe;font-family:var(--mono);font-size:13px;line-height:1.55}.deep-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.deep-link{display:block;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:8px;padding:16px;text-decoration:none;color:var(--ink);transition:transform .2s var(--ease),border-color .2s var(--ease)}.deep-link:hover{transform:translateY(-2px);border-color:rgba(142,227,255,.45)}.deep-link small{display:block;color:var(--muted);margin-top:4px}.callout{border-left:3px solid var(--accent);background:rgba(255,207,107,.08);padding:14px 16px;border-radius:0 8px 8px 0;margin:18px 0;color:#f5dfac}.tag{display:inline-flex;margin:0 8px 8px 0;padding:4px 9px;border-radius:999px;background:rgba(125,220,150,.09);border:1px solid rgba(125,220,150,.2);color:#c8f5d2;font-size:13px}footer{border-top:1px solid rgba(255,255,255,.08);padding:36px 0;color:var(--muted)}@media(max-width:800px){.stats,.grid,.flow,.deep-links{grid-template-columns:1fr}.nav .shell{height:auto;min-height:64px;align-items:flex-start;flex-direction:column;padding:12px 0}.nav a{margin:6px 12px 0 0}.hero{padding-top:54px}}
+</style>
+
+</head>
+<body>
+<div class="bg-stars"></div>
+<nav class="nav"><div class="shell"><a class="brand" href="homerail.html">HomeRail 源码解析</a><div><a href="index.html">趋势首页</a><a href="https://github.com/xiaotianfotos/homerail" target="_blank" rel="noopener">GitHub</a></div></div></nav>
+
+<header class="hero"><div class="shell">
+  <div class="eyebrow">xiaotianfotos/homerail · 2026-07-07 创建 · TypeScript/Vue · 453 ★</div>
+  <h1>HomeRail：把本地 coding agent 变成可审计 DAG 工作流</h1>
+  <p class="lead">今天筛到的 HomeRail 不是“又一个 Claude Code prompt 包”，而是一个把工作流编译、运行时调度、worker WebSocket、容器化隔离和 Agent UI 串起来的本地编排系统。源码里最值得看的不是 UI，而是它如何把 agent 的不确定输出约束成可恢复、可验证、可路由的 DAG。</p>
+  <div class="stats"><div class="stat"><strong>453</strong><span>Stars</span></div><div class="stat"><strong>2026-07-07</strong><span>Created</span></div><div class="stat"><strong>6</strong><span>核心 packages</span></div><div class="stat"><strong>DAG</strong><span>Agent runtime</span></div></div>
+</div></header>
+<main>
+<section class="section"><div class="shell prose">
+  <h3>01 · 为什么选它</h3>
+  <p>筛选标准是“最近 5 天新增、热度高、且有可读源码的 AI/LLM/coding-agent/dev-tool”。HomeRail 在 <code>homerail_protocol</code>、<code>homerail_manager</code>、<code>homerail_worker</code>、<code>homerail_cli</code> 和 <code>agent-ui</code> 中形成了完整产品边界；协议枚举已经把 Claude、Codex、Kimi、manager-agent、消息状态和资源类型集中在 <code>sources/homerail/homerail_protocol/src/types.ts:31</code>、<code>sources/homerail/homerail_protocol/src/types.ts:41</code>、<code>sources/homerail/homerail_protocol/src/types.ts:53</code>、<code>sources/homerail/homerail_protocol/src/types.ts:63</code> 这些定义里，而不是散落在字符串常量中。</p>
+  <h3>02 · 一句话架构</h3>
+  <p>它的核心链路可以读成：CLI 或 UI 提交 YAML/JSON workflow，Manager 解析并编译出 canonical IR，GraphExecutor 创建 ActiveRun，WsDispatchAdapter 选择 worker 或 Docker-capable node，Worker 运行具体 agent 并通过 DAG tools handoff。对应的启动入口在 <code>sources/homerail/homerail_manager/src/index.ts:8</code>、<code>sources/homerail/homerail_manager/src/index.ts:15</code>、HTTP 路由装配在 <code>sources/homerail/homerail_manager/src/server/http.ts:115</code>，worker 入口则从环境变量和 WebSocket URL 开始于 <code>sources/homerail/homerail_worker/src/index.ts:17</code>、<code>sources/homerail/homerail_worker/src/index.ts:36</code>。</p>
+  <div class="flow"><div><b>Protocol</b>types/schema 约束公共消息</div><div><b>Compiler</b>YAML → canonical IR + hash</div><div><b>Runtime</b>ActiveRun + mailbox + limits</div><div><b>Dispatch</b>worker/node/container 选择</div><div><b>Worker</b>agent backend + DAG tools</div></div>
+  <h3>03 · 协议层先行</h3>
+  <p>协议层做得比一般 demo 更认真：共享 schema 覆盖 handoff request/response、tool call/result、send/receive、graph context 与 agent config，见 <code>sources/homerail/homerail_protocol/src/schemas.ts:7</code>、<code>sources/homerail/homerail_protocol/src/schemas.ts:48</code>、<code>sources/homerail/homerail_protocol/src/schemas.ts:75</code>、<code>sources/homerail/homerail_protocol/src/schemas.ts:119</code>。这意味着 manager、worker 和 UI 之间不是靠“大家约定 JSON 长这样”，而是把可校验边界放在包里复用。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_protocol/src/types.ts · 31-84</span></div><pre><code>  31    CLAUDE: &quot;claude&quot;,
+  32    CODEX: &quot;codex&quot;,
+  33    CODEX_APPSERVER: &quot;codex_appserver&quot;,
+  34    KIMI: &quot;kimi&quot;,
+  35    PI_MONO: &quot;pi_mono&quot;,
+  36  } as const;
+  37  export type AgentClientType = (typeof AgentClientType)[keyof typeof AgentClientType];
+  38  
+  39  /** @version 0.1.0 */
+  40  export const MessageType = {
+  41    REQUEST: &quot;request&quot;,
+  42    RESPONSE: &quot;response&quot;,
+  43    EVENT: &quot;event&quot;,
+  44    STREAM: &quot;stream&quot;,
+  45    ASYNC_REQUEST: &quot;async_request&quot;,
+  46    ASYNC_RESPONSE: &quot;async_response&quot;,
+  47    ASYNC_PROGRESS: &quot;async_progress&quot;,
+  48    ASYNC_CONTROL: &quot;async_control&quot;,
+  49  } as const;
+  50  export type MessageType = (typeof MessageType)[keyof typeof MessageType];
+  51  
+  52  /** @version 0.1.0 */
+  53  export const MessageStatus = {
+  54    PENDING: &quot;pending&quot;,
+  55    SUCCESS: &quot;success&quot;,
+  56    ERROR: &quot;error&quot;,
+  57    TIMEOUT: &quot;timeout&quot;,
+  58  } as const;
+  59  export type MessageStatus = (typeof MessageStatus)[keyof typeof MessageStatus];
+  60  
+  61  /** @version 0.1.0 */
+  62  export const ResourceType = {
+  63    CONTAINER: &quot;container&quot;,
+  64    IMAGE: &quot;image&quot;,
+  65    NETWORK: &quot;network&quot;,
+  66    VOLUME: &quot;volume&quot;,
+  67    NODE: &quot;node&quot;,
+  68    AGENT: &quot;agent&quot;,
+  69    TEMPLATE: &quot;template&quot;,
+  70    BUILD: &quot;build&quot;,
+  71    OPERATION: &quot;operation&quot;,
+  72    POD: &quot;pod&quot;,
+  73    SERVICE: &quot;service&quot;,
+  74    DEPLOYMENT: &quot;deployment&quot;,
+  75    CONFIGMAP: &quot;configmap&quot;,
+  76    SECRET: &quot;secret&quot;,
+  77  } as const;
+  78  export type ResourceType = (typeof ResourceType)[keyof typeof ResourceType];
+  79  
+  80  /** @version 0.1.0 */
+  81  export const Operation = {
+  82    CREATE: &quot;create&quot;,
+  83    GET: &quot;get&quot;,
+  84    LIST: &quot;list&quot;,</code></pre></div>
+  <h3>04 · WorkflowSpec v1 是真正的产品心脏</h3>
+  <p>WorkflowSpec v1 的解析路径先保留 YAML line/column，再做 TypeBox schema 校验和语义诊断；这一层能返回具体错误位置，关键逻辑在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:146</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:167</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:226</code>。它还检查 unknown agent、unknown node、contract、condition route、join、foreach、while 等规则，集中在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:261</code> 到 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:351</code>。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/workflow-spec-v1.ts · 261-351</span></div><pre><code> 261  function semanticDiagnostics(context: SourceContext, workflow: WorkflowSpecV1): WorkflowDiagnostic[] {
+ 262    const diagnostics: WorkflowDiagnostic[] = [];
+ 263    const nodes = workflow.spec.nodes;
+ 264    const agents = workflow.spec.agents;
+ 265    const contracts = workflow.spec.contracts ?? {};
+ 266  
+ 267    const add = (path: string, code: string, message: string, hint?: string) =&gt; {
+ 268      diagnostics.push(diagnostic(context, {
+ 269        severity: &quot;error&quot;,
+ 270        code,
+ 271        path,
+ 272        message,
+ 273        ...(hint ? { hint } : {}),
+ 274      }));
+ 275    };
+ 276  
+ 277    for (const [contractName, contract] of Object.entries(contracts)) {
+ 278      const validation = validateJsonContractSchema(contract);
+ 279      if (!validation.valid) {
+ 280        add(
+ 281          `/spec/contracts/${contractName}`,
+ 282          &quot;DAG_SEMANTIC_INVALID_CONTRACT&quot;,
+ 283          `invalid JSON Schema contract &#x27;${contractName}&#x27;: ${validation.details}`,
+ 284        );
+ 285      }
+ 286    }
+ 287  
+ 288    for (const [nodeId, node] of Object.entries(nodes)) {
+ 289      const nodePath = `/spec/nodes/${nodeId}`;
+ 290      if (node.kind === &quot;agent&quot; &amp;&amp; !agents[node.agent]) {
+ 291        add(`${nodePath}/agent`, &quot;DAG_SEMANTIC_UNKNOWN_AGENT&quot;, `unknown agent &#x27;${node.agent}&#x27;`);
+ 292      }
+ 293      for (const dependency of node.depends_on ?? []) {
+ 294        if (!nodes[dependency]) {
+ 295          add(`${nodePath}/depends_on`, &quot;DAG_SEMANTIC_UNKNOWN_NODE&quot;, `unknown dependency &#x27;${dependency}&#x27;`);
+ 296        } else if (dependency === nodeId) {
+ 297          add(`${nodePath}/depends_on`, &quot;DAG_SEMANTIC_SELF_DEPENDENCY&quot;, &quot;a node cannot depend on itself&quot;);
+ 298        }
+ 299      }
+ 300      for (const direction of [&quot;inputs&quot;, &quot;outputs&quot;] as const) {
+ 301        for (const [portName, port] of Object.entries(nodePorts(node, direction))) {
+ 302          if (port.contract &amp;&amp; !contracts[port.contract]) {
+ 303            add(
+ 304              `${nodePath}/${direction}/${portName}/contract`,
+ 305              &quot;DAG_SEMANTIC_UNKNOWN_CONTRACT&quot;,
+ 306              `unknown contract &#x27;${port.contract}&#x27;`,
+ 307            );
+ 308          }
+ 309        }
+ 310      }
+ 311      if (node.kind === &quot;condition&quot;) {
+ 312        const outputs = nodePorts(node, &quot;outputs&quot;);
+ 313        for (const [value, port] of Object.entries(node.config.routes)) {
+ 314          if (!outputs[port]) {
+ 315            add(`${nodePath}/config/routes/${value}`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${port}&#x27;`);
+ 316          }
+ 317        }
+ 318        if (node.config.default &amp;&amp; !outputs[node.config.default]) {
+ 319          add(`${nodePath}/config/default`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${node.config.default}&#x27;`);
+ 320        }
+ 321      }
+ 322      if (node.kind === &quot;join&quot;) {
+ 323        if (node.config.mode === &quot;n_of_m&quot; &amp;&amp; node.config.threshold === undefined) {
+ 324          add(`${nodePath}/config/threshold`, &quot;DAG_SEMANTIC_REQUIRED_THRESHOLD&quot;, &quot;n_of_m join requires threshold&quot;);
+ 325        }
+ 326        if (node.config.mode !== &quot;n_of_m&quot; &amp;&amp; node.config.threshold !== undefined) {
+ 327          add(`${nodePath}/config/threshold`, &quot;DAG_SEMANTIC_INVALID_THRESHOLD&quot;, &quot;threshold is only valid for n_of_m join&quot;);
+ 328        }
+ 329      }
+ 330      if (node.kind === &quot;foreach&quot;) {
+ 331        const inputs = nodePorts(node, &quot;inputs&quot;);
+ 332        const outputs = nodePorts(node, &quot;outputs&quot;);
+ 333        if (!inputs[node.config.input]) {
+ 334          add(`${nodePath}/config/input`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown input port &#x27;${node.config.input}&#x27;`);
+ 335        }
+ 336        for (const key of [&quot;item_port&quot;, &quot;done_port&quot;] as const) {
+ 337          const port = node.config[key];
+ 338          if (!outputs[port]) add(`${nodePath}/config/${key}`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${port}&#x27;`);
+ 339        }
+ 340        if (!inputs[node.config.result_port]) {
+ 341          add(`${nodePath}/config/result_port`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown input port &#x27;${node.config.result_port}&#x27;`);
+ 342        }
+ 343      }
+ 344      if (node.kind === &quot;while&quot;) {
+ 345        const outputs = nodePorts(node, &quot;outputs&quot;);
+ 346        for (const key of [&quot;continue_port&quot;, &quot;done_port&quot;, &quot;exhausted_port&quot;] as const) {
+ 347          const port = node.config[key];
+ 348          if (port &amp;&amp; !outputs[port]) add(`${nodePath}/config/${key}`, &quot;DAG_SEMANTIC_UNKNOWN_PORT&quot;, `unknown output port &#x27;${port}&#x27;`);
+ 349        }
+ 350      }
+ 351    }</code></pre></div>
+  <h3>05 · 语义诊断不是装饰</h3>
+  <p>我最看重的是它对边的约束：edge 的 from/to 会拆成 node.port，检查端口存在、contract 匹配、run input 必须声明 contract、非 join 禁止隐式 fan-in、feedback 只能指向 foreach/while，并保证普通边无环、每个非 terminal 节点能走到 terminal。证据分别在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:363</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:388</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:396</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:407</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:413</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:449</code> 和 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:469</code>。</p>
+  <h3>06 · Canonical IR 给恢复和审计打底</h3>
+  <p>编译器最终把 node、edge、contract、agent、policy 排序后深度 canonicalize，再算 hash；这让同一个 workflow 能获得稳定 revision/provenance。代码路径在 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:504</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:524</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:550</code>、<code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:558</code>；默认策略还明确给了 max_nodes、max_edges、max_parallelism、max_dispatches、max_handoffs 和 tool call 上限，见 <code>sources/homerail/homerail_manager/src/orchestration/workflow-spec-v1.ts:610</code>。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/workflow-spec-v1.ts · 558-625</span></div><pre><code> 558  function compileV1(workflow: WorkflowSpecV1): CanonicalWorkflowIR {
+ 559    const nodes = Object.entries(workflow.spec.nodes)
+ 560      .sort(([left], [right]) =&gt; left.localeCompare(right))
+ 561      .map(([id, node]) =&gt; canonicalNode(id, node));
+ 562    const dataEdges = workflow.spec.edges.map(canonicalEdge);
+ 563    const controlEdges: CanonicalEdge[] = [];
+ 564    for (const node of nodes) {
+ 565      for (const dependency of node.depends_on) {
+ 566        controlEdges.push({
+ 567          id: &quot;&quot;,
+ 568          kind: &quot;control&quot;,
+ 569          from: { node: dependency, port: &quot;done&quot; },
+ 570          to: { node: node.id, port: &quot;task&quot; },
+ 571          condition: &quot;on_success&quot;,
+ 572          retry: { max_retries: 0 },
+ 573        });
+ 574      }
+ 575    }
+ 576    const edges = [...dataEdges, ...controlEdges]
+ 577      .sort((left, right) =&gt; {
+ 578        const leftKey = `${left.from.node}.${left.from.port}&gt;${left.to.node}.${left.to.port}:${left.kind}`;
+ 579        const rightKey = `${right.from.node}.${right.from.port}&gt;${right.to.node}.${right.to.port}:${right.kind}`;
+ 580        return leftKey.localeCompare(rightKey);
+ 581      })
+ 582      .map((edge, index) =&gt; ({ ...edge, id: `edge-${String(index + 1).padStart(4, &quot;0&quot;)}` }));
+ 583    const incoming = new Set(edges.filter((edge) =&gt; edge.from.node !== &quot;$run&quot; &amp;&amp; edge.kind !== &quot;feedback&quot;).map((edge) =&gt; edge.to.node));
+ 584    return {
+ 585      ir_version: &quot;1&quot;,
+ 586      source_api_version: WORKFLOW_API_VERSION,
+ 587      compiler_version: WORKFLOW_COMPILER_VERSION,
+ 588      workflow_id: workflow.metadata.id,
+ 589      name: workflow.metadata.name,
+ 590      ...(workflow.spec.description ? { description: workflow.spec.description } : {}),
+ 591      labels: deepSort(workflow.metadata.labels ?? {}) as Record&lt;string, string&gt;,
+ 592      annotations: deepSort(workflow.metadata.annotations ?? {}) as Record&lt;string, string&gt;,
+ 593      workspace: { mode: workflow.spec.workspace?.mode ?? &quot;isolated&quot; },
+ 594      contracts: deepSort(workflow.spec.contracts ?? {}) as Record&lt;string, unknown&gt;,
+ 595      agents: Object.fromEntries(Object.entries(workflow.spec.agents)
+ 596        .sort(([left], [right]) =&gt; left.localeCompare(right))
+ 597        .map(([id, agent]) =&gt; [id, {
+ 598          ...(agent.description ? { description: agent.description } : {}),
+ 599          ...(agent.system ? { system: agent.system } : {}),
+ 600          skills: [...(agent.skills ?? [])].sort(),
+ 601        }])),
+ 602      ...(workflow.spec.pattern ? {
+ 603        pattern: {
+ 604          id: workflow.spec.pattern.id,
+ 605          version: workflow.spec.pattern.version,
+ 606          ...(workflow.spec.pattern.source ? { source: workflow.spec.pattern.source } : {}),
+ 607          parameters: deepSort(workflow.spec.pattern.parameters ?? {}) as Record&lt;string, unknown&gt;,
+ 608        },
+ 609      } : {}),
+ 610      policies: {
+ 611        max_nodes: workflow.spec.policies?.max_nodes ?? 1000,
+ 612        max_edges: workflow.spec.policies?.max_edges ?? 10_000,
+ 613        max_parallelism: workflow.spec.policies?.max_parallelism ?? 32,
+ 614        max_dispatches: workflow.spec.policies?.max_dispatches ?? 30,
+ 615        max_handoffs: workflow.spec.policies?.max_handoffs ?? 50,
+ 616        max_corrections_per_node: workflow.spec.policies?.max_corrections_per_node ?? 2,
+ 617        max_edge_traversals: workflow.spec.policies?.max_edge_traversals ?? 3,
+ 618        max_tool_calls_per_node: workflow.spec.policies?.max_tool_calls_per_node ?? 0,
+ 619      },
+ 620      nodes,
+ 621      edges,
+ 622      entry_nodes: nodes.filter((node) =&gt; !incoming.has(node.id)).map((node) =&gt; node.id).sort(),
+ 623      terminal_nodes: nodes.filter((node) =&gt; node.kind === &quot;terminal&quot;).map((node) =&gt; node.id).sort(),
+ 624      feedback_edges: edges.filter((edge) =&gt; edge.kind === &quot;feedback&quot;).map((edge) =&gt; edge.id),
+ 625    };</code></pre></div>
+  <h3>07 · DAG Engine 的状态机很克制</h3>
+  <p>运行时没有把 DAG 做成大而全的框架，而是保持一个清晰状态机：node state、after deps、input deps、mailbox 和 handoffed set。初始化逻辑在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:71</code>，pending 节点提升 READY 的条件在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:107</code>，untaken branch 的 SKIPPED 传播在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:129</code>，失败依赖传播则在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:185</code> 和 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:209</code>。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/dag-engine.ts · 71-127</span></div><pre><code>  71  export function createDAGRun(parsedDAG: ParsedDAG, runId: string): DAGRun {
+  72    const nodeStates = new Map&lt;string, NodeState&gt;();
+  73    const afterSatisfied = new Map&lt;string, Set&lt;string&gt;&gt;();
+  74    const inputSatisfied = new Map&lt;string, Set&lt;string&gt;&gt;();
+  75    const mailboxes = new Map&lt;string, Map&lt;string, unknown[]&gt;&gt;();
+  76  
+  77    for (const node of parsedDAG.graph.nodes) {
+  78      nodeStates.set(node.node_id, _initialState(parsedDAG.graph, node.node_id));
+  79      afterSatisfied.set(node.node_id, new Set&lt;string&gt;());
+  80      inputSatisfied.set(node.node_id, new Set&lt;string&gt;());
+  81      mailboxes.set(node.node_id, new Map&lt;string, unknown[]&gt;());
+  82    }
+  83  
+  84    return {
+  85      runId,
+  86      graph: parsedDAG.graph,
+  87      loopSources: new Set(parsedDAG.loop_sources),
+  88      nodeStates,
+  89      handoffedNodes: new Set&lt;string&gt;(),
+  90      afterSatisfied,
+  91      inputSatisfied,
+  92      mailboxes,
+  93    };
+  94  }
+  95  
+  96  function _ensureMailbox(run: DAGRun, nodeId: string, port: string): unknown[] {
+  97    const nodeBox = run.mailboxes.get(nodeId);
+  98    if (!nodeBox) {
+  99      throw new Error(`Unknown node: ${nodeId}`);
+ 100    }
+ 101    if (!nodeBox.has(port)) {
+ 102      nodeBox.set(port, []);
+ 103    }
+ 104    return nodeBox.get(port)!;
+ 105  }
+ 106  
+ 107  function _tryPromote(run: DAGRun, nodeId: string): void {
+ 108    if (run.nodeStates.get(nodeId) !== &quot;PENDING&quot;) return;
+ 109    const deps = _incomingAfterDeps(run.graph.edges, nodeId);
+ 110    const satisfiedDeps = run.afterSatisfied.get(nodeId);
+ 111    const satisfied = deps.every((e) =&gt; satisfiedDeps?.has(e.from_node));
+ 112    if (!satisfied) return;
+ 113  
+ 114    const routedInputs = run.inputSatisfied.get(nodeId);
+ 115    for (const dep of deps) {
+ 116      const explicitFromDep = _incomingExplicitEdgesFrom(
+ 117        run.graph.edges,
+ 118        nodeId,
+ 119        dep.from_node,
+ 120      );
+ 121      if (explicitFromDep.length &gt; 0 &amp;&amp; !routedInputs?.has(dep.from_node)) {
+ 122        return;
+ 123      }
+ 124    }
+ 125  
+ 126    run.nodeStates.set(nodeId, &quot;READY&quot;);
+ 127  }</code></pre></div>
+  <h3>08 · handoff 是 Agent 输出进入工程世界的闸门</h3>
+  <p>agent 不是“说完就算完成”，必须通过 handoff 命中指定端口。<code>handoff()</code> 会匹配 downstream edge 和 terminal edge，写入 mailbox、标记 inputSatisfied、唤醒 loop source/gateway，并在 terminal failure 时跳过后继；这一串在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:260</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:270</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:284</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:296</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:305</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:313</code>。这就是它比“顺序调用多个 agent”更像工作流引擎的地方。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/dag-engine.ts · 260-321</span></div><pre><code> 260  export function handoff(
+ 261    run: DAGRun,
+ 262    fromNode: string,
+ 263    port: string,
+ 264    content: unknown,
+ 265  ): DAGTransitionResult {
+ 266    if (!run.nodeStates.has(fromNode)) {
+ 267      throw new Error(`Unknown node: ${fromNode}`);
+ 268    }
+ 269  
+ 270    const matchingDownstream = run.graph.edges.filter(
+ 271      (edge) =&gt;
+ 272        edge.from_node === fromNode &amp;&amp;
+ 273        edge.label !== &quot;after_dep&quot; &amp;&amp;
+ 274        edge.to_node !== &quot;&quot; &amp;&amp;
+ 275        edgeMatchesHandoff(edge, port),
+ 276    );
+ 277    const matchingTerminal = run.graph.edges.find(
+ 278      (edge) =&gt; edge.from_node === fromNode &amp;&amp; edge.to_node === &quot;&quot; &amp;&amp; edgeMatchesHandoff(edge, port),
+ 279    );
+ 280    const terminalOutcome = matchingTerminal?.terminal_outcome;
+ 281    const terminalFailure = terminalOutcome === &quot;failure&quot; ||
+ 282      (terminalOutcome === undefined &amp;&amp; isFailurePort(port) &amp;&amp; matchingDownstream.length === 0);
+ 283    const terminalCancelled = terminalOutcome === &quot;cancelled&quot;;
+ 284    run.handoffedNodes.add(fromNode);
+ 285    run.nodeStates.set(
+ 286      fromNode,
+ 287      terminalFailure
+ 288        ? &quot;FAILED&quot;
+ 289        : terminalCancelled
+ 290          ? &quot;CANCELLED&quot;
+ 291        : run.loopSources.has(fromNode)
+ 292          ? &quot;RUNNING&quot;
+ 293          : &quot;COMPLETED&quot;,
+ 294    );
+ 295  
+ 296    const affected = terminalFailure ? new Set&lt;string&gt;() : _satisfyAfterDeps(run, fromNode);
+ 297    const mailboxReceivers = new Set&lt;string&gt;();
+ 298    for (const edge of matchingDownstream) {
+ 299      _ensureMailbox(run, edge.to_node, edge.to_port).push(content);
+ 300      run.inputSatisfied.get(edge.to_node)?.add(fromNode);
+ 301      affected.add(edge.to_node);
+ 302      mailboxReceivers.add(edge.to_node);
+ 303    }
+ 304  
+ 305    for (const nodeId of affected) {
+ 306      _tryPromote(run, nodeId);
+ 307      _skipUntakenSatisfiedBranches(run, nodeId);
+ 308    }
+ 309    for (const nodeId of mailboxReceivers) {
+ 310      _wakeLoopSource(run, nodeId);
+ 311      _wakeLoopGatewayReceiver(run, fromNode, nodeId);
+ 312    }
+ 313    if (terminalFailure) {
+ 314      _skipDependentNodes(run, fromNode);
+ 315    }
+ 316    return {
+ 317      affectedNodes: Array.from(affected).sort(),
+ 318      routedNodes: Array.from(mailboxReceivers).sort(),
+ 319      terminalFailure,
+ 320      terminalOutcome,
+ 321    };</code></pre></div>
+  <h3>09 · ActiveRun 负责把运行状态持久化</h3>
+  <p>ActiveRun 层给 DAG Engine 加了生产需要的外壳：默认限制在 <code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:118</code>，创建 run 时写 metadata、seed prompt 并发出 run_created/engine_started/node_ready/status 事件，位置在 <code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:356</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:415</code>；冷恢复逻辑不是重跑 agent，而是从 persisted handoff 和 authoritative nodeStates 重建，见 <code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:446</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:462</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:537</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:601</code>。</p>
+  <h3>10 · Dispatch 层把能力匹配和隔离工作区分开</h3>
+  <p>WsDispatchAdapter 的路线是先找满足 required capabilities 的在线 worker，再看是否允许隔离工作区复用；如果没有 worker 且有 Docker-capable node，就异步 provision run-scoped worker；最后才回退到 node。这个优先级在 <code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:134</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:144</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:165</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:175</code>、<code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:189</code>。run-scoped worker 命名和 isolated workspace 禁止 generic worker 的判断在 <code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:237</code> 到 <code>sources/homerail/homerail_manager/src/orchestration/ws-dispatch-adapter.ts:250</code>。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/ws-dispatch-adapter.ts · 134-223</span></div><pre><code> 134    dispatch(envelope: DispatchEnvelope): DispatchResult {
+ 135      const requiredCapabilities = envelope.requiredCapabilities
+ 136        ?.map((capability) =&gt; capability.trim())
+ 137        .filter((capability) =&gt; capability.length &gt; 0);
+ 138  
+ 139      const provisionKey = `${envelope.runId}:${envelope.nodeId}`;
+ 140      if (isProvisioning(envelope.runId, envelope.nodeId) || this.inflightProvisioning.has(provisionKey)) {
+ 141        return { status: &quot;skipped&quot;, reason: &quot;provisioning_in_progress&quot; };
+ 142      }
+ 143  
+ 144      const worker = this._selectOpenWorker(envelope);
+ 145      if (worker) {
+ 146        try {
+ 147          this._dispatchToWorker(envelope, worker.worker_id, worker.socket);
+ 148        } catch (err) {
+ 149          const reason = err instanceof Error ? err.message : String(err);
+ 150          emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 151            runId: envelope.runId,
+ 152            nodeId: envelope.nodeId,
+ 153            reason,
+ 154          });
+ 155          recordDispatchFailed(envelope.runId, envelope.nodeId);
+ 156          return { status: &quot;failed&quot;, reason, retryable: true };
+ 157        }
+ 158        return {
+ 159          status: &quot;dispatched&quot;,
+ 160          targetType: &quot;worker&quot;,
+ 161          targetId: worker.worker_id,
+ 162        };
+ 163      }
+ 164  
+ 165      if (requiredCapabilities &amp;&amp; requiredCapabilities.length &gt; 0) {
+ 166        const reason = `no available worker satisfies required capabilities: ${requiredCapabilitiesText(requiredCapabilities)}`;
+ 167        emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 168          runId: envelope.runId,
+ 169          nodeId: envelope.nodeId,
+ 170          reason,
+ 171        });
+ 172        return { status: &quot;failed&quot;, reason, retryable: false };
+ 173      }
+ 174  
+ 175      // Try to find a Docker-capable node for provisioning.
+ 176      if (this.provisionerOpts) {
+ 177        const nodes = getAllNodes();
+ 178        const dockerNode = nodes.find(
+ 179          (n) =&gt;
+ 180            n.socket.readyState === WebSocket.OPEN &amp;&amp;
+ 181            isDockerCapableNode(n),
+ 182        );
+ 183        if (dockerNode) {
+ 184          this._startProvisioning(envelope, dockerNode.node_id);
+ 185          return { status: &quot;skipped&quot;, reason: &quot;provisioning_in_progress&quot; };
+ 186        }
+ 187      }
+ 188  
+ 189      // Fallback: dispatch directly to any connected node (previous behavior)
+ 190      const nodes = getAllNodes();
+ 191      const node = nodes.find((n) =&gt; n.socket.readyState === WebSocket.OPEN);
+ 192      if (node) {
+ 193        try {
+ 194          this._dispatchToNode(envelope, node.node_id, node.socket);
+ 195        } catch (err) {
+ 196          const reason = err instanceof Error ? err.message : String(err);
+ 197          emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 198            runId: envelope.runId,
+ 199            nodeId: envelope.nodeId,
+ 200            reason,
+ 201          });
+ 202          recordDispatchFailed(envelope.runId, envelope.nodeId);
+ 203          return { status: &quot;failed&quot;, reason, retryable: true };
+ 204        }
+ 205        return {
+ 206          status: &quot;dispatched&quot;,
+ 207          targetType: &quot;node&quot;,
+ 208          targetId: node.node_id,
+ 209        };
+ 210      }
+ 211  
+ 212      // No worker, no node — fail
+ 213      emit(&quot;dag:ws_dispatch_failed&quot;, {
+ 214        runId: envelope.runId,
+ 215        nodeId: envelope.nodeId,
+ 216        reason: &quot;no available worker or node&quot;,
+ 217      });
+ 218      return {
+ 219        status: &quot;failed&quot;,
+ 220        reason: &quot;no available worker or node&quot;,
+ 221        retryable: true,
+ 222      };
+ 223    }</code></pre></div>
+  <h3>11 · Worker 不是黑盒执行器</h3>
+  <p>worker 端把 manager envelope 展开成 task、agent config、LLM provider/model/protocol/API base，然后交给 <code>runPrompt()</code>。入口解包逻辑在 <code>sources/homerail/homerail_worker/src/index.ts:85</code>、<code>sources/homerail/homerail_worker/src/index.ts:99</code>、<code>sources/homerail/homerail_worker/src/index.ts:107</code>、<code>sources/homerail/homerail_worker/src/index.ts:114</code>、<code>sources/homerail/homerail_worker/src/index.ts:152</code>；PromptRunner 又负责 session transcript、audit writer、DAG tools、agent backend、usage、node_error 和 SESSION_END，证据在 <code>sources/homerail/homerail_worker/src/prompt-runner.ts:103</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:167</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:228</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:352</code>、<code>sources/homerail/homerail_worker/src/prompt-runner.ts:393</code>。</p>
+  <div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_worker/src/prompt-runner.ts · 228-365</span></div><pre><code> 228    try {
+ 229      assertAgentRuntimeProtocol(agentBackend, job.llmProtocol);
+ 230      const agent = createAgentClient(agentBackend);
+ 231      const context: AgentRunContext = {
+ 232        systemPrompt: job.systemPrompt,
+ 233        provider: job.llmProvider,
+ 234        protocol: job.llmProtocol,
+ 235        model: job.dagConfig.model,
+ 236        apiKey: job.llmApiKey ?? process.env.LLM_API_KEY ?? &quot;&quot;,
+ 237        baseUrl: resolveAgentBaseUrl(job, agentBackend),
+ 238        workspace: process.env.WORKSPACE ?? process.cwd(),
+ 239        sessionId: job.dagConfig.session_id ?? job.runId,
+ 240        abortSignal: deps.abortSignal,
+ 241      };
+ 242      try {
+ 243        saveSession({
+ 244          sessionId,
+ 245          runId: job.runId,
+ 246          nodeId: job.dagConfig.node_id,
+ 247          messages: [{ role: &quot;user&quot;, content: job.task }],
+ 248          toolCallState: { inFlight: false },
+ 249          agentConfig: redactAgentContext(context),
+ 250          timestamp: Date.now(),
+ 251        });
+ 252      } catch {
+ 253        // Best-effort.
+ 254      }
+ 255      let errorMessage: string | null = null;
+ 256      for await (const event of agent.run(job.task, dagTools, context)) {
+ 257        switch (event.type) {
+ 258          case &quot;text&quot;:
+ 259            sendContent(event.text);
+ 260            audit?.transcript.write({ event: &quot;text&quot;, text: event.text });
+ 261            appendSessionTranscript(&quot;text&quot;, event.text);
+ 262            break;
+ 263          case &quot;debug&quot;:
+ 264            sendStream({
+ 265              event: &quot;agent_debug&quot;,
+ 266              source: event.source,
+ 267              message: event.message,
+ 268              data: event.data ?? {},
+ 269            });
+ 270            console.log(
+ 271              `[homerail_worker] HOMERAIL_AGENT_DEBUG ${JSON.stringify({
+ 272                run_id: job.runId,
+ 273                node_id: job.dagConfig.node_id,
+ 274                source: event.source,
+ 275                message: event.message,
+ 276                data: event.data ?? {},
+ 277              })}`,
+ 278            );
+ 279            audit?.transcript.write({
+ 280              event: &quot;agent_debug&quot;,
+ 281              source: event.source,
+ 282              message: event.message,
+ 283              data: event.data ?? {},
+ 284            });
+ 285            appendSessionTranscript(&quot;agent_debug&quot;, undefined, {
+ 286              source: event.source,
+ 287              message: event.message,
+ 288              data: redactToolTelemetry(event.data ?? {}) as Record&lt;string, unknown&gt;,
+ 289            });
+ 290            break;
+ 291          case &quot;tool_use&quot;:
+ 292            appendSessionTranscript(&quot;tool_use&quot;, undefined, {
+ 293              tool_name: event.name,
+ 294              tool_id: event.id,
+ 295              tool_input: redactToolTelemetry(event.input),
+ 296            });
+ 297            sendStream({
+ 298              event: &quot;tool_use&quot;,
+ 299              tool_name: event.name,
+ 300              tool_id: event.id,
+ 301              tool_input: redactToolTelemetry(event.input),
+ 302            });
+ 303            audit?.toolEvents.write({
+ 304              event: &quot;tool_use&quot;,
+ 305              tool_name: event.name,
+ 306              tool_id: event.id,
+ 307              input: event.input,
+ 308              node_id: job.dagConfig.node_id,
+ 309              run_id: job.runId,
+ 310            });
+ 311            break;
+ 312          case &quot;tool_result&quot;:
+ 313            appendSessionTranscript(&quot;tool_result&quot;, undefined, {
+ 314              tool_use_id: event.tool_use_id,
+ 315              is_error: event.is_error,
+ 316              result_preview: redactToolTelemetry(event.content),
+ 317            });
+ 318            sendStream({
+ 319              event: &quot;tool_result&quot;,
+ 320              tool_use_id: event.tool_use_id,
+ 321              is_error: event.is_error,
+ 322              result_preview: redactToolTelemetry(event.content),
+ 323            });
+ 324            audit?.toolEvents.write({
+ 325              event: &quot;tool_result&quot;,
+ 326              tool_use_id: event.tool_use_id,
+ 327              is_error: event.is_error,
+ 328              node_id: job.dagConfig.node_id,
+ 329              run_id: job.runId,
+ 330            });
+ 331            break;
+ 332          case &quot;error&quot;:
+ 333            errorMessage = event.message;
+ 334            sendContent(`[ERROR] ${event.message}`);
+ 335            audit?.transcript.write({ event: &quot;error&quot;, message: event.message });
+ 336            appendSessionTranscript(&quot;error&quot;, event.message);
+ 337            break;
+ 338          case &quot;usage&quot;:
+ 339            // The claude-sdk adapter emits running-total snapshots (one per
+ 340            // assistant message, carrying the cumulative total so far), so
+ 341            // we replace rather than accumulate. Other adapters that emit a
+ 342            // single final aggregate behave the same way.
+ 343            Object.assign(nodeUsage, event.usage);
+ 344            break;
+ 345          case &quot;done&quot;:
+ 346            if (event.usage) Object.assign(nodeUsage, event.usage);
+ 347            if (event.duration_ms !== undefined) nodeDurationMs = event.duration_ms;
+ 348            if (event.num_turns !== undefined) nodeNumTurns = event.num_turns;
+ 349            break;
+ 350        }
+ 351  
+ 352        // If handoff was called, stop processing. Emit the final accumulated
+ 353        // usage first so the manager can persist per-node token totals even
+ 354        // when the node yields early via handoff.
+ 355        if (dagState.yielded) {
+ 356          emitUsage();
+ 357          break;
+ 358        }
+ 359      }
+ 360      // Normal completion (no handoff, no error) — emit usage once more so
+ 361      // the manager records totals before the node-error fallback fires.
+ 362      if (!dagState.yielded) {
+ 363        emitUsage();
+ 364        sendNodeError(errorMessage ?? &quot;agent ended without DAG handoff&quot;);
+ 365      }</code></pre></div>
+  <h3>12 · CLI 和测试说明它正在产品化</h3>
+  <p>CLI 注册了 templates、run/runs/status/stop、dag、provider、model/profile/voice/runtime/doctor/smoke/evidence 等命令，入口在 <code>sources/homerail/homerail_cli/src/index.ts:25</code> 到 <code>sources/homerail/homerail_cli/src/index.ts:51</code>。测试方面，WorkflowSpec runtime 覆盖 canonical revision、contract violation、run input contract、cold recovery、fan-out/join、condition、foreach 和 bounded while，见 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:97</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:127</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:162</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:175</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:197</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:221</code>、<code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:239</code> 和 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:260</code>。</p>
+  <div class="callout">判断：HomeRail 还处于早期，但代码重心已经放在 agent 编排的硬问题上：确定性 workflow 表达、contract 校验、运行时恢复、worker 能力调度和密钥脱敏。短板也明显：系统面很宽，稳定性取决于 manager/worker/UI/provisioner 全链路测试能否继续补齐。</div>
+  <h3>深度阅读</h3>
+  <div class="deep-links"><a class="deep-link" href="homerail/dag-runtime.html">DAG 运行时拆解<small>handoff、mailbox、failure routing、cold recovery</small></a><a class="deep-link" href="homerail/workflow-compiler.html">Workflow 编译器拆解<small>YAML 诊断、canonical IR、contract guardrail</small></a><a class="deep-link" href="homerail/worker-dispatch.html">Worker 调度拆解<small>capability、isolated workspace、PromptRunner</small></a></div>
+</div></section>
+</main>
+
+<footer><div class="shell">GitHub Trending Monitor · 源码级阅读 · 2026-07-12</div></footer>
+</body>
+</html>

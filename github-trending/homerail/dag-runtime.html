@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HomeRail DAG Runtime 源码拆解</title>
+<meta name="description" content="handoff、mailbox、failure routing 与 cold recovery 源码分析。" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@1,9..144,500&display=swap" rel="stylesheet" />
+
+<style>
+:root{--bg:#090b10;--ink:#eef5ff;--muted:#9fafc3;--panel:#111722;--panel-2:#151e2c;--line:#263247;--star:#8ee3ff;--accent:#ffcf6b;--green:#7ddc96;--rose:#ff8c9a;--ease:cubic-bezier(.2,.8,.2,1);--mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--serif:"Fraunces",Georgia,serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 20% 0%,rgba(142,227,255,.12),transparent 30%),linear-gradient(180deg,#090b10 0%,#0c1018 60%,#090b10 100%);color:var(--ink);font-family:var(--sans);line-height:1.72}.bg-stars{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.42) 1px,transparent 1px);background-size:34px 34px;opacity:.1}.shell{width:min(1120px,calc(100% - 36px));margin:0 auto}.nav{position:sticky;top:0;z-index:20;background:rgba(9,11,16,.78);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}.nav .shell{height:64px;display:flex;align-items:center;justify-content:space-between}.brand{color:var(--ink);text-decoration:none;font-weight:800;letter-spacing:0}.nav a{color:var(--muted);text-decoration:none;margin-left:20px}.nav a:hover{color:var(--star)}.hero{padding:92px 0 54px}.eyebrow{color:var(--star);font-family:var(--mono);font-size:13px}.hero h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:1.02;margin:18px 0}.hero .lead{font-size:clamp(1.02rem,2vw,1.26rem);max-width:860px;color:#c9d7ea}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:34px}.stat{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);padding:18px;border-radius:8px}.stat strong{display:block;font-size:1.35rem;color:var(--ink)}.stat span{color:var(--muted);font-size:.9rem}.section{padding:36px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:rgba(17,23,34,.72);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:24px}.panel h3,.prose h3{font-size:1.3rem;line-height:1.25;margin:0 0 12px;color:var(--ink)}.prose{max-width:920px}.prose p{color:#c7d4e6;margin:0 0 18px}.prose code,.panel code{font-family:var(--mono);font-size:.92em;color:#d9f6ff;background:rgba(142,227,255,.08);border:1px solid rgba(142,227,255,.16);border-radius:5px;padding:1px 5px}.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:24px 0}.flow div{border:1px solid rgba(142,227,255,.18);background:rgba(142,227,255,.06);border-radius:8px;padding:14px;min-height:96px}.flow b{display:block;color:var(--star);margin-bottom:8px}.code-wrap{background:#070a0f;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;margin:18px 0 28px}.code-head{display:flex;gap:8px;align-items:center;height:36px;border-bottom:1px solid rgba(255,255,255,.08);padding:0 12px;color:var(--muted);font-family:var(--mono);font-size:12px}.code-head i{width:10px;height:10px;border-radius:50%;background:var(--rose)}.code-head i:nth-child(2){background:var(--accent)}.code-head i:nth-child(3){background:var(--green)}pre{margin:0;overflow:auto;padding:16px 18px;color:#dbeafe;font-family:var(--mono);font-size:13px;line-height:1.55}.deep-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}.deep-link{display:block;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);border-radius:8px;padding:16px;text-decoration:none;color:var(--ink);transition:transform .2s var(--ease),border-color .2s var(--ease)}.deep-link:hover{transform:translateY(-2px);border-color:rgba(142,227,255,.45)}.deep-link small{display:block;color:var(--muted);margin-top:4px}.callout{border-left:3px solid var(--accent);background:rgba(255,207,107,.08);padding:14px 16px;border-radius:0 8px 8px 0;margin:18px 0;color:#f5dfac}.tag{display:inline-flex;margin:0 8px 8px 0;padding:4px 9px;border-radius:999px;background:rgba(125,220,150,.09);border:1px solid rgba(125,220,150,.2);color:#c8f5d2;font-size:13px}footer{border-top:1px solid rgba(255,255,255,.08);padding:36px 0;color:var(--muted)}@media(max-width:800px){.stats,.grid,.flow,.deep-links{grid-template-columns:1fr}.nav .shell{height:auto;min-height:64px;align-items:flex-start;flex-direction:column;padding:12px 0}.nav a{margin:6px 12px 0 0}.hero{padding-top:54px}}
+</style>
+
+</head>
+<body>
+<div class="bg-stars"></div>
+<nav class="nav"><div class="shell"><a class="brand" href="../homerail.html">HomeRail 源码解析</a><div><a href="../index.html">趋势首页</a><a href="https://github.com/xiaotianfotos/homerail" target="_blank" rel="noopener">GitHub</a></div></div></nav>
+
+<header class="hero"><div class="shell"><div class="eyebrow">HomeRail deep dive · DAG runtime</div><h1>DAG 运行时：把 agent handoff 变成可恢复状态机</h1><p class="lead">这一页只看运行时：DAGRun 的状态结构、handoff 路由、失败传播、ActiveRun 持久化和冷恢复。</p></div></header>
+<main><section class="section"><div class="shell prose">
+<h3>状态模型：少字段，但含义很硬</h3>
+<p>DAGRun 只维护 nodeStates、handoffedNodes、afterSatisfied、inputSatisfied 和 mailboxes；这些字段在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:12</code> 到 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:21</code>。初始化时根据 after_dep 决定 READY/PENDING，见 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:66</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:71</code>。这种结构的好处是每次 handoff 都是显式状态转移，而不是依赖 agent 文本判断。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/dag-engine.ts · 12-43</span></div><pre><code>  12  export interface DAGRun {
+  13    runId: string;
+  14    graph: DAGGraphData;
+  15    loopSources: Set&lt;string&gt;;
+  16    nodeStates: Map&lt;string, NodeState&gt;;
+  17    handoffedNodes: Set&lt;string&gt;;
+  18    afterSatisfied: Map&lt;string, Set&lt;string&gt;&gt;;
+  19    inputSatisfied: Map&lt;string, Set&lt;string&gt;&gt;;
+  20    mailboxes: Map&lt;string, Map&lt;string, unknown[]&gt;&gt;;
+  21  }
+  22  
+  23  export const FAILURE_PORTS = new Set([&quot;failed&quot;, &quot;failure&quot;, &quot;rejected&quot;, &quot;error&quot;]);
+  24  
+  25  export interface DAGTransitionResult {
+  26    affectedNodes: string[];
+  27    routedNodes: string[];
+  28    terminalFailure?: boolean;
+  29    terminalOutcome?: &quot;success&quot; | &quot;failure&quot; | &quot;cancelled&quot;;
+  30  }
+  31  
+  32  export function isFailurePort(port: string): boolean {
+  33    return FAILURE_PORTS.has(port.toLowerCase());
+  34  }
+  35  
+  36  export function edgeMatchesHandoff(edge: DAGEdge, port: string): boolean {
+  37    if (edge.from_port !== port) return false;
+  38    if (edge.condition === &quot;always&quot;) return true;
+  39    return isFailurePort(port)
+  40      ? edge.condition === &quot;on_failure&quot;
+  41      : edge.condition !== &quot;on_failure&quot;;
+  42  }
+  43  </code></pre></div>
+<h3>READY 推进：after 依赖和显式输入必须同时满足</h3>
+<p>节点从 PENDING 到 READY 的关键不只是所有 after_dep 完成；如果某个依赖还有显式 data edge，目标节点还必须真的收到 routed input。这个双条件写在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:107</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:114</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:121</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:126</code>。未被选择的分支会在依赖都满足但缺少输入时被 SKIPPED，逻辑位于 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:129</code> 到 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:148</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/dag-engine.ts · 107-148</span></div><pre><code> 107  function _tryPromote(run: DAGRun, nodeId: string): void {
+ 108    if (run.nodeStates.get(nodeId) !== &quot;PENDING&quot;) return;
+ 109    const deps = _incomingAfterDeps(run.graph.edges, nodeId);
+ 110    const satisfiedDeps = run.afterSatisfied.get(nodeId);
+ 111    const satisfied = deps.every((e) =&gt; satisfiedDeps?.has(e.from_node));
+ 112    if (!satisfied) return;
+ 113  
+ 114    const routedInputs = run.inputSatisfied.get(nodeId);
+ 115    for (const dep of deps) {
+ 116      const explicitFromDep = _incomingExplicitEdgesFrom(
+ 117        run.graph.edges,
+ 118        nodeId,
+ 119        dep.from_node,
+ 120      );
+ 121      if (explicitFromDep.length &gt; 0 &amp;&amp; !routedInputs?.has(dep.from_node)) {
+ 122        return;
+ 123      }
+ 124    }
+ 125  
+ 126    run.nodeStates.set(nodeId, &quot;READY&quot;);
+ 127  }
+ 128  
+ 129  function _skipUntakenSatisfiedBranches(run: DAGRun, nodeId: string): void {
+ 130    if (run.nodeStates.get(nodeId) !== &quot;PENDING&quot;) return;
+ 131    const deps = _incomingAfterDeps(run.graph.edges, nodeId);
+ 132    const satisfiedDeps = run.afterSatisfied.get(nodeId);
+ 133    const allDepsSatisfied = deps.every((e) =&gt; satisfiedDeps?.has(e.from_node));
+ 134    if (!allDepsSatisfied) return;
+ 135  
+ 136    const routedInputs = run.inputSatisfied.get(nodeId);
+ 137    const hasUntakenRequiredInput = deps.some((dep) =&gt; {
+ 138      const explicitFromDep = _incomingExplicitEdgesFrom(
+ 139        run.graph.edges,
+ 140        nodeId,
+ 141        dep.from_node,
+ 142      );
+ 143      return explicitFromDep.length &gt; 0 &amp;&amp; !routedInputs?.has(dep.from_node);
+ 144    });
+ 145    if (hasUntakenRequiredInput) {
+ 146      run.nodeStates.set(nodeId, &quot;SKIPPED&quot;);
+ 147      _skipDependentNodes(run, nodeId, true);
+ 148    }</code></pre></div>
+<h3>Handoff：端口匹配决定工作流下一跳</h3>
+<p>handoff 会过滤同 source node、非 after_dep、非 terminal 且端口匹配的 downstream edge；terminal edge 单独处理，并用 failure port 与 terminal_outcome 决定 COMPLETED/FAILED/CANCELLED/RUNNING。证据在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:260</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:270</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:277</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:280</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:284</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:296</code>。写入 mailbox 和 inputSatisfied 的代码在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:298</code> 到 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:303</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/dag-engine.ts · 260-321</span></div><pre><code> 260  export function handoff(
+ 261    run: DAGRun,
+ 262    fromNode: string,
+ 263    port: string,
+ 264    content: unknown,
+ 265  ): DAGTransitionResult {
+ 266    if (!run.nodeStates.has(fromNode)) {
+ 267      throw new Error(`Unknown node: ${fromNode}`);
+ 268    }
+ 269  
+ 270    const matchingDownstream = run.graph.edges.filter(
+ 271      (edge) =&gt;
+ 272        edge.from_node === fromNode &amp;&amp;
+ 273        edge.label !== &quot;after_dep&quot; &amp;&amp;
+ 274        edge.to_node !== &quot;&quot; &amp;&amp;
+ 275        edgeMatchesHandoff(edge, port),
+ 276    );
+ 277    const matchingTerminal = run.graph.edges.find(
+ 278      (edge) =&gt; edge.from_node === fromNode &amp;&amp; edge.to_node === &quot;&quot; &amp;&amp; edgeMatchesHandoff(edge, port),
+ 279    );
+ 280    const terminalOutcome = matchingTerminal?.terminal_outcome;
+ 281    const terminalFailure = terminalOutcome === &quot;failure&quot; ||
+ 282      (terminalOutcome === undefined &amp;&amp; isFailurePort(port) &amp;&amp; matchingDownstream.length === 0);
+ 283    const terminalCancelled = terminalOutcome === &quot;cancelled&quot;;
+ 284    run.handoffedNodes.add(fromNode);
+ 285    run.nodeStates.set(
+ 286      fromNode,
+ 287      terminalFailure
+ 288        ? &quot;FAILED&quot;
+ 289        : terminalCancelled
+ 290          ? &quot;CANCELLED&quot;
+ 291        : run.loopSources.has(fromNode)
+ 292          ? &quot;RUNNING&quot;
+ 293          : &quot;COMPLETED&quot;,
+ 294    );
+ 295  
+ 296    const affected = terminalFailure ? new Set&lt;string&gt;() : _satisfyAfterDeps(run, fromNode);
+ 297    const mailboxReceivers = new Set&lt;string&gt;();
+ 298    for (const edge of matchingDownstream) {
+ 299      _ensureMailbox(run, edge.to_node, edge.to_port).push(content);
+ 300      run.inputSatisfied.get(edge.to_node)?.add(fromNode);
+ 301      affected.add(edge.to_node);
+ 302      mailboxReceivers.add(edge.to_node);
+ 303    }
+ 304  
+ 305    for (const nodeId of affected) {
+ 306      _tryPromote(run, nodeId);
+ 307      _skipUntakenSatisfiedBranches(run, nodeId);
+ 308    }
+ 309    for (const nodeId of mailboxReceivers) {
+ 310      _wakeLoopSource(run, nodeId);
+ 311      _wakeLoopGatewayReceiver(run, fromNode, nodeId);
+ 312    }
+ 313    if (terminalFailure) {
+ 314      _skipDependentNodes(run, fromNode);
+ 315    }
+ 316    return {
+ 317      affectedNodes: Array.from(affected).sort(),
+ 318      routedNodes: Array.from(mailboxReceivers).sort(),
+ 319      terminalFailure,
+ 320      terminalOutcome,
+ 321    };</code></pre></div>
+<h3>失败传播：on_failure 不是异常通道，而是合法边</h3>
+<p><code>failNode()</code> 不只是把节点置 FAILED，它会满足 after dep、寻找 condition 为 on_failure 或 always 的边，把错误数据塞进目标 mailbox，再唤醒目标；没有替代路径的普通后继才会被跳过。相关实现集中在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:324</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:332</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:335</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:344</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:351</code>，而依赖跳过和 alternative path 判断在 <code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:169</code>、<code>sources/homerail/homerail_manager/src/orchestration/dag-engine.ts:185</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/orchestration/dag-engine.ts · 324-356</span></div><pre><code> 324  export function failNode(
+ 325    run: DAGRun,
+ 326    nodeId: string,
+ 327    errorData: unknown = &quot;&quot;,
+ 328  ): DAGTransitionResult {
+ 329    if (!run.nodeStates.has(nodeId)) {
+ 330      throw new Error(`Unknown node: ${nodeId}`);
+ 331    }
+ 332    run.nodeStates.set(nodeId, &quot;FAILED&quot;);
+ 333    const affected = _satisfyAfterDeps(run, nodeId);
+ 334    const mailboxReceivers = new Set&lt;string&gt;();
+ 335    for (const edge of run.graph.edges) {
+ 336      if (edge.from_node !== nodeId) continue;
+ 337      if (edge.label === &quot;after_dep&quot; || edge.to_node === &quot;&quot;) continue;
+ 338      if (edge.condition !== &quot;on_failure&quot; &amp;&amp; edge.condition !== &quot;always&quot;) continue;
+ 339      _ensureMailbox(run, edge.to_node, edge.to_port).push(errorData);
+ 340      run.inputSatisfied.get(edge.to_node)?.add(nodeId);
+ 341      affected.add(edge.to_node);
+ 342      mailboxReceivers.add(edge.to_node);
+ 343    }
+ 344    for (const affectedNode of affected) {
+ 345      _tryPromote(run, affectedNode);
+ 346      _skipUntakenSatisfiedBranches(run, affectedNode);
+ 347    }
+ 348    for (const receiver of mailboxReceivers) {
+ 349      _wakeLoopSource(run, receiver);
+ 350    }
+ 351    _skipDependentNodes(run, nodeId);
+ 352    return {
+ 353      affectedNodes: Array.from(affected).sort(),
+ 354      routedNodes: Array.from(mailboxReceivers).sort(),
+ 355    };
+ 356  }</code></pre></div>
+<h3>ActiveRun：把内存状态锚到磁盘和事件流</h3>
+<p>ActiveRun 设置了 max_dispatches、max_handoffs、max_corrections_per_node、max_edge_traversals 等默认限流，见 <code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:118</code>。创建 run 后会持久化 metadata、seed 初始 prompt、发出 run_created/engine_started/node_ready/status 事件，对应 <code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:356</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:415</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:320</code>。这些事件让 UI 和外部监控能看到工作流推进。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/runtime/active-runs.ts · 356-444</span></div><pre><code> 356  }
+ 357  
+ 358  export function _clearActiveRuns(): void {
+ 359    store.clear();
+ 360  }
+ 361  
+ 362  export function createActiveRun(
+ 363    runId: string,
+ 364    parsedDAG: ParsedDAG,
+ 365    options: CreateActiveRunOptions = {},
+ 366  ): ActiveRun {
+ 367    const dagRun = createDAGRun(parsedDAG, runId);
+ 368    seedInitialPrompt(
+ 369      dagRun,
+ 370      options.initialPrompt,
+ 371      parsedDAG.meta.run_input_targets,
+ 372      parsedDAG.meta.contracts,
+ 373    );
+ 374    const run: ActiveRun = {
+ 375      runId,
+ 376      workflowId: parsedDAG.meta.workflow_id,
+ 377      workflowName: parsedDAG.meta.name,
+ 378      workflowRevision: parsedDAG.meta.workflow_revision,
+ 379      canonicalHash: parsedDAG.meta.canonical_hash,
+ 380      compilerVersion: parsedDAG.meta.compiler_version,
+ 381      sourceApiVersion: parsedDAG.meta.source_api_version,
+ 382      contracts: parsedDAG.meta.contracts ? { ...parsedDAG.meta.contracts } : undefined,
+ 383      runInputTargets: parsedDAG.meta.run_input_targets
+ 384        ? parsedDAG.meta.run_input_targets.map((target) =&gt; ({ ...target }))
+ 385        : undefined,
+ 386      initialPrompt: options.initialPrompt,
+ 387      nodeCount: parsedDAG.graph.nodes.length,
+ 388      agents: parsedDAG.meta.agents
+ 389        ? { ...parsedDAG.meta.agents }
+ 390        : undefined,
+ 391      workspace: parsedDAG.meta.workspace
+ 392        ? { ...parsedDAG.meta.workspace }
+ 393        : undefined,
+ 394      scorecard: parsedDAG.meta.scorecard
+ 395        ? { ...parsedDAG.meta.scorecard }
+ 396        : undefined,
+ 397      pattern: parsedDAG.meta.pattern
+ 398        ? { ...parsedDAG.meta.pattern, parameters: { ...(parsedDAG.meta.pattern.parameters ?? {}) } }
+ 399        : undefined,
+ 400      dagRun,
+ 401      createdAt: Date.now(),
+ 402      status: &quot;active&quot;,
+ 403      limits: _resolveLimits(parsedDAG.meta.limits),
+ 404      counters: _initialCounters(),
+ 405      nodeIndex: _buildNodeIndex(parsedDAG.graph.nodes),
+ 406      nodeSessions: new Map(),
+ 407    };
+ 408    store.set(runId, run);
+ 409    writeRunMetadata(runId, serializeRunMetadata(run));
+ 410    emit(&quot;dag:run_created&quot;, {
+ 411      runId,
+ 412      workflowId: run.workflowId,
+ 413      nodeCount: run.nodeCount,
+ 414    });
+ 415    emit(&quot;dag:engine_started&quot;, {
+ 416      runId,
+ 417      workflowId: run.workflowId,
+ 418      limits: { ...run.limits },
+ 419    });
+ 420    for (const nodeId of getReadyNodes(dagRun)) {
+ 421      emit(&quot;dag:node_ready&quot;, { runId, nodeId });
+ 422    }
+ 423    _emitStatusUpdate(run);
+ 424    return run;
+ 425  }
+ 426  
+ 427  export function seedInitialPrompt(
+ 428    dagRun: DAGRun,
+ 429    prompt: string | undefined,
+ 430    targets?: Array&lt;{ node: string; port: string; contract?: string }&gt;,
+ 431    contracts?: Record&lt;string, unknown&gt;,
+ 432  ): void {
+ 433    if (prompt === undefined || prompt.trim().length === 0) return;
+ 434    if (targets &amp;&amp; targets.length &gt; 0) {
+ 435      const payload = _structuredGatewayValue(prompt);
+ 436      for (const target of targets) {
+ 437        if (target.contract) {
+ 438          const schema = contracts?.[target.contract];
+ 439          const validation = validateJsonContract(schema, payload);
+ 440          if (!validation.valid) {
+ 441            throw new Error(`DAG_RUN_INPUT_CONTRACT_VIOLATION ${target.node}.${target.port}: ${validation.details}`);
+ 442          }
+ 443        }
+ 444        const mailbox = dagRun.mailboxes.get(target.node);</code></pre></div>
+<h3>冷恢复：重建，不重跑</h3>
+<p>冷恢复的注释很直接：不要手工重建 side effect，而是 replay persisted handoff history；代码会 overlay authoritative node states、处理 orphaned RUNNING、fail lost nodes、deprovision 已失败运行。证据在 <code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:446</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:462</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:537</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:601</code>、<code>sources/homerail/homerail_manager/src/runtime/active-runs.ts:677</code>。测试则验证 cold recovery 后仍保留 v1 provenance、contracts 和 reserved run input，见 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:175</code> 到 <code>sources/homerail/homerail_manager/tests/workflow-spec-runtime.test.ts:194</code>。</p>
+<div class="code-wrap"><div class="code-head"><i></i><i></i><i></i><span>homerail_manager/src/runtime/active-runs.ts · 446-589</span></div><pre><code> 446        const values = mailbox.get(target.port) ?? [];
+ 447        values.push(payload);
+ 448        mailbox.set(target.port, values);
+ 449      }
+ 450      return;
+ 451    }
+ 452    for (const nodeId of getReadyNodes(dagRun)) {
+ 453      const mailbox = dagRun.mailboxes.get(nodeId);
+ 454      if (!mailbox) continue;
+ 455      const values = mailbox.get(&quot;prompt&quot;) ?? [];
+ 456      values.push(prompt);
+ 457      mailbox.set(&quot;prompt&quot;, values);
+ 458    }
+ 459  }
+ 460  
+ 461  // ---------------------------------------------------------------------------
+ 462  //  Cold recovery — rebuild an ActiveRun from persisted state after a restart.
+ 463  //
+ 464  //  The persisted RunMetadata covers nearly every ActiveRun field, but four
+ 465  //  DAGRun Maps are process-local and NOT serialized (mailboxes, afterSatisfied,
+ 466  //  inputSatisfied, loopSources). Rather than hand-writing reconstruction and
+ 467  //  risking loop-gateway wake-ups or dependency-satisfaction edge cases, we
+ 468  //  rebuild a minimal DAGRun (all nodes PENDING, empty Maps) and replay the
+ 469  //  persisted dag_handoffs through the engine&#x27;s own `handoff()` — which drives
+ 470  //  mailbox pushes, inputSatisfied marking, afterDep satisfaction, tryPromote
+ 471  //  and loop wake-ups exactly as it did the first time. The authoritative
+ 472  //  nodeStates snapshot from metadata is then layered on top so transient
+ 473  //  states (RUNNING) are preserved long enough to be demoted.
+ 474  // ---------------------------------------------------------------------------
+ 475  
+ 476  /** Rebuilds a DAGRun&#x27;s non-persisted Maps by replaying handoff history.
+ 477   * Caller must have set every node to a fresh state (we use PENDING) and
+ 478   * supplied empty afterSatisfied/inputSatisfied/mailboxes. */
+ 479  function _replayHandoffsInto(
+ 480    dagRun: DAGRun,
+ 481    handoffs: Array&lt;{ fromNode: string; port: string; content?: unknown }&gt;,
+ 482  ): void {
+ 483    for (const record of handoffs) {
+ 484      if (!dagRun.nodeStates.has(record.fromNode)) continue;
+ 485      handoff(dagRun, record.fromNode, record.port, record.content);
+ 486    }
+ 487  }
+ 488  
+ 489  function _graphFromPersisted(data: PersistedGraphData): {
+ 490    nodes: DAGGraphNode[];
+ 491    edges: DAGEdge[];
+ 492    loopSources: Set&lt;string&gt;;
+ 493  } {
+ 494    const nodes = data.nodes.map((node): DAGGraphNode =&gt; ({ ...node }));
+ 495    const edges = data.edges.map((edge): DAGEdge =&gt; ({ ...edge }));
+ 496    const loopSources = new Set(
+ 497      nodes
+ 498        .filter((n) =&gt; n.node_type === &quot;loop_gateway&quot; || n.node_type === &quot;while_gateway&quot;)
+ 499        .map((n) =&gt; n.node_id),
+ 500    );
+ 501    return { nodes, edges, loopSources };
+ 502  }
+ 503  
+ 504  function _isRecoverableNodeState(value: string): value is NodeState {
+ 505    return RECOVERABLE_NODE_STATES.has(value);
+ 506  }
+ 507  
+ 508  function _rebuildDagRunFromPersisted(metadata: PersistedRunMetadata, graphData: PersistedGraphData): {
+ 509    dagRun: DAGRun;
+ 510    nodes: DAGGraphNode[];
+ 511  } {
+ 512    const { nodes, edges, loopSources } = _graphFromPersisted(graphData);
+ 513    const graph = { nodes, edges };
+ 514  
+ 515    // Build a DAGRun in a neutral state, then replay history through the engine.
+ 516    const nodeStates = new Map&lt;string, NodeState&gt;();
+ 517    const afterSatisfied = new Map&lt;string, Set&lt;string&gt;&gt;();
+ 518    const inputSatisfied = new Map&lt;string, Set&lt;string&gt;&gt;();
+ 519    const mailboxes = new Map&lt;string, Map&lt;string, unknown[]&gt;&gt;();
+ 520    for (const node of nodes) {
+ 521      nodeStates.set(node.node_id, &quot;PENDING&quot;);
+ 522      afterSatisfied.set(node.node_id, new Set());
+ 523      inputSatisfied.set(node.node_id, new Set());
+ 524      mailboxes.set(node.node_id, new Map());
+ 525    }
+ 526    const dagRun: DAGRun = {
+ 527      runId: metadata.runId,
+ 528      graph,
+ 529      loopSources,
+ 530      nodeStates,
+ 531      handoffedNodes: new Set(metadata.handoffedNodes),
+ 532      afterSatisfied,
+ 533      inputSatisfied,
+ 534      mailboxes,
+ 535    };
+ 536  
+ 537    const snapshot = loadRunSnapshot(metadata.runId);
+ 538    if (snapshot &amp;&amp; snapshot.handoffs.length &gt; 0) {
+ 539      _replayHandoffsInto(dagRun, snapshot.handoffs);
+ 540    }
+ 541  
+ 542    // Layer the authoritative node-state snapshot on top of the replay. The replay
+ 543    // only knows COMPLETED/terminal transitions; transient READY/RUNNING state is
+ 544    // taken from disk and orphaned RUNNING nodes are demoted in a separate step.
+ 545    for (const [nodeId, persistedState] of Object.entries(metadata.nodeStates)) {
+ 546      if (!nodeStates.has(nodeId)) continue;
+ 547      if (_isRecoverableNodeState(persistedState)) nodeStates.set(nodeId, persistedState);
+ 548    }
+ 549  
+ 550    return { dagRun, nodes };
+ 551  }
+ 552  
+ 553  function _applyOrphanedNodeDemotion(run: ActiveRun): string[] {
+ 554    const demotedFromRunning = Array.from(run.dagRun.nodeStates.entries())
+ 555      .filter(([, state]) =&gt; state === &quot;RUNNING&quot;)
+ 556      .map(([nodeId]) =&gt; nodeId);
+ 557  
+ 558    // Apply RUNNING→FAILED demotion: mark sessions and emit the standard
+ 559    // node-failed signal so downstream edges/on_failure are routed.
+ 560    for (const nodeId of demotedFromRunning) {
+ 561      const current = run.nodeSessions.get(nodeId);
+ 562      if (current) {
+ 563        _persistNodeSession(run, nodeId, { ...current, status: &quot;failed&quot; });
+ 564      }
+ 565      failNode(run.dagRun, nodeId, { error: &quot;node lost: manager process restarted&quot; });
+ 566      emit(&quot;dag:node_failed&quot;, {
+ 567        runId: run.runId,
+ 568        nodeId,
+ 569        reason: &quot;node lost: manager process restarted&quot;,
+ 570      });
+ 571    }
+ 572  
+ 573    const skippedBlockedNodes = reconcileFailedDependencies(run.dagRun);
+ 574    for (const nodeId of skippedBlockedNodes) {
+ 575      _markNodeSessionStatus(run, nodeId, &quot;cancelled&quot;);
+ 576    }
+ 577  
+ 578    // A failed prerequisite can leave downstream nodes permanently PENDING. If
+ 579    // recovery has no READY/RUNNING work left, those nodes cannot make progress.
+ 580    const hasFailedNodes = Array.from(run.dagRun.nodeStates.values()).some((state) =&gt; state === &quot;FAILED&quot;);
+ 581    const hasRunnableWork = Array.from(run.dagRun.nodeStates.values())
+ 582      .some((state) =&gt; state === &quot;READY&quot; || state === &quot;RUNNING&quot;);
+ 583    if (hasFailedNodes &amp;&amp; !hasRunnableWork) {
+ 584      for (const [nodeId, state] of run.dagRun.nodeStates.entries()) {
+ 585        if (state === &quot;PENDING&quot;) {
+ 586          run.dagRun.nodeStates.set(nodeId, &quot;SKIPPED&quot;);
+ 587          _markNodeSessionStatus(run, nodeId, &quot;cancelled&quot;);
+ 588        }
+ 589      }</code></pre></div>
+</div></section></main>
+
+<footer><div class="shell">GitHub Trending Monitor · 源码级阅读 · 2026-07-12</div></footer>
+</body>
+</html>
