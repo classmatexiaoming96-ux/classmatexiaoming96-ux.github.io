@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-13</title>
+<meta name="description" content="周一的 AI 主线从“谁的模型更强”转向“谁来部署、谁来审计、谁承担风险”：TCS 扩编 AI 部署工程师，OpenAI 安全部门再现高层变动，Illinois 监管讨论进入独立安全审查细节；社区则把注意力放到现代 coding agents、分布式推理、AI 无法读取的字体，以及 Agent 工具">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-13</span>
+      <span class="sep">·</span>
+      <span>星期一</span>
+      <span class="edition">第 54 期</span>
+    </div>
+    <p class="mh-intro">周一的 AI 主线从“谁的模型更强”转向“谁来部署、谁来审计、谁承担风险”：TCS 扩编 AI 部署工程师，OpenAI 安全部门再现高层变动，Illinois 监管讨论进入独立安全审查细节；社区则把注意力放到现代 coding agents、分布式推理、AI 无法读取的字体，以及 Agent 工具链的可观测性与约束。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">5</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">4</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">5</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">5</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News</span></div>
+    <a class="lead" href="https://news.google.com/rss/articles/CBMixgFBVV95cUxPZHVWMTZfdlZoNHBPbVhNSTktYk5yTzBaN3BOTWc2NjNhczhUWVJVTktLZld3WC0zeGEyREFDZk1kWkFjNzBFaXV0M3JSMC1mNFlPQU9DYy1palFFbTRoUFYxR1JZVDNRVmhCQzREYnMxOGd1cEFhNE9aeTFOVzhDTjF6UVY3b0RzUm5ReWIyQkQ2ZjF2OC1kNG40clpPNzhkTTJZOWJUckc0SUlaWVhaa1VFOVpkVXA3am9aY1I2bWlqODM3N2c?oc=5" target="_blank" rel="noopener">
+      <span class="tag">企业落地</span>
+      <h3>TCS 计划配置最多 8,900 名 AI 部署工程师，并继续寻找 AI 收购标的</h3>
+      <p>Reuters 报道称，Tata Consultancy Services 正把 AI 从咨询叙事推进到实施队伍建设：大规模 deployment engineers 意味着企业客户需要的不只是模型能力，而是迁移、集成、治理和现场交付。</p>
+      <div class="src">◷ <b>Reuters</b> <span class="dotsep">·</span> Sun, 12 Jul 2026 08:37 GMT</div>
+    </a>
+    <div class="rows">
+      <a class="row" href="https://news.google.com/rss/articles/CBMitAFBVV95cUxNQ0w1UFFoTFpubU5UT3RQblNWSlpENThoUDVfQ3hvWnRYT1EwYUcyVU02NkhuZUNIYXV4OEc1alpjRUNaS0I5U1FzQ1VwTGh1elh4bVZqcHdZSVNETHBEZWRtNWhyM19udEJqSzVhemJ3aF9TSHRzYzFPajZZT0JRdmJ0M0VIdDRhLUt1cTZpLVd2UTJ6MTZETlRJZUE5eG9RcW92NHJZZUVBN19LT0V4a0ZiTVU?oc=5" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>OpenAI safety boss 离职，安全治理再次进入执行层面压力测试</h4>
+          <p>在模型能力和商业化速度都继续加速的背景下，安全负责人变动会被市场解读为治理结构信号。今天值得关注的不是人事八卦，而是安全审查、发布节奏和产品责任如何被组织化承接。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">PYMNTS.com</b> <span class="dotsep">·</span> Sun, 12 Jul 2026 21:59 GMT <span class="dotsep">·</span> <span class="tag">组织</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMi0gFBVV95cUxNd3g0ckw5eTI3NHdfTFFCSXhoUzNuZ09WQmhXRjd5YU1EWWlYd2FjRExtOGttVXhXTjVJWlFhNmdkc3IzZmxzaGREVnZlbS1aMEtETHAwVWdfdzROaU9CNmlIY3FROGl0R1JKWTM2dHVVekk5MWo4R01qajMwRTdsdVZVWlo0QTFTU3M5VEgwbEd6blpCZk13ZTNDX0FSX1dsZW43djNVMHBjTkZNMDNMdWdfSGZRM2VXQXlHcF9xZm5HUUp4Snc4MUVSRVdxbEZrNGfSAdcBQVVfeXFMTzk2SXE0aUluWTFLX01LT2NJRGRSQUtOZ1plM0N1UXdEeUs3MVE5dlo3eng0bjJPSDFQZjFweTZsV2Y1elZnMkpDZTNmWmxqZ0FLaTF1MV9pRDhjSzV5VXZEM0VMa3dyX0xkUXhXMWcwdXpTd0R1QzhQRHhpa0h4SmwwaW5sSDhOM29BaktsQU9xbWpOV0hMTXB2cXJfZmVjdmpxWlMxZ2hEampMT0gxVXFhdnVkVTQtZEF4RGVpalgzQ2tyck1NNVEyQUZwT1pSdldfLTRlcGs?oc=5" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Illinois AI 监管讨论转向独立安全审查，责任法案进入落地细节</h4>
+          <p>相比 7 月 7 日“责任法案签署”的上一轮主线，今天的新进展是监管执行面：报道把焦点放到独立安全评估是否会成为关键机制，说明 AI 责任正在从原则文本进入第三方审计和合规流程设计。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">OurQuadCities</b> <span class="dotsep">·</span> Sun, 12 Jul 2026 15:16 GMT <span class="dotsep">·</span> <span class="tag">监管</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMi4wFBVV95cUxQRkdzYnZZcklHa3F5bzkwWktROFVVNjM1RUpFVWw1LUpjdG1PNkxEX2hBYmF6ZmRfSkI3bEY2amFtbVZzRVRVb1BMM3VzQTNSSndfS25lUTJzd3lGT29IUHVkWmZoeGtaUXloQi00ZERfSS11U3ExV1RSSVo5eGZ4SDdwa2oyVTRzQm9iamF4ZlN6VnFKSjIzaFBVOTVwcU1OVzdOVldvZk9pMnhCMHhUWlRFQ3UtV0Y5bWsyR1lpcUg4SDNMaHk5bVkxck1GT25IVTItTUFsY1NacE05R0xwVFVPWQ?oc=5" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Turkcell 宣布横跨五个战略技术层建设 AI 基础设施</h4>
+          <p>运营商正在把 AI 能力建设拆成更完整的技术栈：网络、算力、数据、安全和应用层会一起决定企业能否真正部署 AI，而不是只采购单点模型服务。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">The Fast Mode</b> <span class="dotsep">·</span> Mon, 13 Jul 2026 00:59 GMT <span class="dotsep">·</span> <span class="tag">基础设施</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxPTDM4b014aFl2MHhHSzJmdXlnajd2MFpzV0Q1NC1KZzVkUXdoRDB6Q2hXWXZmM2gzWjQwczBsdlhWc1k2c1JTODZpVWo3RmRQYXMwU2hSa1pFLWs2MTdvSlY1LUNmSDJLNGhDSkI4XzRSM1k3U0tRZ2VET2dvRmFMWHR3YVBmbTZjd1VoNUl1ZUZyUjdSYUVJRElrV0lMekcxZnBBRE9wN0RsWG5MSlMxNTdPeENwUnViVjlTdExHUFZUUUlub1R6VEJjUWxqOFd2Tl9NODFnUGx0aHlHX3RNWmlZNVdrb29XcHJzRmQ5dw?oc=5" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Insilico 预计收入跃升，AI 开发候选药物推进到 Phase III</h4>
+          <p>AI 制药的评价重点正在从“发现速度”转向临床阶段和财务结果。候选药物进入 Phase III 让市场更容易观察 AI 研发管线是否能跨过真实试验和商业化门槛。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Genetic Engineering and Biotechnology News</b> <span class="dotsep">·</span> Sun, 12 Jul 2026 20:35 GMT <span class="dotsep">·</span> <span class="tag">医疗 AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxQODRvWGdDNkFJU3o2S1g1SzZuYkZnQ3puYnZqX25PdGdvVm81eXJ6ZTdXN0VlWG1rUDVGQVhrUnBIcWctaFdzRHN5TVZQM0ZHQWF5cHd4Z2NTSVFObkpFNmxzN0lYa0lxbXZidTNndDRyWTJsb1EydmFSdnlkbnlzd3ZMaEFrQ3RSblI0NEJHSzFacUh0bkhYeWt6b0dBRm1QcFYza2NRdk9zQkZCSDdvekNJdWZoSTNQd0tZWW5fcUlNY0FjU3dPVjB5cGdUME9ZeTljNjBmSG05SXhSTTVz?oc=5" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>DGIST 展示可区分数万种气味的 AI 电子鼻技术</h4>
+          <p>这类“AI + 传感器”进展提示多模态不只发生在图文视频里，也在进入化学、医疗和工业检测。阅读价值在于它展示了 AI 系统与专用硬件共同定义新数据模态的路线。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Asia Research News</b> <span class="dotsep">·</span> Mon, 13 Jul 2026 02:31 GMT <span class="dotsep">·</span> <span class="tag">研究转化</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.09653v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>VEXAIoT: Autonomous IoT Vulnerability EXploitation using AI Agents</h4>
+          <p><b>为什么值得看：</b>把 Agent 放进 IoT 漏洞利用链，而不是只做静态扫描，能帮助安全团队评估“自主攻击代理”在真实设备生态中的风险边界和防御需求。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-10 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.09649v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>ConceptSMILE: Auditing the Trustworthiness of Concept-Based Explainable AI</h4>
+          <p><b>为什么值得看：</b>概念式可解释 AI 常被当成“更可信”的默认答案，这篇把审计对象放在概念层本身，适合关注模型解释、合规和安全评估的人读。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-10 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.09600v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Agora: Enhancing LLM Agent Reasoning Via Auction-Based Task Allocation</h4>
+          <p><b>为什么值得看：</b>多 Agent 系统最难的是任务分配和责任边界。用拍卖机制做 allocation 提供了一个可分析、可比较的协调框架，比“让一个 orchestrator 随便分派”更值得工程化验证。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-10 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.09586v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>TrustX Agent Risk Classification Framework (ARC): Risk-Tiering Internally Created Agentic AI Systems</h4>
+          <p><b>为什么值得看：</b>企业内部自建 Agent 越多，越需要可执行的风险分层。这篇的价值在于把“Agent 风险”从抽象担忧拆成可分类、可治理的内部框架。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-10 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.09654v1" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Evolution of Accuracy and Visual-Cognitive Errors in a Decade of Vision-Language AI Models</h4>
+          <p><b>为什么值得看：</b>这篇不是又一个单点 benchmark，而是看十年视觉语言模型错误类型如何演化。对做多模态产品的人来说，它能帮助判断哪些错误会随规模消失，哪些可能长期存在。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-10 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit</span></div>
+    <div class="rows">
+      <a class="row" href="https://terrytao.wordpress.com/2026/07/11/old-and-new-apps-via-modern-coding-agents/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Terry Tao 讨论现代 coding agents：旧应用如何借新代理重写工作流</h4>
+          <p>高热度来自一个罕见视角：不是让 Agent 炫技，而是观察它们如何把老应用、脚本和研究工具重新连接起来。讨论重点落在可审查性、可复现和人类仍需保留的判断。</p>
+          <div class="quote">“社区共识更像是：coding agent 的价值不只是生成代码，而是重排一个人使用软件的方式。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 419 <span class="dotsep">·</span> 💬 122</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://geohot.github.io//blog/jekyll/update/2026/07/12/i-love-llms.html" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>“I love LLMs, I hate hype”继续刷屏，社区在给 AI 热潮降温</h4>
+          <p>这类帖子高热说明开发者并非反 AI，而是在反对过度营销、虚假自动化和不负责任的替代叙事。它和今天的 Agent 工具讨论形成互补：真价值需要落到工程可验证性上。</p>
+          <div class="quote">“喜欢 LLM 和厌恶 hype 并不矛盾，反而是把工具用好的前提。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 333 <span class="dotsep">·</span> 💬 202</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://spectrum.ieee.org/ai-science-research-flattens-discovery" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AI 提升科研职业产出，但可能收窄探索想法跨度</h4>
+          <p>Spectrum IEEE 的讨论点比“AI 提效”更细：当工具把研究者推向更快产出时，是否也会让大家围绕相似问题收敛。对团队管理者来说，这是采用 AI research tooling 时必须跟踪的副作用。</p>
+          <div class="quote">“效率提升如果伴随想法空间变窄，就不能只用论文数量衡量进步。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 140 <span class="dotsep">·</span> 💬 100</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.off-policy.com/dont-go-quietly-into-the-ai-night/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>“Who manages the agents?”把讨论拉回组织责任：Agent 越多，谁来管</h4>
+          <p>社区开始从单个 Agent 能力转向管理面：权限、预算、任务优先级、失败复盘和人类责任链。对企业来说，Agent 管理可能会比 Agent 构建更早成为瓶颈。</p>
+          <div class="quote">“Agent 不是雇员，但会制造需要像雇员一样管理的工作流和风险。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 73 <span class="dotsep">·</span> 💬 92</div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Products & Concepts</span></div>
+    <div class="cards">
+      <a class="card" href="https://github.com/cosmtrek/mindwalk" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🗺</span>
+          <h4>Mindwalk</h4>
+        </div>
+        <p class="tagline">把 coding-agent session 回放成代码库 3D 地图</p>
+        <p>它抓住了 Agent 开发的新痛点：不是“能不能生成”，而是事后如何理解 Agent 在代码库里走过哪些路径、改动依据是什么。</p>
+        <div><span class="tag">可观测性</span></div>
+      </a>
+      <a class="card" href="https://www.adaptiverecall.com/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧠</span>
+          <h4>Adaptive Recall</h4>
+        </div>
+        <p class="tagline">面向 AI assistants 的 MCP 持久记忆</p>
+        <p>记忆正在从单应用功能变成可通过 MCP 共享的外部能力。关键看它如何处理权限、遗忘、检索质量和跨工具一致性。</p>
+        <div><span class="tag">MCP Memory</span></div>
+      </a>
+      <a class="card" href="https://sxp.studio/apps/subz" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎛</span>
+          <h4>SubjectiveZero</h4>
+        </div>
+        <p class="tagline">面向 creative coding 的开源 agentic node editor</p>
+        <p>它把 Agent 放进节点式创作环境，值得看的是人类如何在可视化图里约束、组合和复用模型步骤，而不是只靠聊天窗口驱动。</p>
+        <div><span class="tag">Creative Agent</span></div>
+      </a>
+      <a class="card" href="https://www.zot.sh/docs/zotfiles" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">📄</span>
+          <h4>Zotfile Agents</h4>
+        </div>
+        <p class="tagline">把 agent 配置沉淀成项目文件</p>
+        <p>Zotfile 的思路接近“Agent 基础设施即配置”：把上下文、工具和执行习惯放进可版本化文件，适合团队复用和审查。</p>
+        <div><span class="tag">Agent Config</span></div>
+      </a>
+      <a class="card" href="https://github.com/ninjahawk/Confessor" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🔎</span>
+          <h4>Confessor</h4>
+        </div>
+        <p class="tagline">回放 Claude Code 在电脑上访问过的私密信息</p>
+        <p>Agent 权限越大，事后审计越重要。Confessor 把“它到底看了什么”变成可回放证据，补上本地 Agent 安全的一块缺口。</p>
+        <div><span class="tag">Privacy Audit</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" href="https://github.com/Dicklesworthstone/destructive_command_guard" target="_blank" rel="noopener">
+      <div>
+        <div class="name">Dicklesworthstone / <b>destructive_command_guard</b></div>
+        <div class="desc">面向终端和 coding agents 的破坏性命令防护层，适合放在自动化执行链路前做最后拦截。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#dea584"></span>Rust</span> <span class="dotsep">·</span> <span class="tag">Agent Safety</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 3,018</div>
+        <div class="today">▲ 444 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/HKUDS/Vibe-Trading" target="_blank" rel="noopener">
+      <div>
+        <div class="name">HKUDS / <b>Vibe-Trading</b></div>
+        <div class="desc">把 LLM agent、交易策略和研究工作流结合起来的 Python 项目，今天继续高增长。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Trading Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 20,658</div>
+        <div class="today">▲ 768 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/ColeMurray/background-agents" target="_blank" rel="noopener">
+      <div>
+        <div class="name">ColeMurray / <b>background-agents</b></div>
+        <div class="desc">面向后台运行的 Agent 模式示例，适合观察长任务、状态管理和异步执行的最小实现。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Agent Runtime</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 2,283</div>
+        <div class="today">▲ 16 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/k1tbyte/Wand-Enhancer" target="_blank" rel="noopener">
+      <div>
+        <div class="name">k1tbyte / <b>Wand-Enhancer</b></div>
+        <div class="desc">C# 项目今日新增 609 stars，显示 AI 辅助增强类桌面/创作工具仍在开源榜上有强需求。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>C#</span> <span class="dotsep">·</span> <span class="tag">AI Tooling</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 6,988</div>
+        <div class="today">▲ 609 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/pingdotgg/t3code" target="_blank" rel="noopener">
+      <div>
+        <div class="name">pingdotgg / <b>t3code</b></div>
+        <div class="desc">TypeScript 开发工具项目，适合关注现代 web stack 与 AI/code tooling 结合的人继续观察。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Developer Tool</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 13,770</div>
+        <div class="today">▲ 75 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <a class="back" href="index.html">← 返回 · 浏览其他日报</a>
+      <span class="made">生成于 2026-07-13 10:48 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 自动汇编：要闻来自 Google News，AI 论文来自 arXiv，社区热议来自 Hacker News / Reddit，
+      开源热门来自 GitHub Trending，产品与概念由上述信源综合提炼。摘要为机器辅助整理，链接指向原始信源；
+      如有出入请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
