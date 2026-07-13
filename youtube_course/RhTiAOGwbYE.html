@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP 从零实战：亲手构建 Server 与 Client — KodeKloud</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .back-link svg { width: 14px; height: 14px; }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+      font-size: 0.98rem;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #000;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+      margin-bottom: 32px;
+    }
+
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .content-card:hover { border-color: var(--border-hover); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+    .content-card:hover::before { opacity: 1; }
+
+    .section { margin: 36px 0; }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 24px 0 12px;
+    }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875em;
+      color: var(--accent-cyan);
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 14px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-color);
+      margin: 18px 0;
+    }
+
+    pre code { background: transparent; padding: 0; color: var(--text-secondary); }
+
+    .rec-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .rec-list a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      padding: 12px 14px;
+      transition: all 0.2s ease;
+    }
+
+    .rec-list a:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99,179,237,0.08); }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 50px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+      table { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">MCP 从零实战：亲手构建 Server 与 Client</h1>
+    <p class="subtitle">MCP Tutorial: Build Your First MCP Server and Client from Scratch (Free Labs)</p>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ 40:14</span>
+      <span class="meta-badge source">📺 KodeKloud</span>
+      <span class="meta-badge">🔗 Model Context Protocol</span>
+      <span class="meta-badge">👀 352,363 views</span>
+    </div>
+  </header>
+
+  <main style="position: relative; z-index: 1;">
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/RhTiAOGwbYE" title="MCP Tutorial: Build Your First MCP Server and Client from Scratch" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <div class="content-card">
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>问题引入：为什么 Agent 需要 MCP</h2>
+        <p>这支 KodeKloud 课程的切入点很直接：LLM 本身只能生成文本、图像、音频这类输出，它不会天然替你订机票、查数据库、读浏览器控制台、对接 SaaS API。真正能“行动”的，是围绕 LLM 的 Agent；而 Agent 要行动，就必须知道有哪些外部能力可用、每个能力怎么调用、调用结果如何回到上下文里。</p>
+        <p>视频用“Flight GPT”作类比：用户说想从一个城市飞到另一个城市，理想系统不只是回答一句建议，而是能查询多个航班服务、结合偏好比较价格和座位、再把候选结果交给 LLM 决策。难点不在“模型会不会理解机票”，而在“模型如何可靠发现并调用订票系统”。</p>
+        <blockquote>视频的核心判断可以概括为：MCP 不是另一个聊天协议，而是给 Agent 使用外部能力的一套发现、描述和调用约定。</blockquote>
+        <p>如果没有 MCP，每接一个第三方平台，开发者都要给 Agent 单独写 API 适配、参数说明、错误处理、返回值解释。接口命名可能是 <code>/api/flights</code>、<code>flights/list</code> 或 <code>listFlights</code>，语义相同但形状不同；Agent 很难凭空知道哪个接口能完成当前任务。MCP 的价值就是把这些外部能力包装成可发现的 tools、resources 和 prompts，让客户端按统一方式询问服务器：“你能做什么？”</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>核心概念：MCP 的三层角色</h2>
+        <p>视频反复强调 MCP 是 client-server 架构。Agent 通常不是直接实现所有协议细节，而是通过内置 MCP client 连接一个或多个 MCP server。Cursor、Windsurf、Claude Code、Claude Desktop 这类工具往往已经内置 client；你要做的是配置 server，或者为自己的 Agent 写一个 client。</p>
+        <h3>1. MCP Host：用户实际操作的地方</h3>
+        <p>Host 可以是 IDE、桌面应用、聊天工具或你自己写的 Agent 应用。用户在这里发起请求，Host 负责协调 LLM、上下文和一组 MCP client。对用户而言，Host 是“AI 助手”；对工程师而言，它是运行工具调用循环的外壳。</p>
+        <h3>2. MCP Client：和某个 Server 对话的协议端</h3>
+        <p>Client 通常一对一连接 server，负责初始化、能力发现、工具调用、资源读取和 prompt 获取。视频后半段会手写 client，就是为了说明：即便没有 IDE 内置支持，你也能把 MCP 接进自己的 Agent。</p>
+        <h3>3. MCP Server：把外部系统变成可调用能力</h3>
+        <p>Server 可以本地运行，也可以远程托管。它暴露的不应该只是“API 文档”，而是 Agent 能理解和调用的能力集合：工具代表动作，资源代表可读数据，prompts 代表可复用提示模板。一个航班 MCP server 可以把航班查询、机场列表、订票偏好说明都以这些结构交给 client。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>协议底座：JSON-RPC 与 Transport</h2>
+        <p>课程中间有一段很重要：MCP 的消息格式基于 JSON-RPC。JSON-RPC 本身很轻，只规定 request、response、method、params、id 这些基础结构，不规定数据必须通过什么通道传。MCP 在此之上定义了 client 与 server 如何初始化、列出能力、调用工具和读取资源。</p>
+        <p>这就解释了为什么 MCP 同时支持本地 <code>stdio</code> 和网络 <code>HTTP</code>。如果 server 跟 IDE 在同一台机器上，标准输入输出最简单：不用开端口，不用处理网络层，只要两个本地进程能互相读写文本流即可。如果 server 面向组织内多个用户或由供应商托管，HTTP 更适合治理、认证、部署和共享。</p>
+        <table>
+          <thead><tr><th>传输方式</th><th>适用场景</th><th>优点</th><th>风险或注意点</th></tr></thead>
+          <tbody>
+            <tr><td><strong>stdio</strong></td><td>本地 IDE、Claude Code、Cursor 调试本机 server</td><td>轻量、隔离、启动快；不用端口和反向代理</td><td>生命周期通常由 Host 管理，日志和错误输出要区分清楚</td></tr>
+            <tr><td><strong>HTTP</strong></td><td>组织内部共享 server、供应商托管 server、跨机器访问</td><td>便于认证、监控、限流和集中部署</td><td>需要处理安全边界、网络可用性、版本兼容和权限隔离</td></tr>
+            <tr><td><strong>WebSocket / 其他通道</strong></td><td>更复杂的实时或双向场景</td><td>可以保留长连接和实时反馈</td><td>不是入门优先项，协议和基础设施复杂度更高</td></tr>
+          </tbody>
+        </table>
+        <blockquote>把 MCP 理解成“HTTP API 的替代品”会偏；更准确地说，它把 API 能力整理成 Agent 能发现、选择和调用的协议面。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>先用现成 Server：从配置开始理解调用链</h2>
+        <p>视频采用“先学开车，再学造车”的顺序：先配置一个已有 MCP server，再亲手实现 server 和 client。配置阶段的重点不是写代码，而是理解 IDE 如何启动 server。以 Cursor 或类似工具为例，项目里会有 <code>mcp.json</code>，里面声明 server 名称、启动命令、参数、工作目录和必要环境变量。</p>
+        <pre><code>{
+  "mcpServers": {
+    "flight-booking": {
+      "command": "uv",
+      "args": ["run", "python", "server.py"],
+      "cwd": "/path/to/flight-booking"
+    }
+  }
+}</code></pre>
+        <p>配置保存后，Host 会以 stdio 模式启动 server。刷新 MCP server 列表时，IDE 能看到这个 server 是否在线，并展示其 tools 与 resources。课程里的验证方式是让 Agent 查询 LAX 到 JFK 的航班；当 Agent 请求使用 flight booking tool 并得到航班列表，就说明 client-server 链路已经跑通。</p>
+        <p>这里最值得注意的是权限确认：当 AI 想调用工具时，Host 通常会提示用户批准。这一层交互不是多余的 UI，而是 Agent 工程里的安全边界。MCP 让能力可发现，但不等于所有能力都应自动执行。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>亲手构建 Server：Tools、Resources、Prompts</h2>
+        <p>构建 server 时，课程把能力拆成三类。很多入门者只记住“tool calling”，但 MCP 的信息面比 tool 更完整。一个好 server 不只提供动作，还应该提供可读上下文和可复用的任务模板。</p>
+        <h3>Tools：让 Agent 做动作</h3>
+        <p>Tools 是最像传统 API 的部分，例如查询航班、按条件筛选航班、提交预订请求。工具定义应包含清晰名称、描述和参数 schema。名称要从 Agent 视角表达能力，而不是暴露内部 REST 路径。与其叫 <code>api_flights_v2_get</code>，不如叫 <code>search_flights</code>。</p>
+        <h3>Resources：让 Agent 读数据</h3>
+        <p>Resources 更适合稳定、可枚举、只读的数据，例如机场列表、舱位规则、供应商说明。视频演示里，配置成功后可以在 IDE 里看到可用的机场文件资源。资源的好处是减少“把所有资料塞进 prompt”的冲动，让 Agent 在需要时读取。</p>
+        <h3>Prompts：把常用任务包装成模板</h3>
+        <p>Prompts 是可复用的交互模板，比如“帮我找从 A 到 B 的经济舱航班，并优先考虑少转机”。它们不是替代用户输入，而是给 Host 或 Agent 一个更稳定的任务入口。对企业场景而言，这有助于把业务流程从临时 prompt 变成可维护资产。</p>
+        <table>
+          <thead><tr><th>MCP 能力</th><th>它解决什么问题</th><th>航班示例</th><th>工程建议</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tool</strong></td><td>执行动作或查询动态结果</td><td>按出发地、目的地、日期搜索航班</td><td>参数 schema 要严格，错误信息要给模型可恢复线索</td></tr>
+            <tr><td><strong>Resource</strong></td><td>提供只读上下文</td><td>机场代码、城市映射、舱位政策</td><td>适合稳定资料；避免把大段文档默认塞进上下文</td></tr>
+            <tr><td><strong>Prompt</strong></td><td>复用任务模式</td><td>商务出行、低价优先、家庭出行三种搜索模板</td><td>适合沉淀业务流程和团队最佳实践</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>亲手构建 Client：当你要写自己的 Agent</h2>
+        <p>大多数开发者一开始会使用内置 MCP client 的工具，但视频最后仍然讲了自定义 client，因为这是理解 MCP 边界的关键：如果你在做自己的 Agent 平台，不能假设用户一定在 Cursor 或 Claude Desktop 里工作。你需要在自己的应用里完成初始化、能力发现、工具选择和响应回填。</p>
+        <p>一个最小 client 的生命周期大致是：启动或连接 server，发送初始化消息，读取 server capabilities，向 LLM 展示可用工具，在模型选择某个 tool 后发起调用，再把结果作为上下文交回模型。这里真正复杂的地方不在 JSON 序列化，而在“调用结果如何影响下一步推理”。</p>
+        <pre><code>// 伪代码：MCP client 的最小循环
+connect(server)
+capabilities = initializeAndListCapabilities()
+tools = capabilities.tools
+modelResponse = llm.ask(userMessage, tools)
+if modelResponse.toolCall:
+  result = mcp.callTool(modelResponse.toolCall.name, modelResponse.toolCall.args)
+  finalAnswer = llm.askWithToolResult(userMessage, result)</code></pre>
+        <p>这个循环解释了为什么 MCP 与普通 SDK 不同。SDK 面向人写代码；MCP 面向 Agent 运行时。它需要让模型理解工具何时可用、参数怎么填、失败后如何修正、结果是否足以回答用户。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">七</span>决策矩阵：什么时候该上 MCP</h2>
+        <p>MCP 很热，但不应变成“所有集成都要 MCP”的条件反射。视频的实战路径更接近务实工程：本地学习可以先用 stdio server；组织共享能力再考虑 HTTP；如果只是一个脚本内部调用某个 API，普通 SDK 或 CLI 可能更简单。</p>
+        <table>
+          <thead><tr><th>需求</th><th>优先方案</th><th>为什么</th><th>不适合的情况</th></tr></thead>
+          <tbody>
+            <tr><td>单个脚本自动化任务</td><td>普通 SDK / CLI</td><td>调用方确定、流程固定，MCP 会增加运行时复杂度</td><td>多个 Agent 都要动态发现和复用同一能力</td></tr>
+            <tr><td>IDE 内本地调试工具</td><td>本地 MCP server + stdio</td><td>启动轻、权限边界清楚，适合开发者机器</td><td>需要跨团队集中审计和限流</td></tr>
+            <tr><td>企业共享内部能力</td><td>远程 MCP server + HTTP</td><td>便于统一认证、治理、版本管理和观测</td><td>接口仍处于频繁试验期，契约不稳定</td></tr>
+            <tr><td>供应商希望 AI 工具接入产品</td><td>官方 MCP server</td><td>把 API 能力以 Agent 友好的方式发布，减少社区适配碎片</td><td>没有清晰权限模型或 API 本身不适合自动执行</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">八</span>实现时最容易踩的坑</h2>
+        <h3>把内部 API 名称直接暴露给模型</h3>
+        <p>模型选择工具时依赖名称和描述。如果工具名只是内部路由或历史包袱，Agent 会更容易误选。MCP server 应该把外部能力重新整理成语义清晰的动作，而不是把 REST API 原样转成 tool 列表。</p>
+        <h3>资源和工具混在一起</h3>
+        <p>机场代码表、产品目录、配置说明这类稳定数据，不一定要做成 tool。把它们放进 resources，Agent 可以按需读取，调用日志也更清楚。工具更适合产生动态结果或改变外部状态。</p>
+        <h3>忽略权限与确认</h3>
+        <p>课程中的工具调用会要求用户批准，这是值得保留的设计。查询类 tool 可以低风险自动化，写入类、购买类、发送类动作应有更强确认。MCP 让能力标准化，不代表安全审查可以省略。</p>
+        <h3>只做 server，不测试 client 行为</h3>
+        <p>server 列出 tools 并不等于 Agent 会正确使用。真正的验收应包括端到端 prompt：用户提出自然语言任务，Agent 发现能力、选对工具、填对参数、处理结果，并在失败时能重试或解释限制。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">九</span>时间戳目录</h2>
+        <table>
+          <thead><tr><th>时间</th><th>章节</th><th>你应该关注什么</th></tr></thead>
+          <tbody>
+            <tr><td>00:00</td><td>课程目标</td><td>从零解释 MCP，随后使用现成 server，再构建 server 与 client。</td></tr>
+            <tr><td>00:50</td><td>为什么只靠 LLM 不够</td><td>Flight GPT 示例说明模型生成文本和 Agent 执行动作之间的差距。</td></tr>
+            <tr><td>03:30</td><td>API 混乱与工具发现问题</td><td>同一业务能力可能有多种接口命名，Agent 需要统一能力描述。</td></tr>
+            <tr><td>08:13</td><td>MCP client-server 架构</td><td>Host、client、server 的职责分离，以及 IDE/Claude Code 这类工具的位置。</td></tr>
+            <tr><td>13:50</td><td>JSON-RPC 与 MCP 能力</td><td>理解 request/response 格式，以及 resources、prompts、tools 的作用。</td></tr>
+            <tr><td>16:30</td><td>使用现有 MCP server</td><td>配置 <code>mcp.json</code>，通过 stdio 启动本地 server，并在 IDE 中验证 tools/resources。</td></tr>
+            <tr><td>23:00</td><td>构建 flight booking server</td><td>为航班场景添加工具、资源和 prompts，并让 Root Code/IDE 使用。</td></tr>
+            <tr><td>33:00</td><td>构建 MCP client</td><td>当你要开发自己的 Agent 时，需要自己实现连接、能力发现和工具调用循环。</td></tr>
+            <tr><td>39:00</td><td>总结与练习</td><td>用 lab 环境复现 server/client，继续扩展 prompts 和业务能力。</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">十</span>推荐阅读路径</h2>
+        <p>如果你已经理解这支视频，可以继续沿两条线深入：一条是 MCP 协议和工具治理，另一条是 Agent 工程中“什么时候用工具、什么时候用子智能体”的架构判断。</p>
+        <div class="rec-list">
+          <a href="index.html">返回课程列表</a>
+          <a href="HNzH5Us1Rvg.html">MCP 201：模型上下文协议进阶</a>
+          <a href="B44bXmzU60s.html">把 MCP 变成虚拟文件系统</a>
+          <a href="mWvtOHlZM-I.html">工具、技能还是子智能体？</a>
+          <a href="X_zVY3-mbM8.html">Claude Code 2026 完整入门</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=RhTiAOGwbYE" target="_blank">▶ 原视频</a>
+  </footer>
+</body>
+</html>
