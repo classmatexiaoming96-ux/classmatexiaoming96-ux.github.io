@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 本地 AI 编程环境指南：从模型选择到 Claude Code Router</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a8b3c7;
+      --text-muted: #738096;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --card-border-hover: rgba(99,179,237,0.3);
+    }
+    body {
+      background:
+        radial-gradient(circle at 20% 0%, rgba(99,179,237,0.12), transparent 28rem),
+        radial-gradient(circle at 80% 10%, rgba(159,122,234,0.10), transparent 30rem),
+        var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    .wrap { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 32px 0 64px; }
+    .back-link, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+    .back-link:hover, .btn:hover { background: var(--accent); color: var(--bg-primary); }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin: 24px 0 2rem;
+    }
+    .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: 0; margin-bottom: 12px; }
+    h1 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.08; margin-bottom: 16px; letter-spacing: 0; }
+    .subtitle { color: var(--text-secondary); font-size: 1.05rem; max-width: 760px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .pill {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.88rem;
+    }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: #000;
+      margin: 28px 0;
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { font-size: 1.45rem; margin: 34px 0 14px; color: var(--text-primary); }
+    h3 { font-size: 1.08rem; margin: 22px 0 10px; color: var(--accent); }
+    p { color: var(--text-secondary); margin-bottom: 14px; }
+    strong { color: var(--text-primary); }
+    ul, ol { color: var(--text-secondary); padding-left: 24px; margin: 0 0 16px; }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 4px solid var(--accent-purple);
+      background: rgba(159,122,234,0.09);
+      color: var(--text-primary);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 18px;
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+    }
+    th, td { border: 1px solid var(--card-border); padding: 12px; vertical-align: top; text-align: left; }
+    th { color: var(--text-primary); background: rgba(255,255,255,0.07); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+    }
+    .toc li { border: 1px solid var(--card-border); border-radius: 8px; padding: 10px 12px; background: rgba(255,255,255,0.035); }
+    .time { color: var(--accent-green); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 800; }
+    .recommendations { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-top: 12px; }
+    .rec {
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      background: rgba(255,255,255,0.035);
+    }
+    .rec:hover { border-color: var(--card-border-hover); color: var(--text-primary); }
+    .rec span { display: block; color: var(--accent); font-weight: 800; margin-bottom: 6px; }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 24px, 980px); padding-top: 20px; }
+      .hero, .content-card { padding: 1.1rem; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">Local AI Coding · 2026 实战课</div>
+      <h1>2026 本地 AI 编程环境指南：从模型选择到 Claude Code Router</h1>
+      <p class="subtitle">英文原题：The Ultimate Local AI Coding Guide For 2026。视频核心不是“买最贵显卡”，而是把 VRAM、上下文窗口、推理速度和工具接入方式放在同一张决策表里，建立能落地的本地 AI 编程工作流。</p>
+      <div class="meta">
+        <span class="pill">频道：Zen van Riel</span>
+        <span class="pill">时长：36:03</span>
+        <span class="pill">Video ID：rp5EwOogWEw</span>
+        <span class="pill">播放量：未公开抓取</span>
+      </div>
+    </header>
+
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/rp5EwOogWEw" title="The Ultimate Local AI Coding Guide For 2026" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么工程师还要关心本地模型</h2>
+      <p>这个视频的出发点很直接：很多 AI 工程师已经习惯把所有编程任务交给云端 API，但一旦项目里有私有代码、离线环境、成本约束，或者需要低延迟的小工具，本地 AI 编程就不再是玩具。作者用自己的 Windows 工作站演示，但反复强调课程的原则适用于 Linux、macOS 和 Windows：先理解硬件约束，再选择模型，最后把模型接到真正的代码代理里。</p>
+      <p>值得注意的是，作者没有把“本地”包装成云模型的全面替代。他一开始就承认 RTX 5090 属于顶级消费硬件，也说明不需要同等显卡才能开始。真正需要掌握的是：显存能装下什么模型，长上下文会怎样消耗显存，模型越大推理越慢，编程代理把仓库文件塞进上下文后会发生什么。</p>
+      <blockquote>
+        <p>本地 AI 编程的关键不是追求最大参数量，而是在你的显存、上下文和等待时间之间找到能持续工作的平衡点。</p>
+      </blockquote>
+      <p>因此，这节课适合两类人：一类是想把小型脚本、私有仓库或内部工具放在本地模型上跑的开发者；另一类是已经使用 Claude Code、Continue、Kilo Code 等工具，但想知道这些工具能否连接 LM Studio 或 Ollama 的工程师。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：本地 AI 编程不是只下载一个模型</h2>
+      <h3>1. LM Studio / Ollama 的角色</h3>
+      <p>作者选择 LM Studio 作为入门工具，因为它有图形界面，可以搜索、下载、加载模型，并在聊天窗口里先做基本测试。Ollama 更偏终端和服务化场景，适合已经熟悉命令行的人。两者最重要的共同点是：通常都会暴露一个 OpenAI 兼容 API，让下游工具用熟悉的 chat completions 接口调用本地模型。</p>
+      <p>这点是后续所有接入的基础。Continue、Kilo Code、Claude Code Router 之所以能吃到本地模型，不是因为它们专门为某个模型适配，而是因为 LM Studio 把模型包装成了一个 HTTP 服务。你需要确认本地 server 已启动，并知道基础 URL、chat completions endpoint、模型名和一个占位 API key。</p>
+
+      <h3>2. VRAM、参数量和上下文窗口</h3>
+      <p>视频中最实用的部分，是把模型选择从“参数越大越好”拉回到工程约束。一个 20B 模型在 50K token 上下文下可能占用约 20GB 显存，而 32B 模型在 75K token 场景下可能飙到 45GB 显存，直接超过普通单卡工作站承受范围。对真实编程任务来说，上下文窗口尤其重要，因为代理会读取文件、计划、错误日志和历史对话。</p>
+      <p>如果你只是让模型生成一个全新的 Python class，短上下文会很快，作者演示的小模型甚至能达到每秒一百多 token。但当模型变大、上下文变长、仓库文件变多之后，速度会明显下降。等待三十分钟拿一个简单改动，这就失去了本地模型的意义。</p>
+
+      <h3>3. 代码代理接入的共同模式</h3>
+      <p>无论是 Continue、Kilo Code 还是 Claude Code Router，接入思路基本一致：把本地服务当成一个自定义 provider。配置项通常包括 API Base URL、chat completions 路径、模型 ID、API key 占位符、上下文长度或 token budget。作者在 Continue 中演示了选择模型、添加 chat model，并说明这些界面只是不同工具的外壳，本质都是调用同一个本地 HTTP endpoint。</p>
+      <p>Claude Code Router 的价值在于，它可以把 Claude Code 这类工具的请求路由到非 Anthropic 模型，包括 LM Studio 中加载的本地模型。作者启动 `CCR UI`，新增 provider，填入 LM Studio 的 chat completions URL，再复制模型名。这样做的意义不是获得完全等同于云端 Claude 的体验，而是在更熟悉的 Agent 工作流里测试本地模型能处理哪些任务。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点 / 实操步骤</h2>
+      <h3>步骤 1：先用 LM Studio 验证模型能跑</h3>
+      <p>第一步不要急着接入 IDE。先在 LM Studio 里下载一个适合自己显存的 coding model，加载时观察显存占用，再用简单任务测试速度和输出质量。作者用“生成一个包含不同器械的 gym class”作为基准任务，这不是为了证明模型会写复杂项目，而是为了快速观察 token/s、响应延迟和基础代码风格。</p>
+      <p>这个测试应该至少覆盖两种设置：一种是较小模型配较长上下文，另一种是较大模型配较短或中等上下文。两者能帮你看清“速度、质量、上下文容量”之间的取舍。不要只看一次输出是否正确，更要看交互是否能承受，因为编程代理通常需要多轮修改。</p>
+
+      <h3>步骤 2：按真实仓库需求设置上下文窗口</h3>
+      <p>如果你的项目只有几个文件，低上下文也能工作；如果是中等规模前端或后端仓库，代理可能很快把文件内容、报错和计划塞满上下文。视频中的关键提醒是：上下文窗口会显著增加显存占用，而且模型参数越大，增长越难承受。因此要根据项目类型设置合理上限，而不是盲目把 context slider 拉满。</p>
+      <p>实操上，建议先从 16K 或 32K 上下文开始。若常常出现模型忘记前文、无法同时处理多个文件，再逐步提高。每次提高后都记录显存占用和生成速度，形成自己的硬件基线。对 MacBook 这类统一内存设备，也要注意系统和其他应用会共享同一块内存。</p>
+
+      <h3>步骤 3：启动本地 OpenAI 兼容服务</h3>
+      <p>LM Studio 的 Developer tab 里可以启动本地 server。你需要复制本地 URL，并在工具里补全类似 `/v1/chat/completions` 的路径。很多错误都发生在这里：只填了基础 URL、忘了 chat completions endpoint，或者模型名没有完全复制。作者演示时还特别说明，本地模型没有真正的 API key，但有些工具表单要求必填，此时可以填一个占位字符串。</p>
+      <p>验证服务是否可用时，可以先让工具列出 models，或者直接发一个极短 prompt。只有这个环节稳定，再去接复杂的代码仓库。这样排错路径会清楚得多：先确认模型已加载，再确认 server 正在监听，再确认工具 provider 配置正确，最后才排查代理的上下文策略。</p>
+
+      <h3>步骤 4：在 Continue / Kilo Code 中做低风险任务</h3>
+      <p>本地模型接到 VS Code 后，最适合先做低风险任务：解释单个文件、生成小函数、重命名局部变量、提出样式改进方案、补简单测试。视频结尾的示例是把一个 `index.html` 文件拖给 Claude Code UI，让本地模型提出三种样式改进方案。这个任务不要求模型跨仓库推理，也不需要它直接修改关键业务逻辑，因此很适合作为首次验收。</p>
+      <p>如果模型在这类任务上表现稳定，再逐步扩大到小型重构或脚本生成。对于大型项目、生产事故、跨模块迁移，作者建议仍然保留云端顶级模型，因为本地模型容易被上下文窗口和速度限制卡住。</p>
+
+      <h3>步骤 5：用 Claude Code Router 复用熟悉的工作流</h3>
+      <p>Claude Code Router 的演示重点在 provider 配置。启动 UI 后，新增 LM Studio provider，填入 chat completions URL、占位 key 和精确模型名。配置完成后，Claude Code 的请求可以被路由到本地模型。这样做能让用户保留原本的交互模式，比如计划模式、文件上下文和命令式对话，但后端模型换成本地服务。</p>
+      <p>这里最大的风险是预期管理。你可以获得更可控、可能更私密、更低边际成本的推理，但不会自动得到云端 Claude 的长上下文能力、工具调用稳健性或复杂推理质量。把它定位为“本地小任务执行器”和“离线/隐私场景补位”，会比把它当作云模型替代品更稳。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>方案</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险与限制</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LM Studio + 本地 coding model</td>
+            <td>个人工作站、首次尝试本地模型、需要图形界面调参</td>
+            <td>下载和加载模型直观，Developer server 易于开启，适合观察 VRAM 和速度</td>
+            <td>大模型和长上下文会快速吃满显存，图形界面对批量自动化不如 CLI 灵活</td>
+            <td>作为入门首选；先建立硬件基线，再接 IDE 工具</td>
+          </tr>
+          <tr>
+            <td>Ollama 或同类 CLI 服务</td>
+            <td>偏终端、脚本化、服务器部署、团队共享模型服务</td>
+            <td>命令行自动化更方便，适合和内部工具链集成</td>
+            <td>新手需要理解模型拉取、服务端口、环境变量和日志排错</td>
+            <td>熟悉本地模型后再迁移；适合长期服务化使用</td>
+          </tr>
+          <tr>
+            <td>Continue / Kilo Code + 本地 API</td>
+            <td>VS Code 内解释文件、生成小函数、做轻量改动</td>
+            <td>配置 provider 后即可在编辑器里用本地模型，反馈链路短</td>
+            <td>复杂仓库上下文容易超限，模型质量取决于本地硬件可承载的模型</td>
+            <td>用于小任务和辅助理解；重要提交仍需人工 review</td>
+          </tr>
+          <tr>
+            <td>Claude Code Router + LM Studio</td>
+            <td>想保留 Claude Code 风格，但后端改成本地模型</td>
+            <td>能复用熟悉的 Agent 工作方式，适合测试本地模型的真实开发能力</td>
+            <td>路由层增加配置复杂度，本地模型不等同云端 Claude 能力</td>
+            <td>适合进阶用户；先用低风险任务验证再扩大范围</td>
+          </tr>
+          <tr>
+            <td>云端顶级模型</td>
+            <td>大型仓库、复杂重构、高风险生产任务、需要最强推理和长上下文</td>
+            <td>能力上限高，工具生态成熟，复杂问题成功率更高</td>
+            <td>成本、隐私、网络依赖和组织合规限制</td>
+            <td>与本地模型混合使用；把复杂任务留给云端</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：这节课最值得记住的判断</h2>
+      <blockquote>
+        <p>如果一个本地模型需要你等半小时才返回简单代码，那你不如自己写，或者把复杂任务交给云端模型。</p>
+      </blockquote>
+      <p>这句话概括了视频的务实态度。本地 AI 编程不是信仰问题，而是吞吐量问题。能在私有代码、小脚本、样式建议、简单重构上稳定节省时间，它就有价值；一旦任务需要大量上下文、跨模块推理和高质量工具调用，云端模型仍然更合适。</p>
+      <blockquote>
+        <p>真正的模型选择要同时看参数量、上下文容量、显存占用和每秒生成速度。</p>
+      </blockquote>
+      <p>很多人只比较 benchmark 或参数量，却忽略编程代理会把仓库内容塞进上下文。视频把这个现实问题讲得很清楚：本地模型的边界通常不是“能不能运行”，而是“在真实代码上下文里还能不能快到可用”。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <ul class="toc">
+        <li><span class="time">00:00</span><br>课程目标：搭建不依赖云 API 的本地 AI coding assistant。</li>
+        <li><span class="time">02:10</span><br>硬件和操作系统前提：RTX、旧数据中心 GPU、MacBook 统一内存都可以讨论。</li>
+        <li><span class="time">04:30</span><br>用 LM Studio 下载、加载和测试本地模型。</li>
+        <li><span class="time">08:20</span><br>理解 VRAM、模型参数量和上下文窗口之间的关系。</li>
+        <li><span class="time">13:40</span><br>用简单 Python class prompt 测试 token/s 和输出质量。</li>
+        <li><span class="time">17:30</span><br>比较较小模型和较大模型的速度差异，以及为什么不能只看参数量。</li>
+        <li><span class="time">21:15</span><br>打开 LM Studio Developer server，准备 OpenAI 兼容 API。</li>
+        <li><span class="time">23:20</span><br>在 Continue 里添加本地 chat model。</li>
+        <li><span class="time">27:30</span><br>通过 Claude Code Router 配置 LM Studio provider。</li>
+        <li><span class="time">32:10</span><br>把本地模型用于真实文件分析，提出 HTML/CSS 改进方案。</li>
+        <li><span class="time">35:00</span><br>结论：本地模型适合小项目和简单脚本，复杂工程仍需云端强模型。</li>
+      </ul>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <p>如果你想继续沿着“本地模型、工具协议、Agent 编程工作流”深入，可以从下面几篇课程页接着看。</p>
+      <div class="recommendations">
+        <a class="rec" href="index.html"><span>课程列表</span>返回所有 YouTube 技术课程页面。</a>
+        <a class="rec" href="RhTiAOGwbYE.html"><span>MCP 从零实战</span>理解 Agent 工具、资源、提示词和协议边界。</a>
+        <a class="rec" href="mWvtOHlZM-I.html"><span>Agent 工具拆解</span>判断工具、技能和子智能体分别适合什么场景。</a>
+        <a class="rec" href="Bn7YX_RfAt0.html"><span>AI Agent 工具实测</span>比较 n8n、Claude Code 与 Base44 的真实差异。</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
