@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tech With Tim 的 Claude Code 进阶教程中文精读：MCP、Skills、子智能体、上下文压缩与持久记忆。">
+  <title>Claude Code 专业工作流：MCP、Skills、子智能体与持久记忆</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a8b3c7;
+      --text-muted: #738096;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --accent-amber: #f6ad55;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --card-border-hover: rgba(99,179,237,0.3);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(circle at 16% 0%, rgba(99,179,237,0.12), transparent 30rem),
+        radial-gradient(circle at 84% 10%, rgba(159,122,234,0.10), transparent 32rem),
+        var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.78;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); }
+    .wrap { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 32px 0 64px; }
+    .back-link, .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; border: 1px solid var(--accent); color: var(--accent);
+      padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.2s; text-decoration: none;
+      font-weight: 700; font-size: 0.92rem;
+    }
+    .back-link:hover, .btn:hover { background: var(--accent); color: var(--bg-primary); transform: translateY(-1px); }
+    .hero {
+      background: var(--bg-secondary); border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 2rem; backdrop-filter: blur(12px); margin: 24px 0 2rem;
+    }
+    .eyebrow { color: var(--accent); font-weight: 800; letter-spacing: 0.08em; margin-bottom: 12px; }
+    h1 { font-size: clamp(2rem, 4vw, 3.35rem); line-height: 1.1; margin-bottom: 14px; }
+    .subtitle { color: var(--text-secondary); font-size: 1.05rem; max-width: 780px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .pill { border: 1px solid var(--card-border); background: rgba(255,255,255,0.04); color: var(--text-secondary); border-radius: 999px; padding: 6px 12px; font-size: 0.88rem; }
+    .video-frame { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); background: #000; margin: 28px 0; }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 1.65rem; margin-bottom: 1rem; backdrop-filter: blur(12px); }
+    .content-card:hover { border-color: var(--card-border-hover); }
+    h2 { font-size: 1.48rem; margin: 38px 0 16px; line-height: 1.3; }
+    h3 { font-size: 1.08rem; margin: 24px 0 10px; color: #f1f5f9; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    ul, ol { color: var(--text-secondary); padding-left: 1.35rem; margin: 0 0 14px; }
+    li { margin-bottom: 8px; }
+    code { color: #9ae6b4; background: rgba(104,211,145,0.08); border: 1px solid rgba(104,211,145,0.14); border-radius: 4px; padding: 2px 6px; }
+    pre { overflow-x: auto; background: #0d1117; border: 1px solid var(--card-border); border-radius: 10px; padding: 16px; margin: 16px 0; }
+    pre code { border: 0; padding: 0; background: transparent; color: #c9d1d9; }
+    blockquote { margin: 20px 0; padding: 16px 20px; border-left: 3px solid var(--accent-purple); background: rgba(159,122,234,0.08); color: #d8ccf5; border-radius: 0 10px 10px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 0.92rem; }
+    th, td { border: 1px solid var(--card-border); padding: 12px; text-align: left; vertical-align: top; }
+    th { background: rgba(99,179,237,0.09); color: #d8ecff; }
+    td { color: var(--text-secondary); }
+    .note { border-left: 3px solid var(--accent-amber); padding: 12px 16px; background: rgba(246,173,85,0.07); color: #fbd38d; margin: 16px 0; border-radius: 0 8px 8px 0; }
+    .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+    .flow div { padding: 14px; border-radius: 10px; background: rgba(99,179,237,0.07); border: 1px solid rgba(99,179,237,0.18); color: var(--text-secondary); text-align: center; }
+    .flow strong { display: block; color: var(--accent); margin-bottom: 4px; }
+    .toc { list-style: none; padding: 0; }
+    .toc li { display: grid; grid-template-columns: 74px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--card-border); }
+    .toc time { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .link-card { display: block; padding: 16px; border: 1px solid var(--card-border); border-radius: 10px; text-decoration: none; background: rgba(255,255,255,0.025); }
+    .link-card:hover { border-color: var(--accent); }
+    .link-card strong { display: block; margin-bottom: 5px; }
+    .link-card span { color: var(--text-secondary); font-size: 0.9rem; }
+    footer { margin-top: 42px; color: var(--text-muted); text-align: center; font-size: 0.86rem; }
+    @media (max-width: 760px) { .flow, .links { grid-template-columns: 1fr; } .wrap { width: min(100% - 24px, 980px); } .hero, .content-card { padding: 1.2rem; } table { display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">CLAUDE CODE · 进阶工作流</div>
+      <h1>Claude Code 专业工作流：MCP、Skills、子智能体与持久记忆</h1>
+      <p class="subtitle">英文原题：The Ultimate Claude Code Guide | MCP, Skills &amp; More。本文不是命令清单，而是把视频里的能力整理成一套从“临时聊天”走向“可复用工程系统”的实践框架。</p>
+      <div class="meta">
+        <span class="pill">频道：Tech With Tim</span>
+        <span class="pill">时长：37:40</span>
+        <span class="pill">播放：226,064</span>
+        <span class="pill">发布：2026-04-13</span>
+      </div>
+    </header>
+
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/uogzSxOw4LU" title="The Ultimate Claude Code Guide" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section>
+      <h2>一、问题引入：为什么多数人只用了 Claude Code 的 20%</h2>
+      <div class="content-card">
+        <p>视频从一个常见误区出发：打开终端、输入需求、等待代码，然后把 Claude Code 当成“更聪明的聊天框”。这种用法当然有效，但它把每次任务都变成一次性的临时协作。项目规范、工具权限、审查流程和上下文管理都依赖人反复说明，任务一长，质量就开始漂移。</p>
+        <p>更成熟的做法是把能力拆成不同层次：MCP 负责接入外部系统，Skills 固化团队做事的方法，子智能体隔离并行任务，<code>CLAUDE.md</code> 和引用文档承载长期上下文，而 <code>/compact</code> 之类的会话操作负责控制当前上下文成本。每一层解决的问题不同，混用才是复杂度的来源。</p>
+        <blockquote>真正的增益不只是“让模型写更多代码”，而是把重复说明、工具接入、专业角色和项目记忆变成可复用的工作系统。</blockquote>
+        <div class="flow">
+          <div><strong>上下文</strong>当前任务知道什么</div>
+          <div><strong>工具</strong>能够访问什么</div>
+          <div><strong>方法</strong>应该怎样完成</div>
+          <div><strong>分工</strong>谁负责哪部分</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>二、核心概念：四个层次不要混在一起</h2>
+      <div class="content-card">
+        <h3>1. 会话上下文：模型此刻正在“看”的材料</h3>
+        <p>上下文窗口包含当前对话、工具返回和读取过的文件。它越长，推理成本越高，也越容易把早期已经失效的线索带进新决策。视频演示了用 <code>/compact</code> 把历史对话压缩成摘要，以便继续同一任务。不过压缩不是免费午餐：细节被折叠后，关键约束可能丢失，所以在进入全新工作阶段时，开启一个干净会话往往比反复压缩更稳。</p>
+
+        <h3>2. MCP：给智能体增加外部能力</h3>
+        <p>MCP Server 提供工具、资源或提示模板，让 Claude Code 能操作 GitHub 等外部系统。视频用 GitHub MCP 说明了完整链路：安装服务、准备最小权限的 Personal Access Token、在终端完成配置，再让 Claude 创建远程仓库。重点不在“能连多少服务”，而在控制工具数量与权限范围。</p>
+        <div class="note">视频特别提醒：闲置 MCP 工具也可能占用上下文并干扰工具选择。只启用当前项目真正需要的服务，比“全部装上”更可靠。</div>
+
+        <h3>3. Skills：把完成任务的方法写成可触发流程</h3>
+        <p>Skill 是一种可复用的行为说明。示例把代码审查要求写进 <code>SKILL.md</code>：检查安全、错误处理、性能、代码质量和测试，并规定每条发现要包含严重程度与位置。这样团队不必每次重新写长提示词，模型也能按稳定格式执行。</p>
+
+        <h3>4. 子智能体：用独立上下文承担专门角色</h3>
+        <p>子智能体不是“更高级的 Skill”。它拥有独立上下文，可以并行调查、测试或审查，再把结论交还主任务。视频既展示了系统自带的探索型子智能体，也创建了专门的测试编写智能体，并为它选择模型、颜色和记忆范围。适合的任务应当边界清晰、结果可汇总；很小的单步操作没必要拆分。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>三、实操路线：从一次性对话升级为工程工作流</h2>
+      <div class="content-card">
+        <h3>步骤一：先清理环境，再开始复杂任务</h3>
+        <p>先查看当前项目启用了哪些 MCP 服务、上下文是否已经过长、工作目录是否正确。关闭暂时不用的工具，避免模型在几十个近似工具之间选择。长任务进入新阶段时，明确决定是压缩旧会话还是开启新会话。</p>
+        <pre><code># 视频中的操作思路（具体命令以当前版本为准）
+/mcp       # 查看和管理 MCP 服务
+/compact   # 将当前会话压缩为摘要
+/agents    # 查看或创建专用子智能体</code></pre>
+
+        <h3>步骤二：为 MCP 设计最小权限边界</h3>
+        <p>以 GitHub 为例，先确定智能体只需要读仓库、创建仓库，还是还需要管理 Issues、Actions。Token 不应写进仓库或提示词；安装命令也不要被复制到公开文档。连接完成后用一个小而可逆的动作验证权限，再交给智能体执行真实工作。</p>
+        <ol>
+          <li>确认 MCP Server 的来源与维护状态。</li>
+          <li>创建仅覆盖所需仓库和 scope 的凭据。</li>
+          <li>在终端或安全配置界面完成认证。</li>
+          <li>用读取仓库信息等低风险动作做连通性测试。</li>
+          <li>不使用时停用服务，减少攻击面和上下文噪声。</li>
+        </ol>
+
+        <h3>步骤三：把重复的专业要求固化为 Skill</h3>
+        <p>从一项每周都会发生、且验收标准明确的任务开始，例如代码审查、生成测试或发布检查。Skill 应写清触发场景、输入、步骤、输出格式和失败条件。视频的代码审查示例之所以合适，是因为它既有固定维度，又能对每个项目保留判断空间。</p>
+        <pre><code>skills/
+└── code-review/
+    └── SKILL.md
+
+# 典型内容
+- 什么时候触发
+- 安全 / 错误处理 / 性能 / 测试检查项
+- 每条问题的严重程度、文件位置和修改建议
+- 没有发现问题时如何明确报告</code></pre>
+
+        <h3>步骤四：只把可并行、可验收的工作交给子智能体</h3>
+        <p>让主智能体保留任务目标和最终决策，把“查找认证调用链”“补齐单元测试”“评估数据库迁移风险”等独立问题分派出去。每个子智能体都需要明确边界和返回格式，否则只是把一个混乱上下文复制成多个混乱上下文。</p>
+
+        <h3>步骤五：建立分层记忆，而不是把一切塞进一个文件</h3>
+        <p>视频最后用 <code>CLAUDE.md</code> 演示持久记忆：把每次会话都需要的稳定事实放在主文件里，再链接到更细的参考文档。主文件应像目录和宪法，而不是仓库百科全书。架构说明、测试指南和部署步骤可以拆成独立文件，需要时再读。</p>
+        <pre><code>.claude/
+├── CLAUDE.md          # 稳定原则、项目入口、引用索引
+└── references/
+    ├── architecture.md
+    ├── testing.md
+    └── deployment.md</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>四、决策矩阵：什么时候用 MCP、Skill、子智能体或记忆</h2>
+      <div class="content-card">
+        <table>
+          <thead><tr><th>机制</th><th>最适合的场景</th><th>主要优点</th><th>风险</th><th>决策建议</th></tr></thead>
+          <tbody>
+            <tr><td>MCP</td><td>访问 GitHub、数据库、文档或其他外部系统</td><td>把实时数据和动作接入智能体</td><td>权限过宽、工具过多、凭据泄露</td><td>按项目启用，使用最小权限，先做低风险验证</td></tr>
+            <tr><td>Skill</td><td>代码审查、测试生成、发布检查等重复流程</td><td>稳定复用方法和输出格式</td><td>规则过长或过时会限制判断</td><td>把硬门禁写清，案例和背景按需引用</td></tr>
+            <tr><td>子智能体</td><td>可并行调查、独立模块分析、专业角色任务</td><td>隔离上下文，降低主会话噪声</td><td>协调成本、重复工作、结果冲突</td><td>任务必须有边界、交付物和验收条件</td></tr>
+            <tr><td>CLAUDE.md</td><td>每次进入项目都需要的稳定约束和背景</td><td>跨会话保持一致认知</td><td>文件膨胀后占用上下文，旧事实污染决策</td><td>主文件只放索引与原则，细节拆到引用文档</td></tr>
+            <tr><td>/compact</td><td>同一任务接近上下文上限，但仍需延续</td><td>降低历史 token 占用</td><td>压缩可能遗漏细节</td><td>阶段切换优先新会话；必须延续时再压缩</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>五、关键判断：优化目标是“可控”，不是“功能最多”</h2>
+      <div class="content-card">
+        <blockquote>如果一个工具、Skill 或子智能体没有服务于当前目标，它就不是能力，而是上下文噪声。</blockquote>
+        <p>视频里最值得保留的不是某一条安装命令，而是取舍原则。MCP 越多不等于能力越强；子智能体越多不等于速度越快；记忆文件越长不等于理解越深。专业工作流的核心，是让每个机制承担单一职责，并且能解释权限、输入、输出和失败方式。</p>
+        <p>这也意味着要定期维护：删除已经不用的服务，更新 Skill 的验收条件，审查持久记忆中的过期事实，观察子智能体是否真的减少主任务负担。只有这些机制可以被检查和回滚，它们才从“炫技配置”变成工程基础设施。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>六、时间戳目录</h2>
+      <div class="content-card">
+        <p class="note">以下时间点按英文字幕与视频节奏整理，播放器广告或章节标记可能造成数秒偏差。</p>
+        <ul class="toc">
+          <li><time>00:00</time><span>为什么大多数人只使用了 Claude Code 的一小部分能力</span></li>
+          <li><time>01:10</time><span>专业环境与常用会话命令：模型、上下文和工具管理</span></li>
+          <li><time>04:24</time><span><code>/compact</code> 如何压缩会话，以及什么时候应该直接开新会话</span></li>
+          <li><time>05:25</time><span>MCP 的作用、工具膨胀问题与 GitHub Server 配置</span></li>
+          <li><time>11:40</time><span>用 GitHub MCP 创建并验证远程仓库</span></li>
+          <li><time>13:00</time><span>Skills 的定位与代码审查 Skill 实战</span></li>
+          <li><time>21:00</time><span>多会话工具演示与并行工作界面</span></li>
+          <li><time>25:10</time><span>子智能体的独立上下文、内置角色与自定义角色</span></li>
+          <li><time>30:17</time><span>为测试智能体选择模型、颜色和记忆范围</span></li>
+          <li><time>33:48</time><span><code>CLAUDE.md</code>、全局/项目记忆与分层引用结构</span></li>
+          <li><time>37:00</time><span>总结：把工具、方法、分工和记忆组合成可维护系统</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>七、相关推荐</h2>
+      <div class="links">
+        <a class="link-card" href="RhTiAOGwbYE.html"><strong>MCP 从零实战</strong><span>从协议、Server、Client 到 tools/resources/prompts 的完整实现。</span></a>
+        <a class="link-card" href="X_zVY3-mbM8.html"><strong>Claude Code 2026 完整入门</strong><span>从工作目录、计划模式讲到子智能体、例程与部署。</span></a>
+        <a class="link-card" href="mWvtOHlZM-I.html"><strong>工具、技能还是子智能体？</strong><span>用一个过度膨胀的 Agent 理解三种能力边界。</span></a>
+        <a class="link-card" href="index.html"><strong>浏览全部课程</strong><span>返回 AI 技术视频中文精读列表。</span></a>
+      </div>
+    </section>
+
+    <footer>基于公开视频英文字幕整理 · 页面生成于 2026-07-15</footer>
+  </main>
+</body>
+</html>
