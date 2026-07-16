@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>从零搭建 Base44 Super Agent：邮件、Slack 与 WhatsApp 自动化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a2a2b8;
+      --text-muted: #6d6d83;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .content-card, .video-frame, .footer-nav { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 28px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99,179,237,0.08);
+      transform: translateX(-2px);
+    }
+    .hero {
+      background: rgba(22,22,31,0.92);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-cyan);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: 2rem;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 20px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99,179,237,0.2); background: rgba(99,179,237,0.08); }
+    .video-frame {
+      margin: 28px 0 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    h2 {
+      font-size: 1.28rem;
+      color: var(--text-primary);
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+      background: rgba(99,179,237,0.1);
+      border: 1px solid rgba(99,179,237,0.2);
+      padding: 2px 8px;
+      border-radius: 5px;
+    }
+    h3 { font-size: 1.02rem; color: var(--text-primary); margin: 24px 0 10px; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px 22px; }
+    li { margin-bottom: 8px; }
+    strong { color: var(--text-primary); }
+    code {
+      background: rgba(255,255,255,0.06);
+      color: var(--accent-cyan);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86em;
+    }
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 20px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159,122,234,0.08);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-secondary);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: rgba(255,255,255,0.04); color: var(--text-primary); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+    .timecode {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-green);
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+    .footer-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.6rem 1.05rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .btn:hover { background: var(--accent-cyan); color: var(--bg-primary); }
+    @media (max-width: 640px) {
+      body { padding: 0 16px 40px; }
+      .hero, .content-card { padding: 22px; }
+      h1 { font-size: 1.58rem; }
+      .timeline-item { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="hero-label">No-code Agent Workflow</div>
+      <h1>从零搭建 Base44 Super Agent：让助手读邮件、写草稿并进入 WhatsApp</h1>
+      <p class="subtitle">AI Agent Full Tutorial for Beginners 2026: How to Build AI Agents in Minutes</p>
+      <div class="page-meta">
+        <span class="meta-badge">频道：Mikey No Code</span>
+        <span class="meta-badge time">时长：31:38</span>
+        <span class="meta-badge">播放量：约 62,405</span>
+        <span class="meta-badge">上传：2026-03-23</span>
+      </div>
+    </section>
+  </header>
+
+  <div class="video-frame">
+    <iframe src="https://www.youtube.com/embed/C05XDMGaAn8" title="AI Agent Full Tutorial for Beginners 2026: How to Build AI Agents in Minutes" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+
+  <main>
+    <section class="content-card">
+      <h2><span class="num">01</span>问题引入：这个视频真正教的不是“聊天机器人”</h2>
+      <p>这节课的切入点很朴素：如果一个人完全不了解 AI Agent，能不能在半小时内搭出一个会做事的个人助手？视频选择的答案是 Base44 的 Super Agent，而不是从代码、框架、API 或提示词工程讲起。它把“代理”解释成一个可以连接日常工具、按计划运行、对事件做响应的后台员工。</p>
+      <p>视频里演示的目标也很具体：创建一个个人助手，让它监控 Gmail、识别重要邮件、起草回复，并通过 WhatsApp 继续交互。这个例子适合初学者，因为它覆盖了 Agent 的几个关键环节：身份设定、知识和记忆、外部集成、自动任务、移动端触达，以及权限确认。</p>
+      <p>值得注意的是，这类 no-code Agent 平台降低了入门门槛，但并没有消除设计责任。你仍然需要决定它能读什么、什么时候运行、哪些动作必须确认、如何处理不确定性，以及它消耗的消息额度和集成额度是否可控。把视频当成“点击教程”会漏掉这些风险；把它当成“代理工作流建模课”则更有价值。</p>
+      <blockquote>视频中的核心判断可以概括为：App 是给用户使用的产品，Super Agent 是在后台替你工作的员工。</blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">02</span>核心概念：Base44 App、Super Agent、Brain 与 Task</h2>
+      <h3>App 与 Super Agent 的边界</h3>
+      <p>Base44 里有两个入口：Apps 和 Super Agents。App 更像一个对外产品，通常有界面、数据库、用户账号和业务流程；Super Agent 更像你工作区里的个人助手，它可以连接工具、运行任务、保存文件，并在后台按指令行动。理解这条边界很重要，因为两者的设计目标不同：App 关注用户体验，Agent 关注职责、权限和自动化。</p>
+      <p>视频里使用“产品与员工”的比喻很准确。产品负责承载用户操作，员工负责在幕后执行例行工作。实际落地时，你可以先把 Agent 当成一个有限职责岗位来设计，例如“邮件筛选助理”“Slack 日报助理”“客户支持草稿助理”，而不是一开始就做一个什么都管的万能助手。</p>
+
+      <h3>Brain 是代理的控制中心</h3>
+      <p>创建 Super Agent 之后，视频重点进入 Brain 标签。Brain 不是一个单纯的设置页，而是代理行为的控制面板，里面包含 identity、soul、user、knowledge files、memory、integrations 和 payments 等区域。初学者最容易忽略的是：这些设置会影响代理如何理解你、如何判断风险，以及是否能调用真实工具。</p>
+      <p>Identity 决定名称、头像和沟通风格；Soul 决定它在不确定时的行为原则，比如是否主动、是否保守、哪些动作必须先问你；User 保存你的时区、角色、工作背景等信息；Knowledge files 让它读取公司 FAQ、客户资料、报价表、风格指南等特定上下文。它们共同决定 Agent 的“岗位说明书”。</p>
+
+      <h3>Tasks 让代理从问答变成自动化</h3>
+      <p>视频把 Task 分成两类：定时任务和事件触发任务。定时任务适合每天早上生成摘要、每周汇总项目、每天下班前整理待办；事件触发任务适合新邮件到达、新 Slack 消息出现、付款完成后启动后续流程。只有到了 Task 这一层，Agent 才真正从“你问我答”变成“我按职责运行”。</p>
+      <p>这也是学习 Agent 的关键分水岭。提示词能让模型说得更好，任务系统才能让它在固定时刻或外部事件发生时行动。一个可靠的 Agent 设计，通常不是一句漂亮提示词，而是一组明确的触发条件、权限边界、输出格式和人工确认点。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">03</span>关键步骤：从创建代理到接入 Gmail、Slack 与 WhatsApp</h2>
+      <h3>第一步：用自然语言创建职责</h3>
+      <p>视频演示从 Super Agents 页面点击 create a new super agent，然后给代理命名为 Devo。接着不是配置 API，也不是写代码，而是直接描述任务：“我想创建一个监控 Gmail 收件箱的代理。”Base44 会根据这段自然语言推断需要的工具、连接器和自动化步骤。</p>
+      <p>这里的技巧是用岗位描述而不是技术描述。不要写“配置 Gmail API 并轮询邮件”，而要写“监控我的 Gmail 收件箱，找出紧急邮件，必要时起草回复并提醒我”。后者更接近你真正想要的业务结果，也更容易让平台生成合适的工作流。</p>
+
+      <h3>第二步：在 Brain 中补全身份、原则和上下文</h3>
+      <p>进入 Brain 后，先处理 Identity 与 Soul。Identity 让你定义代理叫什么、用什么语气沟通；Soul 则更像行为准则。比如可以规定它遇到敏感客户邮件时只起草不发送，遇到付款、删除、外发等动作必须先确认，遇到不确定意图时要解释判断依据。</p>
+      <p>接着设置 User 与 Knowledge files。User 中的时区、角色、工作范围会影响计划任务和摘要口径；Knowledge files 可以上传客户清单、报价规则、支持文档、FAQ 或内部 SOP。视频提醒这些文件不是装饰，而是让代理从通用聊天变成理解你工作环境的助手。</p>
+
+      <h3>第三步：连接工具，让指令变成真实动作</h3>
+      <p>Integrations 是整条链路最关键的部分。Base44 提供内置服务和外部连接器，其中 Gmail、Slack、Google Calendar、Google Drive、Google Sheets 等通过标准授权流程接入。视频先连接 Gmail，完成 Google 授权后，代理就可以检查收件箱、总结重要邮件、识别需要回复的内容。</p>
+      <p>同样的模式可以扩展到 Slack。连接 Slack 后，你可以让代理总结工作区当天发生了什么、提取待办、标记需要跟进的对话。这里要注意权限范围：如果代理只需要读消息，就不要授予写入或管理权限；如果需要发消息，最好限定频道或要求确认。</p>
+
+      <h3>第四步：设置任务与渠道，把代理放进日常流程</h3>
+      <p>当 Gmail 和 Slack 连接完成后，视频进入 Tasks 与 Channels。定时任务可以写成“每天早上 7 点检查 Gmail 并发送重要事项摘要”；事件触发任务可以写成“新客户邮件到达时，起草建议回复并通知我”。这样代理不再等待你打开页面，而是进入工作节奏。</p>
+      <p>WhatsApp 接入则解决了触达问题。视频演示点击 Continue on WhatsApp，发送预填的激活消息后，代理会出现在 WhatsApp 聊天里。此后你可以直接在手机上问“总结我最近的邮件”，它的回复来自 Base44 中的 Super Agent，但交互入口变成了日常通讯工具。</p>
+
+      <h3>第五步：高级集成与商业闭环</h3>
+      <p>视频还提到 API、Secrets and keys 以及 Stripe。Secrets and keys 用来保存外部服务凭据，避免把密钥直接写在提示词或配置文本里；API 让其他系统通过 endpoint 和 authentication key 调用代理；Stripe 则让 Agent 能与付款和交易流程连接。初学者不必第一天使用这些功能，但它们决定了 Agent 能否从个人助理扩展成业务自动化层。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">04</span>对比表格：什么时候用聊天、任务、连接器或 API</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>能力层</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险与决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Chat 指令</td>
+            <td>临时查询、解释当前职责、让代理现场检查一次邮件或 Slack</td>
+            <td>上手最快，适合探索和验证代理是否理解你的工作方式</td>
+            <td>不可持续，容易依赖人工反复触发；验证稳定后应沉淀为 Task</td>
+          </tr>
+          <tr>
+            <td>Knowledge files</td>
+            <td>FAQ、报价表、客户清单、产品文档、回复模板</td>
+            <td>让输出贴近你的业务上下文，减少通用回答</td>
+            <td>文件过期会导致错误建议；需要建立更新节奏和敏感信息边界</td>
+          </tr>
+          <tr>
+            <td>Integrations</td>
+            <td>Gmail、Slack、Calendar、Drive、Sheets 等常用工具</td>
+            <td>把自然语言指令变成真实读取、总结、起草和通知动作</td>
+            <td>授权范围要最小化；写入、发送、删除类动作建议先要求确认</td>
+          </tr>
+          <tr>
+            <td>Scheduled Tasks</td>
+            <td>晨间摘要、周报、每日跟进、定期检查项目状态</td>
+            <td>稳定、可预期，适合重复性高的个人生产力流程</td>
+            <td>时间、时区和输出格式要明确；否则摘要可能不完整或跑错时点</td>
+          </tr>
+          <tr>
+            <td>Event-triggered Tasks</td>
+            <td>新客户邮件、Slack 关键字、付款完成、表单提交</td>
+            <td>响应及时，适合把 Agent 变成后台运营助手</td>
+            <td>触发条件必须窄；条件太宽会造成误报、额度浪费和干扰</td>
+          </tr>
+          <tr>
+            <td>API / Secrets / Stripe</td>
+            <td>连接内部系统、Zapier/Make、自建网站按钮、支付后动作</td>
+            <td>可扩展到更复杂的业务系统，形成端到端自动化</td>
+            <td>需要更严格的密钥管理、日志审计和失败回滚策略</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">05</span>实践中的判断：把代理设计成“有限职责员工”</h2>
+      <p>视频后半段给了多个实操例子：让代理检查收件箱并找出紧急邮件；让它为需要回复的邮件保存草稿；让它总结 Slack 工作区当天发生了什么；让它每天早上输出一份包含邮件、Slack、日程和下一步行动的简报；还可以把客户支持 FAQ 上传为知识库，让代理回答重复问题或起草客服回复。</p>
+      <p>这些例子背后有一个共同模式：先让代理读信息，再让它整理判断，最后再谨慎进入写入动作。对于新手来说，这比一上来就要求代理自动发送邮件安全得多。推荐的升级路径是：只读摘要 → 草稿建议 → 人工确认发送 → 对低风险场景自动执行。</p>
+      <p>如果一个 Agent 开始同时管理邮件、日历、客服、销售线索和付款回调，调试会很困难。视频建议可以拆分多个 Agent，例如一个负责个人生产力，一个负责业务支持，一个负责日程管理。这个建议非常实用，因为单一职责不只是软件工程原则，也适用于 Agent 运营。</p>
+      <blockquote>判断一个 Agent 是否成熟，不是看它能不能回答很多问题，而是看它的职责、权限、触发条件和确认点是否清楚。</blockquote>
+      <p>最后还要关注成本。Base44 使用 message credits 和 integration credits：聊天会消耗消息额度，访问 Gmail、Slack、Calendar 等外部工具会消耗集成额度。自动任务如果触发太频繁，可能在没有产生相应价值的情况下消耗额度。因此，每个任务都应该有明确频率、明确输出和明确停止条件。</p>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">06</span>时间戳目录</h2>
+      <div class="timeline">
+        <div class="timeline-item"><span class="timecode">00:01</span><span>用“10 分钟搭一个 AI Agent”的问题引入，定义本课目标：邮件监控、草稿回复和 WhatsApp 更新。</span></div>
+        <div class="timeline-item"><span class="timecode">01:31</span><span>进入 Base44，创建账号，认识 dashboard 中的 Apps 与 Super Agents 两个入口。</span></div>
+        <div class="timeline-item"><span class="timecode">03:01</span><span>解释 App 与 Super Agent 的区别：一个是产品，一个是后台工作的助手。</span></div>
+        <div class="timeline-item"><span class="timecode">05:00</span><span>创建第一个 Super Agent，用自然语言描述“监控 Gmail 收件箱”的职责。</span></div>
+        <div class="timeline-item"><span class="timecode">07:01</span><span>打开 Brain 标签，理解 identity、soul、user、knowledge files 对代理行为的影响。</span></div>
+        <div class="timeline-item"><span class="timecode">10:45</span><span>介绍 memory 与 integrations，说明代理如何连接 Gmail、Slack、Calendar、Drive、Sheets 等外部工具。</span></div>
+        <div class="timeline-item"><span class="timecode">13:01</span><span>回到聊天界面，演示如何通过自然语言让代理执行临时任务，并说明文件区的用途。</span></div>
+        <div class="timeline-item"><span class="timecode">16:01</span><span>进入 Tasks：区分 scheduled tasks 与 event-triggered tasks，让代理按时间或事件自动运行。</span></div>
+        <div class="timeline-item"><span class="timecode">19:01</span><span>连接 Gmail 与 Slack，并介绍 Secrets and keys 如何安全保存外部凭据。</span></div>
+        <div class="timeline-item"><span class="timecode">22:01</span><span>接入 WhatsApp、API 与 Stripe，让代理从平台内聊天扩展到移动端和业务系统。</span></div>
+        <div class="timeline-item"><span class="timecode">25:01</span><span>实测收件箱摘要、邮件草稿、Slack 总结和日常简报等生产力工作流。</span></div>
+        <div class="timeline-item"><span class="timecode">28:00</span><span>讨论客服场景、知识库、提示词质量，以及如何把重复支持问题交给代理处理。</span></div>
+        <div class="timeline-item"><span class="timecode">31:01</span><span>收尾：拆分多个专职 Agent、理解 credits，并排查任务未运行、连接失效或回答含糊等问题。</span></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2><span class="num">07</span>相关推荐</h2>
+      <p>如果你想继续沿着“代理工作流”学习，可以回到课程列表查看更多 Agent、Claude Code、Codex 和本地 AI 编程相关课程。建议先补两类内容：一类是 Agent 的工具调用和权限边界，一类是 AI 编程助手如何在真实项目中拆任务、验证和回滚。</p>
+      <div class="footer-nav">
+        <a class="btn" href="index.html">返回课程列表</a>
+        <a class="btn" href="LNkAW4SSgdY.html">AI Agents 2026 完整指南</a>
+        <a class="btn" href="OdSXY4YgmZA.html">Claude Code 入门实战</a>
+        <a class="btn" href="rp5EwOogWEw.html">本地 AI 编程指南</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
