@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-17</title>
+<meta name="description" content="今天的主线是 Agent 工程化继续落地：大模型发布、自动化任务、代码迁移、企业安全与搜索接地同时推进；社区则在讨论 LLM 的真实生产价值、开放模型、本地 Agent 和 AI 基础设施代价。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-17</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 58 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是 Agent 工程化继续落地：大模型发布、自动化任务、代码迁移、企业安全与搜索接地同时推进；社区则在讨论 LLM 的真实生产价值、开放模型、本地 Agent 和 AI 基础设施代价。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">7</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">5</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">5</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻 · 12 个来源</div>
+        <h3>Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文</h3>
+        <p>AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://x.ai/news/grok-automations" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Grok 推出 Automations：支持定时与邮件触发自动执行任务</h3>
+        <p>xAI 为 Grok 增加自动化任务入口，用户可用自然语言描述一次性、每日、工作日或邮件触发任务，并在运行历史中查看结果。这把聊天机器人推进到轻量工作流层，关键观察点是权限、失败恢复和可审计性。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://claude.com/blog/ai-code-migration" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust</h3>
+        <p>Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>26</b> 条精选信号<i></i><b>15</b> 个原始来源<i></i><b>49</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=AI%20%E7%BC%96%E7%A8%8B" target="_top">AI 编程</a>
+        <a href="topics.html?topic=%E4%BC%81%E4%B8%9A%20Agent" target="_top">企业 Agent</a>
+        <a href="topics.html?topic=%E5%A4%9A%E6%A8%A1%E6%80%81%E8%AF%84%E6%B5%8B" target="_top">多模态评测</a>
+        <a href="topics.html?topic=Benchmark" target="_top">Benchmark</a>
+        <a href="topics.html?topic=%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B8%83" target="_top">模型发布</a>
+        <a href="topics.html?topic=%E5%A4%9A%E6%A8%A1%E6%80%81" target="_top">多模态</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" href="https://www.kimi.com/blog/kimi-k3" target="_blank" rel="noopener">
+      <span class="tag">模型</span>
+      <h3>Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文</h3>
+      <p>AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。</p>
+      <div class="src">◷ <b>Moonshot AI</b> <span class="dotsep">·</span> 今日</div>
+      <div class="item-signals"><span class="signal-badge source-count" title="Moonshot AI、IT之家">12 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">模型发布</span><span class="signal-badge topic">多模态</span><span class="signal-badge topic">长上下文</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" href="https://x.ai/news/grok-automations" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Grok 推出 Automations：支持定时与邮件触发自动执行任务</h4>
+          <p>xAI 为 Grok 增加自动化任务入口，用户可用自然语言描述一次性、每日、工作日或邮件触发任务，并在运行历史中查看结果。这把聊天机器人推进到轻量工作流层，关键观察点是权限、失败恢复和可审计性。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">xAI</b> <span class="dotsep">·</span> 7 月 16 日 <span class="dotsep">·</span> <span class="tag">产品</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Agent 自动化</span><span class="signal-badge topic">生产力</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://claude.com/blog/ai-code-migration" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust</h4>
+          <p>Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Claude Blog</b> <span class="dotsep">·</span> 7 月 16 日 <span class="dotsep">·</span> <span class="tag">工程</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 编程</span><span class="signal-badge topic">代码迁移</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://venturebeat.com/ai/the-agent-security-gap-54-of-enterprises-have-already-had-an-ai-agent-incident-and-most-still-let-agents-share-credentials" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>企业 Agent 安全缺口扩大：54% 受访组织已遭遇或险些遭遇事故</h4>
+          <p>VentureBeat 调查显示，不少企业仍让多个 Agent 共享凭证，独立身份和沙箱隔离覆盖率偏低。对企业用户来说，这条新闻比单点漏洞更重要，因为它说明 Agent 权限治理已经成为生产部署的基础设施问题。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">VentureBeat</b> <span class="dotsep">·</span> 7 月 16 日 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">企业部署</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.theverge.com/policy/966438/eu-google-android-ai-interoperability-search-data-dma" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>欧盟要求 Google 开放 Android 与 Search 关键部分，Gemini 生态受影响</h4>
+          <p>欧盟依据《数字市场法案》推动 Google 向第三方 AI 助手和搜索服务开放更大访问权限。若执行细节落地，AI 助手的默认入口、搜索接地和平台分发格局都可能被重塑。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">The Verge</b> <span class="dotsep">·</span> 7 月 16 日 <span class="dotsep">·</span> <span class="tag">监管</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="Ars Technica">3 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 监管</span><span class="signal-badge topic">平台开放</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://developers.googleblog.com/expanding-choice-in-gemini-enterprise-agent-platform-introducing-grounding-with-parallel-web-search" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Gemini Enterprise Agent Platform 接入 Parallel Web Search 作为网络接地提供商</h4>
+          <p>Google Cloud 将 Parallel 的搜索基础设施作为新的 grounding provider，强调可验证实时网络结果、可编程提取与缓存。这反映企业 Agent 平台正在把“搜索接地”从插件能力变成可选基础组件。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google Developers Blog</b> <span class="dotsep">·</span> 7 月 16 日 <span class="dotsep">·</span> <span class="tag">平台</span></div>
+          <div class="item-signals"><span class="signal-badge topic">企业 Agent</span><span class="signal-badge topic">搜索接地</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users" target="_blank" rel="noopener">
+        <div class="idx">06</div>
+        <div class="body">
+          <h4>xAI 起诉涉嫌滥用 Grok 生成 CSAM 的用户，模型滥用治理进入司法层面</h4>
+          <p>Ars Technica 报道称，xAI 首次就 Grok 被用于生成儿童性虐待图像起诉用户。案件把责任焦点放在滥用者身上，但也会推动外界继续追问模型防护、检测和平台处置流程是否充分。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Ars Technica</b> <span class="dotsep">·</span> 7 月 16 日 <span class="dotsep">·</span> <span class="tag">治理</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">滥用治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.15193v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Plover: Steering GUI Agents through Plan-Centric Interaction</h4>
+          <p><b>为什么值得看：</b>这篇把 GUI Agent 的失败归因到“执行漂移”，提出围绕计划进行交互和纠偏。它的价值在于把用户意图、动态界面状态和 Agent 执行动作放进同一个可审查循环，适合做桌面/浏览器自动化的人读。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-16 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">GUI Agent</span><span class="signal-badge topic">人机协作</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.15205v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>MM-IssueLoc: A Controlled Benchmark for Evaluating Visual Evidence in Multimodal Repository-Level Issue Localization</h4>
+          <p><b>为什么值得看：</b>真实 issue 常带截图、报错弹窗和渲染状态，但现有仓库级定位评测多是纯文本。这篇补上视觉证据维度，对评估多模态代码 Agent 是否真能看懂 UI 失败现场很有参考价值。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-16 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">软件工程</span><span class="signal-badge topic">多模态评测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.15200v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Mask-Aware Policy Gradients for Diffusion Language Models</h4>
+          <p><b>为什么值得看：</b>扩散语言模型要走向推理和对齐训练，需要解决 masked diffusion 下策略梯度估计难题。本文针对 mask 结构设计 policy gradient，对关注非自回归/扩散式 LLM 后训练的人有技术增量。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-16 <span class="dotsep">·</span> <span class="tag">cs.CL · cs.AI · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">扩散语言模型</span><span class="signal-badge topic">强化学习</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" href="https://arxiv.org/abs/2607.15190v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Can We Trust Item Response Theory for AI Evaluation?</h4>
+          <p><b>为什么值得看：</b>越来越多 AI benchmark 用 IRT 估计能力、排序模型和诊断题目，但模型数据未必满足传统 IRT 假设。这篇提醒评测工程师不要只套统计模型，要检查 benchmark 数据分布和模型行为是否支持这些假设。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-07-16 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 评测</span><span class="signal-badge topic">Benchmark</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" href="https://www.theocharis.dev/blog/llm-critics-are-right-i-use-llms-anyway/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>The LLM Critics Are Right. I Use LLMs Anyway</h4>
+          <p>这篇文章在 HN 引发高评论量，讨论点不是盲目拥抱或拒绝 LLM，而是承认缺陷后仍把它作为可控工具使用。对团队落地 AI 编程来说，这类“带保留地采用”比口号更接近现实。</p>
+          <div class="quote">“批评成立，不等于工具没有生产价值。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 193 <span class="dotsep">·</span> 💬 202</div>
+          <div class="item-signals"><span class="signal-badge topic">LLM 生产力</span><span class="signal-badge topic">开发者观点</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://lmstudio.ai/blog/introducing-lm-studio-bionic" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>LM Studio Bionic: the AI agent for open models</h4>
+          <p>LM Studio Bionic 把本地/开放模型带进 Agent 工作流，是开源权重热度之后的自然延伸。社区关注点在于本地模型能否承担真实工具调用、代码理解和长任务执行，而不只是聊天。</p>
+          <div class="quote">“开放模型的下一步，是能在本地跑起来的 Agent 外壳。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 167 <span class="dotsep">·</span> 💬 64</div>
+          <div class="item-signals"><span class="signal-badge topic">本地模型</span><span class="signal-badge topic">Agent</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://blog.lyc8503.net/en/post/llm-classifier/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Detecting LLM-Generated Texts with “Classical” Machine Learning</h4>
+          <p>文章用传统机器学习路线讨论 LLM 文本检测，引发社区对可泛化性、数据泄漏和检测器寿命的争论。它提醒我们：AI 安全问题不总需要更大的模型，有时需要更清楚的问题定义。</p>
+          <div class="quote">“检测器真正难的不是拟合训练集，而是跨模型、跨写作场景保持有效。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 163 <span class="dotsep">·</span> 💬 110</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 检测</span><span class="signal-badge topic">机器学习</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://www.theatlantic.com/technology/2026/07/generative-ai-engineering-disaster/687901/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Generative AI Is an Engineering Disaster</h4>
+          <p>The Atlantic 文章把讨论拉到数据中心、内存供给和硬件价格层面。社区热议说明 AI 工程化不只是模型能力问题，也包括供应链、电力、散热、成本和普通用户设备价格。</p>
+          <div class="quote">“AI 的外部性开始从云端账单扩散到整个计算硬件生态。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 100 <span class="dotsep">·</span> 💬 73</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 基础设施</span><span class="signal-badge topic">成本</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" href="https://blog.greg.technology/2026/07/14/llm-networking-with-mikrotik.html" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>LLM Networking with MikroTik</h4>
+          <p>这篇把 LLM 用在网络设备配置与理解上，属于小众但实用的工程案例。它体现了一个趋势：LLM 价值不只在通用聊天，而是在垂直工具链里帮助专家读配置、查状态、缩短定位路径。</p>
+          <div class="quote">“越是命令密集、上下文碎片化的系统，越适合先做辅助理解而非全自动修改。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 102 <span class="dotsep">·</span> 💬 55</div>
+          <div class="item-signals"><span class="signal-badge topic">网络运维</span><span class="signal-badge topic">LLM 应用</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" href="https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎬</span>
+          <h4>Google Vids：Gemini Omni 与个人数字分身</h4>
+        </div>
+        <p class="tagline">Workspace 视频创作进入自然语言编辑和个人 avatar 阶段。</p>
+        <p>Google Vids 新增基于提示词和参考图生成/编辑视频片段，以及上传自拍和语音后生成个人数字分身的能力，面向 Google AI Pro、Ultra 和 Workspace 商业客户。</p>
+        <div><span class="tag">视频工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">视频生成</span><span class="signal-badge topic">Workspace</span></div>
+      </a>
+      <a class="card" href="https://x.com/OpenBMB/status/2077741814799548451" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🏢</span>
+          <h4>StaffDeck：面向企业数字员工的开源平台</h4>
+        </div>
+        <p class="tagline">把 SOP、专业知识和决策规则沉淀为可持续工作的数字员工。</p>
+        <p>面壁智能联合多团队开源 StaffDeck，定位不是普通聊天机器人，而是帮助企业构建、管理和持续改进数字员工的工作平台。</p>
+        <div><span class="tag">开源平台</span></div>
+        <div class="item-signals"><span class="signal-badge topic">数字员工</span><span class="signal-badge topic">企业 Agent</span></div>
+      </a>
+      <a class="card" href="https://www.marktechpost.com/2026/07/16/patter-sdk-guide-to-building-a-restaurant-booking-phone-agent-with-dynamic-variables-guardrails-latency-dashboards-and-eval-checks" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">☎️</span>
+          <h4>Patter SDK 电话 Agent 教程</h4>
+        </div>
+        <p class="tagline">把动态变量、护栏、延迟指标和回归评估放进同一条语音工作流。</p>
+        <p>MarkTechPost 报道的教程演示餐厅预订电话 Agent：注册工具、设置 PII/脏话/话题护栏，并用脚本化通话模拟进行成本、延迟与评估检查。</p>
+        <div><span class="tag">开发教程</span></div>
+        <div class="item-signals"><span class="signal-badge topic">语音 Agent</span><span class="signal-badge topic">评估</span></div>
+      </a>
+      <a class="card" href="https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">💻</span>
+          <h4>MiniMax Code 2.0 桌面端</h4>
+        </div>
+        <p class="tagline">基于 Pi Agent 框架重构，强调长程任务稳定性和金融数据 MCP。</p>
+        <p>MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。</p>
+        <div><span class="tag">编程工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 编程</span><span class="signal-badge topic">桌面 Agent</span></div>
+      </a>
+      <a class="card" href="https://www.kimi.com/blog/perception-bench" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">👁</span>
+          <h4>PerceptionBench</h4>
+        </div>
+        <p class="tagline">从模型真实失败案例归纳视觉感知能力诊断基准。</p>
+        <p>Moonshot AI 发布 PerceptionBench，覆盖 10 项原子视觉感知能力和 3000 道验证题，用于诊断多模态模型到底是在感知还是猜测。</p>
+        <div><span class="tag">评测基准</span></div>
+        <div class="item-signals"><span class="signal-badge topic">多模态评测</span><span class="signal-badge topic">Benchmark</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" href="https://github.com/apache/ossie" target="_blank" rel="noopener">
+      <div>
+        <div class="name">apache / <b>ossie</b></div>
+        <div class="desc">Apache Ossie 试图标准化分析、AI 与 BI 平台之间的语义元数据交换，适合关注企业数据语义层和 AI 数据治理的人跟进。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Semantic Metadata</span></div>
+        <div class="item-signals"><span class="signal-badge topic">语义层</span><span class="signal-badge topic">数据平台</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 934</div>
+        <div class="today">▲ 60 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/PostHog/posthog" target="_blank" rel="noopener">
+      <div>
+        <div class="name">PostHog / <b>posthog</b></div>
+        <div class="desc">PostHog 正把 analytics、session replay、logs 和 MCP 连接成 self-driving products 的上下文层，对 Agent 诊断产品问题有直接意义。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">AI Observability</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI Observability</span><span class="signal-badge topic">产品分析</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 35,872</div>
+        <div class="today">▲ 77 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/lobehub/lobehub" target="_blank" rel="noopener">
+      <div>
+        <div class="name">lobehub / <b>lobehub</b></div>
+        <div class="desc">LobeHub 将多个 Agent 的雇用、排班、报告和 7x24 运营作为产品核心，适合观察 Agent Operator 类产品形态。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Agent Operator</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Ops</span><span class="signal-badge topic">多 Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 80,202</div>
+        <div class="today">▲ 71 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/github/copilot-sdk" target="_blank" rel="noopener">
+      <div>
+        <div class="name">github / <b>copilot-sdk</b></div>
+        <div class="desc">GitHub Copilot SDK 提供跨平台集成 Copilot Agent 的能力，值得关注第三方应用如何嵌入官方编程 Agent。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#b07219"></span>Java</span> <span class="dotsep">·</span> <span class="tag">SDK</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Copilot Agent</span><span class="signal-badge topic">SDK</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 9,658</div>
+        <div class="today">▲ 13 today</div>
+      </div>
+    </a>
+    <a class="repo" href="https://github.com/ibelick/ui-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">ibelick / <b>ui-skills</b></div>
+        <div class="desc">ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Design Skills</span></div>
+        <div class="item-signals"><span class="signal-badge topic">设计工程</span><span class="signal-badge topic">Skills</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 4,319</div>
+        <div class="today">▲ 178 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-07-17 10:45 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>

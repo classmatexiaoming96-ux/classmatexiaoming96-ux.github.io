@@ -1,7 +1,1049 @@
 {
   "version": 1,
-  "generated_at": "2026-07-17T10:08",
+  "generated_at": "2026-07-17T10:45",
   "digests": [
+    {
+      "date": "2026-07-17",
+      "weekday": "星期五",
+      "edition": 58,
+      "title": "Agent 工程化与模型治理同步升温",
+      "intro": "今天的主线是 Agent 工程化继续落地：大模型发布、自动化任务、代码迁移、企业安全与搜索接地同时推进；社区则在讨论 LLM 的真实生产价值、开放模型、本地 Agent 和 AI 基础设施代价。",
+      "counts": {
+        "headlines": 7,
+        "papers": 4,
+        "community": 5,
+        "products": 5,
+        "repos": 5
+      },
+      "highlights": [
+        {
+          "event_key": "kimi-k3-open-model-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "time": "今日",
+          "topics": [
+            "模型发布",
+            "多模态",
+            "长上下文"
+          ],
+          "source_count": 12,
+          "related_sources": [
+            "Moonshot AI",
+            "IT之家"
+          ],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://www.kimi.com/blog/kimi-k3"
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "grok-automations-launch-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Grok 推出 Automations：支持定时与邮件触发自动执行任务",
+          "summary": "xAI 为 Grok 增加自动化任务入口，用户可用自然语言描述一次性、每日、工作日或邮件触发任务，并在运行历史中查看结果。这把聊天机器人推进到轻量工作流层，关键观察点是权限、失败恢复和可审计性。",
+          "url": "https://x.ai/news/grok-automations",
+          "source": "xAI",
+          "time": "7 月 16 日",
+          "topics": [
+            "Agent 自动化",
+            "生产力"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://x.ai/news/grok-automations"
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "anthropic-claude-code-migration-bun-rust-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
+          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
+          "url": "https://claude.com/blog/ai-code-migration",
+          "source": "Claude Blog",
+          "time": "7 月 16 日",
+          "topics": [
+            "AI 编程",
+            "代码迁移"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://claude.com/blog/ai-code-migration"
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        }
+      ],
+      "items": [
+        {
+          "event_key": "kimi-k3-open-model-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "time": "今日",
+          "topics": [
+            "模型发布",
+            "多模态",
+            "长上下文"
+          ],
+          "source_count": 12,
+          "related_sources": [
+            "Moonshot AI",
+            "IT之家"
+          ],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://www.kimi.com/blog/kimi-k3"
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "grok-automations-launch-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Grok 推出 Automations：支持定时与邮件触发自动执行任务",
+          "summary": "xAI 为 Grok 增加自动化任务入口，用户可用自然语言描述一次性、每日、工作日或邮件触发任务，并在运行历史中查看结果。这把聊天机器人推进到轻量工作流层，关键观察点是权限、失败恢复和可审计性。",
+          "url": "https://x.ai/news/grok-automations",
+          "source": "xAI",
+          "time": "7 月 16 日",
+          "topics": [
+            "Agent 自动化",
+            "生产力"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://x.ai/news/grok-automations"
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "anthropic-claude-code-migration-bun-rust-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
+          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
+          "url": "https://claude.com/blog/ai-code-migration",
+          "source": "Claude Blog",
+          "time": "7 月 16 日",
+          "topics": [
+            "AI 编程",
+            "代码迁移"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://claude.com/blog/ai-code-migration"
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "enterprise-agent-security-gap-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "企业 Agent 安全缺口扩大：54% 受访组织已遭遇或险些遭遇事故",
+          "summary": "VentureBeat 调查显示，不少企业仍让多个 Agent 共享凭证，独立身份和沙箱隔离覆盖率偏低。对企业用户来说，这条新闻比单点漏洞更重要，因为它说明 Agent 权限治理已经成为生产部署的基础设施问题。",
+          "url": "https://venturebeat.com/ai/the-agent-security-gap-54-of-enterprises-have-already-had-an-ai-agent-incident-and-most-still-let-agents-share-credentials",
+          "source": "VentureBeat",
+          "time": "7 月 16 日",
+          "topics": [
+            "Agent 安全",
+            "企业部署"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "google-dma-android-search-ai-interoperability-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "欧盟要求 Google 开放 Android 与 Search 关键部分，Gemini 生态受影响",
+          "summary": "欧盟依据《数字市场法案》推动 Google 向第三方 AI 助手和搜索服务开放更大访问权限。若执行细节落地，AI 助手的默认入口、搜索接地和平台分发格局都可能被重塑。",
+          "url": "https://www.theverge.com/policy/966438/eu-google-android-ai-interoperability-search-data-dma",
+          "source": "The Verge",
+          "time": "7 月 16 日",
+          "topics": [
+            "AI 监管",
+            "平台开放"
+          ],
+          "source_count": 3,
+          "related_sources": [
+            "Ars Technica"
+          ],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://www.theverge.com/policy/966438/eu-google-android-ai-interoperability-search-data-dma"
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "gemini-enterprise-parallel-web-search-grounding-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Gemini Enterprise Agent Platform 接入 Parallel Web Search 作为网络接地提供商",
+          "summary": "Google Cloud 将 Parallel 的搜索基础设施作为新的 grounding provider，强调可验证实时网络结果、可编程提取与缓存。这反映企业 Agent 平台正在把“搜索接地”从插件能力变成可选基础组件。",
+          "url": "https://developers.googleblog.com/expanding-choice-in-gemini-enterprise-agent-platform-introducing-grounding-with-parallel-web-search",
+          "source": "Google Developers Blog",
+          "time": "7 月 16 日",
+          "topics": [
+            "企业 Agent",
+            "搜索接地"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "xai-grok-csam-lawsuit-2026-07-17",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "xAI 起诉涉嫌滥用 Grok 生成 CSAM 的用户，模型滥用治理进入司法层面",
+          "summary": "Ars Technica 报道称，xAI 首次就 Grok 被用于生成儿童性虐待图像起诉用户。案件把责任焦点放在滥用者身上，但也会推动外界继续追问模型防护、检测和平台处置流程是否充分。",
+          "url": "https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users",
+          "source": "Ars Technica",
+          "time": "7 月 16 日",
+          "topics": [
+            "AI 安全",
+            "滥用治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users"
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-15193",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Plover: Steering GUI Agents through Plan-Centric Interaction",
+          "summary": "这篇把 GUI Agent 的失败归因到“执行漂移”，提出围绕计划进行交互和纠偏。它的价值在于把用户意图、动态界面状态和 Agent 执行动作放进同一个可审查循环，适合做桌面/浏览器自动化的人读。",
+          "url": "https://arxiv.org/abs/2607.15193v1",
+          "source": "arXiv",
+          "time": "2026-07-16",
+          "topics": [
+            "GUI Agent",
+            "人机协作"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-15205",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "MM-IssueLoc: A Controlled Benchmark for Evaluating Visual Evidence in Multimodal Repository-Level Issue Localization",
+          "summary": "真实 issue 常带截图、报错弹窗和渲染状态，但现有仓库级定位评测多是纯文本。这篇补上视觉证据维度，对评估多模态代码 Agent 是否真能看懂 UI 失败现场很有参考价值。",
+          "url": "https://arxiv.org/abs/2607.15205v1",
+          "source": "arXiv",
+          "time": "2026-07-16",
+          "topics": [
+            "软件工程",
+            "多模态评测"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-15200",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Mask-Aware Policy Gradients for Diffusion Language Models",
+          "summary": "扩散语言模型要走向推理和对齐训练，需要解决 masked diffusion 下策略梯度估计难题。本文针对 mask 结构设计 policy gradient，对关注非自回归/扩散式 LLM 后训练的人有技术增量。",
+          "url": "https://arxiv.org/abs/2607.15200v1",
+          "source": "arXiv",
+          "time": "2026-07-16",
+          "topics": [
+            "扩散语言模型",
+            "强化学习"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-15190",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Can We Trust Item Response Theory for AI Evaluation?",
+          "summary": "越来越多 AI benchmark 用 IRT 估计能力、排序模型和诊断题目，但模型数据未必满足传统 IRT 假设。这篇提醒评测工程师不要只套统计模型，要检查 benchmark 数据分布和模型行为是否支持这些假设。",
+          "url": "https://arxiv.org/abs/2607.15190v1",
+          "source": "arXiv",
+          "time": "2026-07-16",
+          "topics": [
+            "AI 评测",
+            "Benchmark"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-llm-critics-right-use-anyway-2026-07-17",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "The LLM Critics Are Right. I Use LLMs Anyway",
+          "summary": "这篇文章在 HN 引发高评论量，讨论点不是盲目拥抱或拒绝 LLM，而是承认缺陷后仍把它作为可控工具使用。对团队落地 AI 编程来说，这类“带保留地采用”比口号更接近现实。",
+          "url": "https://www.theocharis.dev/blog/llm-critics-are-right-i-use-llms-anyway/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "LLM 生产力",
+            "开发者观点"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 193,
+          "comments": 202,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-lm-studio-bionic-open-model-agent-2026-07-17",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "LM Studio Bionic: the AI agent for open models",
+          "summary": "LM Studio Bionic 把本地/开放模型带进 Agent 工作流，是开源权重热度之后的自然延伸。社区关注点在于本地模型能否承担真实工具调用、代码理解和长任务执行，而不只是聊天。",
+          "url": "https://lmstudio.ai/blog/introducing-lm-studio-bionic",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "本地模型",
+            "Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 167,
+          "comments": 64,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-detecting-llm-text-classical-ml-2026-07-17",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Detecting LLM-Generated Texts with “Classical” Machine Learning",
+          "summary": "文章用传统机器学习路线讨论 LLM 文本检测，引发社区对可泛化性、数据泄漏和检测器寿命的争论。它提醒我们：AI 安全问题不总需要更大的模型，有时需要更清楚的问题定义。",
+          "url": "https://blog.lyc8503.net/en/post/llm-classifier/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 检测",
+            "机器学习"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 163,
+          "comments": 110,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-generative-ai-engineering-disaster-2026-07-17",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Generative AI Is an Engineering Disaster",
+          "summary": "The Atlantic 文章把讨论拉到数据中心、内存供给和硬件价格层面。社区热议说明 AI 工程化不只是模型能力问题，也包括供应链、电力、散热、成本和普通用户设备价格。",
+          "url": "https://www.theatlantic.com/technology/2026/07/generative-ai-engineering-disaster/687901/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 基础设施",
+            "成本"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 100,
+          "comments": 73,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-llm-networking-mikrotik-2026-07-17",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "LLM Networking with MikroTik",
+          "summary": "这篇把 LLM 用在网络设备配置与理解上，属于小众但实用的工程案例。它体现了一个趋势：LLM 价值不只在通用聊天，而是在垂直工具链里帮助专家读配置、查状态、缩短定位路径。",
+          "url": "https://blog.greg.technology/2026/07/14/llm-networking-with-mikrotik.html",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "网络运维",
+            "LLM 应用"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 102,
+          "comments": 55,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "google-vids-gemini-omni-avatars-2026-07-17",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Google Vids：Gemini Omni 与个人数字分身",
+          "summary": "Google Vids 新增基于提示词和参考图生成/编辑视频片段，以及上传自拍和语音后生成个人数字分身的能力，面向 Google AI Pro、Ultra 和 Workspace 商业客户。",
+          "url": "https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars",
+          "source": "Google Blog",
+          "time": "",
+          "topics": [
+            "视频生成",
+            "Workspace"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "staffdeck-openbmb-digital-employee-platform-2026-07-17",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "StaffDeck：面向企业数字员工的开源平台",
+          "summary": "面壁智能联合多团队开源 StaffDeck，定位不是普通聊天机器人，而是帮助企业构建、管理和持续改进数字员工的工作平台。",
+          "url": "https://x.com/OpenBMB/status/2077741814799548451",
+          "source": "OpenBMB",
+          "time": "",
+          "topics": [
+            "数字员工",
+            "企业 Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "patter-sdk-restaurant-phone-agent-guide-2026-07-17",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Patter SDK 电话 Agent 教程",
+          "summary": "MarkTechPost 报道的教程演示餐厅预订电话 Agent：注册工具、设置 PII/脏话/话题护栏，并用脚本化通话模拟进行成本、延迟与评估检查。",
+          "url": "https://www.marktechpost.com/2026/07/16/patter-sdk-guide-to-building-a-restaurant-booking-phone-agent-with-dynamic-variables-guardrails-latency-dashboards-and-eval-checks",
+          "source": "MarkTechPost",
+          "time": "",
+          "topics": [
+            "语音 Agent",
+            "评估"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "minimax-code-2-desktop-pi-agent-2026-07-17",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "MiniMax Code 2.0 桌面端",
+          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
+          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
+          "source": "MiniMax",
+          "time": "",
+          "topics": [
+            "AI 编程",
+            "桌面 Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "moonshot-perceptionbench-multimodal-2026-07-17",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "PerceptionBench",
+          "summary": "Moonshot AI 发布 PerceptionBench，覆盖 10 项原子视觉感知能力和 3000 道验证题，用于诊断多模态模型到底是在感知还是猜测。",
+          "url": "https://www.kimi.com/blog/perception-bench",
+          "source": "Moonshot AI",
+          "time": "",
+          "topics": [
+            "多模态评测",
+            "Benchmark"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-apache-ossie",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "apache/ossie",
+          "summary": "Apache Ossie 试图标准化分析、AI 与 BI 平台之间的语义元数据交换，适合关注企业数据语义层和 AI 数据治理的人跟进。",
+          "url": "https://github.com/apache/ossie",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "语义层",
+            "数据平台"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "934",
+          "stars_today": "60"
+        },
+        {
+          "event_key": "github-posthog-posthog-ai-observability",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "PostHog/posthog",
+          "summary": "PostHog 正把 analytics、session replay、logs 和 MCP 连接成 self-driving products 的上下文层，对 Agent 诊断产品问题有直接意义。",
+          "url": "https://github.com/PostHog/posthog",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "AI Observability",
+            "产品分析"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "35,872",
+          "stars_today": "77"
+        },
+        {
+          "event_key": "github-lobehub-lobehub",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "lobehub/lobehub",
+          "summary": "LobeHub 将多个 Agent 的雇用、排班、报告和 7x24 运营作为产品核心，适合观察 Agent Operator 类产品形态。",
+          "url": "https://github.com/lobehub/lobehub",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent Ops",
+            "多 Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "80,202",
+          "stars_today": "71"
+        },
+        {
+          "event_key": "github-github-copilot-sdk",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "github/copilot-sdk",
+          "summary": "GitHub Copilot SDK 提供跨平台集成 Copilot Agent 的能力，值得关注第三方应用如何嵌入官方编程 Agent。",
+          "url": "https://github.com/github/copilot-sdk",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Copilot Agent",
+            "SDK"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "9,658",
+          "stars_today": "13"
+        },
+        {
+          "event_key": "github-ibelick-ui-skills",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "ibelick/ui-skills",
+          "summary": "ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。",
+          "url": "https://github.com/ibelick/ui-skills",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "设计工程",
+            "Skills"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "4,319",
+          "stars_today": "178"
+        }
+      ],
+      "topics": [
+        {
+          "name": "AI 编程",
+          "count": 2
+        },
+        {
+          "name": "企业 Agent",
+          "count": 2
+        },
+        {
+          "name": "多模态评测",
+          "count": 2
+        },
+        {
+          "name": "Benchmark",
+          "count": 2
+        },
+        {
+          "name": "模型发布",
+          "count": 1
+        },
+        {
+          "name": "多模态",
+          "count": 1
+        },
+        {
+          "name": "长上下文",
+          "count": 1
+        },
+        {
+          "name": "Agent 自动化",
+          "count": 1
+        },
+        {
+          "name": "生产力",
+          "count": 1
+        },
+        {
+          "name": "代码迁移",
+          "count": 1
+        },
+        {
+          "name": "Agent 安全",
+          "count": 1
+        },
+        {
+          "name": "企业部署",
+          "count": 1
+        },
+        {
+          "name": "AI 监管",
+          "count": 1
+        },
+        {
+          "name": "平台开放",
+          "count": 1
+        },
+        {
+          "name": "搜索接地",
+          "count": 1
+        },
+        {
+          "name": "AI 安全",
+          "count": 1
+        },
+        {
+          "name": "滥用治理",
+          "count": 1
+        },
+        {
+          "name": "GUI Agent",
+          "count": 1
+        },
+        {
+          "name": "人机协作",
+          "count": 1
+        },
+        {
+          "name": "软件工程",
+          "count": 1
+        },
+        {
+          "name": "扩散语言模型",
+          "count": 1
+        },
+        {
+          "name": "强化学习",
+          "count": 1
+        },
+        {
+          "name": "AI 评测",
+          "count": 1
+        },
+        {
+          "name": "LLM 生产力",
+          "count": 1
+        },
+        {
+          "name": "开发者观点",
+          "count": 1
+        },
+        {
+          "name": "本地模型",
+          "count": 1
+        },
+        {
+          "name": "Agent",
+          "count": 1
+        },
+        {
+          "name": "AI 检测",
+          "count": 1
+        },
+        {
+          "name": "机器学习",
+          "count": 1
+        },
+        {
+          "name": "AI 基础设施",
+          "count": 1
+        },
+        {
+          "name": "成本",
+          "count": 1
+        },
+        {
+          "name": "网络运维",
+          "count": 1
+        },
+        {
+          "name": "LLM 应用",
+          "count": 1
+        },
+        {
+          "name": "视频生成",
+          "count": 1
+        },
+        {
+          "name": "Workspace",
+          "count": 1
+        },
+        {
+          "name": "数字员工",
+          "count": 1
+        },
+        {
+          "name": "语音 Agent",
+          "count": 1
+        },
+        {
+          "name": "评估",
+          "count": 1
+        },
+        {
+          "name": "桌面 Agent",
+          "count": 1
+        },
+        {
+          "name": "语义层",
+          "count": 1
+        },
+        {
+          "name": "数据平台",
+          "count": 1
+        },
+        {
+          "name": "AI Observability",
+          "count": 1
+        },
+        {
+          "name": "产品分析",
+          "count": 1
+        },
+        {
+          "name": "Agent Ops",
+          "count": 1
+        },
+        {
+          "name": "多 Agent",
+          "count": 1
+        },
+        {
+          "name": "Copilot Agent",
+          "count": 1
+        },
+        {
+          "name": "SDK",
+          "count": 1
+        },
+        {
+          "name": "设计工程",
+          "count": 1
+        },
+        {
+          "name": "Skills",
+          "count": 1
+        }
+      ],
+      "sources": [
+        {
+          "name": "Hacker News",
+          "count": 5
+        },
+        {
+          "name": "GitHub",
+          "count": 5
+        },
+        {
+          "name": "arXiv",
+          "count": 4
+        },
+        {
+          "name": "Moonshot AI",
+          "count": 3
+        },
+        {
+          "name": "Ars Technica",
+          "count": 2
+        },
+        {
+          "name": "IT之家",
+          "count": 1
+        },
+        {
+          "name": "xAI",
+          "count": 1
+        },
+        {
+          "name": "Claude Blog",
+          "count": 1
+        },
+        {
+          "name": "VentureBeat",
+          "count": 1
+        },
+        {
+          "name": "The Verge",
+          "count": 1
+        },
+        {
+          "name": "Google Developers Blog",
+          "count": 1
+        },
+        {
+          "name": "Google Blog",
+          "count": 1
+        },
+        {
+          "name": "OpenBMB",
+          "count": 1
+        },
+        {
+          "name": "MarkTechPost",
+          "count": 1
+        },
+        {
+          "name": "MiniMax",
+          "count": 1
+        }
+      ]
+    },
     {
       "date": "2026-07-16",
       "weekday": "星期四",
@@ -1053,6 +2095,279 @@
       ]
     },
     {
+      "name": "多模态",
+      "count": 3,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Inkling 975B 开源权重模型登上 HN",
+          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
+          "url": "https://thinkingmachines.ai/inkling/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "AI 基础设施",
+      "count": 2,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Generative AI Is an Engineering Disaster",
+          "summary": "The Atlantic 文章把讨论拉到数据中心、内存供给和硬件价格层面。社区热议说明 AI 工程化不只是模型能力问题，也包括供应链、电力、散热、成本和普通用户设备价格。",
+          "url": "https://www.theatlantic.com/technology/2026/07/generative-ai-engineering-disaster/687901/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Hybrid AI infrastructure",
+          "summary": "围绕 AI workloads 的基础设施讨论继续升温，混合架构把云弹性、私有数据、安全边界和推理成本放在同一张决策表里。",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOU0g5U0c0SXc1ZDAyX3FvQkZpTGZvSzRpbUZSdXBQVTZJWUcxTG1TbUFCTTNiejJOUExlNjdzWWxqYTdWbE9IOFdIcW9MQmVnMU5BemtVY0F1V0szdVpKLUpNTDk1X09lUEJZQ0hId21FQ2FNMW52Yko0TkRuazYzc2s5WWdrY2IxTlg1UEo3bFR3T0lpRjUzX1M0TEpJMHNHdDFZay0wakhuUQ?oc=5",
+          "source": "BizTech Magazine",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "AI 安全",
+      "count": 2,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "xAI 起诉涉嫌滥用 Grok 生成 CSAM 的用户，模型滥用治理进入司法层面",
+          "summary": "Ars Technica 报道称，xAI 首次就 Grok 被用于生成儿童性虐待图像起诉用户。案件把责任焦点放在滥用者身上，但也会推动外界继续追问模型防护、检测和平台处置流程是否充分。",
+          "url": "https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users",
+          "source": "Ars Technica",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
+          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
+          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "AI 编程",
+      "count": 2,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
+          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
+          "url": "https://claude.com/blog/ai-code-migration",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "MiniMax Code 2.0 桌面端",
+          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
+          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
+          "source": "MiniMax",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "Agent",
+      "count": 2,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "LM Studio Bionic: the AI agent for open models",
+          "summary": "LM Studio Bionic 把本地/开放模型带进 Agent 工作流，是开源权重热度之后的自然延伸。社区关注点在于本地模型能否承担真实工具调用、代码理解和长任务执行，而不只是聊天。",
+          "url": "https://lmstudio.ai/blog/introducing-lm-studio-bionic",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "Agent 安全",
+      "count": 2,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "企业 Agent 安全缺口扩大：54% 受访组织已遭遇或险些遭遇事故",
+          "summary": "VentureBeat 调查显示，不少企业仍让多个 Agent 共享凭证，独立身份和沙箱隔离覆盖率偏低。对企业用户来说，这条新闻比单点漏洞更重要，因为它说明 Agent 权限治理已经成为生产部署的基础设施问题。",
+          "url": "https://venturebeat.com/ai/the-agent-security-gap-54-of-enterprises-have-already-had-an-ai-agent-incident-and-most-still-let-agents-share-credentials",
+          "source": "VentureBeat",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Dicklesworthstone/destructive_command_guard",
+          "summary": "相比近几日榜单，今日仍有 471 的新增热度；The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.",
+          "url": "https://github.com/Dicklesworthstone/destructive_command_guard",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Benchmark",
+      "count": 2,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Can We Trust Item Response Theory for AI Evaluation?",
+          "summary": "越来越多 AI benchmark 用 IRT 估计能力、排序模型和诊断题目，但模型数据未必满足传统 IRT 假设。这篇提醒评测工程师不要只套统计模型，要检查 benchmark 数据分布和模型行为是否支持这些假设。",
+          "url": "https://arxiv.org/abs/2607.15190v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "PerceptionBench",
+          "summary": "Moonshot AI 发布 PerceptionBench，覆盖 10 项原子视觉感知能力和 3000 道验证题，用于诊断多模态模型到底是在感知还是猜测。",
+          "url": "https://www.kimi.com/blog/perception-bench",
+          "source": "Moonshot AI",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "Coding Agent",
       "count": 2,
       "dates": [
@@ -1090,6 +2405,77 @@
       ]
     },
     {
+      "name": "人机协作",
+      "count": 2,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Plover: Steering GUI Agents through Plan-Centric Interaction",
+          "summary": "这篇把 GUI Agent 的失败归因到“执行漂移”，提出围绕计划进行交互和纠偏。它的价值在于把用户意图、动态界面状态和 Agent 执行动作放进同一个可审查循环，适合做桌面/浏览器自动化的人读。",
+          "url": "https://arxiv.org/abs/2607.15193v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
+          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
+          "url": "https://arxiv.org/abs/2607.14049v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "企业 Agent",
+      "count": 2,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Gemini Enterprise Agent Platform 接入 Parallel Web Search 作为网络接地提供商",
+          "summary": "Google Cloud 将 Parallel 的搜索基础设施作为新的 grounding provider，强调可验证实时网络结果、可编程提取与缓存。这反映企业 Agent 平台正在把“搜索接地”从插件能力变成可选基础组件。",
+          "url": "https://developers.googleblog.com/expanding-choice-in-gemini-enterprise-agent-platform-introducing-grounding-with-parallel-web-search",
+          "source": "Google Developers Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "StaffDeck：面向企业数字员工的开源平台",
+          "summary": "面壁智能联合多团队开源 StaffDeck，定位不是普通聊天机器人，而是帮助企业构建、管理和持续改进数字员工的工作平台。",
+          "url": "https://x.com/OpenBMB/status/2077741814799548451",
+          "source": "OpenBMB",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "前沿模型",
       "count": 2,
       "dates": [
@@ -1123,39 +2509,73 @@
       ]
     },
     {
-      "name": "多模态",
+      "name": "多模态评测",
       "count": 2,
       "dates": [
-        "2026-07-16"
+        "2026-07-17"
       ],
       "sections": [
         {
-          "name": "今日要闻",
+          "name": "AI 论文",
           "count": 1
         },
         {
-          "name": "社区热议",
+          "name": "产品 / 概念",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-16",
-          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
-          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
-          "source": "Amazon Web Services (AWS)",
-          "section": "headlines",
-          "section_label": "今日要闻"
+          "date": "2026-07-17",
+          "title": "MM-IssueLoc: A Controlled Benchmark for Evaluating Visual Evidence in Multimodal Repository-Level Issue Localization",
+          "summary": "真实 issue 常带截图、报错弹窗和渲染状态，但现有仓库级定位评测多是纯文本。这篇补上视觉证据维度，对评估多模态代码 Agent 是否真能看懂 UI 失败现场很有参考价值。",
+          "url": "https://arxiv.org/abs/2607.15205v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "PerceptionBench",
+          "summary": "Moonshot AI 发布 PerceptionBench，覆盖 10 项原子视觉感知能力和 3000 道验证题，用于诊断多模态模型到底是在感知还是猜测。",
+          "url": "https://www.kimi.com/blog/perception-bench",
+          "source": "Moonshot AI",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "软件工程",
+      "count": 2,
+      "dates": [
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "MM-IssueLoc: A Controlled Benchmark for Evaluating Visual Evidence in Multimodal Repository-Level Issue Localization",
+          "summary": "真实 issue 常带截图、报错弹窗和渲染状态，但现有仓库级定位评测多是纯文本。这篇补上视觉证据维度，对评估多模态代码 Agent 是否真能看懂 UI 失败现场很有参考价值。",
+          "url": "https://arxiv.org/abs/2607.15205v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
         },
         {
           "date": "2026-07-16",
-          "title": "Inkling 975B 开源权重模型登上 HN",
-          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
-          "url": "https://thinkingmachines.ai/inkling/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
+          "title": "Early Adoption of Agentic Coding Tools by GitHub Projects",
+          "summary": "这篇从 GitHub 项目层面观察 agentic coding tools 的早期采用，而不是只看单个 PR 成败。它能帮助团队理解 AI 生成贡献如何改变维护流程、权限治理和项目协作模式。",
+          "url": "https://arxiv.org/abs/2607.14037v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
         }
       ]
     },
@@ -1177,6 +2597,30 @@
           "title": "moeru-ai/airi",
           "summary": "相比近几日榜单，今日仍有 110 的新增热度；💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
           "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "AI Observability",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "PostHog/posthog",
+          "summary": "PostHog 正把 analytics、session replay、logs 和 MCP 连接成 self-driving products 的上下文层，对 Agent 诊断产品问题有直接意义。",
+          "url": "https://github.com/PostHog/posthog",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -1208,34 +2652,10 @@
       ]
     },
     {
-      "name": "AI 基础设施",
+      "name": "AI 检测",
       "count": 1,
       "dates": [
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-16",
-          "title": "Hybrid AI infrastructure",
-          "summary": "围绕 AI workloads 的基础设施讨论继续升温，混合架构把云弹性、私有数据、安全边界和推理成本放在同一张决策表里。",
-          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOU0g5U0c0SXc1ZDAyX3FvQkZpTGZvSzRpbUZSdXBQVTZJWUcxTG1TbUFCTTNiejJOUExlNjdzWWxqYTdWbE9IOFdIcW9MQmVnMU5BemtVY0F1V0szdVpKLUpNTDk1X09lUEJZQ0hId21FQ2FNMW52Yko0TkRuazYzc2s5WWdrY2IxTlg1UEo3bFR3T0lpRjUzX1M0TEpJMHNHdDFZay0wakhuUQ?oc=5",
-          "source": "BizTech Magazine",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
-      "name": "AI 安全",
-      "count": 1,
-      "dates": [
-        "2026-07-16"
+        "2026-07-17"
       ],
       "sections": [
         {
@@ -1245,10 +2665,10 @@
       ],
       "items": [
         {
-          "date": "2026-07-16",
-          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
-          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
-          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
+          "date": "2026-07-17",
+          "title": "Detecting LLM-Generated Texts with “Classical” Machine Learning",
+          "summary": "文章用传统机器学习路线讨论 LLM 文本检测，引发社区对可泛化性、数据泄漏和检测器寿命的争论。它提醒我们：AI 安全问题不总需要更大的模型，有时需要更清楚的问题定义。",
+          "url": "https://blog.lyc8503.net/en/post/llm-classifier/",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
@@ -1274,6 +2694,30 @@
           "summary": "州级 AI 安全立法继续推进，说明美国 AI 治理正在从联邦讨论下沉到地方执行层，企业可能需要同时处理多层监管要求。",
           "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOdDZ0MnZWNVdjTS1mYjBSUUR6T3E1VUFweExoLWRreGUzRDgyWjd4WnJKRkRHbUxwNHFySjlQY25FcFFyS2tEMU91VjJwUExPNlBFVHVFMUZlWjhuY3dBOEZ6OVMza2lQVG9qOFN4dW1rZDRvV2JGYWN6ZW5mN2VNT0k2dUxkMGNUbGVzVGJScVZDbTRUSy11SXlHMmx3akdPaFJJ?oc=5",
           "source": "Davis Wright Tremaine",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "AI 监管",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "欧盟要求 Google 开放 Android 与 Search 关键部分，Gemini 生态受影响",
+          "summary": "欧盟依据《数字市场法案》推动 Google 向第三方 AI 助手和搜索服务开放更大访问权限。若执行细节落地，AI 助手的默认入口、搜索接地和平台分发格局都可能被重塑。",
+          "url": "https://www.theverge.com/policy/966438/eu-google-android-ai-interoperability-search-data-dma",
+          "source": "The Verge",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -1328,26 +2772,26 @@
       ]
     },
     {
-      "name": "Agent",
+      "name": "AI 评测",
       "count": 1,
       "dates": [
-        "2026-07-16"
+        "2026-07-17"
       ],
       "sections": [
         {
-          "name": "今日要闻",
+          "name": "AI 论文",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-16",
-          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
-          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
-          "source": "Amazon Web Services (AWS)",
-          "section": "headlines",
-          "section_label": "今日要闻"
+          "date": "2026-07-17",
+          "title": "Can We Trust Item Response Theory for AI Evaluation?",
+          "summary": "越来越多 AI benchmark 用 IRT 估计能力、排序模型和诊断题目，但模型数据未必满足传统 IRT 假设。这篇提醒评测工程师不要只套统计模型，要检查 benchmark 数据分布和模型行为是否支持这些假设。",
+          "url": "https://arxiv.org/abs/2607.15190v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
         }
       ]
     },
@@ -1376,10 +2820,10 @@
       ]
     },
     {
-      "name": "Agent 安全",
+      "name": "Agent Ops",
       "count": 1,
       "dates": [
-        "2026-07-16"
+        "2026-07-17"
       ],
       "sections": [
         {
@@ -1389,13 +2833,37 @@
       ],
       "items": [
         {
-          "date": "2026-07-16",
-          "title": "Dicklesworthstone/destructive_command_guard",
-          "summary": "相比近几日榜单，今日仍有 471 的新增热度；The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.",
-          "url": "https://github.com/Dicklesworthstone/destructive_command_guard",
+          "date": "2026-07-17",
+          "title": "lobehub/lobehub",
+          "summary": "LobeHub 将多个 Agent 的雇用、排班、报告和 7x24 运营作为产品核心，适合观察 Agent Operator 类产品形态。",
+          "url": "https://github.com/lobehub/lobehub",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Agent 自动化",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Grok 推出 Automations：支持定时与邮件触发自动执行任务",
+          "summary": "xAI 为 Grok 增加自动化任务入口，用户可用自然语言描述一次性、每日、工作日或邮件触发任务，并在运行历史中查看结果。这把聊天机器人推进到轻量工作流层，关键观察点是权限、失败恢复和可审计性。",
+          "url": "https://x.ai/news/grok-automations",
+          "source": "xAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -1424,6 +2892,54 @@
       ]
     },
     {
+      "name": "Copilot Agent",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "github/copilot-sdk",
+          "summary": "GitHub Copilot SDK 提供跨平台集成 Copilot Agent 的能力，值得关注第三方应用如何嵌入官方编程 Agent。",
+          "url": "https://github.com/github/copilot-sdk",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "GUI Agent",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Plover: Steering GUI Agents through Plan-Centric Interaction",
+          "summary": "这篇把 GUI Agent 的失败归因到“执行漂移”，提出围绕计划进行交互和纠偏。它的价值在于把用户意图、动态界面状态和 Agent 执行动作放进同一个可审查循环，适合做桌面/浏览器自动化的人读。",
+          "url": "https://arxiv.org/abs/2607.15193v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "LLM 工程",
       "count": 1,
       "dates": [
@@ -1441,6 +2957,54 @@
           "title": "Martin Fowler 文章引发“用 DSL 约束 LLM”讨论",
           "summary": "DSL 被视为让 LLM 输出更可靠的一条工程路线：把自由文本收窄为可验证结构，让模型在明确语义边界内工作。",
           "url": "https://martinfowler.com/articles/llm-and-dsls.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "LLM 应用",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "LLM Networking with MikroTik",
+          "summary": "这篇把 LLM 用在网络设备配置与理解上，属于小众但实用的工程案例。它体现了一个趋势：LLM 价值不只在通用聊天，而是在垂直工具链里帮助专家读配置、查状态、缩短定位路径。",
+          "url": "https://blog.greg.technology/2026/07/14/llm-networking-with-mikrotik.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "LLM 生产力",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "The LLM Critics Are Right. I Use LLMs Anyway",
+          "summary": "这篇文章在 HN 引发高评论量，讨论点不是盲目拥抱或拒绝 LLM，而是承认缺陷后仍把它作为可控工具使用。对团队落地 AI 编程来说，这类“带保留地采用”比口号更接近现实。",
+          "url": "https://www.theocharis.dev/blog/llm-critics-are-right-i-use-llms-anyway/",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
@@ -1496,6 +3060,54 @@
       ]
     },
     {
+      "name": "SDK",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "github/copilot-sdk",
+          "summary": "GitHub Copilot SDK 提供跨平台集成 Copilot Agent 的能力，值得关注第三方应用如何嵌入官方编程 Agent。",
+          "url": "https://github.com/github/copilot-sdk",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Skills",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "ibelick/ui-skills",
+          "summary": "ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。",
+          "url": "https://github.com/ibelick/ui-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "Trading Agent",
       "count": 1,
       "dates": [
@@ -1516,6 +3128,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Workspace",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Google Vids：Gemini Omni 与个人数字分身",
+          "summary": "Google Vids 新增基于提示词和参考图生成/编辑视频片段，以及上传自拍和语音后生成个人数字分身的能力，面向 Google AI Pro、Ultra 和 Workspace 商业客户。",
+          "url": "https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars",
+          "source": "Google Blog",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -1568,26 +3204,74 @@
       ]
     },
     {
-      "name": "人机协作",
+      "name": "产品分析",
       "count": 1,
       "dates": [
-        "2026-07-16"
+        "2026-07-17"
       ],
       "sections": [
         {
-          "name": "AI 论文",
+          "name": "开源热门",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-16",
-          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
-          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
-          "url": "https://arxiv.org/abs/2607.14049v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-07-17",
+          "title": "PostHog/posthog",
+          "summary": "PostHog 正把 analytics、session replay、logs 和 MCP 连接成 self-driving products 的上下文层，对 Agent 诊断产品问题有直接意义。",
+          "url": "https://github.com/PostHog/posthog",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "代码迁移",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
+          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
+          "url": "https://claude.com/blog/ai-code-migration",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "企业部署",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "企业 Agent 安全缺口扩大：54% 受访组织已遭遇或险些遭遇事故",
+          "summary": "VentureBeat 调查显示，不少企业仍让多个 Agent 共享凭证，独立身份和沙箱隔离覆盖率偏低。对企业用户来说，这条新闻比单点漏洞更重要，因为它说明 Agent 权限治理已经成为生产部署的基础设施问题。",
+          "url": "https://venturebeat.com/ai/the-agent-security-gap-54-of-enterprises-have-already-had-an-ai-agent-incident-and-most-still-let-agents-share-credentials",
+          "source": "VentureBeat",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -1688,6 +3372,78 @@
       ]
     },
     {
+      "name": "多 Agent",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "lobehub/lobehub",
+          "summary": "LobeHub 将多个 Agent 的雇用、排班、报告和 7x24 运营作为产品核心，适合观察 Agent Operator 类产品形态。",
+          "url": "https://github.com/lobehub/lobehub",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "平台开放",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "欧盟要求 Google 开放 Android 与 Search 关键部分，Gemini 生态受影响",
+          "summary": "欧盟依据《数字市场法案》推动 Google 向第三方 AI 助手和搜索服务开放更大访问权限。若执行细节落地，AI 助手的默认入口、搜索接地和平台分发格局都可能被重塑。",
+          "url": "https://www.theverge.com/policy/966438/eu-google-android-ai-interoperability-search-data-dma",
+          "source": "The Verge",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "开发者观点",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "The LLM Critics Are Right. I Use LLMs Anyway",
+          "summary": "这篇文章在 HN 引发高评论量，讨论点不是盲目拥抱或拒绝 LLM，而是承认缺陷后仍把它作为可控工具使用。对团队落地 AI 编程来说，这类“带保留地采用”比口号更接近现实。",
+          "url": "https://www.theocharis.dev/blog/llm-critics-are-right-i-use-llms-anyway/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "开源 AI",
       "count": 1,
       "dates": [
@@ -1736,6 +3492,78 @@
       ]
     },
     {
+      "name": "强化学习",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Mask-Aware Policy Gradients for Diffusion Language Models",
+          "summary": "扩散语言模型要走向推理和对齐训练，需要解决 masked diffusion 下策略梯度估计难题。本文针对 mask 结构设计 policy gradient，对关注非自回归/扩散式 LLM 后训练的人有技术增量。",
+          "url": "https://arxiv.org/abs/2607.15200v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "成本",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Generative AI Is an Engineering Disaster",
+          "summary": "The Atlantic 文章把讨论拉到数据中心、内存供给和硬件价格层面。社区热议说明 AI 工程化不只是模型能力问题，也包括供应链、电力、散热、成本和普通用户设备价格。",
+          "url": "https://www.theatlantic.com/technology/2026/07/generative-ai-engineering-disaster/687901/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "扩散语言模型",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Mask-Aware Policy Gradients for Diffusion Language Models",
+          "summary": "扩散语言模型要走向推理和对齐训练，需要解决 masked diffusion 下策略梯度估计难题。本文针对 mask 结构设计 policy gradient，对关注非自回归/扩散式 LLM 后训练的人有技术增量。",
+          "url": "https://arxiv.org/abs/2607.15200v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "推理模型",
       "count": 1,
       "dates": [
@@ -1756,6 +3584,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "搜索接地",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Gemini Enterprise Agent Platform 接入 Parallel Web Search 作为网络接地提供商",
+          "summary": "Google Cloud 将 Parallel 的搜索基础设施作为新的 grounding provider，强调可验证实时网络结果、可编程提取与缓存。这反映企业 Agent 平台正在把“搜索接地”从插件能力变成可选基础组件。",
+          "url": "https://developers.googleblog.com/expanding-choice-in-gemini-enterprise-agent-platform-introducing-grounding-with-parallel-web-search",
+          "source": "Google Developers Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -1828,6 +3680,150 @@
           "source": "FOX 10 Phoenix",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "数字员工",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "StaffDeck：面向企业数字员工的开源平台",
+          "summary": "面壁智能联合多团队开源 StaffDeck，定位不是普通聊天机器人，而是帮助企业构建、管理和持续改进数字员工的工作平台。",
+          "url": "https://x.com/OpenBMB/status/2077741814799548451",
+          "source": "OpenBMB",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "数据平台",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "apache/ossie",
+          "summary": "Apache Ossie 试图标准化分析、AI 与 BI 平台之间的语义元数据交换，适合关注企业数据语义层和 AI 数据治理的人跟进。",
+          "url": "https://github.com/apache/ossie",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "本地模型",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "LM Studio Bionic: the AI agent for open models",
+          "summary": "LM Studio Bionic 把本地/开放模型带进 Agent 工作流，是开源权重热度之后的自然延伸。社区关注点在于本地模型能否承担真实工具调用、代码理解和长任务执行，而不只是聊天。",
+          "url": "https://lmstudio.ai/blog/introducing-lm-studio-bionic",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "机器学习",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Detecting LLM-Generated Texts with “Classical” Machine Learning",
+          "summary": "文章用传统机器学习路线讨论 LLM 文本检测，引发社区对可泛化性、数据泄漏和检测器寿命的争论。它提醒我们：AI 安全问题不总需要更大的模型，有时需要更清楚的问题定义。",
+          "url": "https://blog.lyc8503.net/en/post/llm-classifier/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "桌面 Agent",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "MiniMax Code 2.0 桌面端",
+          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
+          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
+          "source": "MiniMax",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "模型发布",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -1928,6 +3924,174 @@
       ]
     },
     {
+      "name": "滥用治理",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "xAI 起诉涉嫌滥用 Grok 生成 CSAM 的用户，模型滥用治理进入司法层面",
+          "summary": "Ars Technica 报道称，xAI 首次就 Grok 被用于生成儿童性虐待图像起诉用户。案件把责任焦点放在滥用者身上，但也会推动外界继续追问模型防护、检测和平台处置流程是否充分。",
+          "url": "https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users",
+          "source": "Ars Technica",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "生产力",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Grok 推出 Automations：支持定时与邮件触发自动执行任务",
+          "summary": "xAI 为 Grok 增加自动化任务入口，用户可用自然语言描述一次性、每日、工作日或邮件触发任务，并在运行历史中查看结果。这把聊天机器人推进到轻量工作流层，关键观察点是权限、失败恢复和可审计性。",
+          "url": "https://x.ai/news/grok-automations",
+          "source": "xAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "网络运维",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "LLM Networking with MikroTik",
+          "summary": "这篇把 LLM 用在网络设备配置与理解上，属于小众但实用的工程案例。它体现了一个趋势：LLM 价值不只在通用聊天，而是在垂直工具链里帮助专家读配置、查状态、缩短定位路径。",
+          "url": "https://blog.greg.technology/2026/07/14/llm-networking-with-mikrotik.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "视频生成",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Google Vids：Gemini Omni 与个人数字分身",
+          "summary": "Google Vids 新增基于提示词和参考图生成/编辑视频片段，以及上传自拍和语音后生成个人数字分身的能力，面向 Google AI Pro、Ultra 和 Workspace 商业客户。",
+          "url": "https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars",
+          "source": "Google Blog",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "设计工程",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "ibelick/ui-skills",
+          "summary": "ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。",
+          "url": "https://github.com/ibelick/ui-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "评估",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Patter SDK 电话 Agent 教程",
+          "summary": "MarkTechPost 报道的教程演示餐厅预订电话 Agent：注册工具、设置 PII/脏话/话题护栏，并用脚本化通话模拟进行成本、延迟与评估检查。",
+          "url": "https://www.marktechpost.com/2026/07/16/patter-sdk-guide-to-building-a-restaurant-booking-phone-agent-with-dynamic-variables-guardrails-latency-dashboards-and-eval-checks",
+          "source": "MarkTechPost",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "语义层",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "apache/ossie",
+          "summary": "Apache Ossie 试图标准化分析、AI 与 BI 平台之间的语义元数据交换，适合关注企业数据语义层和 AI 数据治理的人跟进。",
+          "url": "https://github.com/apache/ossie",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "语音 AI",
       "count": 1,
       "dates": [
@@ -1952,26 +4116,26 @@
       ]
     },
     {
-      "name": "软件工程",
+      "name": "语音 Agent",
       "count": 1,
       "dates": [
-        "2026-07-16"
+        "2026-07-17"
       ],
       "sections": [
         {
-          "name": "AI 论文",
+          "name": "产品 / 概念",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-16",
-          "title": "Early Adoption of Agentic Coding Tools by GitHub Projects",
-          "summary": "这篇从 GitHub 项目层面观察 agentic coding tools 的早期采用，而不是只看单个 PR 成败。它能帮助团队理解 AI 生成贡献如何改变维护流程、权限治理和项目协作模式。",
-          "url": "https://arxiv.org/abs/2607.14037v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-07-17",
+          "title": "Patter SDK 电话 Agent 教程",
+          "summary": "MarkTechPost 报道的教程演示餐厅预订电话 Agent：注册工具、设置 PII/脏话/话题护栏，并用脚本化通话模拟进行成本、延迟与评估检查。",
+          "url": "https://www.marktechpost.com/2026/07/16/patter-sdk-guide-to-building-a-restaurant-booking-phone-agent-with-dynamic-variables-guardrails-latency-dashboards-and-eval-checks",
+          "source": "MarkTechPost",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -1996,6 +4160,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "长上下文",
+      "count": 1,
+      "dates": [
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-17",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -2027,15 +4215,63 @@
   "sources": [
     {
       "name": "GitHub",
-      "count": 7
+      "count": 12
     },
     {
       "name": "Hacker News",
-      "count": 5
+      "count": 10
     },
     {
       "name": "arXiv",
-      "count": 4
+      "count": 8
+    },
+    {
+      "name": "Moonshot AI",
+      "count": 3
+    },
+    {
+      "name": "Ars Technica",
+      "count": 2
+    },
+    {
+      "name": "IT之家",
+      "count": 2
+    },
+    {
+      "name": "xAI",
+      "count": 1
+    },
+    {
+      "name": "Claude Blog",
+      "count": 1
+    },
+    {
+      "name": "VentureBeat",
+      "count": 1
+    },
+    {
+      "name": "The Verge",
+      "count": 1
+    },
+    {
+      "name": "Google Developers Blog",
+      "count": 1
+    },
+    {
+      "name": "Google Blog",
+      "count": 1
+    },
+    {
+      "name": "OpenBMB",
+      "count": 1
+    },
+    {
+      "name": "MarkTechPost",
+      "count": 1
+    },
+    {
+      "name": "MiniMax",
+      "count": 1
     },
     {
       "name": "South China Morning Post",
@@ -2055,10 +4291,6 @@
     },
     {
       "name": "Amazon Web Services (AWS)",
-      "count": 1
-    },
-    {
-      "name": "IT之家",
       "count": 1
     },
     {
