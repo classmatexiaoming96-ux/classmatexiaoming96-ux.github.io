@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>主题雷达 · AI 每日速递</title>
+<meta name="description" content="按主题查看 AI 每日速递的近期精选动态。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+<link rel="stylesheet" href="assets/explorer.css?v=20260717">
+</head>
+<body class="explorer-page" data-view="topics">
+  <header class="sitebar">
+    <a class="sitebrand" href="index.html"><span class="brand-signal"></span><strong>AI 每日速递</strong></a>
+    <nav class="site-nav" aria-label="主要导航">
+      <a href="index.html">今日刊</a>
+      <a href="feed.html">动态流</a>
+      <a href="topics.html" aria-current="page">主题</a>
+      <a href="calendar.html">日历</a>
+    </nav>
+  </header>
+
+  <main class="explorer-wrap">
+    <header class="explorer-head">
+      <div>
+        <span class="explorer-kicker">TOPIC MAP</span>
+        <h1>主题雷达</h1>
+      </div>
+      <div class="archive-range" id="archiveRange">正在载入</div>
+    </header>
+
+    <label class="search-field topic-search">
+      <span class="sr-only">搜索主题</span>
+      <input id="topicSearch" type="search" placeholder="搜索主题" autocomplete="off">
+    </label>
+
+    <div class="topic-layout">
+      <aside class="topic-sidebar" aria-label="主题列表">
+        <div class="topic-index" id="topicIndex"></div>
+      </aside>
+      <section class="topic-detail" id="topicDetail" aria-live="polite">
+        <div class="empty-state">正在载入主题</div>
+      </section>
+    </div>
+
+    <section class="source-register" aria-labelledby="sourceTitle">
+      <div class="section-line">
+        <h2 id="sourceTitle">近期来源</h2>
+        <span id="sourceCount"></span>
+      </div>
+      <div class="source-list" id="sourceList"></div>
+    </section>
+  </main>
+
+<script src="assets/explorer.js?v=20260717"></script>
+</body>
+</html>

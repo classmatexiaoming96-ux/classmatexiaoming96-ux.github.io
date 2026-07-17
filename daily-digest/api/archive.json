@@ -1,0 +1,2081 @@
+{
+  "version": 1,
+  "generated_at": "2026-07-17T10:08",
+  "digests": [
+    {
+      "date": "2026-07-16",
+      "weekday": "星期四",
+      "edition": 57,
+      "title": "AI 治理标准与 Agent 工程化同日升温",
+      "intro": "今天的 AI 主线集中在治理边界与工程化落地：美国州级和联邦采购规则继续补齐 AI 监管细节，DeepMind 再次推动 frontier AI 标准机构；社区则围绕开源权重、DSL 约束、语音欺诈和 Agent 观测展开讨论，论文栏重点关注 Agent 评测、纠错、长程 credit assignment 与真实 GitHub 项目采用。",
+      "counts": {
+        "headlines": 6,
+        "papers": 4,
+        "community": 5,
+        "products": 4,
+        "repos": 7
+      },
+      "highlights": [
+        {
+          "event_key": "us-ai-china-anthropic-stance-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "美国强化对华 AI 立场，Anthropic 呼吁延长领先窗口",
+          "summary": "报道显示，美国围绕 AI 与中国竞争的政策语气继续变硬，Anthropic 也主张保持美国在前沿模型上的领先。这类表态会影响出口管制、模型开放、供应链和企业合规策略。",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxObmFMMG0yWk8yLTBnMFB6cUlQSVRELVNBZDI0Z3pHelVVSUFra2gyM1ZFajE4NTR5RW5OQTJ5Z3NMeXZmclAycG41Yk8zX1E1UU9RVXFtTUlNSGVwRm1pLVRWQnJEblVlRDNWdXdUUG1MSGRuUnNtLVdqMjg2TENLRi03MVVadW1PMGN6aVpWNDVlTTJWZkQxWGpwVVVGbFo3bGtCUdIBpAFBVV95cUxOUElSQmUzejJWVzRxcy1lS0w0Wkd4d0NwNXZZNU1mbDFudnFGeHJZSTFPOFpRNFUzU00ydHNVVlVlSlVuenhBaHFYbDlLYlJWT01uTE1nVjZqSElRdUlfbUt3OGpfRHhXTkRocW13RTBzM3NhOWEtbUl4LWpyN2ducEJubjNFb24yNnVZMVZ6ZHdSZXJobms5WEh2aDRlODFaZzMzeQ?oc=5",
+          "source": "South China Morning Post",
+          "time": "今日",
+          "topics": [
+            "中美 AI 竞争",
+            "AI 治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "world-ai-cooperation-organization-shanghai-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "世界人工智能合作组织正式成立，总部设在上海",
+          "summary": "29 个国家代表在上海签署协定，成立独立的政府间人工智能合作组织。它把国际 AI 治理从倡议推进到常设组织层，后续值得关注标准协调、成员扩展和与既有多边机制的关系。",
+          "url": "https://www.ithome.com/0/977/793.htm",
+          "source": "IT之家",
+          "time": "今日",
+          "topics": [
+            "AI 治理",
+            "国际合作",
+            "中国 AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://aihot.virxact.com/items/cmrnmdjt80051bizz895rbmu6"
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "deepmind-frontier-ai-standards-body-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "DeepMind CEO 再次推动建立 frontier AI 标准机构",
+          "summary": "Demis Hassabis 再提标准化治理机构，核心不是抽象伦理，而是为前沿模型能力、风险评估和跨国协作建立更稳定的制度接口。",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPMlBta1UyazdYaVdGZkduLTBuYWh0UU5rVDNxUTgtNmlma3ZRcFRfNG5oQmo0SmQydm1jRmMzSXhBMDZkcmlrdGI4RFZFSVlMeUZFSlF3eTdiZG5BTDU1TVNNQmNQcWxsNTdIbzhpcGk3bEhLQnJfX2xhT3A1czlrN0l2d3h6SXk5M2JsNWRMMWFNVlZ3aWstRmhqcEFiVVFu?oc=5",
+          "source": "cio.com",
+          "time": "今日",
+          "topics": [
+            "AI 治理",
+            "前沿模型"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        }
+      ],
+      "items": [
+        {
+          "event_key": "us-ai-china-anthropic-stance-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "美国强化对华 AI 立场，Anthropic 呼吁延长领先窗口",
+          "summary": "报道显示，美国围绕 AI 与中国竞争的政策语气继续变硬，Anthropic 也主张保持美国在前沿模型上的领先。这类表态会影响出口管制、模型开放、供应链和企业合规策略。",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxObmFMMG0yWk8yLTBnMFB6cUlQSVRELVNBZDI0Z3pHelVVSUFra2gyM1ZFajE4NTR5RW5OQTJ5Z3NMeXZmclAycG41Yk8zX1E1UU9RVXFtTUlNSGVwRm1pLVRWQnJEblVlRDNWdXdUUG1MSGRuUnNtLVdqMjg2TENLRi03MVVadW1PMGN6aVpWNDVlTTJWZkQxWGpwVVVGbFo3bGtCUdIBpAFBVV95cUxOUElSQmUzejJWVzRxcy1lS0w0Wkd4d0NwNXZZNU1mbDFudnFGeHJZSTFPOFpRNFUzU00ydHNVVlVlSlVuenhBaHFYbDlLYlJWT01uTE1nVjZqSElRdUlfbUt3OGpfRHhXTkRocW13RTBzM3NhOWEtbUl4LWpyN2ducEJubjNFb24yNnVZMVZ6ZHdSZXJobms5WEh2aDRlODFaZzMzeQ?oc=5",
+          "source": "South China Morning Post",
+          "time": "今日",
+          "topics": [
+            "中美 AI 竞争",
+            "AI 治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "deepmind-frontier-ai-standards-body-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "DeepMind CEO 再次推动建立 frontier AI 标准机构",
+          "summary": "Demis Hassabis 再提标准化治理机构，核心不是抽象伦理，而是为前沿模型能力、风险评估和跨国协作建立更稳定的制度接口。",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPMlBta1UyazdYaVdGZkduLTBuYWh0UU5rVDNxUTgtNmlma3ZRcFRfNG5oQmo0SmQydm1jRmMzSXhBMDZkcmlrdGI4RFZFSVlMeUZFSlF3eTdiZG5BTDU1TVNNQmNQcWxsNTdIbzhpcGk3bEhLQnJfX2xhT3A1czlrN0l2d3h6SXk5M2JsNWRMMWFNVlZ3aWstRmhqcEFiVVFu?oc=5",
+          "source": "cio.com",
+          "time": "今日",
+          "topics": [
+            "AI 治理",
+            "前沿模型"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "illinois-frontier-ai-safety-law-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "伊利诺伊州通过 frontier AI 安全法律",
+          "summary": "州级 AI 安全立法继续推进，说明美国 AI 治理正在从联邦讨论下沉到地方执行层，企业可能需要同时处理多层监管要求。",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOdDZ0MnZWNVdjTS1mYjBSUUR6T3E1VUFweExoLWRreGUzRDgyWjd4WnJKRkRHbUxwNHFySjlQY25FcFFyS2tEMU91VjJwUExPNlBFVHVFMUZlWjhuY3dBOEZ6OVMza2lQVG9qOFN4dW1rZDRvV2JGYWN6ZW5mN2VNT0k2dUxkMGNUbGVzVGJScVZDbTRUSy11SXlHMmx3akdPaFJJ?oc=5",
+          "source": "Davis Wright Tremaine",
+          "time": "今日",
+          "topics": [
+            "AI 法规",
+            "前沿模型"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "gsa-ai-acquisition-rule-feedback-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "GSA AI 采购规则草案仍被认为不够完整",
+          "summary": "围绕美国政府 AI 采购的利益相关者反馈显示，采购规则要覆盖模型风险、供应商责任和实际验收指标仍有缺口。",
+          "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOVURXZ1I2TktPcjVOU2VKWkxCRWlTVjlURzFqXzNyMkphazY0R2hqYktVV2pXRHN6MDRnU0JzWEZqQUhYM1FmbWNOUVUtVXk1Qko1T2xrTDR4NVpSWnd5V1Q1ZUpMRTNpd2c3TU0zUFhweDRBM3d6QzRKcjlncGVaNWpqbw?oc=5",
+          "source": "FedScoop",
+          "time": "今日",
+          "topics": [
+            "政府采购",
+            "AI 治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "aws-agentic-vision-bedrock-mcp-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "time": "今日",
+          "topics": [
+            "Agent",
+            "MCP",
+            "多模态"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "world-ai-cooperation-organization-shanghai-2026-07-16",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "世界人工智能合作组织正式成立，总部设在上海",
+          "summary": "29 个国家代表在上海签署协定，成立独立的政府间人工智能合作组织。它把国际 AI 治理从倡议推进到常设组织层，后续值得关注标准协调、成员扩展和与既有多边机制的关系。",
+          "url": "https://www.ithome.com/0/977/793.htm",
+          "source": "IT之家",
+          "time": "今日",
+          "topics": [
+            "AI 治理",
+            "国际合作",
+            "中国 AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://aihot.virxact.com/items/cmrnmdjt80051bizz895rbmu6"
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-14051",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Hindcast: Replaying Prediction Markets to Evaluate LLM Forecasters",
+          "summary": "它把 LLM 预测评测中的“答案泄漏”问题具体化：检索可能拿到事后材料，新模型训练数据也更接近事件本身。对做 AI forecaster、检索增强评测或 benchmark 复现的人来说，这篇能帮助重新设计更干净的回放实验。",
+          "url": "https://arxiv.org/abs/2607.14051v1",
+          "source": "arXiv",
+          "time": "2026-07-15T17:21:43Z",
+          "topics": [
+            "模型评测",
+            "预测"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-14049",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
+          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
+          "url": "https://arxiv.org/abs/2607.14049v1",
+          "source": "arXiv",
+          "time": "2026-07-15T17:16:43Z",
+          "topics": [
+            "人机协作",
+            "推理模型"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-14037",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Early Adoption of Agentic Coding Tools by GitHub Projects",
+          "summary": "这篇从 GitHub 项目层面观察 agentic coding tools 的早期采用，而不是只看单个 PR 成败。它能帮助团队理解 AI 生成贡献如何改变维护流程、权限治理和项目协作模式。",
+          "url": "https://arxiv.org/abs/2607.14037v1",
+          "source": "arXiv",
+          "time": "2026-07-15T17:05:06Z",
+          "topics": [
+            "Coding Agent",
+            "软件工程"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-13884",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Experience Memory Graph: One-Shot Error Correction for Agents",
+          "summary": "Experience Memory Graph 把错误修正经验组织成图，用于长任务中的一次性纠错和失败恢复。相比普通 reflection，它更强调可复用的错误记忆，适合关注 Agent 记忆、恢复和长程执行可靠性的读者。",
+          "url": "https://arxiv.org/abs/2607.13884v1",
+          "source": "arXiv",
+          "time": "2026-07-15T14:33:15Z",
+          "topics": [
+            "Agent 记忆",
+            "错误恢复"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-ai-voice-fraud-three-second-theft-2026-07-16",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
+          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
+          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 安全",
+            "语音 AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 165,
+          "comments": 217,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-demis-hassabis-ai-safety-plan-2026-07-16",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Demis Hassabis 的 AI 安全路线引发社区讨论",
+          "summary": "社区围绕 DeepMind 的安全治理、标准机构和前沿模型部署节奏展开争论，关注点在于谁有资格定义“足够安全”。",
+          "url": "https://twitter.com/demishassabis/status/2076957440109625718",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 治理",
+            "模型安全"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 153,
+          "comments": 198,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-inkling-open-weights-975b-llm-2026-07-16",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Inkling 975B 开源权重模型登上 HN",
+          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
+          "url": "https://thinkingmachines.ai/inkling/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "开源模型",
+            "多模态"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 120,
+          "comments": 4,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-dsls-enable-reliable-llm-use-2026-07-16",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Martin Fowler 文章引发“用 DSL 约束 LLM”讨论",
+          "summary": "DSL 被视为让 LLM 输出更可靠的一条工程路线：把自由文本收窄为可验证结构，让模型在明确语义边界内工作。",
+          "url": "https://martinfowler.com/articles/llm-and-dsls.html",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "LLM 工程",
+            "可靠性"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 111,
+          "comments": 73,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-invest-in-free-open-source-ai-2026-07-16",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "社区讨论政府、公司与非营利组织是否应投资自由开源 AI",
+          "summary": "话题把开源 AI 从“开发者偏好”提升到公共基础设施层面，争论点包括审计、竞争、依赖风险和长期资金来源。",
+          "url": "https://www.siegelendowment.org/wp-content/uploads/2026/07/fortune-david-siegel-open-source-ai.pdf",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "开源 AI",
+            "公共基础设施"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 98,
+          "comments": 43,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "concept-neural-transparency-ai-design-2026-07-16",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Neural transparency",
+          "summary": "MIT News 讨论神经透明度与 AI 设计未来，重点不是再造一个聊天产品，而是让模型内部表征、失败模式和设计决策更可检查。",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPSmlMMExtV2R6M0dRLUlGemZYRTlvSXhWZHpzS1dWT3dfSzBLNDRJLTllS1VJWllqS3ZtSXk1M0drUXVNVmVjV0owSHBqc3NVZGpVNjhvT2J1bkVPTHRRU2d6NmpyMER5TUtoWFNMS19oOWUyeTdINUFmRGlsRzBWaDlTS211UWFIRWVxcFRScw?oc=5",
+          "source": "MIT News",
+          "time": "",
+          "topics": [
+            "可解释性",
+            "AI 设计"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-ai-lesson-planning-teacher-burnout-2026-07-16",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "教师备课 AI 工具",
+          "summary": "教育场景继续从“学生能不能用 AI”转向“教师如何用 AI 降低行政和备课压力”。这种工具的关键指标会是节省时间、课程质量和学校治理规则。",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9PN0FVX3laVG9jRUZNaW5hbG12eENTcFRlNjE3X08tRFY3T1dEM0NGWk4xOTdzckxfNUtWLURuY2FDcEk5NXRMN2kxeVpWLXFMQ2hISmZfMjEteW1xa29zYkVQblpVZ9IBa0FVX3lxTE0zYlFpaFN6VUV0NmEyWWMzNkpPM3JOYmdsQW53aGp1V3lIei1vbzJIUkVOOGdqSVNnWWRBME1wZGt2UTA3UU9Ia1k0NTY0QWlTSU82UExOOFBWREtTQTIwMWVXLWdXLVo3ZjY4?oc=5",
+          "source": "FOX 10 Phoenix",
+          "time": "",
+          "topics": [
+            "教育 AI",
+            "效率工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "concept-legal-ops-ai-value-proof-2026-07-16",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Legal ops AI value proof",
+          "summary": "法律运营领域的 AI 难点从部署转向 ROI 证明：摘要、检索和合同分析需要转化为可审计的效率、风险和质量指标。",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX1MybVcydm1NZUl6U1VVMGF3YlVoVlpFWEZPV0VWcmZ5RVpQdjgzSHl0cExabVVoTTE4N2FyUEstTjZ2T3Y0cEtlTnJGOGJHM054eVJ6TTBYS0VwSHdnX3EzcWpOMk1iRngxcDdCbXZyYlVRN2JERXRpVk9fQzBfMl94YnhWR3lhcnVVVWluRHhmSVVxU0h2OHFRb3ZtTFhNLWpXY1NDX1RFRXdNbG1uSw?oc=5",
+          "source": "Wolters Kluwer",
+          "time": "",
+          "topics": [
+            "法律 AI",
+            "ROI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "concept-hybrid-ai-workload-infrastructure-2026-07-16",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Hybrid AI infrastructure",
+          "summary": "围绕 AI workloads 的基础设施讨论继续升温，混合架构把云弹性、私有数据、安全边界和推理成本放在同一张决策表里。",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOU0g5U0c0SXc1ZDAyX3FvQkZpTGZvSzRpbUZSdXBQVTZJWUcxTG1TbUFCTTNiejJOUExlNjdzWWxqYTdWbE9IOFdIcW9MQmVnMU5BemtVY0F1V0szdVpKLUpNTDk1X09lUEJZQ0hId21FQ2FNMW52Yko0TkRuazYzc2s5WWdrY2IxTlg1UEo3bFR3T0lpRjUzX1M0TEpJMHNHdDFZay0wakhuUQ?oc=5",
+          "source": "BizTech Magazine",
+          "time": "",
+          "topics": [
+            "AI 基础设施",
+            "混合云"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-nutlope-hallmark",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "Nutlope/hallmark",
+          "summary": "相比近几日榜单，今日仍有 1,277 的新增热度；Anti-AI-slop design skill for Claude Code, Cursor, and Codex.",
+          "url": "https://github.com/Nutlope/hallmark",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "AI 设计治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "8,766",
+          "stars_today": "1,277"
+        },
+        {
+          "event_key": "github-moeru-ai-airi",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "moeru-ai/airi",
+          "summary": "相比近几日榜单，今日仍有 110 的新增热度；💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+          "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "AI Companion"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "42,553",
+          "stars_today": "110"
+        },
+        {
+          "event_key": "github-dicklesworthstone-destructive-command-guard",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "Dicklesworthstone/destructive_command_guard",
+          "summary": "相比近几日榜单，今日仍有 471 的新增热度；The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.",
+          "url": "https://github.com/Dicklesworthstone/destructive_command_guard",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent 安全"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "4,797",
+          "stars_today": "471"
+        },
+        {
+          "event_key": "github-hkuds-vibe-trading",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "HKUDS/Vibe-Trading",
+          "summary": "相比近几日榜单，今日仍有 915 的新增热度；\"Vibe-Trading: Your Personal Trading Agent\"",
+          "url": "https://github.com/HKUDS/Vibe-Trading",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Trading Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "23,766",
+          "stars_today": "915"
+        },
+        {
+          "event_key": "github-openinterpreter-openinterpreter",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "openinterpreter/openinterpreter",
+          "summary": "相比近几日榜单，今日仍有 299 的新增热度；A coding agent for low-cost models",
+          "url": "https://github.com/openinterpreter/openinterpreter",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Coding Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "65,535",
+          "stars_today": "299"
+        },
+        {
+          "event_key": "github-hkuds-deeptutor",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "HKUDS/DeepTutor",
+          "summary": "相比近几日榜单，今日仍有 172 的新增热度；DeepTutor: Lifelong Personalized Tutoring. https://deeptutor.info/.",
+          "url": "https://github.com/HKUDS/DeepTutor",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "AI Tutor"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "26,345",
+          "stars_today": "172"
+        },
+        {
+          "event_key": "github-shubhamsaboo-awesome-llm-apps",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "Shubhamsaboo/awesome-llm-apps",
+          "summary": "相比近几日榜单，今日仍有 1,236 的新增热度；100+ AI Agent &amp; RAG apps you can actually run — clone, customize, ship.",
+          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent Apps"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "121,985",
+          "stars_today": "1,236"
+        }
+      ],
+      "topics": [
+        {
+          "name": "AI 治理",
+          "count": 5
+        },
+        {
+          "name": "前沿模型",
+          "count": 2
+        },
+        {
+          "name": "多模态",
+          "count": 2
+        },
+        {
+          "name": "Coding Agent",
+          "count": 2
+        },
+        {
+          "name": "中美 AI 竞争",
+          "count": 1
+        },
+        {
+          "name": "AI 法规",
+          "count": 1
+        },
+        {
+          "name": "政府采购",
+          "count": 1
+        },
+        {
+          "name": "Agent",
+          "count": 1
+        },
+        {
+          "name": "MCP",
+          "count": 1
+        },
+        {
+          "name": "国际合作",
+          "count": 1
+        },
+        {
+          "name": "中国 AI",
+          "count": 1
+        },
+        {
+          "name": "模型评测",
+          "count": 1
+        },
+        {
+          "name": "预测",
+          "count": 1
+        },
+        {
+          "name": "人机协作",
+          "count": 1
+        },
+        {
+          "name": "推理模型",
+          "count": 1
+        },
+        {
+          "name": "软件工程",
+          "count": 1
+        },
+        {
+          "name": "Agent 记忆",
+          "count": 1
+        },
+        {
+          "name": "错误恢复",
+          "count": 1
+        },
+        {
+          "name": "AI 安全",
+          "count": 1
+        },
+        {
+          "name": "语音 AI",
+          "count": 1
+        },
+        {
+          "name": "模型安全",
+          "count": 1
+        },
+        {
+          "name": "开源模型",
+          "count": 1
+        },
+        {
+          "name": "LLM 工程",
+          "count": 1
+        },
+        {
+          "name": "可靠性",
+          "count": 1
+        },
+        {
+          "name": "开源 AI",
+          "count": 1
+        },
+        {
+          "name": "公共基础设施",
+          "count": 1
+        },
+        {
+          "name": "可解释性",
+          "count": 1
+        },
+        {
+          "name": "AI 设计",
+          "count": 1
+        },
+        {
+          "name": "教育 AI",
+          "count": 1
+        },
+        {
+          "name": "效率工具",
+          "count": 1
+        },
+        {
+          "name": "法律 AI",
+          "count": 1
+        },
+        {
+          "name": "ROI",
+          "count": 1
+        },
+        {
+          "name": "AI 基础设施",
+          "count": 1
+        },
+        {
+          "name": "混合云",
+          "count": 1
+        },
+        {
+          "name": "AI 设计治理",
+          "count": 1
+        },
+        {
+          "name": "AI Companion",
+          "count": 1
+        },
+        {
+          "name": "Agent 安全",
+          "count": 1
+        },
+        {
+          "name": "Trading Agent",
+          "count": 1
+        },
+        {
+          "name": "AI Tutor",
+          "count": 1
+        },
+        {
+          "name": "Agent Apps",
+          "count": 1
+        }
+      ],
+      "sources": [
+        {
+          "name": "GitHub",
+          "count": 7
+        },
+        {
+          "name": "Hacker News",
+          "count": 5
+        },
+        {
+          "name": "arXiv",
+          "count": 4
+        },
+        {
+          "name": "South China Morning Post",
+          "count": 1
+        },
+        {
+          "name": "cio.com",
+          "count": 1
+        },
+        {
+          "name": "Davis Wright Tremaine",
+          "count": 1
+        },
+        {
+          "name": "FedScoop",
+          "count": 1
+        },
+        {
+          "name": "Amazon Web Services (AWS)",
+          "count": 1
+        },
+        {
+          "name": "IT之家",
+          "count": 1
+        },
+        {
+          "name": "MIT News",
+          "count": 1
+        },
+        {
+          "name": "FOX 10 Phoenix",
+          "count": 1
+        },
+        {
+          "name": "Wolters Kluwer",
+          "count": 1
+        },
+        {
+          "name": "BizTech Magazine",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "topics": [
+    {
+      "name": "AI 治理",
+      "count": 5,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 4
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "美国强化对华 AI 立场，Anthropic 呼吁延长领先窗口",
+          "summary": "报道显示，美国围绕 AI 与中国竞争的政策语气继续变硬，Anthropic 也主张保持美国在前沿模型上的领先。这类表态会影响出口管制、模型开放、供应链和企业合规策略。",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxObmFMMG0yWk8yLTBnMFB6cUlQSVRELVNBZDI0Z3pHelVVSUFra2gyM1ZFajE4NTR5RW5OQTJ5Z3NMeXZmclAycG41Yk8zX1E1UU9RVXFtTUlNSGVwRm1pLVRWQnJEblVlRDNWdXdUUG1MSGRuUnNtLVdqMjg2TENLRi03MVVadW1PMGN6aVpWNDVlTTJWZkQxWGpwVVVGbFo3bGtCUdIBpAFBVV95cUxOUElSQmUzejJWVzRxcy1lS0w0Wkd4d0NwNXZZNU1mbDFudnFGeHJZSTFPOFpRNFUzU00ydHNVVlVlSlVuenhBaHFYbDlLYlJWT01uTE1nVjZqSElRdUlfbUt3OGpfRHhXTkRocW13RTBzM3NhOWEtbUl4LWpyN2ducEJubjNFb24yNnVZMVZ6ZHdSZXJobms5WEh2aDRlODFaZzMzeQ?oc=5",
+          "source": "South China Morning Post",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "DeepMind CEO 再次推动建立 frontier AI 标准机构",
+          "summary": "Demis Hassabis 再提标准化治理机构，核心不是抽象伦理，而是为前沿模型能力、风险评估和跨国协作建立更稳定的制度接口。",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPMlBta1UyazdYaVdGZkduLTBuYWh0UU5rVDNxUTgtNmlma3ZRcFRfNG5oQmo0SmQydm1jRmMzSXhBMDZkcmlrdGI4RFZFSVlMeUZFSlF3eTdiZG5BTDU1TVNNQmNQcWxsNTdIbzhpcGk3bEhLQnJfX2xhT3A1czlrN0l2d3h6SXk5M2JsNWRMMWFNVlZ3aWstRmhqcEFiVVFu?oc=5",
+          "source": "cio.com",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "GSA AI 采购规则草案仍被认为不够完整",
+          "summary": "围绕美国政府 AI 采购的利益相关者反馈显示，采购规则要覆盖模型风险、供应商责任和实际验收指标仍有缺口。",
+          "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOVURXZ1I2TktPcjVOU2VKWkxCRWlTVjlURzFqXzNyMkphazY0R2hqYktVV2pXRHN6MDRnU0JzWEZqQUhYM1FmbWNOUVUtVXk1Qko1T2xrTDR4NVpSWnd5V1Q1ZUpMRTNpd2c3TU0zUFhweDRBM3d6QzRKcjlncGVaNWpqbw?oc=5",
+          "source": "FedScoop",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "世界人工智能合作组织正式成立，总部设在上海",
+          "summary": "29 个国家代表在上海签署协定，成立独立的政府间人工智能合作组织。它把国际 AI 治理从倡议推进到常设组织层，后续值得关注标准协调、成员扩展和与既有多边机制的关系。",
+          "url": "https://www.ithome.com/0/977/793.htm",
+          "source": "IT之家",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Demis Hassabis 的 AI 安全路线引发社区讨论",
+          "summary": "社区围绕 DeepMind 的安全治理、标准机构和前沿模型部署节奏展开争论，关注点在于谁有资格定义“足够安全”。",
+          "url": "https://twitter.com/demishassabis/status/2076957440109625718",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "Coding Agent",
+      "count": 2,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Early Adoption of Agentic Coding Tools by GitHub Projects",
+          "summary": "这篇从 GitHub 项目层面观察 agentic coding tools 的早期采用，而不是只看单个 PR 成败。它能帮助团队理解 AI 生成贡献如何改变维护流程、权限治理和项目协作模式。",
+          "url": "https://arxiv.org/abs/2607.14037v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "openinterpreter/openinterpreter",
+          "summary": "相比近几日榜单，今日仍有 299 的新增热度；A coding agent for low-cost models",
+          "url": "https://github.com/openinterpreter/openinterpreter",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "前沿模型",
+      "count": 2,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "DeepMind CEO 再次推动建立 frontier AI 标准机构",
+          "summary": "Demis Hassabis 再提标准化治理机构，核心不是抽象伦理，而是为前沿模型能力、风险评估和跨国协作建立更稳定的制度接口。",
+          "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPMlBta1UyazdYaVdGZkduLTBuYWh0UU5rVDNxUTgtNmlma3ZRcFRfNG5oQmo0SmQydm1jRmMzSXhBMDZkcmlrdGI4RFZFSVlMeUZFSlF3eTdiZG5BTDU1TVNNQmNQcWxsNTdIbzhpcGk3bEhLQnJfX2xhT3A1czlrN0l2d3h6SXk5M2JsNWRMMWFNVlZ3aWstRmhqcEFiVVFu?oc=5",
+          "source": "cio.com",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "伊利诺伊州通过 frontier AI 安全法律",
+          "summary": "州级 AI 安全立法继续推进，说明美国 AI 治理正在从联邦讨论下沉到地方执行层，企业可能需要同时处理多层监管要求。",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOdDZ0MnZWNVdjTS1mYjBSUUR6T3E1VUFweExoLWRreGUzRDgyWjd4WnJKRkRHbUxwNHFySjlQY25FcFFyS2tEMU91VjJwUExPNlBFVHVFMUZlWjhuY3dBOEZ6OVMza2lQVG9qOFN4dW1rZDRvV2JGYWN6ZW5mN2VNT0k2dUxkMGNUbGVzVGJScVZDbTRUSy11SXlHMmx3akdPaFJJ?oc=5",
+          "source": "Davis Wright Tremaine",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "多模态",
+      "count": 2,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Inkling 975B 开源权重模型登上 HN",
+          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
+          "url": "https://thinkingmachines.ai/inkling/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "AI Companion",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "moeru-ai/airi",
+          "summary": "相比近几日榜单，今日仍有 110 的新增热度；💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+          "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "AI Tutor",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "HKUDS/DeepTutor",
+          "summary": "相比近几日榜单，今日仍有 172 的新增热度；DeepTutor: Lifelong Personalized Tutoring. https://deeptutor.info/.",
+          "url": "https://github.com/HKUDS/DeepTutor",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "AI 基础设施",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Hybrid AI infrastructure",
+          "summary": "围绕 AI workloads 的基础设施讨论继续升温，混合架构把云弹性、私有数据、安全边界和推理成本放在同一张决策表里。",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOU0g5U0c0SXc1ZDAyX3FvQkZpTGZvSzRpbUZSdXBQVTZJWUcxTG1TbUFCTTNiejJOUExlNjdzWWxqYTdWbE9IOFdIcW9MQmVnMU5BemtVY0F1V0szdVpKLUpNTDk1X09lUEJZQ0hId21FQ2FNMW52Yko0TkRuazYzc2s5WWdrY2IxTlg1UEo3bFR3T0lpRjUzX1M0TEpJMHNHdDFZay0wakhuUQ?oc=5",
+          "source": "BizTech Magazine",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "AI 安全",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
+          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
+          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "AI 法规",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "伊利诺伊州通过 frontier AI 安全法律",
+          "summary": "州级 AI 安全立法继续推进，说明美国 AI 治理正在从联邦讨论下沉到地方执行层，企业可能需要同时处理多层监管要求。",
+          "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxOdDZ0MnZWNVdjTS1mYjBSUUR6T3E1VUFweExoLWRreGUzRDgyWjd4WnJKRkRHbUxwNHFySjlQY25FcFFyS2tEMU91VjJwUExPNlBFVHVFMUZlWjhuY3dBOEZ6OVMza2lQVG9qOFN4dW1rZDRvV2JGYWN6ZW5mN2VNT0k2dUxkMGNUbGVzVGJScVZDbTRUSy11SXlHMmx3akdPaFJJ?oc=5",
+          "source": "Davis Wright Tremaine",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "AI 设计",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Neural transparency",
+          "summary": "MIT News 讨论神经透明度与 AI 设计未来，重点不是再造一个聊天产品，而是让模型内部表征、失败模式和设计决策更可检查。",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPSmlMMExtV2R6M0dRLUlGemZYRTlvSXhWZHpzS1dWT3dfSzBLNDRJLTllS1VJWllqS3ZtSXk1M0drUXVNVmVjV0owSHBqc3NVZGpVNjhvT2J1bkVPTHRRU2d6NmpyMER5TUtoWFNMS19oOWUyeTdINUFmRGlsRzBWaDlTS211UWFIRWVxcFRScw?oc=5",
+          "source": "MIT News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "AI 设计治理",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Nutlope/hallmark",
+          "summary": "相比近几日榜单，今日仍有 1,277 的新增热度；Anti-AI-slop design skill for Claude Code, Cursor, and Codex.",
+          "url": "https://github.com/Nutlope/hallmark",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Agent",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "Agent Apps",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Shubhamsaboo/awesome-llm-apps",
+          "summary": "相比近几日榜单，今日仍有 1,236 的新增热度；100+ AI Agent &amp; RAG apps you can actually run — clone, customize, ship.",
+          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Agent 安全",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Dicklesworthstone/destructive_command_guard",
+          "summary": "相比近几日榜单，今日仍有 471 的新增热度；The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.",
+          "url": "https://github.com/Dicklesworthstone/destructive_command_guard",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Agent 记忆",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Experience Memory Graph: One-Shot Error Correction for Agents",
+          "summary": "Experience Memory Graph 把错误修正经验组织成图，用于长任务中的一次性纠错和失败恢复。相比普通 reflection，它更强调可复用的错误记忆，适合关注 Agent 记忆、恢复和长程执行可靠性的读者。",
+          "url": "https://arxiv.org/abs/2607.13884v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "LLM 工程",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Martin Fowler 文章引发“用 DSL 约束 LLM”讨论",
+          "summary": "DSL 被视为让 LLM 输出更可靠的一条工程路线：把自由文本收窄为可验证结构，让模型在明确语义边界内工作。",
+          "url": "https://martinfowler.com/articles/llm-and-dsls.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "MCP",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "ROI",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Legal ops AI value proof",
+          "summary": "法律运营领域的 AI 难点从部署转向 ROI 证明：摘要、检索和合同分析需要转化为可审计的效率、风险和质量指标。",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX1MybVcydm1NZUl6U1VVMGF3YlVoVlpFWEZPV0VWcmZ5RVpQdjgzSHl0cExabVVoTTE4N2FyUEstTjZ2T3Y0cEtlTnJGOGJHM054eVJ6TTBYS0VwSHdnX3EzcWpOMk1iRngxcDdCbXZyYlVRN2JERXRpVk9fQzBfMl94YnhWR3lhcnVVVWluRHhmSVVxU0h2OHFRb3ZtTFhNLWpXY1NDX1RFRXdNbG1uSw?oc=5",
+          "source": "Wolters Kluwer",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "Trading Agent",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "HKUDS/Vibe-Trading",
+          "summary": "相比近几日榜单，今日仍有 915 的新增热度；\"Vibe-Trading: Your Personal Trading Agent\"",
+          "url": "https://github.com/HKUDS/Vibe-Trading",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "中国 AI",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "世界人工智能合作组织正式成立，总部设在上海",
+          "summary": "29 个国家代表在上海签署协定，成立独立的政府间人工智能合作组织。它把国际 AI 治理从倡议推进到常设组织层，后续值得关注标准协调、成员扩展和与既有多边机制的关系。",
+          "url": "https://www.ithome.com/0/977/793.htm",
+          "source": "IT之家",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "中美 AI 竞争",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "美国强化对华 AI 立场，Anthropic 呼吁延长领先窗口",
+          "summary": "报道显示，美国围绕 AI 与中国竞争的政策语气继续变硬，Anthropic 也主张保持美国在前沿模型上的领先。这类表态会影响出口管制、模型开放、供应链和企业合规策略。",
+          "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxObmFMMG0yWk8yLTBnMFB6cUlQSVRELVNBZDI0Z3pHelVVSUFra2gyM1ZFajE4NTR5RW5OQTJ5Z3NMeXZmclAycG41Yk8zX1E1UU9RVXFtTUlNSGVwRm1pLVRWQnJEblVlRDNWdXdUUG1MSGRuUnNtLVdqMjg2TENLRi03MVVadW1PMGN6aVpWNDVlTTJWZkQxWGpwVVVGbFo3bGtCUdIBpAFBVV95cUxOUElSQmUzejJWVzRxcy1lS0w0Wkd4d0NwNXZZNU1mbDFudnFGeHJZSTFPOFpRNFUzU00ydHNVVlVlSlVuenhBaHFYbDlLYlJWT01uTE1nVjZqSElRdUlfbUt3OGpfRHhXTkRocW13RTBzM3NhOWEtbUl4LWpyN2ducEJubjNFb24yNnVZMVZ6ZHdSZXJobms5WEh2aDRlODFaZzMzeQ?oc=5",
+          "source": "South China Morning Post",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "人机协作",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
+          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
+          "url": "https://arxiv.org/abs/2607.14049v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "公共基础设施",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "社区讨论政府、公司与非营利组织是否应投资自由开源 AI",
+          "summary": "话题把开源 AI 从“开发者偏好”提升到公共基础设施层面，争论点包括审计、竞争、依赖风险和长期资金来源。",
+          "url": "https://www.siegelendowment.org/wp-content/uploads/2026/07/fortune-david-siegel-open-source-ai.pdf",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "可解释性",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Neural transparency",
+          "summary": "MIT News 讨论神经透明度与 AI 设计未来，重点不是再造一个聊天产品，而是让模型内部表征、失败模式和设计决策更可检查。",
+          "url": "https://news.google.com/rss/articles/CBMijwFBVV95cUxPSmlMMExtV2R6M0dRLUlGemZYRTlvSXhWZHpzS1dWT3dfSzBLNDRJLTllS1VJWllqS3ZtSXk1M0drUXVNVmVjV0owSHBqc3NVZGpVNjhvT2J1bkVPTHRRU2d6NmpyMER5TUtoWFNMS19oOWUyeTdINUFmRGlsRzBWaDlTS211UWFIRWVxcFRScw?oc=5",
+          "source": "MIT News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "可靠性",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Martin Fowler 文章引发“用 DSL 约束 LLM”讨论",
+          "summary": "DSL 被视为让 LLM 输出更可靠的一条工程路线：把自由文本收窄为可验证结构，让模型在明确语义边界内工作。",
+          "url": "https://martinfowler.com/articles/llm-and-dsls.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "国际合作",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "世界人工智能合作组织正式成立，总部设在上海",
+          "summary": "29 个国家代表在上海签署协定，成立独立的政府间人工智能合作组织。它把国际 AI 治理从倡议推进到常设组织层，后续值得关注标准协调、成员扩展和与既有多边机制的关系。",
+          "url": "https://www.ithome.com/0/977/793.htm",
+          "source": "IT之家",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "开源 AI",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "社区讨论政府、公司与非营利组织是否应投资自由开源 AI",
+          "summary": "话题把开源 AI 从“开发者偏好”提升到公共基础设施层面，争论点包括审计、竞争、依赖风险和长期资金来源。",
+          "url": "https://www.siegelendowment.org/wp-content/uploads/2026/07/fortune-david-siegel-open-source-ai.pdf",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "开源模型",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Inkling 975B 开源权重模型登上 HN",
+          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
+          "url": "https://thinkingmachines.ai/inkling/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "推理模型",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
+          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
+          "url": "https://arxiv.org/abs/2607.14049v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "政府采购",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "GSA AI 采购规则草案仍被认为不够完整",
+          "summary": "围绕美国政府 AI 采购的利益相关者反馈显示，采购规则要覆盖模型风险、供应商责任和实际验收指标仍有缺口。",
+          "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOVURXZ1I2TktPcjVOU2VKWkxCRWlTVjlURzFqXzNyMkphazY0R2hqYktVV2pXRHN6MDRnU0JzWEZqQUhYM1FmbWNOUVUtVXk1Qko1T2xrTDR4NVpSWnd5V1Q1ZUpMRTNpd2c3TU0zUFhweDRBM3d6QzRKcjlncGVaNWpqbw?oc=5",
+          "source": "FedScoop",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "效率工具",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "教师备课 AI 工具",
+          "summary": "教育场景继续从“学生能不能用 AI”转向“教师如何用 AI 降低行政和备课压力”。这种工具的关键指标会是节省时间、课程质量和学校治理规则。",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9PN0FVX3laVG9jRUZNaW5hbG12eENTcFRlNjE3X08tRFY3T1dEM0NGWk4xOTdzckxfNUtWLURuY2FDcEk5NXRMN2kxeVpWLXFMQ2hISmZfMjEteW1xa29zYkVQblpVZ9IBa0FVX3lxTE0zYlFpaFN6VUV0NmEyWWMzNkpPM3JOYmdsQW53aGp1V3lIei1vbzJIUkVOOGdqSVNnWWRBME1wZGt2UTA3UU9Ia1k0NTY0QWlTSU82UExOOFBWREtTQTIwMWVXLWdXLVo3ZjY4?oc=5",
+          "source": "FOX 10 Phoenix",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "教育 AI",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "教师备课 AI 工具",
+          "summary": "教育场景继续从“学生能不能用 AI”转向“教师如何用 AI 降低行政和备课压力”。这种工具的关键指标会是节省时间、课程质量和学校治理规则。",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9PN0FVX3laVG9jRUZNaW5hbG12eENTcFRlNjE3X08tRFY3T1dEM0NGWk4xOTdzckxfNUtWLURuY2FDcEk5NXRMN2kxeVpWLXFMQ2hISmZfMjEteW1xa29zYkVQblpVZ9IBa0FVX3lxTE0zYlFpaFN6VUV0NmEyWWMzNkpPM3JOYmdsQW53aGp1V3lIei1vbzJIUkVOOGdqSVNnWWRBME1wZGt2UTA3UU9Ia1k0NTY0QWlTSU82UExOOFBWREtTQTIwMWVXLWdXLVo3ZjY4?oc=5",
+          "source": "FOX 10 Phoenix",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "模型安全",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Demis Hassabis 的 AI 安全路线引发社区讨论",
+          "summary": "社区围绕 DeepMind 的安全治理、标准机构和前沿模型部署节奏展开争论，关注点在于谁有资格定义“足够安全”。",
+          "url": "https://twitter.com/demishassabis/status/2076957440109625718",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "模型评测",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Hindcast: Replaying Prediction Markets to Evaluate LLM Forecasters",
+          "summary": "它把 LLM 预测评测中的“答案泄漏”问题具体化：检索可能拿到事后材料，新模型训练数据也更接近事件本身。对做 AI forecaster、检索增强评测或 benchmark 复现的人来说，这篇能帮助重新设计更干净的回放实验。",
+          "url": "https://arxiv.org/abs/2607.14051v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "法律 AI",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Legal ops AI value proof",
+          "summary": "法律运营领域的 AI 难点从部署转向 ROI 证明：摘要、检索和合同分析需要转化为可审计的效率、风险和质量指标。",
+          "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQX1MybVcydm1NZUl6U1VVMGF3YlVoVlpFWEZPV0VWcmZ5RVpQdjgzSHl0cExabVVoTTE4N2FyUEstTjZ2T3Y0cEtlTnJGOGJHM054eVJ6TTBYS0VwSHdnX3EzcWpOMk1iRngxcDdCbXZyYlVRN2JERXRpVk9fQzBfMl94YnhWR3lhcnVVVWluRHhmSVVxU0h2OHFRb3ZtTFhNLWpXY1NDX1RFRXdNbG1uSw?oc=5",
+          "source": "Wolters Kluwer",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "混合云",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Hybrid AI infrastructure",
+          "summary": "围绕 AI workloads 的基础设施讨论继续升温，混合架构把云弹性、私有数据、安全边界和推理成本放在同一张决策表里。",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOU0g5U0c0SXc1ZDAyX3FvQkZpTGZvSzRpbUZSdXBQVTZJWUcxTG1TbUFCTTNiejJOUExlNjdzWWxqYTdWbE9IOFdIcW9MQmVnMU5BemtVY0F1V0szdVpKLUpNTDk1X09lUEJZQ0hId21FQ2FNMW52Yko0TkRuazYzc2s5WWdrY2IxTlg1UEo3bFR3T0lpRjUzX1M0TEpJMHNHdDFZay0wakhuUQ?oc=5",
+          "source": "BizTech Magazine",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "语音 AI",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
+          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
+          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "软件工程",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Early Adoption of Agentic Coding Tools by GitHub Projects",
+          "summary": "这篇从 GitHub 项目层面观察 agentic coding tools 的早期采用，而不是只看单个 PR 成败。它能帮助团队理解 AI 生成贡献如何改变维护流程、权限治理和项目协作模式。",
+          "url": "https://arxiv.org/abs/2607.14037v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "错误恢复",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Experience Memory Graph: One-Shot Error Correction for Agents",
+          "summary": "Experience Memory Graph 把错误修正经验组织成图，用于长任务中的一次性纠错和失败恢复。相比普通 reflection，它更强调可复用的错误记忆，适合关注 Agent 记忆、恢复和长程执行可靠性的读者。",
+          "url": "https://arxiv.org/abs/2607.13884v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "预测",
+      "count": 1,
+      "dates": [
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-16",
+          "title": "Hindcast: Replaying Prediction Markets to Evaluate LLM Forecasters",
+          "summary": "它把 LLM 预测评测中的“答案泄漏”问题具体化：检索可能拿到事后材料，新模型训练数据也更接近事件本身。对做 AI forecaster、检索增强评测或 benchmark 复现的人来说，这篇能帮助重新设计更干净的回放实验。",
+          "url": "https://arxiv.org/abs/2607.14051v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "name": "GitHub",
+      "count": 7
+    },
+    {
+      "name": "Hacker News",
+      "count": 5
+    },
+    {
+      "name": "arXiv",
+      "count": 4
+    },
+    {
+      "name": "South China Morning Post",
+      "count": 1
+    },
+    {
+      "name": "cio.com",
+      "count": 1
+    },
+    {
+      "name": "Davis Wright Tremaine",
+      "count": 1
+    },
+    {
+      "name": "FedScoop",
+      "count": 1
+    },
+    {
+      "name": "Amazon Web Services (AWS)",
+      "count": 1
+    },
+    {
+      "name": "IT之家",
+      "count": 1
+    },
+    {
+      "name": "MIT News",
+      "count": 1
+    },
+    {
+      "name": "FOX 10 Phoenix",
+      "count": 1
+    },
+    {
+      "name": "Wolters Kluwer",
+      "count": 1
+    },
+    {
+      "name": "BizTech Magazine",
+      "count": 1
+    }
+  ]
+}

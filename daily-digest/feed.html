@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 动态流 · AI 每日速递</title>
+<meta name="description" content="AI 每日速递最新一期的全部精选动态。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+<link rel="stylesheet" href="assets/explorer.css?v=20260717">
+</head>
+<body class="explorer-page" data-view="feed">
+  <header class="sitebar">
+    <a class="sitebrand" href="index.html"><span class="brand-signal"></span><strong>AI 每日速递</strong></a>
+    <nav class="site-nav" aria-label="主要导航">
+      <a href="index.html">今日刊</a>
+      <a href="feed.html" aria-current="page">动态流</a>
+      <a href="topics.html">主题</a>
+      <a href="calendar.html">日历</a>
+    </nav>
+  </header>
+
+  <main class="explorer-wrap">
+    <header class="explorer-head">
+      <div>
+        <span class="explorer-kicker">LATEST SIGNALS</span>
+        <h1>AI 动态流</h1>
+      </div>
+      <a class="issue-link" id="issueLink" href="index.html">打开本期日报</a>
+    </header>
+
+    <div class="coverage-line" id="coverageLine" aria-live="polite">正在载入最新一期</div>
+
+    <section class="filter-zone" aria-label="动态筛选">
+      <label class="search-field">
+        <span class="sr-only">搜索标题、摘要或来源</span>
+        <input id="feedSearch" type="search" placeholder="搜索标题、摘要或来源" autocomplete="off">
+      </label>
+      <div class="segment-control" id="sectionFilters" aria-label="栏目"></div>
+      <div class="topic-filters" id="topicFilters" aria-label="主题"></div>
+    </section>
+
+    <section class="signal-list" id="feedList" aria-live="polite"></section>
+    <div class="empty-state" id="feedEmpty" hidden>暂无匹配动态</div>
+  </main>
+
+<script src="assets/explorer.js?v=20260717"></script>
+</body>
+</html>
