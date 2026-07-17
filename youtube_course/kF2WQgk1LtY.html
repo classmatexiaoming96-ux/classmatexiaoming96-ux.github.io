@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor 编程智能体实战教程 · leerob</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #9aa4b8;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --muted: #667085;
+      --good: #73d7a3;
+      --warn: #f5c26b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(99,179,237,.14), transparent 32rem),
+        radial-gradient(circle at 80% 12%, rgba(115,215,163,.10), transparent 28rem),
+        var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 72px; }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      padding: 0.55rem 1rem;
+      background: transparent;
+      transition: background .2s, color .2s;
+    }
+    .back:hover { background: var(--accent); color: var(--bg-primary); }
+    .hero {
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.035)), var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(24px, 5vw, 48px);
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+    .eyebrow { color: var(--good); font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
+    h1 { margin: 12px 0 10px; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.08; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-secondary); font-size: 1.1rem; max-width: 820px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .pill {
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.045);
+      border-radius: 999px;
+      padding: 6px 12px;
+      color: var(--text-secondary);
+      font-size: .9rem;
+    }
+    .video {
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: #000;
+      margin-bottom: 28px;
+      aspect-ratio: 16 / 9;
+    }
+    iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .grid { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+    .toc {
+      position: sticky;
+      top: 18px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .toc strong { display: block; margin-bottom: 10px; }
+    .toc a { display: block; color: var(--text-secondary); padding: 7px 0; font-size: .92rem; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(22px, 4vw, 40px);
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { margin: 0 0 16px; font-size: clamp(1.45rem, 3vw, 2.1rem); line-height: 1.25; }
+    h3 { margin: 30px 0 10px; font-size: 1.18rem; color: #f7fafc; }
+    p { margin: 12px 0; color: var(--text-secondary); }
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      background: rgba(99,179,237,.08);
+      border-radius: 8px;
+      color: #dbeafe;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 8px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+    th, td { padding: 13px 14px; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.07); }
+    th { text-align: left; background: rgba(99,179,237,.12); color: #eaf6ff; }
+    td { color: var(--text-secondary); background: rgba(255,255,255,.025); }
+    .stamp-list { display: grid; gap: 10px; margin-top: 14px; }
+    .stamp {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.075);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+    }
+    .time { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--warn); }
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+    .rec {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,.04);
+      border-radius: 10px;
+      padding: 16px;
+      min-height: 120px;
+    }
+    .rec b { display: block; color: var(--text-primary); margin-bottom: 8px; }
+    .rec span { color: var(--text-secondary); font-size: .92rem; }
+    .note { color: var(--muted); font-size: .92rem; }
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .cards { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 24px, 1120px); }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="back" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">Coding Agents · Cursor Workflow</div>
+      <h1>Cursor 编程智能体实战：从提示词、计划模式到质量验收</h1>
+      <p class="subtitle">英文原题：Cursor: coding agents tutorial (2026)。这是一节面向软件工程师的工作流课，重点不是“让 Agent 写更多代码”，而是如何给它上下文、让它先理解系统、再用计划、调试、测试和团队规则把结果推到可合并状态。</p>
+      <div class="meta">
+        <span class="pill">频道：leerob</span>
+        <span class="pill">时长：31:42</span>
+        <span class="pill">播放量：76,631</span>
+        <span class="pill">主题：Cursor · Coding Agent · Plan Mode</span>
+      </div>
+    </header>
+
+    <div class="video">
+      <iframe src="https://www.youtube.com/embed/kF2WQgk1LtY" title="Cursor: coding agents tutorial (2026)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <div class="grid">
+      <aside class="toc">
+        <strong>课程目录</strong>
+        <a href="#background">一、为什么这门课值得看</a>
+        <a href="#concepts">二、核心概念</a>
+        <a href="#workflow">三、实操工作流</a>
+        <a href="#matrix">四、决策矩阵</a>
+        <a href="#quote">五、关键判断</a>
+        <a href="#timestamps">六、时间戳目录</a>
+        <a href="#recommend">七、相关推荐</a>
+      </aside>
+
+      <article>
+        <section id="background" class="content-card">
+          <h2>一、问题引入：Agent 不是自动补全，而是一种新的工程协作对象</h2>
+          <p>这支视频的出发点很直接：越来越多开发者已经不再逐行手写所有代码，而是在和编程智能体对话，让它搜索代码库、修改文件、运行命令、解释失败原因并准备 PR。真正的难点因此从“会不会写提示词”转移到了“能不能把一个含糊目标变成可验证、可审查、可迭代的工程任务”。</p>
+          <p>leerob 选择 Cursor 作为演示环境，但这节课的价值并不局限于 Cursor。视频反复强调的几个原则，适用于 Claude Code、Codex、GitHub Copilot Agent、Devin 类工具，甚至适用于你自己封装的内部 Agent：上下文要可控，意图要清楚，计划要先审，修改要小步，测试和代码审查必须接上。</p>
+          <p>课程的主线是为文档站新增模型详情页。这个任务足够真实：它需要理解现有路由、配置、组件、导航和测试，又不至于复杂到被业务细节淹没。借这个例子，视频把“理解代码库 → 制定计划 → 生成变更 → 迭代 UI → 调试失败 → 写测试 → PR 审查 → 沉淀规则”串成一个完整闭环。</p>
+        </section>
+
+        <section id="concepts" class="content-card">
+          <h2>二、核心概念：先把 Agent 的工作边界讲清楚</h2>
+          <h3>1. Harness：智能体真正运行的外壳</h3>
+          <p>视频开头把 Cursor 的 coding agent 放在一个更通用的概念里：harness。可以把它理解为模型的运行外壳，由三部分组成：给模型的 instructions、可调用的 tools，以及你选择的 frontier model。模型本身只是推理核心，harness 决定它能看什么、能改什么、能运行什么命令、如何把结果返回给你。</p>
+          <p>这个视角很重要，因为很多团队讨论 Agent 时只比较模型名，却忽视工具权限、代码搜索、上下文注入、审批机制和运行环境。实际工程结果往往由这些外壳能力决定，而不是单纯由模型参数决定。</p>
+
+          <h3>2. Context：工作记忆越大，越需要治理</h3>
+          <p>对话消息、工具调用、读取过的文件、日志、截图、PR diff，都会进入智能体的工作记忆。上下文越丰富，回答越可能贴近真实系统；但上下文太杂，模型也更容易被旧信息、无关文件或错误假设带偏。视频建议：新功能最好开新会话；当 Agent 开始跑偏，重新整理上下文比继续追问更有效。</p>
+          <p>在大型代码库中，Cursor 会结合 literal search 和 semantic search：前者像 grep，找精确字符串；后者用 embedding 把自然语言问题映射到相关代码。两者结合，能让“认证逻辑在哪里？”这类问题找到没有直接包含 authentication 字符串的实现文件。</p>
+
+          <h3>3. Sub-agent：把探索和主会话拆开</h3>
+          <p>视频特别强调 explore sub-agent。它可以在独立上下文窗口里搜索代码库、总结发现，只把结论交还给主 Agent。这样做的收益是主会话不被大量文件内容撑爆，同时让探索阶段更快、更聚焦。对于陌生大仓库，先让 Agent 生成架构图或数据流图，也是减少误改的重要步骤。</p>
+
+          <h3>4. Rules 与 Skills：团队知识要短、准、可维护</h3>
+          <p>结尾部分讲到定制化。Rules 是每次会话都会带入的 Markdown 指令，适合放构建命令、测试命令、代码约定、关键目录和团队偏好的 canonical pattern。Skills 则适合偶尔才需要的专业知识。视频提醒不要把所有东西都塞进 rules，因为它会长期消耗上下文，还可能让 Agent 混淆优先级。</p>
+        </section>
+
+        <section id="workflow" class="content-card">
+          <h2>三、关键论点与实操步骤：把一次 AI 编程变成可交付流程</h2>
+          <h3>步骤一：不要直接下命令，先要求理解系统</h3>
+          <p>视频中的反例是“帮我加一个页面”。这种提示会迫使 Agent 猜测布局、组件、样式和路由策略。更稳的方式是先让它找现有模式：哪些页面已经类似？数据从哪里来？导航在哪里注册？测试怎么写？这样 Agent 才会复用已有抽象，而不是凭空创建新的 utility、组件或目录结构。</p>
+
+          <h3>步骤二：进入计划模式，但计划必须由人审</h3>
+          <p>作者演示了一个刻意有点含糊的任务：“为支持的模型增加专用页面”。Cursor 先探索代码库，提出动态路由、配置查找、能力组件和侧边导航更新等步骤。真正关键的动作不是“点击 Build”，而是人在计划阶段删掉过大的范围、补充选择标准，并确认文件触点是否合理。</p>
+          <p>一个好计划应该回答三件事：要改哪些文件，为什么改这些文件，如何验证。视频中的计划还生成了 Mermaid 数据流图，帮助理解新页面如何从模型配置读取数据并进入现有文档站导航。</p>
+
+          <h3>步骤三：生成后马上看 diff，不要等它堆成大变更</h3>
+          <p>Agent 完成第一版后，作者先看 diff 和运行结果，再通过截图、语音和具体指令迭代 UI。这里的技巧是把反馈变成可观察信号：例如“这些 pills 需要更贴合设计系统”“图标可以保留，但颜色不要偏离品牌”。图片、浏览器状态和 DOM 元素选择都比抽象形容词更容易让模型改对。</p>
+
+          <h3>步骤四：调试要回到工程基本功</h3>
+          <p>视频中间把焦点转向 bug fixing：能复现、最小化、隔离变量、提出假设，再验证修复。Agent 可以帮忙跑命令、加日志、检查调用链，但它不能替代这些基本原则。如果一个失败无法复现，Agent 很容易给出看似合理但不可证明的改动。</p>
+
+          <h3>步骤五：测试和 AI code review 是放权前提</h3>
+          <p>作者把 PR 发给别人之前，会先自己审一遍，再用 AI code review 工具做额外检查。视频里 BugBot 找到了 clipped icon 和 duplicated function 两类问题。随后作者又要求 Agent 为新模型页面补测试，并让 Agent 做更长时间的端到端探索，例如搜索、复制页面、切换主题、分享反馈等。</p>
+
+          <h3>步骤六：把学到的东西沉淀回 rules</h3>
+          <p>完成折扣码案例后，作者把发现写回共享 rules 文件，让团队后续处理同类逻辑时能自动获得上下文。这是整节课最容易被忽略的部分：Agent 工作流不是一次性技巧，而是可以积累的团队资产。每次修复后的知识沉淀，都会降低下一次对话成本。</p>
+        </section>
+
+        <section id="matrix" class="content-card">
+          <h2>四、对比表格：什么时候该用哪种 Agent 工作模式</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>模式</th>
+                <th>适用场景</th>
+                <th>优点</th>
+                <th>主要风险</th>
+                <th>建议做法</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>直接实现</td>
+                <td>很小的 copy、样式、单文件修复，需求边界清楚。</td>
+                <td>速度快，沟通成本低。</td>
+                <td>任务稍复杂就容易猜错上下文。</td>
+                <td>限制改动范围，要求先显示 diff。</td>
+              </tr>
+              <tr>
+                <td>Plan Mode</td>
+                <td>新增功能、跨文件改动、需要复用现有模式。</td>
+                <td>先暴露假设，便于人类删减范围。</td>
+                <td>计划过大时会制造一口气大改。</td>
+                <td>审计划、删非必要步骤、确认验证命令。</td>
+              </tr>
+              <tr>
+                <td>Explore Sub-agent</td>
+                <td>陌生大仓库、调用链复杂、需要生成架构图。</td>
+                <td>减少主上下文污染，输出聚焦结论。</td>
+                <td>只看结论可能漏掉实现细节。</td>
+                <td>要求它引用文件和原因，再让主 Agent 决策。</td>
+              </tr>
+              <tr>
+                <td>Debug Mode</td>
+                <td>测试失败、线上缺陷、行为与预期不一致。</td>
+                <td>可以系统性跑命令、收集证据。</td>
+                <td>没有复现步骤时容易“猜修”。</td>
+                <td>先复现，再最小化，再隔离变量。</td>
+              </tr>
+              <tr>
+                <td>Rules / Skills</td>
+                <td>团队约定、构建命令、领域知识、重复流程。</td>
+                <td>把个人经验变成团队默认上下文。</td>
+                <td>过多 rules 会消耗上下文并互相冲突。</td>
+                <td>保持短、具体、指向真实例子，定期清理。</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="quote" class="content-card">
+          <h2>五、引用块：这节课最值得带走的判断</h2>
+          <blockquote>
+            编程智能体会非常字面地执行你的请求；如果你不提供意图，它就只能用自己的最佳判断。
+          </blockquote>
+          <p>这句话解释了为什么许多 AI 编程体验会两极分化。不是 Agent “聪明或不聪明”这么简单，而是你是否让它看见了正确的上下文、正确的约束和正确的成功标准。工程团队越成熟，越应该把 Agent 当成会写代码的新同事：给背景、给边界、给计划、给审查，而不是只给一句目标。</p>
+        </section>
+
+        <section id="timestamps" class="content-card">
+          <h2>六、时间戳目录：按视频脉络快速复习</h2>
+          <div class="stamp-list">
+            <div class="stamp"><span class="time">00:00</span><span>引入 coding agents：从逐行编码转向目标驱动协作。</span></div>
+            <div class="stamp"><span class="time">00:27</span><span>Cursor agent 与 harness：instructions、tools、model 三件套。</span></div>
+            <div class="stamp"><span class="time">01:20</span><span>提示词质量：简单指令与详细意图的输出差异。</span></div>
+            <div class="stamp"><span class="time">02:10</span><span>上下文管理：新任务开新会话，跑偏时重新整理上下文。</span></div>
+            <div class="stamp"><span class="time">04:00</span><span>代码库理解：literal search、semantic search 与 embedding 索引。</span></div>
+            <div class="stamp"><span class="time">06:00</span><span>Explore sub-agent：在独立上下文中探索仓库并返回结论。</span></div>
+            <div class="stamp"><span class="time">09:30</span><span>Plan mode：让 Agent 先理解文档站结构，再提出实现计划。</span></div>
+            <div class="stamp"><span class="time">12:00</span><span>审计划与启动构建：动态路由、模型配置、导航和 Mermaid 图。</span></div>
+            <div class="stamp"><span class="time">15:00</span><span>迭代 UI：用截图、浏览器和语音反馈修正视觉细节。</span></div>
+            <div class="stamp"><span class="time">18:00</span><span>调试原则：复现、最小化、隔离变量、验证假设。</span></div>
+            <div class="stamp"><span class="time">22:00</span><span>PR 审查：自审与 AI code review 工具形成第二道防线。</span></div>
+            <div class="stamp"><span class="time">24:00</span><span>测试与 fuzz：让 Agent 写测试、跑集成流程并产出验证证据。</span></div>
+            <div class="stamp"><span class="time">27:00</span><span>优化系统瓶颈：测试、类型检查、CI 和依赖清理会复利提升 Agent 效率。</span></div>
+            <div class="stamp"><span class="time">29:00</span><span>Rules 与 Skills：把团队知识短而准地写进共享上下文。</span></div>
+            <div class="stamp"><span class="time">31:00</span><span>完整案例收束：折扣码功能从理解、计划、调试、审查到知识沉淀。</span></div>
+          </div>
+        </section>
+
+        <section id="recommend" class="content-card">
+          <h2>七、相关推荐</h2>
+          <p>如果你看完这节课，下一步可以沿两个方向继续：一是学习更底层的 Agent 工具协议与上下文治理，二是学习生产环境里如何审查、调试和沉淀团队规则。</p>
+          <div class="cards">
+            <a class="rec" href="gv0WHhKelSE.html"><b>Claude Code 最佳实践</b><span>从工程师视角理解生产级 AI 编程习惯。</span></a>
+            <a class="rec" href="uogzSxOw4LU.html"><b>Claude Code 专业工作流</b><span>MCP、Skills、子智能体与持久记忆。</span></a>
+            <a class="rec" href="RhTiAOGwbYE.html"><b>MCP 从零实战</b><span>理解 Agent 工具调用背后的协议和客户端。</span></a>
+          </div>
+          <p class="note">返回 <a href="index.html">课程列表</a> 可以浏览全部视频课程。</p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
