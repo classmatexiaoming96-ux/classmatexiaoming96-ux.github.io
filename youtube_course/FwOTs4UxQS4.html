@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agent 到底是什么：从 LLM、工作流到自主迭代 — Jeff Su</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
+      --text-muted: #687086;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --table-line: rgba(255,255,255,0.12);
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.78;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 22px 64px;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    a { color: var(--accent); }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+      background: transparent;
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 24px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .back-link:hover { background: var(--accent); color: var(--bg-primary); border-color: var(--accent); }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 4vw, 3.1rem); line-height: 1.16; margin-bottom: 0.8rem; letter-spacing: 0; }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 1.1rem; }
+    .meta { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--card-border);
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.04);
+      padding: 0.35rem 0.72rem;
+      border-radius: 6px;
+      font-size: 0.86rem;
+    }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { font-size: 1.35rem; margin-bottom: 0.9rem; color: #f8fafc; letter-spacing: 0; }
+    h3 { font-size: 1.05rem; margin: 1.2rem 0 0.45rem; color: #dbeafe; letter-spacing: 0; }
+    p + p { margin-top: 0.8rem; }
+    ul, ol { padding-left: 1.35rem; }
+    li + li { margin-top: 0.4rem; }
+    blockquote {
+      margin: 1.1rem 0;
+      padding: 1rem 1.15rem;
+      border-left: 4px solid var(--accent);
+      background: rgba(99,179,237,0.08);
+      color: #dbeafe;
+      border-radius: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      overflow: hidden;
+      border: 1px solid var(--table-line);
+      border-radius: 10px;
+      font-size: 0.92rem;
+    }
+    th, td { border: 1px solid var(--table-line); padding: 0.8rem; vertical-align: top; }
+    th { background: rgba(99,179,237,0.12); color: #f8fafc; text-align: left; }
+    td { color: var(--text-secondary); }
+    .timestamp-list { display: grid; gap: 0.65rem; padding-left: 0; list-style: none; }
+    .timestamp-list li { border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem 0.9rem; background: rgba(255,255,255,0.035); }
+    .timestamp { font-family: "JetBrains Mono", monospace; color: var(--accent); margin-right: 0.5rem; }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+    .rec-card {
+      display: block;
+      text-decoration: none;
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.9rem;
+      background: rgba(255,255,255,0.04);
+    }
+    .rec-card small { display: block; color: var(--text-muted); margin-top: 0.35rem; }
+    @media (max-width: 640px) {
+      body { padding: 20px 14px 48px; }
+      .hero, .content-card { padding: 1rem; }
+      th, td { padding: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="back-link" href="index.html">← 返回课程列表</a>
+
+  <header class="hero">
+    <h1>AI Agent 到底是什么：从 LLM、工作流到自主迭代</h1>
+    <p class="subtitle">英文原题：AI Agents, Clearly Explained</p>
+    <div class="meta">
+      <span>频道：Jeff Su</span>
+      <span>时长：10:09</span>
+      <span>播放量：4,626,178</span>
+      <span>主题：Agent 入门、RAG、ReAct、自动化工作流</span>
+    </div>
+  </header>
+
+  <div class="video-frame">
+    <iframe src="https://www.youtube.com/embed/FwOTs4UxQS4" title="AI Agents, Clearly Explained" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+
+  <section class="content-card">
+    <h2>一、问题引入：为什么“Agent”这个词总让人困惑</h2>
+    <p>这个视频的价值不在于展示一个复杂框架，而在于把“AI Agent”从营销词汇拉回到一个可以判断的工程概念。Jeff Su 的切入点很朴素：很多解释要么直接进入工具调用、向量数据库和框架术语，要么只说“它能帮你做事”，但普通使用者真正需要的是一条从熟悉事物出发的理解路径。</p>
+    <p>视频把学习路线拆成三层：第一层是大型语言模型，也就是我们已经熟悉的 ChatGPT、Gemini、Claude 这类聊天应用背后的能力；第二层是 AI workflow，也就是人类预先写好路径、让模型按步骤调用工具；第三层才是 AI agent，也就是由模型承担“下一步怎么做”的决策工作。这个顺序很重要，因为如果跳过前两层，很容易把所有“接了工具的 LLM”都误叫成 Agent。</p>
+    <p>课程中的核心例子是“咖啡聊天”和“社交媒体内容生产”。当你问模型“帮我写一封约咖啡聊天的邮件”，这只是输入到输出；当你问“我下一次咖啡聊天是什么时候”，模型必须访问日历；当你继续问“那天天气怎么样”，模型又需要天气服务。这些例子让边界变得清楚：接入外部工具不等于 Agent，能不能自行判断该走哪条路径，才是关键。</p>
+  </section>
+
+  <section class="content-card">
+    <h2>二、核心概念解释：LLM、Workflow、Agent 的边界</h2>
+    <h3>1. LLM 是会生成文本的被动系统</h3>
+    <p>大型语言模型最擅长的是根据输入生成输出。你给它一个 prompt，它根据训练数据、上下文和当前指令生成回答。它可以写邮件、改文案、总结文本、解释概念，但它默认不知道你的日历、公司内部文档、实时天气或某个私有数据库里的内容。</p>
+    <p>视频强调了两个特征：一是知识边界，模型不知道没有提供给它的私有信息；二是行为边界，模型通常是被动等待 prompt，然后给出回应。理解这两个边界，才能明白为什么 RAG、工具调用和 Agent 会出现：它们都试图让模型在回答前看到更多上下文，或在回答过程中执行更多动作。</p>
+
+    <h3>2. AI Workflow 是人类预先设计的路径</h3>
+    <p>当你写出一条固定逻辑：“如果用户问个人日程，就先查 Google Calendar，再把结果交给 LLM 回答”，这就是工作流。它可能包含很多步骤，比如从表格读取链接、用 Perplexity 抓取新闻摘要、交给 Claude 生成 LinkedIn 和 Instagram 文案，再每天早上定时运行。它看起来很智能，但关键路径仍然是人设计的。</p>
+    <p>工作流的优点是稳定、可解释、易测试。缺点也同样明显：它只能沿着事先设定的路径运行。你让它查日历，它就不会自然想到改查天气；你让它生成文案，它不会自动决定增加一个批评者模型来迭代质量。它能自动化步骤，但不负责重新设计步骤。</p>
+
+    <h3>3. RAG 只是工作流中的一种常见形态</h3>
+    <p>视频中特别把 RAG 降低到一个更容易理解的位置：Retrieval Augmented Generation 本质上就是“回答前先查东西”。这个“东西”可以是日历、天气、文档库、向量索引，也可以是搜索 API。RAG 并不是 Agent 的同义词，它更像是一个检索增强的工作流组件。</p>
+    <p>这个区分对工程实践很有用。如果你的任务只是“先检索，再回答”，用 RAG workflow 就足够；如果任务需要模型根据目标动态决定检索什么、调用什么工具、是否重试、是否修改计划，那才开始接近 Agent。</p>
+
+    <h3>4. Agent 的变化点：LLM 接管决策</h3>
+    <p>Jeff Su 给出的判断标准非常直接：要让一个 AI workflow 变成 AI agent，关键变化是“人类决策者被 LLM 替代”。也就是说，模型不只是执行步骤，而是要根据目标推理出步骤、选择工具、观察中间结果，并决定是否继续迭代。</p>
+    <p>在社交媒体例子里，人类原本要决定先收集新闻、再总结、再写帖文；还要判断输出不够好时是否修改提示词。Agent 版本则应该能自己推理：先收集链接比复制全文更高效，Google Sheets 比 Word 更适合结构化链接，生成完 V1 后可以增加一个评审步骤，让另一个模型按 LinkedIn 最佳实践批评并迭代。</p>
+  </section>
+
+  <section class="content-card">
+    <h2>三、关键论点与实操步骤：如何判断一个系统是不是 Agent</h2>
+    <h3>步骤一：先问“目标是谁给的，路径是谁定的”</h3>
+    <p>如果用户给的是明确步骤，比如“打开表格，读取 A 列链接，逐条摘要，然后写成帖子”，这更像工作流。如果用户给的是目标，比如“每天早上根据今天值得关注的新闻生成适合 LinkedIn 的帖子”，而系统自己决定检索、筛选、写作、评估和重试方式，就更像 Agent。</p>
+    <p>这不是术语洁癖，而是直接影响系统设计。工作流适合强约束、可重复、路径稳定的任务；Agent 适合目标清楚但路径会变化的任务。把稳定任务硬做成 Agent，成本、延迟和不可预测性都会上升；把动态任务硬写成工作流，又会在例外场景里频繁断掉。</p>
+
+    <h3>步骤二：确认工具调用是不是由模型选择</h3>
+    <p>工具调用本身不是 Agent 的充分条件。一个系统可以固定地每次都查日历、查天气、生成语音，这仍然是 workflow。更关键的问题是：模型是否能判断“这次应该查日历还是天气 API，还是先问用户补充地点”？如果答案是 yes，系统才有了 Agent 的味道。</p>
+    <p>工程上可以把这个差异翻译成控制逻辑的位置：控制逻辑写死在代码里，就是工作流；控制逻辑由模型在运行时根据目标和观察结果生成，就是 Agent。不过真实系统常常是混合体：外层有安全边界和固定流程，内部某些节点允许模型自主规划。</p>
+
+    <h3>步骤三：看它是否会观察结果并迭代</h3>
+    <p>视频提到的第三个特征是迭代能力。一个 Agent 不应该只执行一次计划并返回，它还应能观察中间结果，判断是否达标，然后决定继续修改、换工具、增加检查步骤或停止。比如生成 LinkedIn 帖文后，Agent 可以调用另一个模型做风格批评，再根据批评重写，直到满足标准。</p>
+    <p>这也解释了为什么 Agent 系统通常需要状态管理、日志、预算限制和退出条件。没有这些工程护栏，所谓“自主迭代”很容易变成无限循环、重复调用工具或产出不可验证的内容。</p>
+
+    <h3>步骤四：用 ReAct 理解“推理 + 行动”循环</h3>
+    <p>视频用 ReAct 解释 Agent 常见配置：Reason and Act。模型先推理下一步应该做什么，再通过工具采取行动，然后观察行动结果，继续推理。这个循环并不神秘，它只是把“想一想”和“动手做”交替组织起来。</p>
+    <p>对使用者来说，ReAct 的意义是降低想象门槛：Agent 不是一个魔法黑盒，而是一个会在目标、工具和反馈之间循环的系统。对开发者来说，它提醒我们要定义可用工具、工具输入输出、错误处理、观察格式和停止规则。</p>
+  </section>
+
+  <section class="content-card">
+    <h2>四、对比表格：三层能力的决策矩阵</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>层级</th>
+          <th>用户输入</th>
+          <th>控制逻辑</th>
+          <th>优点</th>
+          <th>风险与限制</th>
+          <th>适用场景</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LLM / Chatbot</td>
+          <td>一段 prompt 或对话上下文</td>
+          <td>模型根据上下文直接生成输出</td>
+          <td>简单、低成本、响应快，适合文本生成和解释</td>
+          <td>不知道私有数据，默认不会访问外部系统，也不会主动行动</td>
+          <td>写邮件、改文案、总结已有材料、解释概念</td>
+        </tr>
+        <tr>
+          <td>AI Workflow</td>
+          <td>触发条件或固定任务</td>
+          <td>人类预先写好步骤和分支</td>
+          <td>稳定、可测试、权限边界清楚，易在业务流程中落地</td>
+          <td>遇到未设计过的需求会失效，路径变化需要人手修改</td>
+          <td>定时摘要、固定报表、RAG 问答、表格到社媒帖文</td>
+        </tr>
+        <tr>
+          <td>AI Agent</td>
+          <td>目标、约束和可用工具</td>
+          <td>LLM 在运行时推理路径、选择工具并观察结果</td>
+          <td>能处理路径不确定的任务，具备规划、工具选择和迭代能力</td>
+          <td>成本更高、行为更难预测，需要日志、预算、权限和停止条件</td>
+          <td>研究助手、代码代理、多工具任务执行、复杂内容生产</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="content-card">
+    <h2>五、引用块：视频中最关键的判断</h2>
+    <blockquote>
+      判断一个系统是不是 AI Agent，关键不是它有没有接工具，而是 LLM 是否取代人类成为工作流里的决策者。
+    </blockquote>
+    <p>这句话可以作为一个实用测试。很多产品会把“自动化 + LLM + API”包装成 Agent，但如果所有路径都已经由人写死，模型只是按固定脚本填空，那它仍然是 workflow。反过来，如果模型能根据目标决定使用哪些工具、如何检查中间结果、什么时候重试或停止，那就进入了 Agent 的范畴。</p>
+    <p>这也解释了为什么“Agent 能力”需要和权限设计一起讨论。让模型成为决策者，意味着它可能选择访问更多工具、产生更多副作用、消耗更多资源。真正成熟的 Agent 系统不是只提高自主性，还要把自主性放进可观测、可审计、可回滚的边界里。</p>
+  </section>
+
+  <section class="content-card">
+    <h2>六、时间戳目录</h2>
+    <ol class="timestamp-list">
+      <li><span class="timestamp">00:00</span>开场：为什么多数 AI Agent 解释要么太技术化，要么太泛泛而谈。</li>
+      <li><span class="timestamp">00:35</span>学习路径预告：先理解 LLM，再理解 AI workflow，最后进入 AI agent。</li>
+      <li><span class="timestamp">01:05</span>Level 1：LLM 的基本输入输出模式，以及它为什么不知道你的私人日历。</li>
+      <li><span class="timestamp">02:00</span>Level 2：用 Google Calendar 例子解释工作流和控制逻辑。</li>
+      <li><span class="timestamp">03:00</span>RAG 的简化解释：回答前先检索，它本质上是一类工作流。</li>
+      <li><span class="timestamp">03:45</span>Make.com 示例：Google Sheets、Perplexity、Claude 和定时发布组成固定路径。</li>
+      <li><span class="timestamp">05:10</span>Level 3：Agent 的转折点是让 LLM 替代人类做决策。</li>
+      <li><span class="timestamp">06:00</span>ReAct：Agent 必须 reason and act，在推理和行动之间循环。</li>
+      <li><span class="timestamp">06:45</span>迭代能力：让另一个模型批评输出，并自动改进社交媒体帖文。</li>
+      <li><span class="timestamp">08:00</span>视觉 Agent 示例：根据“skier”目标推理、检索视频片段并返回结果。</li>
+      <li><span class="timestamp">09:20</span>总结三层模型：LLM 生成、workflow 按路径执行、agent 以目标驱动决策和迭代。</li>
+    </ol>
+  </section>
+
+  <section class="content-card">
+    <h2>七、相关推荐</h2>
+    <p>如果你刚开始搭 Agent，建议先用这节课建立边界感，再继续阅读偏工程实现的课程。先知道什么时候不用 Agent，往往比急着套框架更有价值。</p>
+    <div class="rec-grid">
+      <a class="rec-card" href="index.html">返回完整课程列表<small>查看全部 AI、Agent 和 Claude 工程课程</small></a>
+      <a class="rec-card" href="LNkAW4SSgdY.html">2026 AI Agents 完整指南<small>从使用层级理解聊天、工具、工作流和 Agent</small></a>
+      <a class="rec-card" href="bcM9dP_uXJU.html">用 Claude Code 构建 AI Agent<small>从概念走向一个可运行的开发实践</small></a>
+      <a class="rec-card" href="EAeUiipzCTE.html">Microsoft Agent Framework<small>理解 Agent 框架里的工具、记忆和上下文</small></a>
+    </div>
+  </section>
+</body>
+</html>
