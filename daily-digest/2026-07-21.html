@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-21</title>
+<meta name="description" content="今天的主线是 Agent 工程继续从概念走向评估、部署和安全：Cursor 的 agent swarm 讨论拉高了模型经济学关注度，Grok for Excel 与 Replit 更新把 AI 拉进日常工具链，研究侧则在代码 Agent 上下文压缩、轨迹瘦身和实时多模态部署上给出更具体的工程方法。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-21</span>
+      <span class="sep">·</span>
+      <span>星期二</span>
+      <span class="edition">第 60 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是 Agent 工程继续从概念走向评估、部署和安全：Cursor 的 agent swarm 讨论拉高了模型经济学关注度，Grok for Excel 与 Replit 更新把 AI 拉进日常工具链，研究侧则在代码 Agent 上下文压缩、轨迹瘦身和实时多模态部署上给出更具体的工程方法。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">4</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">5</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://cursor.com/blog/agent-swarm-model-economics" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻 · 3 个来源</div>
+        <h3>Cursor 公开 Agent Swarm 实验：规划者加执行者分工挑战复杂软件任务</h3>
+        <p>Cursor 将复杂任务拆成树状计划，再由多个执行 Agent 并行推进，在 Rust 版 SQLite 构建任务中达到 80% 测试通过率。相比昨天的泛泛 Agent 热点，这条更值得看的是它把成本、并行度和失败回收放在同一套模型经济学框架里讨论。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://x.ai/news/introducing-excel-addin" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻 · 2 个来源</div>
+        <h3>xAI 发布 Grok for Excel，自然语言公式和场景分析进入电子表格</h3>
+        <p>Grok for Excel 把自然语言提问、公式生成和场景推演放进 Microsoft Excel。它不是单纯聊天入口，而是把 LLM 嵌进高频业务表格流，值得关注权限、审计和公式可解释性。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://openai.com/index/safety-alignment-long-horizon-models" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻 · 2 个来源</div>
+        <h3>OpenAI 总结长时运行模型安全实践：Agent 评估要覆盖新型故障模式</h3>
+        <p>OpenAI 把长时运行模型的对齐问题放到更接近 Agent 的场景中讨论，重点不只是回答是否安全，而是模型在多步任务、工具使用和延迟反馈下会出现哪些新故障。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>23</b> 条精选信号<i></i><b>13</b> 个原始来源<i></i><b>56</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=Agent" target="_top">Agent</a>
+        <a href="topics.html?topic=%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7" target="_top">开发工具</a>
+        <a href="topics.html?topic=%E4%BB%A3%E7%A0%81%20Agent" target="_top">代码 Agent</a>
+        <a href="topics.html?topic=Coding%20Agent" target="_top">Coding Agent</a>
+        <a href="topics.html?topic=%E6%A8%A1%E5%9E%8B%E7%BB%8F%E6%B5%8E%E5%AD%A6" target="_top">模型经济学</a>
+        <a href="topics.html?topic=%E5%8A%9E%E5%85%AC%20AI" target="_top">办公 AI</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="cursor-agent-swarm-model-economics-2026-07-21" href="https://cursor.com/blog/agent-swarm-model-economics" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>Cursor 公开 Agent Swarm 实验：规划者加执行者分工挑战复杂软件任务</h3>
+      <p>Cursor 将复杂任务拆成树状计划，再由多个执行 Agent 并行推进，在 Rust 版 SQLite 构建任务中达到 80% 测试通过率。相比昨天的泛泛 Agent 热点，这条更值得看的是它把成本、并行度和失败回收放在同一套模型经济学框架里讨论。</p>
+      <div class="src">◷ <b>Cursor Blog</b> <span class="dotsep">·</span> 今日热议</div>
+      <div class="item-signals"><span class="signal-badge source-count" title="Hacker News、AI HOT">3 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">模型经济学</span><span class="signal-badge topic">开发工具</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="xai-grok-excel-addin-2026-07-21" href="https://x.ai/news/introducing-excel-addin" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>xAI 发布 Grok for Excel，自然语言公式和场景分析进入电子表格</h4>
+          <p>Grok for Excel 把自然语言提问、公式生成和场景推演放进 Microsoft Excel。它不是单纯聊天入口，而是把 LLM 嵌进高频业务表格流，值得关注权限、审计和公式可解释性。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">xAI News</b> <span class="dotsep">·</span> 昨日发布 <span class="dotsep">·</span> <span class="tag">产品</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="AI HOT">2 个来源</span><span class="signal-badge topic">办公 AI</span><span class="signal-badge topic">数据分析</span><span class="signal-badge topic">产品发布</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="openai-long-horizon-safety-alignment-2026-07-21" href="https://openai.com/index/safety-alignment-long-horizon-models" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>OpenAI 总结长时运行模型安全实践：Agent 评估要覆盖新型故障模式</h4>
+          <p>OpenAI 把长时运行模型的对齐问题放到更接近 Agent 的场景中讨论，重点不只是回答是否安全，而是模型在多步任务、工具使用和延迟反馈下会出现哪些新故障。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">OpenAI</b> <span class="dotsep">·</span> 昨日发布 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="AI HOT">2 个来源</span><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">长时任务</span><span class="signal-badge topic">评估</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="ai-model-behavior-fingerprint-random-number-2026-07-21" href="https://mp.weixin.qq.com/s/pqFZreEZj8kB4KDirl4MSQ" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>行为指纹技术被用于识别 API 中转站是否偷换模型</h4>
+          <p>国内技术社区讨论用随机数和行为模式给模型做身份指纹，目标是检测 API 中转或聚合平台是否替换底层模型。它提醒团队在采购模型服务时不能只看标称名称，还要建立可重复的行为核验。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">数字生命卡兹克</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">评测</span></div>
+          <div class="item-signals"><span class="signal-badge topic">模型评测</span><span class="signal-badge topic">API 透明度</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="seed-audio-1-0-byte-dance-2026-07-21" href="https://seed.bytedance.com/zh/blog/%E4%BB%8E-%E4%BC%9A%E8%AF%B4-%E8%B5%B0%E5%90%91-%E4%BC%9A%E5%88%9B%E4%BD%9C-seed-audio-1-0-%E9%9F%B3%E9%A2%91%E5%88%9B%E4%BD%9C%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B8%83" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>字节 Seed Audio 1.0 发布，尝试统一人声与音效创作链路</h4>
+          <p>Seed Audio 1.0 将语音、音效和影视级音频创作放在同一模型叙事中，说明多模态生成正在从单点能力走向端到端内容流水线。对创作工具来说，接下来要看可控性、版权边界和与视频生成的联动。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">字节 Seed</b> <span class="dotsep">·</span> 近 24 小时 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge topic">多模态</span><span class="signal-badge topic">音频生成</span><span class="signal-badge topic">内容生产</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="world-ai-cooperation-organization-diplomat-2026-07-21" href="https://thediplomat.com/" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>世界人工智能合作组织继续引发国际观察，AI 治理进入机构化竞争阶段</h4>
+          <p>围绕上海总部的世界人工智能合作组织，海外媒体开始讨论其在全球 AI 治理中的定位。事件本身不是模型发布，但说明 AI 基础设施、标准和治理话语权正在成为国家级议题。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">The Diplomat</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">治理</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="Google News">2 个来源</span><span class="signal-badge topic">AI 治理</span><span class="signal-badge topic">国际合作</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2607-18213" href="https://arxiv.org/abs/2607.18213v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>SWE-Pruner Pro: The Coder LLM Already Knows What to Prune</h4>
+          <p><b>为什么值得看：</b>这篇把代码 Agent 的上下文裁剪从外部分类器推进到模型内部信号，重点在于利用 Agent 读取工具输出时已有的相关性表征。对长上下文越来越贵的代码代理来说，它给出了一条更贴近运行时的降成本路线。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yuhang Wang, Yuling Shi, Shaoqiu Zhang 等</b> <span class="dotsep">·</span> 2026-07-20 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">代码 Agent</span><span class="signal-badge topic">上下文压缩</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2607-18161" href="https://arxiv.org/abs/2607.18161v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>TRIM: Reducing AI-Generated CodeSlop via Agent Trajectory Minimization</h4>
+          <p><b>为什么值得看：</b>它把 AI 生成代码臃肿的问题归因到 Agent 搜索轨迹，而不只是 prompt 风格。若结论成立，减少无效迭代轨迹可能比事后 lint 更能降低 code slop。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Alex Mathai, Shobini Iyer, Aleksandr Nogikh 等</b> <span class="dotsep">·</span> 2026-07-20 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">代码 Agent</span><span class="signal-badge topic">软件质量</span><span class="signal-badge topic">轨迹优化</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2607-18171" href="https://arxiv.org/abs/2607.18171v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>FlashRT: Agent Harness for Guiding Agents to Deploy Real-Time Multimodal Applications</h4>
+          <p><b>为什么值得看：</b>实时语音 Agent 和交互式视频生成的难点常在部署编排，而不只在模型能力。FlashRT 关注 placement、streaming 与并行策略，适合做多模型实时应用的工程参考。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Krish Agarwal, Zhuoming Chen, Yanyuan Qin 等</b> <span class="dotsep">·</span> 2026-07-20 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.DC</span></div>
+          <div class="item-signals"><span class="signal-badge topic">多模态 Agent</span><span class="signal-badge topic">部署</span><span class="signal-badge topic">实时系统</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2607-18147" href="https://arxiv.org/abs/2607.18147v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>LLMs and Agentic AI Systems for Smart Grids: A Tutorial on Architectures and Applications</h4>
+          <p><b>为什么值得看：</b>这是一篇面向智能电网的教程型论文，价值在于把 Agent 架构、可信求解器和多步工作流放进高风险工程域。它提醒我们 Agent 落地不能只靠通用聊天能力，必须与领域优化器和控制边界结合。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Daniela Rojas, Abdulwahab Albassam, Aidan G. Leung 等</b> <span class="dotsep">·</span> 2026-07-20 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 架构</span><span class="signal-badge topic">能源系统</span><span class="signal-badge topic">工具调用</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-china-open-weights-ai-strategy-2026-07-21" href="https://werd.io/american-ai-is-locked-down-and-proprietary-its-losing/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>中国开放权重策略是否正在赢得开发者生态？</h4>
+          <p>HN 讨论集中在开放权重、可本地部署和生态扩散速度上，争议点不是单个模型分数，而是开放策略会不会改写美国闭源厂商的护城河。</p>
+          <div class="quote">“社区把问题从模型榜单转向分发模式：谁能让更多开发者低成本试错，谁就更容易积累生态。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 991 <span class="dotsep">·</span> 💬 799</div>
+          <div class="item-signals"><span class="signal-badge topic">开放模型</span><span class="signal-badge topic">产业竞争</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-writing-arxiv-measurement-breaks-2026-07-21" href="https://unslop.run/blog/measuring-ai-writing-on-arxiv" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>arXiv AI 写作测量方法引发讨论：检测器本身在哪里会失真？</h4>
+          <p>围绕 arXiv 新投稿中 AI 写作特征比例的讨论，社区更关注测量边界：学科、语言、模板化写作和改写工具都会影响检测结论。</p>
+          <div class="quote">“真正的问题不是是否有 AI 写作，而是我们能否把检测误差、学科差异和作者行为分开。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 197 <span class="dotsep">·</span> 💬 144</div>
+          <div class="item-signals"><span class="signal-badge topic">学术出版</span><span class="signal-badge topic">AI 写作检测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-nativ-frontier-open-models-local-mac-2026-07-21" href="https://blaizzy.github.io/nativ/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Nativ 在 Mac 上运行前沿开放模型，本地推理体验继续升温</h4>
+          <p>Nativ 的讨论延续了本地模型热潮，但新意在于面向普通 Mac 用户包装体验。社区关注点集中在内存占用、模型兼容性和离线隐私收益。</p>
+          <div class="quote">“本地模型的竞争点正在从能不能跑，转向能不能像桌面软件一样顺手。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 191 <span class="dotsep">·</span> 💬 74</div>
+          <div class="item-signals"><span class="signal-badge topic">本地模型</span><span class="signal-badge topic">开发者工具</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="show-hn-shikigami-parallel-coding-agents-2026-07-21" href="https://shikigami.dev/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Shikigami 展示并行 coding agents：每个 Agent 独占一个 Git worktree</h4>
+          <p>Show HN 的关注点很工程化：并行跑多个编码 Agent 时，隔离工作树比共享目录更容易比较结果、回滚失败和合并有效 patch。</p>
+          <div class="quote">“并行 Agent 的关键不是开更多终端，而是让每条尝试都有清楚的状态边界。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Show HN</b> <span class="dotsep">·</span> ▲ 7 <span class="dotsep">·</span> 💬 2</div>
+          <div class="item-signals"><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">并行开发</span><span class="signal-badge topic">Git Worktree</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="product-replit-unified-toolbar-database-2fa-2026-07-21" href="https://x.com/Replit/status/2079235154485109114" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">IDE</span>
+          <h4>Replit 统一工具栏</h4>
+        </div>
+        <p class="tagline">把数据库操作和双因素认证入口整合进开发工作台</p>
+        <p>这类更新不显眼，但对 AI 编程平台很关键：当 Agent 参与更多项目操作，数据库、权限和安全入口必须变得更直接可控。</p>
+        <div><span class="tag">开发平台</span></div>
+        <div class="item-signals"><span class="signal-badge topic">开发平台</span><span class="signal-badge topic">数据库</span><span class="signal-badge topic">安全</span></div>
+      </a>
+      <a class="card" data-event-key="product-agent-jails-list-2026-07-21" href="https://pleasedonotescape.com/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">SEC</span>
+          <h4>AI Agent Jails List</h4>
+        </div>
+        <p class="tagline">一个可筛选的 AI agent jailbreak 与逃逸案例列表</p>
+        <p>对做工具调用和浏览器 Agent 的团队有参考价值：它把安全失败案例做成可检索资源，便于设计红队用例和回归测试。</p>
+        <div><span class="tag">安全资源</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">Prompt Injection</span><span class="signal-badge topic">评测资源</span></div>
+      </a>
+      <a class="card" data-event-key="product-movie-gen-claude-code-seedance-2026-07-21" href="https://github.com/dawndrain/movie-gen" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">VID</span>
+          <h4>movie-gen</h4>
+        </div>
+        <p class="tagline">用 Claude Code 与 Seedance 串起 10 分钟 AI 电影制作流水线</p>
+        <p>它的看点不是单个视频模型，而是把脚本、镜头、生成和拼接组织成可复用 pipeline，适合观察 AI 内容生产从 demo 走向流程化工具。</p>
+        <div><span class="tag">创作工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 视频</span><span class="signal-badge topic">内容流水线</span><span class="signal-badge topic">Claude Code</span></div>
+      </a>
+      <a class="card" data-event-key="product-peek-cli-claude-code-frontend-iteration-2026-07-21" href="https://github.com/puffinsoft/peek-cli" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">CLI</span>
+          <h4>Peek-CLI</h4>
+        </div>
+        <p class="tagline">让 Claude Code 对前端页面进行可视化迭代</p>
+        <p>前端 Agent 的瓶颈常在看不见页面状态；这类 CLI 工具把截图/预览反馈接入代码循环，有助于减少纯文本猜测式修改。</p>
+        <div><span class="tag">开发工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">前端开发</span><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">设计迭代</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-diegosouzapw-omniroute" href="https://github.com/diegosouzapw/OmniRoute" target="_blank" rel="noopener">
+      <div>
+        <div class="name">diegosouzapw / <b>OmniRoute</b></div>
+        <div class="desc">高星上升的路由/编排项目，适合观察开发者对轻量级服务路由与自动化基础设施的需求。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">DevTool</span></div>
+        <div class="item-signals"><span class="signal-badge topic">路由</span><span class="signal-badge topic">开发工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 21,997</div>
+        <div class="today">▲ 1,107 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-rohitg00-ai-engineering-from-scratch" href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">
+      <div>
+        <div class="name">rohitg00 / <b>ai-engineering-from-scratch</b></div>
+        <div class="desc">面向工程师的 AI 系统从零实现资源库，继续获得大量新增 stars，适合作为训练、RAG、Agent 和部署基础材料。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">AI Engineering</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 工程</span><span class="signal-badge topic">学习资源</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 40,631</div>
+        <div class="today">▲ 823 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-msitarzewski-agency-agents" href="https://github.com/msitarzewski/agency-agents" target="_blank" rel="noopener">
+      <div>
+        <div class="name">msitarzewski / <b>agency-agents</b></div>
+        <div class="desc">Agent 相关项目继续在 trending 中保持高热度，说明社区仍在寻找可复用的多 Agent 编排和业务自动化模板。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent</span><span class="signal-badge topic">自动化工作流</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 134,791</div>
+        <div class="today">▲ 862 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-every-app-open-seo" href="https://github.com/every-app/open-seo" target="_blank" rel="noopener">
+      <div>
+        <div class="name">every-app / <b>open-seo</b></div>
+        <div class="desc">围绕 AI 搜索和内容可见性的开源工具，新增 stars 说明从传统 SEO 转向 LLM/搜索摘要曝光的需求正在升温。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">AI Search</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 搜索</span><span class="signal-badge topic">SEO</span><span class="signal-badge topic">内容工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 5,928</div>
+        <div class="today">▲ 939 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-microsoft-ontology-playground" href="https://github.com/microsoft/Ontology-Playground" target="_blank" rel="noopener">
+      <div>
+        <div class="name">microsoft / <b>Ontology-Playground</b></div>
+        <div class="desc">微软的 ontology playground 出现在 trending，适合关注结构化知识、语义层和 Agent 工具上下文组织的读者。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Knowledge</span></div>
+        <div class="item-signals"><span class="signal-badge topic">知识建模</span><span class="signal-badge topic">Ontology</span><span class="signal-badge topic">Agent 工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 1,764</div>
+        <div class="today">▲ 464 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-07-21 10:46 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
