@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-07-24</title>
+<meta name="description" content="今天的主线从模型能力转向可控交付：桌面语音多智能体、Claude 语音连接器和北京智能体政策都在扩展入口；同时 Workspace Agent 漏洞、健康咨询诉讼与开源权重争论提醒团队把权限、责任和本地可控能力放进设计。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-07-24</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 63 期</span>
+    </div>
+    <p class="mh-intro">今天的主线从模型能力转向可控交付：桌面语音多智能体、Claude 语音连接器和北京智能体政策都在扩展入口；同时 Workspace Agent 漏洞、健康咨询诉讼与开源权重争论提醒团队把权限、责任和本地可控能力放进设计。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://x.com/OpenAI/status/2080378182469857576" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻 · 2 个来源</div>
+        <h3>ChatGPT 桌面版上线语音控制多智能体：Codex 与 Work 可被语音协调</h3>
+        <p>OpenAI 宣布 ChatGPT 语音功能登陆 macOS 与 Windows 桌面应用，可用语音控制电脑，并协调 ChatGPT Work 或 Codex 中运行的多个智能体。新增价值不在语音本身，而在把实时语音、桌面上下文和并行 Agent 编排合成一个交互入口。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://claude.com/blog/think-through-hard-problems-in-voice-mode" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Claude 语音模式扩展到 Opus、Sonnet、工具连接器与多语言</h3>
+        <p>Anthropic 将 Claude 语音模式扩展到 Opus、Sonnet、Haiku，并支持 Gmail、Slack 等连接工具。对工作流用户来说，语音不再只是输入方式，而是可以携带模型选择和外部工具权限的会话层。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://the-decoder.com/one-tampered-chatgpt-link-could-spawn-a-rogue-ai-agent-that-took-orders-from-an-attacker-every-five-minutes" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>OpenAI Workspace Agents 漏洞显示：一个链接可能创建继承权限的恶意 Agent</h3>
+        <p>Zenity Labs 披露的 AgentForger 漏洞显示，恶意 ChatGPT 链接可诱导创建周期运行的 Workspace Agent，并继承受害者已授权应用权限。虽然 OpenAI 已修复，但它给企业 Agent 平台提出了明确要求：创建、调度和权限继承必须可审计。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>25</b> 条精选信号<i></i><b>14</b> 个原始来源<i></i><b>73</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=%E8%AF%AD%E9%9F%B3%E4%BA%A4%E4%BA%92" target="_top">语音交互</a>
+        <a href="topics.html?topic=Agent%20%E5%AE%89%E5%85%A8" target="_top">Agent 安全</a>
+        <a href="topics.html?topic=%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93" target="_top">多智能体</a>
+        <a href="topics.html?topic=%E6%A1%8C%E9%9D%A2%E8%87%AA%E5%8A%A8%E5%8C%96" target="_top">桌面自动化</a>
+        <a href="topics.html?topic=%E8%BF%9E%E6%8E%A5%E5%99%A8" target="_top">连接器</a>
+        <a href="topics.html?topic=Claude" target="_top">Claude</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="chatgpt-desktop-voice-multi-agent-2026-07-24" href="https://x.com/OpenAI/status/2080378182469857576" target="_blank" rel="noopener">
+      <span class="tag">产品</span>
+      <h3>ChatGPT 桌面版上线语音控制多智能体：Codex 与 Work 可被语音协调</h3>
+      <p>OpenAI 宣布 ChatGPT 语音功能登陆 macOS 与 Windows 桌面应用，可用语音控制电脑，并协调 ChatGPT Work 或 Codex 中运行的多个智能体。新增价值不在语音本身，而在把实时语音、桌面上下文和并行 Agent 编排合成一个交互入口。</p>
+      <div class="src">◷ <b>OpenAI</b> <span class="dotsep">·</span> 今日</div>
+      <div class="item-signals"><span class="signal-badge source-count" title="AI HOT">2 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">多智能体</span><span class="signal-badge topic">语音交互</span><span class="signal-badge topic">桌面自动化</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="claude-voice-mode-opus-sonnet-connectors-2026-07-24" href="https://claude.com/blog/think-through-hard-problems-in-voice-mode" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Claude 语音模式扩展到 Opus、Sonnet、工具连接器与多语言</h4>
+          <p>Anthropic 将 Claude 语音模式扩展到 Opus、Sonnet、Haiku，并支持 Gmail、Slack 等连接工具。对工作流用户来说，语音不再只是输入方式，而是可以携带模型选择和外部工具权限的会话层。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Claude Blog</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">产品</span></div>
+          <div class="item-signals"><span class="signal-badge topic">语音交互</span><span class="signal-badge topic">连接器</span><span class="signal-badge topic">Claude</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="openai-workspace-agentforger-vulnerability-2026-07-24" href="https://the-decoder.com/one-tampered-chatgpt-link-could-spawn-a-rogue-ai-agent-that-took-orders-from-an-attacker-every-five-minutes" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>OpenAI Workspace Agents 漏洞显示：一个链接可能创建继承权限的恶意 Agent</h4>
+          <p>Zenity Labs 披露的 AgentForger 漏洞显示，恶意 ChatGPT 链接可诱导创建周期运行的 Workspace Agent，并继承受害者已授权应用权限。虽然 OpenAI 已修复，但它给企业 Agent 平台提出了明确要求：创建、调度和权限继承必须可审计。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">The Decoder</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">权限继承</span><span class="signal-badge topic">企业治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="microsoft-mai-cost-efficient-model-strategy-2026-07-24" href="https://x.com/satyanadella/status/2080329851127669104" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>微软 MAI 模型路线强调成本-效果前沿：让 Copilot 与 Excel 在真实任务中学习</h4>
+          <p>Satya Nadella 介绍 MAI 模型家族，重点是用独立评估系统优化 GitHub Copilot、Excel 等产品任务，而不是单纯追逐通用榜单。它值得关注，因为企业模型策略正在从“最大模型”转向“真实场景下每美元有效智能”。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Satya Nadella</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge topic">模型工程</span><span class="signal-badge topic">企业 AI</span><span class="signal-badge topic">成本效率</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="beijing-agent-policy-harness-token-economy-2026-07-24" href="https://mp.weixin.qq.com/s/CYB7v1e5D4m-btgosjmLgA" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>北京智能体新政把 Harness Engineering、Token 经济和 OPC 写入政策语言</h4>
+          <p>北京市发布加快智能体发展的措施，提出从 Token 消耗计费转向价值计费，并鼓励 TaaS、AaaS、RaaS 等模式。它的信号意义在于，Agent 不再只是产品功能，也开始被纳入产业组织和商业定价框架。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">数字生命卡兹克</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">政策</span></div>
+          <div class="item-signals"><span class="signal-badge topic">智能体政策</span><span class="signal-badge topic">Harness Engineering</span><span class="signal-badge topic">商业模式</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="chatgpt-health-lawsuit-personal-medical-context-2026-07-24" href="https://www.ithome.com/0/980/890.htm" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>ChatGPT 健康功能扩张遇到责任边界拷问：个人健康上下文不能替代医疗判断</h4>
+          <p>OpenAI 正向美国用户推出 Apple Health 和医疗记录连接能力，同时一名佛州男子起诉称其依赖 ChatGPT 医疗建议而延误就医。两条消息放在一起看，产品进入高风险个人数据场景后，免责声明、转诊机制和紧急场景识别会成为核心门槛。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">IT之家 / Greg Brockman</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">治理</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="Greg Brockman">2 个来源</span><span class="signal-badge topic">AI 医疗</span><span class="signal-badge topic">产品责任</span><span class="signal-badge topic">个人数据</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2607-21557" href="https://arxiv.org/abs/2607.21557" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>OpenForgeRL: Train Harness-native Agents in Any Environment</h4>
+          <p><b>为什么值得看：</b>它把 Agent 训练重点放在 harness-native 环境，而不是只做静态基准分数；如果你的团队在做工具调用或自动化任务评测，这篇能提供如何把环境、任务和反馈闭环放进训练流程的参考。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Xiao Yu, Baolin Peng, Ruize Xu 等</b> <span class="dotsep">·</span> 2026-07-24 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 训练</span><span class="signal-badge topic">强化学习</span><span class="signal-badge topic">评测环境</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2607-21503" href="https://arxiv.org/abs/2607.21503" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Agentic Context Management: Solving Agent Memory and Cost by Treating Them as Lifecycle and Architecture Problems</h4>
+          <p><b>为什么值得看：</b>它把上下文窗口、记忆和 token 成本看成生命周期架构问题，而不是简单的 prompt 压缩技巧。对正在做长任务 Agent 的团队，价值在于给出何时写入、何时遗忘、何时重建上下文的系统视角。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Gaurav Dadhich</b> <span class="dotsep">·</span> 2026-07-24 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.IR</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 记忆</span><span class="signal-badge topic">上下文管理</span><span class="signal-badge topic">成本控制</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2607-21461" href="https://arxiv.org/abs/2607.21461" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AREX: Towards a Recursively Self-Improving Agent for Deep Research</h4>
+          <p><b>为什么值得看：</b>它直接切入 Deep Research Agent 如何递归改进的问题，比单次问答评测更接近真实研究工作流。值得看的是作者把研究任务拆成可反思、可迭代的 Agent 循环，适合和企业研究助手设计对照。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Shuqi Lu, Chaofan Li, Kun Luo 等</b> <span class="dotsep">·</span> 2026-07-24 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Deep Research</span><span class="signal-badge topic">自我改进</span><span class="signal-badge topic">Agent 架构</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2607-21412" href="https://arxiv.org/abs/2607.21412" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Euclid-MCP: A Model Context Protocol Server for Deterministic Logical Reasoning via Prolog</h4>
+          <p><b>为什么值得看：</b>它把 MCP 与 Prolog 这类确定性逻辑推理结合，提供了一个很具体的方向：让 LLM 把模糊语言交给可验证工具处理。对构建高可靠 Agent 工具链的人来说，这是比再加一个搜索工具更值得研究的 MCP 形态。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Bartolomeo Bogliolo</b> <span class="dotsep">·</span> 2026-07-24 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL · cs.SE</span></div>
+          <div class="item-signals"><span class="signal-badge topic">MCP</span><span class="signal-badge topic">逻辑推理</span><span class="signal-badge topic">可验证工具</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-floss-commons-from-llms-2026-07-24" href="https://blog.codeberg.org/protecting-our-floss-commons-from-llms.html" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>保护 FLOSS 公地免受 LLM 流量和重用压力，成为 HN 热议</h4>
+          <p>Codeberg 文章引发讨论：开源项目不只是免费训练材料，还承担维护、带宽和社区治理成本。讨论焦点从版权转到更实际的公地维护和自动化访问边界。</p>
+          <div class="quote">“社区担心的是：当 LLM 把公共代码当作无限资源，维护者承担的成本并不会自动消失。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 188 <span class="dotsep">·</span> 💬 140</div>
+          <div class="item-signals"><span class="signal-badge topic">开源治理</span><span class="signal-badge topic">爬虫</span><span class="signal-badge topic">许可证</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-darpa-ai-controlled-f16-discussion-2026-07-24" href="https://www.darpa.mil/news/2026/darpa-us-air-force-fly-ai-controlled-f-16" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>DARPA 与美国空军 AI 控制 F-16 试飞引发自治武器边界讨论</h4>
+          <p>这条不是单纯军工新闻，HN 讨论集中在真实世界自治控制、监管责任和人类介入边界。它和今天 Agent 安全主线呼应：越靠近高风险物理系统，越需要可解释和可停机设计。</p>
+          <div class="quote">“从软件 Agent 到飞行控制，问题最终都会落到谁授权、谁监督、谁负责。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 189 <span class="dotsep">·</span> 💬 210</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 军事</span><span class="signal-badge topic">自治系统</span><span class="signal-badge topic">安全边界</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-mud-evaluate-llms-2026-07-24" href="https://cruciblebench.ai/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>用 MUD 评测 LLM 的 99 美元实验，提醒大家重新关注交互式基准</h4>
+          <p>CrucibleBench 的讨论点在于，用廉价文本世界测试模型的长程规划、状态跟踪和工具使用，比单轮问答更接近 Agent 能力。它适合作为团队内部评测原型的灵感来源。</p>
+          <div class="quote">“一个足够便宜的交互环境，可能比昂贵榜单更容易暴露 Agent 的真实短板。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 106 <span class="dotsep">·</span> 💬 77</div>
+          <div class="item-signals"><span class="signal-badge topic">LLM 评测</span><span class="signal-badge topic">交互环境</span><span class="signal-badge topic">低成本基准</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-fooling-yourself-workflow-2026-07-24" href="https://louwrentius.com/i-think-you-might-be-fooling-yourself-with-ai.html" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>“你可能在用 AI 欺骗自己”引发开发者对生产力幻觉的反思</h4>
+          <p>文章和讨论把焦点放在 AI 使用后的真实产出质量：速度提升不等于理解提升，生成更多代码也不等于交付更稳。它提醒团队把 diff 审查、测试和可维护性指标纳入 AI 工作流。</p>
+          <div class="quote">“AI 让你感觉进展很快，但工程判断仍然要在测试、审查和长期维护中兑现。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 80 <span class="dotsep">·</span> 💬 156</div>
+          <div class="item-signals"><span class="signal-badge topic">开发者工作流</span><span class="signal-badge topic">AI 反思</span><span class="signal-badge topic">生产力</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-petals-bittorrent-style-home-llms-2026-07-24" href="https://petals.dev/" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Petals 重回 HN 视野：用 BitTorrent 式协作在家运行大模型</h4>
+          <p>Petals 的讨论价值在于把本地 LLM、社区算力和分布式推理放到一起，而不是只谈单机显卡。它为“开源权重是否能形成真实替代基础设施”提供了一个老项目新语境。</p>
+          <div class="quote">“开源模型生态的瓶颈不只是权重，还包括谁来承担推理基础设施。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 132 <span class="dotsep">·</span> 💬 37</div>
+          <div class="item-signals"><span class="signal-badge topic">本地模型</span><span class="signal-badge topic">分布式推理</span><span class="signal-badge topic">开源基础设施</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="product-qwen-audio-3-tts-2026-07-24" href="https://x.com/Alibaba_Qwen/status/2080270065547809136" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎙️</span>
+          <h4>Qwen-Audio-3.0-TTS</h4>
+        </div>
+        <p class="tagline">Flash/Plus 双版本文本转语音模型</p>
+        <p>通义千问发布新 TTS，支持实时交互、高质量生成、16 种语言和内联风格标签。它和今天语音 Agent 入口趋势呼应：语音正在从附加能力变成 Agent 产品的主交互层。</p>
+        <div><span class="tag">语音</span></div>
+        <div class="item-signals"><span class="signal-badge topic">语音模型</span><span class="signal-badge topic">TTS</span><span class="signal-badge topic">多语言</span></div>
+      </a>
+      <a class="card" data-event-key="product-microsoft-magenticlite-open-models-2026-07-24" href="https://x.com/MSFTResearch/status/2079989338994069511" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧠</span>
+          <h4>MagenticLite</h4>
+        </div>
+        <p class="tagline">微软将 MagenticLite 模型栈全面开源</p>
+        <p>微软研究院宣布 MagenticLite 模型开放权重，覆盖此前在 Foundry 中提供的 MagenticBrain 和 Fara 1.5。它的看点是把企业 Agent 栈里的模型、应用和测试工具进一步推向可复现。</p>
+        <div><span class="tag">开源模型</span></div>
+        <div class="item-signals"><span class="signal-badge topic">开源模型</span><span class="signal-badge topic">Agent 框架</span><span class="signal-badge topic">Microsoft Research</span></div>
+      </a>
+      <a class="card" data-event-key="product-echo-open-weight-fable-cost-2026-07-24" href="https://news.ycombinator.com/item?id=49026810" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🪞</span>
+          <h4>Echo</h4>
+        </div>
+        <p class="tagline">用开源权重以约三分之一成本接近 Fable 结果</p>
+        <p>Echo 在 HN 上主打“Fable 级结果、1/3 成本”，本质是把开源权重模型和路由/评估包装成可落地产品。它适合观察开源模型如何争夺商业 Agent 成本曲线。</p>
+        <div><span class="tag">模型服务</span></div>
+        <div class="item-signals"><span class="signal-badge topic">开源权重</span><span class="signal-badge topic">模型路由</span><span class="signal-badge topic">成本优化</span></div>
+      </a>
+      <a class="card" data-event-key="product-miora-design-agent-open-2026-07-24" href="https://mp.weixin.qq.com/s/qQhq9nxoeCD68iMwQoEVFQ" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎨</span>
+          <h4>Miora</h4>
+        </div>
+        <p class="tagline">腾讯设计 Agent 平台全面开放</p>
+        <p>Miora 面向品牌设计、影视创意等场景开放，支持自定义多模态模型、Agent 推理深度、Skill 市场和记忆系统。它说明设计类 Agent 正从单次生成图像走向可配置工作台。</p>
+        <div><span class="tag">设计</span></div>
+        <div class="item-signals"><span class="signal-badge topic">设计 Agent</span><span class="signal-badge topic">多模态</span><span class="signal-badge topic">创意工具</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-shiyu-coder-kronos-2026-07-24" href="https://github.com/shiyu-coder/Kronos" target="_blank" rel="noopener">
+      <div>
+        <div class="name">shiyu-coder / <b>Kronos</b></div>
+        <div class="desc">面向金融市场语言的基础模型，把价格、成交和市场事件视作可建模序列，适合观察垂直基础模型如何落地到量化场景。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Finance AI</span></div>
+        <div class="item-signals"><span class="signal-badge topic">金融模型</span><span class="signal-badge topic">时间序列</span><span class="signal-badge topic">基础模型</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 33,120</div>
+        <div class="today">▲ 401 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-alibaba-open-code-review-2026-07-24" href="https://github.com/alibaba/open-code-review" target="_blank" rel="noopener">
+      <div>
+        <div class="name">alibaba / <b>open-code-review</b></div>
+        <div class="desc">阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Code Review</span></div>
+        <div class="item-signals"><span class="signal-badge topic">代码审查</span><span class="signal-badge topic">LLM Agent</span><span class="signal-badge topic">静态分析</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 11,645</div>
+        <div class="today">▲ 180 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-citrolabs-ego-lite-2026-07-24" href="https://github.com/citrolabs/ego-lite" target="_blank" rel="noopener">
+      <div>
+        <div class="name">citrolabs / <b>ego-lite</b></div>
+        <div class="desc">面向人与 AI Agent 并行工作的浏览器，关注浏览器作为 Agent 工作台时的任务切换与上下文承载能力。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span> <span class="dotsep">·</span> <span class="tag">Browser Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 浏览器</span><span class="signal-badge topic">并行工作</span><span class="signal-badge topic">Agent 工作台</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 1,743</div>
+        <div class="today">▲ 247 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-palmier-io-palmier-pro-2026-07-24" href="https://github.com/palmier-io/palmier-pro" target="_blank" rel="noopener">
+      <div>
+        <div class="name">palmier-io / <b>palmier-pro</b></div>
+        <div class="desc">开源 macOS 视频编辑器，主打 AI 创作工作流；Show HN 讨论热度较高，适合关注本地创作工具的人跟进。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#F05138"></span>Swift</span> <span class="dotsep">·</span> <span class="tag">Video AI</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 视频</span><span class="signal-badge topic">macOS</span><span class="signal-badge topic">创作工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 11,347</div>
+        <div class="today">▲ 125 HN points today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-onecli-onecli-2026-07-24" href="https://github.com/onecli/onecli" target="_blank" rel="noopener">
+      <div>
+        <div class="name">onecli / <b>onecli</b></div>
+        <div class="desc">内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Security</span></div>
+        <div class="item-signals"><span class="signal-badge topic">凭据管理</span><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">开发者工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 2,655</div>
+        <div class="today">▲ 81 HN points today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-cactus-compute-cactus-hybrid-2026-07-24" href="https://github.com/cactus-compute/cactus-hybrid" target="_blank" rel="noopener">
+      <div>
+        <div class="name">cactus-compute / <b>cactus-hybrid</b></div>
+        <div class="desc">端侧模型回答时输出置信度分数，低置信度自动转交云端模型，是小模型 + 大模型混合部署的具体实现样本。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#89e051"></span>Shell</span> <span class="dotsep">·</span> <span class="tag">Hybrid LLM</span></div>
+        <div class="item-signals"><span class="signal-badge topic">端侧模型</span><span class="signal-badge topic">混合推理</span><span class="signal-badge topic">置信度路由</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 161</div>
+        <div class="today">▲ HN 热议 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-07-24 10:56 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
