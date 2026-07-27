@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>如何把 Claude Code 变成 AI 工程团队 - Y Combinator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a7b0c3;
+      --text-muted: #6b7280;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-soft: rgba(99, 179, 237, 0.12);
+      --accent-warm: #f6ad55;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --code-bg: #0f111a;
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(99, 179, 237, 0.12), transparent 28%),
+        radial-gradient(circle at 85% 12%, rgba(246, 173, 85, 0.10), transparent 26%),
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: auto, auto, 56px 56px, 56px 56px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+    .back-link, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .back-link:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      backdrop-filter: blur(12px);
+      margin: 24px 0 2rem;
+    }
+    .eyebrow {
+      color: var(--accent-warm);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+      margin-bottom: 16px;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.08rem;
+      max-width: 820px;
+      margin-bottom: 18px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .pill {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.045);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.86rem;
+    }
+    .pill strong { color: var(--text-primary); }
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: #000;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.36);
+      margin-bottom: 28px;
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(1.2rem, 2.6vw, 2rem);
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .toc a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.035);
+    }
+    .toc a:hover { border-color: rgba(99,179,237,0.45); color: var(--accent); }
+    h2 {
+      font-size: clamp(1.45rem, 3vw, 2rem);
+      line-height: 1.25;
+      margin-bottom: 18px;
+      letter-spacing: 0;
+    }
+    h3 {
+      font-size: 1.14rem;
+      margin: 28px 0 10px;
+      color: #f8fafc;
+      letter-spacing: 0;
+    }
+    p { color: var(--text-secondary); margin: 12px 0; }
+    strong { color: var(--text-primary); }
+    ul, ol { margin: 12px 0 12px 22px; color: var(--text-secondary); }
+    li { margin: 8px 0; }
+    code {
+      font-family: "JetBrains Mono", monospace;
+      background: var(--code-bg);
+      color: #d6bcfa;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 5px;
+      padding: 2px 6px;
+      font-size: 0.88em;
+    }
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: rgba(99,179,237,0.08);
+      color: var(--text-primary);
+      padding: 18px 20px;
+      margin: 18px 0;
+      border-radius: 8px;
+      font-size: 1.02rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 10px;
+      margin: 18px 0;
+      border: 1px solid var(--card-border);
+      background: rgba(10,10,15,0.58);
+    }
+    th, td {
+      border-bottom: 1px solid var(--card-border);
+      padding: 13px 14px;
+      text-align: left;
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+    th {
+      color: var(--text-primary);
+      background: rgba(99,179,237,0.10);
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .mini-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .mini-card .label {
+      color: var(--accent-warm);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      margin-bottom: 8px;
+    }
+    .timestamp-list {
+      list-style: none;
+      margin-left: 0;
+      display: grid;
+      gap: 10px;
+    }
+    .timestamp-list li {
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.035);
+    }
+    .timestamp-list span {
+      display: inline-block;
+      min-width: 70px;
+      color: var(--accent);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
+    }
+    .rec-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .rec-links a {
+      display: block;
+      padding: 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      text-decoration: none;
+      background: rgba(255,255,255,0.035);
+    }
+    .rec-links a:hover { border-color: var(--accent); color: var(--accent); }
+    @media (max-width: 640px) {
+      .page { width: min(100% - 24px, 1120px); padding-top: 18px; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 0; }
+      tr { display: block; border-bottom: 1px solid var(--card-border); }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">Y Combinator · Agentic Engineering · Claude Code</div>
+      <h1>如何把 Claude Code 变成 AI 工程团队</h1>
+      <p class="subtitle">英文原题：How to Make Claude Code Your AI Engineering Team。Garry Tan 用 G Stack 演示一个核心判断：真正限制 Agent 生产力的不是模型智力，而是团队化流程、角色、评审和可见工具。</p>
+      <div class="meta">
+        <span class="pill"><strong>频道</strong> Y Combinator</span>
+        <span class="pill"><strong>时长</strong> 21:49</span>
+        <span class="pill"><strong>播放量</strong> 237,459</span>
+        <span class="pill"><strong>发布</strong> 2026-04-23</span>
+      </div>
+    </header>
+
+    <div class="video-frame">
+      <iframe
+        src="https://www.youtube.com/embed/wkv2ifxPpF8"
+        title="How to Make Claude Code Your AI Engineering Team"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>课程导航</h2>
+      <div class="toc">
+        <a href="#background">一、问题引入 / 背景</a>
+        <a href="#concepts">二、核心概念解释</a>
+        <a href="#steps">三、关键论点 / 实操步骤</a>
+        <a href="#matrix">四、对比表格 / 决策矩阵</a>
+        <a href="#quote">五、引用块</a>
+        <a href="#timestamps">六、时间戳目录</a>
+        <a href="#related">七、相关推荐</a>
+      </div>
+    </section>
+
+    <section class="content-card" id="background">
+      <h2>一、问题引入 / 背景</h2>
+      <p>这支视频不是普通的 Claude Code 入门，而是一个创业者兼工程师把自己的工作方式公开拆开。Garry Tan 先说明，他不是从“AI 很酷”开始讲，而是从多年写代码、做产品、做 YC office hours 的经验出发：如果把模型当成一个会写代码的聊天框，它很快会游走、猜测、写出看似正确但暗中损坏系统的代码；如果把模型放进一个有角色、有流程、有评审、有工具的团队系统里，它才开始稳定地产生真正能落地的工程成果。</p>
+      <p>视频里的主角是 <strong>G Stack</strong>，它被描述为一种“薄 harness、厚 skills”的实现。所谓薄 harness，是不要让外层框架变成复杂巨兽；所谓厚 skills，是把 YC 式产品拷问、CEO review、工程 review、设计 shotgun、QA 浏览器、ship gate 等经验固化为可调用的专业能力。换句话说，模型不是被要求一次性“把 App 写好”，而是被要求在一个接近真实团队的流程里逐步推进。</p>
+      <p>Garry 的演示案例很具体：做一个能帮用户找齐 1099 税务文件的产品。这个想法一开始只是“去 Gmail 找文件”，但在 office hours 的追问、竞品辨析、商业模式推演和浏览器自动化方案比较之后，它逐渐变成一个更完整的 wedge strategy：先解决税务文件收集的即时痛点，再把后续的 CPA 匹配和报税协作变成更大的商业机会。</p>
+    </section>
+
+    <section class="content-card" id="concepts">
+      <h2>二、核心概念解释</h2>
+      <h3>1. Agent 不是一个更长的 prompt，而是一套工作系统</h3>
+      <p>视频最重要的隐含定义是：Agent 工程的关键不是给模型更多自由，而是给它更清楚的上下文边界和决策流程。普通提示词会让模型直接进入执行，但 G Stack 会先让模型扮演产品合伙人、工程负责人、设计 reviewer、QA reviewer 等角色，每一步都要求产物可审查、可回滚、可继续推进。</p>
+      <h3>2. “薄 harness、厚 skills”意味着框架少做魔法</h3>
+      <p>薄 harness 的价值在于降低系统不透明度。Garry 批评了“把所有东西都藏进巨大框架”的倾向，因为那会让调试、治理和迁移变难。厚 skills 则是把实际经验沉淀为明确命令：<code>/officehours</code> 负责先问尖锐问题，<code>/auto-plan</code> 负责压缩多角色审查，<code>/review</code> 负责像 staff engineer 一样找 bug，<code>/browse</code> 和 <code>/qa</code> 则把浏览器测试和视觉检查变成 Agent 可执行的外部能力。</p>
+      <h3>3. Office Hours 是产品判断，不是需求收集表</h3>
+      <p>演示里的 Office Hours 会追问用户痛点、替代方案、商业模式和可行性。它指出 TurboTax、H&amp;R Block、Plaid 等已有方案为什么没有完全解决问题，并引导 Garry 从“文档聚合器”想到“税务服务漏斗”。这一步的价值不是多写功能，而是决定哪些功能值得写。</p>
+      <h3>4. 浏览器自动化把本地上下文变成产品能力</h3>
+      <p>Garry 特别强调，本地可见浏览器和云端托管浏览器不是一回事。对于 Gmail、银行、2FA、税务文件这样的场景，用户在自己机器上登录，AI 在可见浏览器里导航、下载、截图，往往比 OAuth、Plaid 或云端凭证保管更容易建立信任。这也解释了为什么他要围绕 Playwright 和 Chromium 写 CLI 工具。</p>
+    </section>
+
+    <section class="content-card" id="steps">
+      <h2>三、关键论点 / 实操步骤</h2>
+      <h3>步骤一：先让 Agent 反驳你的点子</h3>
+      <p>Garry 没有直接让 Claude Code 写税务 App，而是先运行 Office Hours。它会用六个强制问题重构产品：谁痛、为什么现在、现有方案为何不够、用户愿意为哪一步付费、技术可行性在哪里、失败时如何处理。这个顺序能防止团队一开始就把工程能力花在错误问题上。</p>
+      <h3>步骤二：把“需求”改写成可执行设计文档</h3>
+      <p>在 1099 案例里，初始想法被拆成 Gmail 搜索、银行门户导航、PDF 下载、CPA 邮件识别、用户授权和失败处理。模型不仅写需求，还会指出缺少隐私章节、2FA handoff、错误恢复和信任边界。视频中这个 adversarial review 把设计评分从 6/10 推到 8/10，并自动修复了 16 个问题。</p>
+      <h3>步骤三：用设计 shotgun 并行探索多个界面方向</h3>
+      <p>Garry 选择主 checklist dashboard 后，让多个 Agent 并行生成三种视觉方向：command center、friendly progress、split view。重点不是谁画得漂亮，而是让设计空间在一分钟级别展开，再由人类选择更适合用户心理模型的方向。最后他倾向于有进度环和卡片感的 friendly progress，因为税务文件收集是焦虑型任务，需要可见进展。</p>
+      <h3>步骤四：让 coding、review、QA、ship 分离</h3>
+      <p>视频后半段展示的是 G Stack 的完整 sprint：先 Office Hours，再 auto plan 或 CEO/engineering/design/developer-experience review，通过后才让 Claude Code 写代码；写完后运行 review 找 bug，再用浏览器 QA 检查真实界面和 CSS/JS 问题，最后用 ship 工具确认 PR 是否适合进入 main。这个顺序把“一个 Agent 一口气写完”变成“多个专业角色接力”。</p>
+      <h3>步骤五：并行 PR 不是多开窗口，而是多条隔离流水线</h3>
+      <p>Garry 提到自己会同时运行 10 到 15 个 Claude Code session，甚至一天推进 20 到 50 个 PR。这个数字容易误导，真正的关键是每个任务都有 worktree、计划、评审、QA 和落地门禁。没有这些隔离和门禁，多开窗口只会把风险放大；有了这些结构，才可能把“AI 写代码”扩展成“AI 工程团队”。</p>
+    </section>
+
+    <section class="content-card" id="matrix">
+      <h2>四、对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>模式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>直接聊天 / 一次性 prompt</td>
+            <td>查资料、写小脚本、生成一次性文本</td>
+            <td>启动成本最低，适合探索</td>
+            <td>模型容易猜测需求，缺少回顾和 QA</td>
+            <td>只用于低风险任务；不要让它直接改核心代码</td>
+          </tr>
+          <tr>
+            <td>Claude Code 单 Agent</td>
+            <td>明确 bug、局部功能、已知代码库内的小改动</td>
+            <td>上下文在代码目录里，执行力强</td>
+            <td>容易边做边改范围，审查压力回到人身上</td>
+            <td>必须搭配计划、diff 检查和测试命令</td>
+          </tr>
+          <tr>
+            <td>G Stack skills 团队流</td>
+            <td>新产品、复杂功能、需要产品与工程判断的任务</td>
+            <td>把产品、设计、工程、QA 和发布拆成角色</td>
+            <td>流程更长，需要维护 skills 质量</td>
+            <td>适合高杠杆项目，是视频推荐的主路径</td>
+          </tr>
+          <tr>
+            <td>本地浏览器自动化</td>
+            <td>Gmail、银行、后台系统、视觉 QA、下载文件</td>
+            <td>用户可见、凭证不出本机、能处理真实 UI</td>
+            <td>站点变化、2FA、下载权限会带来失败模式</td>
+            <td>把它作为 QA 和受控操作工具，不要假装它永不失败</td>
+          </tr>
+          <tr>
+            <td>多 session 并行 PR</td>
+            <td>多个相互独立的 issue、开源维护、批量修复</td>
+            <td>吞吐量极高，适合维护者处理大量反馈</td>
+            <td>供应链攻击、冲突、重复工作和审查债务会放大</td>
+            <td>只有在 worktree 隔离、review、QA、ship gate 完整时使用</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card" id="quote">
+      <h2>五、引用块</h2>
+      <blockquote>
+        Garry 的核心判断可以转述为：模型已经足够聪明，真正要补的是围绕模型的团队结构、专业角色、审查流程和可见工具。
+      </blockquote>
+      <p>这句话值得反复看。它把“升级模型”之外的工作重新放到工程师手里：怎样组织任务、怎样提出反对意见、怎样隔离分支、怎样验证浏览器行为、怎样拒绝不成熟的设计，都会直接决定 Agent 的产出质量。</p>
+      <blockquote>
+        另一个关键点是：当 AI 接管计划、设计和编码后，人类最容易被剩下的 QA 淹没，所以 QA 本身也必须成为自动化的一等公民。
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>从视频抽出的实践清单</h2>
+      <div class="grid">
+        <div class="mini-card">
+          <div class="label">01 / Product</div>
+          <p><strong>先问难题。</strong> 每个新想法先跑产品 office hours，要求模型证明痛点、替代方案和商业模式，而不是直接生成 backlog。</p>
+        </div>
+        <div class="mini-card">
+          <div class="label">02 / Design</div>
+          <p><strong>并行出方向。</strong> 对复杂 UI 让多个 Agent 给出不同方向，再由人类选择，而不是让一个 Agent 一路微调到审美疲劳。</p>
+        </div>
+        <div class="mini-card">
+          <div class="label">03 / Engineering</div>
+          <p><strong>计划先锁定。</strong> 代码前要有可审查计划，计划被 adversarial review 打过一轮之后再进入实现。</p>
+        </div>
+        <div class="mini-card">
+          <div class="label">04 / QA</div>
+          <p><strong>浏览器是真相。</strong> 对前端、表单、下载、权限、视觉状态，不能只靠静态代码审查，必须让 Agent 操作真实浏览器。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card" id="timestamps">
+      <h2>六、时间戳目录</h2>
+      <ul class="timestamp-list">
+        <li><span>00:00</span> Garry Tan 介绍自己从工程师、创业者到 YC 的背景，并提出“Agent era”的工作方式变化。</li>
+        <li><span>01:35</span> 解释普通模型为什么会游走和猜测，问题不在模型智力，而在缺少流程与上下文。</li>
+        <li><span>03:00</span> 进入 G Stack 与 Conductor 快速开始，用 1099 税务文件收集 App 作为演示案例。</li>
+        <li><span>04:27</span> Office Hours 开始追问 Gmail、银行门户、PDF 下载和用户输入范围。</li>
+        <li><span>06:00</span> 从 TurboTax、H&amp;R Block、Plaid 的替代方案反推真正的用户痛点和商业机会。</li>
+        <li><span>08:00</span> 提出本地可见浏览器自动化：用户登录，AI 导航并下载文件，不保存云端凭证。</li>
+        <li><span>10:08</span> 比较 OAuth、CPA marketplace、browser-first 等路线，选择更符合信任边界的方案。</li>
+        <li><span>13:00</span> 多步 adversarial review 自动发现隐私、2FA、失败处理等缺口，并推动设计文档升级。</li>
+        <li><span>14:25</span> Design shotgun 生成多个界面方向：command center、friendly progress、split view。</li>
+        <li><span>16:00</span> 展示完整 sprint：Office Hours、auto plan、CEO review、design review、code、review、QA、ship。</li>
+        <li><span>18:00</span> 解释为什么要用 Playwright/Chromium CLI 包装浏览器能力，减少 MCP 上下文膨胀和慢动作。</li>
+        <li><span>20:00</span> 讨论多 session、多 worktree、多 PR 的工作方式，以及供应链攻击下的审查和发布谨慎性。</li>
+        <li><span>21:32</span> 收束观点：真正的问题不再是“能不能写代码”，而是如何把 idea 到 shipping 的链路系统化。</li>
+      </ul>
+    </section>
+
+    <section class="content-card" id="related">
+      <h2>七、相关推荐</h2>
+      <p>如果你想继续看同一条主线，可以按下面顺序补课：先理解 Agentic Engineering，再看 Claude Code 工作流，最后看具体的本地工具和浏览器自动化边界。</p>
+      <div class="rec-links">
+        <a href="index.html">返回全部课程列表</a>
+        <a href="96jN2OCOfLs.html">从 Vibe Coding 到 Agentic Engineering</a>
+        <a href="uogzSxOw4LU.html">Claude Code 专业工作流：MCP、Skills、子智能体与持久记忆</a>
+        <a href="kF2WQgk1LtY.html">Cursor 编程智能体实战：从提示词、计划模式到质量验收</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
