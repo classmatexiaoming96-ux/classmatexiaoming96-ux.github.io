@@ -1,7 +1,1110 @@
 {
   "version": 1,
-  "generated_at": "2026-07-27T10:46",
+  "generated_at": "2026-07-28T10:49",
   "digests": [
+    {
+      "date": "2026-07-28",
+      "weekday": "星期二",
+      "edition": 65,
+      "title": "开放权重澄清、Copilot Harness 与 Agent 工程治理升温",
+      "intro": "今天的主线是开放权重争议进入澄清阶段，Agent 工程继续从提示词走向权限、路由和工作流治理；开发者工具、搜索入口和开源 Agent 项目仍在快速迭代。",
+      "counts": {
+        "headlines": 6,
+        "papers": 5,
+        "community": 5,
+        "products": 5,
+        "repos": 5
+      },
+      "highlights": [
+        {
+          "event_key": "anthropic-open-weights-position-clarification-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Anthropic 澄清开放权重立场：反对全面禁令，主张出口管制与安全测试",
+          "summary": "相比昨天围绕 OpenAI、Anthropic 游说限制中国开源模型的报道，今天的新进展是 Anthropic 发布正式澄清：公司称从未主张全面禁止开源权重模型，而是支持芯片出口管制、危险能力测试和更细的安全门槛。这把争议从“开源/闭源二选一”推进到“哪些模型、哪些能力、哪些出口路径需要管制”。",
+          "url": "https://www.anthropic.com/news/position-open-weights-models",
+          "source": "Anthropic Newsroom / AI HOT",
+          "time": "今日凌晨",
+          "topics": [
+            "AI 治理",
+            "开放权重",
+            "模型安全"
+          ],
+          "source_count": 17,
+          "related_sources": [
+            "Anthropic Newsroom",
+            "IT之家背景报道"
+          ],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://aihot.virxact.com/"
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "openrouter-provider-performance-insights-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "time": "今日",
+          "topics": [
+            "推理服务",
+            "模型路由",
+            "开发者工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-copilot-harness-workflow-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "time": "昨日夜间",
+          "topics": [
+            "AI 编程",
+            "工作流",
+            "代码审查"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        }
+      ],
+      "items": [
+        {
+          "event_key": "anthropic-open-weights-position-clarification-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Anthropic 澄清开放权重立场：反对全面禁令，主张出口管制与安全测试",
+          "summary": "相比昨天围绕 OpenAI、Anthropic 游说限制中国开源模型的报道，今天的新进展是 Anthropic 发布正式澄清：公司称从未主张全面禁止开源权重模型，而是支持芯片出口管制、危险能力测试和更细的安全门槛。这把争议从“开源/闭源二选一”推进到“哪些模型、哪些能力、哪些出口路径需要管制”。",
+          "url": "https://www.anthropic.com/news/position-open-weights-models",
+          "source": "Anthropic Newsroom / AI HOT",
+          "time": "今日凌晨",
+          "topics": [
+            "AI 治理",
+            "开放权重",
+            "模型安全"
+          ],
+          "source_count": 17,
+          "related_sources": [
+            "Anthropic Newsroom",
+            "IT之家背景报道"
+          ],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://aihot.virxact.com/"
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "openrouter-provider-performance-insights-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "time": "今日",
+          "topics": [
+            "推理服务",
+            "模型路由",
+            "开发者工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-copilot-harness-workflow-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "time": "昨日夜间",
+          "topics": [
+            "AI 编程",
+            "工作流",
+            "代码审查"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "kimi-k3-open-release-agentenv-modal-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Kimi K3 相关发布密集出现：2.8T MoE、AgentENV 与推理平台支持同步推进",
+          "summary": "Kimi 官方与 LMSYS 相关消息显示，Kimi K3 不只是模型权重和技术报告，还同步推进 AgentENV 分布式智能体环境、Modal 部署和发布日推理支持。值得关注的是大模型发布正在绑定工具链与 Agent 环境，而不是只发模型卡。",
+          "url": "https://www.lmsys.org/blog/2026-07-27-kimi-k3-day0-support",
+          "source": "Kimi / LMSYS",
+          "time": "昨日",
+          "topics": [
+            "开源模型",
+            "推理",
+            "Agent 环境"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "google-ai-overviews-search-share-43-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "数据显示 Google AI Overviews 在搜索结果中的出现率升至 43%",
+          "summary": "TechCrunch 引用第三方数据称，Google 的 AI 搜索摘要正在快速成为默认入口。这对内容站、SEO、新闻分发和电商检索都有直接影响：用户可能更少点击传统蓝链，更多在摘要层完成初步判断。",
+          "url": "https://techcrunch.com/2026/07/27/googles-ai-search-is-rapidly-becoming-the-default-new-data-shows",
+          "source": "TechCrunch",
+          "time": "昨日",
+          "topics": [
+            "AI 搜索",
+            "流量入口",
+            "内容生态"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "nvidia-open-secure-ai-alliance-2026-07-28",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "NVIDIA 等行业组织成立 Open Secure AI Alliance，推动 AI 安全与防御开源化",
+          "summary": "Open Secure AI Alliance 把 AI 安全从企业内部红队扩展到可复用的开源工具和防御协作。它和今天的开放权重争议形成呼应：开源风险不只靠封闭解决，也需要共享测试、评估和防护能力。",
+          "url": "https://blogs.nvidia.com/blog/open-secure-ai-alliance",
+          "source": "NVIDIA Blog",
+          "time": "昨日",
+          "topics": [
+            "AI 安全",
+            "开源生态",
+            "防御工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-22529",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills",
+          "summary": "这篇把 skill 从静态工具说明推进到可共同演化的训练对象，和当前 Agent skill / workflow 生态高度相关。值得读它如何用自博弈扩展能力边界，而不是只靠人工写更多提示词。",
+          "url": "https://arxiv.org/abs/2607.22529",
+          "source": "arXiv",
+          "time": "2026-07-27",
+          "topics": [
+            "cs.CL"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-22385",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Agentic Root Cause Analysis through Evidence-Grounded Reasoning",
+          "summary": "Root cause analysis 是企业 Agent 最容易产生幻觉也最需要落地的场景。这篇强调 evidence-grounded reasoning，阅读价值在于看它如何把诊断链条绑定到证据，而不是让 Agent 只给漂亮解释。",
+          "url": "https://arxiv.org/abs/2607.22385",
+          "source": "arXiv",
+          "time": "2026-07-27",
+          "topics": [
+            "cs.AI",
+            "cs.LG"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-22375",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "IDEAgent: Agentic Quality-Diversity Search for Research Idea Generation",
+          "summary": "研究创意生成经常只评“像不像点子”，这篇把 quality-diversity search 引入 Agent 生成流程，适合关注科研助手、自动头脑风暴和评审闭环的人看。新意在于不只追求单个最高分答案，而是维持多样候选空间。",
+          "url": "https://arxiv.org/abs/2607.22375",
+          "source": "arXiv",
+          "time": "2026-07-27",
+          "topics": [
+            "cs.AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-22157",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Learning on the Job: Continual Learning from Deployment Feedback for Frozen-Weights Agents",
+          "summary": "很多生产 Agent 不能频繁微调模型，但仍需要从部署反馈中变好。这篇切中 frozen-weights agents 的现实约束，值得看它如何在不改底座权重的前提下吸收反馈。",
+          "url": "https://arxiv.org/abs/2607.22157",
+          "source": "arXiv",
+          "time": "2026-07-27",
+          "topics": [
+            "cs.AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2607-22098",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Reasoning Denoiser: Denoising Reasoning Traces for Hallucination Detection in Large Reasoning Models",
+          "summary": "推理模型的幻觉不只出现在最终答案，也藏在中间 reasoning trace。它的新意是把“清理推理轨迹”作为检测信号，适合做 reasoning model 评测、安全审查和可解释性工具的人读。",
+          "url": "https://arxiv.org/abs/2607.22098",
+          "source": "arXiv",
+          "time": "2026-07-27",
+          "topics": [
+            "cs.AI",
+            "cs.LG"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-ai-companies-shredding-rare-books-2026-07-28",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "HN 热议：AI 公司为了训练数据处理稀有书籍，引发版权和文化保存争论",
+          "summary": "742 points / 468 comments 的讨论集中在训练数据稀缺之后，AI 公司会把成本转嫁到图书馆、档案和版权边界上。它不是单纯新闻，而是关于“数据来源是否可审计、是否可替代”的长期问题。",
+          "url": "https://twitter.com/HedgieMarkets/status/2081534588485296565",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "数据版权",
+            "训练数据",
+            "文化遗产"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 742,
+          "comments": 468,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-apple-ai-bubble-watch-burn-2026-07-28",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "HN 讨论 Apple 是否会在 AI 泡沫破裂时受益",
+          "summary": "235 points / 310 comments 的争论反映了社区对 AI 资本开支与产品价值脱节的担忧。讨论焦点不是 Apple 是否落后，而是保守平台在基础设施泡沫阶段可能反而少承担风险。",
+          "url": "https://www.macrumors.com/2026/07/27/ed-zitron-apple-watch-it-burn-ai-bubble-bursts/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 泡沫",
+            "平台战略",
+            "大厂竞争"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 235,
+          "comments": 310,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-new-ai-superpowers-focus-followthrough-2026-07-28",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "社区转向讨论 AI 时代的新能力：专注与持续推进",
+          "summary": "这条讨论的价值在于把 AI 使用能力从“会不会写提示词”拉回到人类工作方式：能否拆任务、持续验证、处理反馈和把 Agent 输出接进真实行动。",
+          "url": "https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "个人效率",
+            "AI 工作流",
+            "执行力"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 214,
+          "comments": 79,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-terence-tao-mathematics-age-of-ai-2026-07-28",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Terence Tao《AI 时代的数学》幻灯片在 HN 引发讨论",
+          "summary": "157 points / 62 comments 的讨论集中在 AI 对数学发现、证明检查和协作研究的影响。相比普通“AI 会不会取代研究者”的争论，这份材料更适合看顶级数学家如何拆分工具能力和研究判断。",
+          "url": "https://teorth.github.io/tao-web/slides/age-of-ai-icm-2026.pdf",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "数学",
+            "AI 辅助研究",
+            "科研工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 157,
+          "comments": 62,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-invisible-prompt-trap-student-ai-cheating-2026-07-28",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "教授用不可见提示词识别 AI 作业作弊，引发教育场景的攻防讨论",
+          "summary": "91 points / 80 comments 的讨论说明，AI 教育治理已经进入 prompt injection 与检测规避的现实阶段。它也提醒老师和平台：只靠陷阱很难长期治理，课程设计需要更强调过程证据。",
+          "url": "https://www.techspot.com/news/113243-professor-invisible-prompt-trap-catches-32-students-cheating.html",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 教育",
+            "提示注入",
+            "学术诚信"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 91,
+          "comments": 80,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-feynobg-background-removal-2026-07-28",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "FeyNoBg",
+          "summary": "Show HN 上升最快的视觉工具之一，面向图片背景移除和训练流程复用。它的看点在于把常见视觉能力做成更可直接集成的模型/库，而不是只提供网页 demo。",
+          "url": "https://usefeyn.com/blog/feynobg/",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "视觉模型",
+            "开源训练",
+            "设计工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-world-model-optimizer-2026-07-28",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "world-model-optimizer",
+          "summary": "项目把讨论点放在“frontier quality for half the cost”，适合关注模型服务成本、蒸馏和线上质量保持的团队跟进。",
+          "url": "https://github.com/experientiallabs/world-model-optimizer",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "模型蒸馏",
+            "推理成本",
+            "部署优化"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-openlake-kv-cache-offload-2026-07-28",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "OpenLake",
+          "summary": "长上下文和 long-horizon agent 继续推高推理成本，OpenLake 的方向是把 KV cache 外置化，减少重复计算与显存压力。",
+          "url": "https://github.com/openlake-project/openlake",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "长上下文",
+            "KV Cache",
+            "推理成本"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-hart-os-frontier-ai-no-datacenter-2026-07-28",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "HART OS",
+          "summary": "虽然还需要看实现成熟度，但它代表了一个明显趋势：开发者正在把模型、工具、运行时和设备侧环境打包成更完整的 AI 操作系统叙事。",
+          "url": "https://github.com/hertz-ai/HARTOS",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "AI OS",
+            "边缘部署",
+            "开源系统"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-wmux-ai-agent-workspace-multiplexer-2026-07-28",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "wmux",
+          "summary": "多 Agent 并行之后，工作区隔离、上下文切换和会话管理会成为真实痛点。wmux 的定位说明工具链正在补齐“让多个 Agent 同时工作”的基础设施。",
+          "url": "https://github.com/openwong2kim/wmux",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "Agent 工作区",
+            "开发者工具",
+            "并行任务"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-moeru-ai-airi-2026-07-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "moeru-ai/airi",
+          "summary": "自托管 AI companion，支持实时语音聊天、Minecraft/Factorio 场景和 Web/macOS/Windows 多端运行。",
+          "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "AI 伴侣",
+            "实时语音",
+            "多平台"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "44,114",
+          "stars_today": "572"
+        },
+        {
+          "event_key": "github-shiyu-coder-kronos-2026-07-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "shiyu-coder/Kronos",
+          "summary": "面向金融市场语言的 foundation model，把时序市场数据建模为可迁移的模型能力。",
+          "url": "https://github.com/shiyu-coder/Kronos",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "金融模型",
+            "时间序列",
+            "Foundation Model"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "34,595",
+          "stars_today": "441"
+        },
+        {
+          "event_key": "github-alibaba-open-code-review-2026-07-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源混合式代码审查工具，结合确定性流水线与 LLM Agent，支持行级评论和安全规则集。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "代码审查",
+            "LLM Agent",
+            "安全规则"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "14,935",
+          "stars_today": "979"
+        },
+        {
+          "event_key": "github-bradautomates-claude-video-2026-07-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "bradautomates/claude-video",
+          "summary": "给 Claude 增加 /watch 能力，下载视频、抽帧、转录并把材料交给 Claude 分析。",
+          "url": "https://github.com/bradautomates/claude-video",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Claude",
+            "视频理解",
+            "多模态工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "11,182",
+          "stars_today": "434"
+        },
+        {
+          "event_key": "github-mvanhorn-last30days-skill-2026-07-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "mvanhorn/last30days-skill",
+          "summary": "面向 AI Agent 的研究 skill，可跨 Reddit、X、YouTube、HN、Polymarket 和 Web 汇总最近 30 天信息。",
+          "url": "https://github.com/mvanhorn/last30days-skill",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent Skill",
+            "研究自动化",
+            "跨源摘要"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "54,224",
+          "stars_today": "240"
+        }
+      ],
+      "topics": [
+        {
+          "name": "cs.AI",
+          "count": 4
+        },
+        {
+          "name": "开发者工具",
+          "count": 2
+        },
+        {
+          "name": "代码审查",
+          "count": 2
+        },
+        {
+          "name": "cs.LG",
+          "count": 2
+        },
+        {
+          "name": "推理成本",
+          "count": 2
+        },
+        {
+          "name": "AI 治理",
+          "count": 1
+        },
+        {
+          "name": "开放权重",
+          "count": 1
+        },
+        {
+          "name": "模型安全",
+          "count": 1
+        },
+        {
+          "name": "推理服务",
+          "count": 1
+        },
+        {
+          "name": "模型路由",
+          "count": 1
+        },
+        {
+          "name": "AI 编程",
+          "count": 1
+        },
+        {
+          "name": "工作流",
+          "count": 1
+        },
+        {
+          "name": "开源模型",
+          "count": 1
+        },
+        {
+          "name": "推理",
+          "count": 1
+        },
+        {
+          "name": "Agent 环境",
+          "count": 1
+        },
+        {
+          "name": "AI 搜索",
+          "count": 1
+        },
+        {
+          "name": "流量入口",
+          "count": 1
+        },
+        {
+          "name": "内容生态",
+          "count": 1
+        },
+        {
+          "name": "AI 安全",
+          "count": 1
+        },
+        {
+          "name": "开源生态",
+          "count": 1
+        },
+        {
+          "name": "防御工具",
+          "count": 1
+        },
+        {
+          "name": "cs.CL",
+          "count": 1
+        },
+        {
+          "name": "数据版权",
+          "count": 1
+        },
+        {
+          "name": "训练数据",
+          "count": 1
+        },
+        {
+          "name": "文化遗产",
+          "count": 1
+        },
+        {
+          "name": "AI 泡沫",
+          "count": 1
+        },
+        {
+          "name": "平台战略",
+          "count": 1
+        },
+        {
+          "name": "大厂竞争",
+          "count": 1
+        },
+        {
+          "name": "个人效率",
+          "count": 1
+        },
+        {
+          "name": "AI 工作流",
+          "count": 1
+        },
+        {
+          "name": "执行力",
+          "count": 1
+        },
+        {
+          "name": "数学",
+          "count": 1
+        },
+        {
+          "name": "AI 辅助研究",
+          "count": 1
+        },
+        {
+          "name": "科研工具",
+          "count": 1
+        },
+        {
+          "name": "AI 教育",
+          "count": 1
+        },
+        {
+          "name": "提示注入",
+          "count": 1
+        },
+        {
+          "name": "学术诚信",
+          "count": 1
+        },
+        {
+          "name": "视觉模型",
+          "count": 1
+        },
+        {
+          "name": "开源训练",
+          "count": 1
+        },
+        {
+          "name": "设计工具",
+          "count": 1
+        },
+        {
+          "name": "模型蒸馏",
+          "count": 1
+        },
+        {
+          "name": "部署优化",
+          "count": 1
+        },
+        {
+          "name": "长上下文",
+          "count": 1
+        },
+        {
+          "name": "KV Cache",
+          "count": 1
+        },
+        {
+          "name": "AI OS",
+          "count": 1
+        },
+        {
+          "name": "边缘部署",
+          "count": 1
+        },
+        {
+          "name": "开源系统",
+          "count": 1
+        },
+        {
+          "name": "Agent 工作区",
+          "count": 1
+        },
+        {
+          "name": "并行任务",
+          "count": 1
+        },
+        {
+          "name": "AI 伴侣",
+          "count": 1
+        },
+        {
+          "name": "实时语音",
+          "count": 1
+        },
+        {
+          "name": "多平台",
+          "count": 1
+        },
+        {
+          "name": "金融模型",
+          "count": 1
+        },
+        {
+          "name": "时间序列",
+          "count": 1
+        },
+        {
+          "name": "Foundation Model",
+          "count": 1
+        },
+        {
+          "name": "LLM Agent",
+          "count": 1
+        },
+        {
+          "name": "安全规则",
+          "count": 1
+        },
+        {
+          "name": "Claude",
+          "count": 1
+        },
+        {
+          "name": "视频理解",
+          "count": 1
+        },
+        {
+          "name": "多模态工具",
+          "count": 1
+        },
+        {
+          "name": "Agent Skill",
+          "count": 1
+        },
+        {
+          "name": "研究自动化",
+          "count": 1
+        },
+        {
+          "name": "跨源摘要",
+          "count": 1
+        }
+      ],
+      "sources": [
+        {
+          "name": "arXiv",
+          "count": 5
+        },
+        {
+          "name": "Hacker News",
+          "count": 5
+        },
+        {
+          "name": "Show HN",
+          "count": 5
+        },
+        {
+          "name": "GitHub",
+          "count": 5
+        },
+        {
+          "name": "Anthropic Newsroom / AI HOT",
+          "count": 1
+        },
+        {
+          "name": "Anthropic Newsroom",
+          "count": 1
+        },
+        {
+          "name": "IT之家背景报道",
+          "count": 1
+        },
+        {
+          "name": "OpenRouter Blog",
+          "count": 1
+        },
+        {
+          "name": "GitHub Blog",
+          "count": 1
+        },
+        {
+          "name": "Kimi / LMSYS",
+          "count": 1
+        },
+        {
+          "name": "TechCrunch",
+          "count": 1
+        },
+        {
+          "name": "NVIDIA Blog",
+          "count": 1
+        }
+      ]
+    },
     {
       "date": "2026-07-27",
       "weekday": "星期一",
@@ -8457,6 +9560,131 @@
   ],
   "topics": [
     {
+      "name": "cs.AI",
+      "count": 12,
+      "dates": [
+        "2026-07-28",
+        "2026-07-27",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 12
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Agentic Root Cause Analysis through Evidence-Grounded Reasoning",
+          "summary": "Root cause analysis 是企业 Agent 最容易产生幻觉也最需要落地的场景。这篇强调 evidence-grounded reasoning，阅读价值在于看它如何把诊断链条绑定到证据，而不是让 Agent 只给漂亮解释。",
+          "url": "https://arxiv.org/abs/2607.22385",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "IDEAgent: Agentic Quality-Diversity Search for Research Idea Generation",
+          "summary": "研究创意生成经常只评“像不像点子”，这篇把 quality-diversity search 引入 Agent 生成流程，适合关注科研助手、自动头脑风暴和评审闭环的人看。新意在于不只追求单个最高分答案，而是维持多样候选空间。",
+          "url": "https://arxiv.org/abs/2607.22375",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "Learning on the Job: Continual Learning from Deployment Feedback for Frozen-Weights Agents",
+          "summary": "很多生产 Agent 不能频繁微调模型，但仍需要从部署反馈中变好。这篇切中 frozen-weights agents 的现实约束，值得看它如何在不改底座权重的前提下吸收反馈。",
+          "url": "https://arxiv.org/abs/2607.22157",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "Reasoning Denoiser: Denoising Reasoning Traces for Hallucination Detection in Large Reasoning Models",
+          "summary": "推理模型的幻觉不只出现在最终答案，也藏在中间 reasoning trace。它的新意是把“清理推理轨迹”作为检测信号，适合做 reasoning model 评测、安全审查和可解释性工具的人读。",
+          "url": "https://arxiv.org/abs/2607.22098",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "The Regression Tax: Decomposing Why Skills Help and Hurt LLM Agents",
+          "summary": "这篇把“给 Agent 加技能一定更好”的直觉拆开，关注技能何时反而造成回归。对正在沉淀 Claude Code/Codex skills 的团队有直接价值，因为它逼你用评测看清技能边界和副作用。",
+          "url": "https://arxiv.org/abs/2607.22520",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI",
+          "summary": "Agent 系统开始从“一个强模型包办”转向在线路由和任务一致性。TRACE-ROUTER 值得看，因为它把模型/工具选择做成运行时问题，而不是静态 prompt 约定。",
+          "url": "https://arxiv.org/abs/2607.22465",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture",
+          "summary": "企业 Agent 最难的不是调用工具，而是按任务动态缩小权限。它把 synthetic dataset 与三源权限架构放在一起，适合安全、内控和 Agent 平台团队阅读。",
+          "url": "https://arxiv.org/abs/2607.22445",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "Do Agent Benchmarks Measure Capability? Protocol Validity in the Age of Agentic AI",
+          "summary": "Agent benchmark 很容易测到 prompt 熟悉度、工具泄漏或协议偏差，而不是能力本身。该文把 protocol validity 放到中心，适合评测负责人检查自家 benchmark 是否真的能代表生产任务。",
+          "url": "https://arxiv.org/abs/2607.22368",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "RoboTTT: Context Scaling for Robot Policies",
+          "summary": "这篇把 test-time training 引入机器人策略，让视觉运动上下文扩到 8K timesteps，同时不增加推理延迟。它值得读，因为它把“长上下文”从语言模型迁移到机器人控制，直接对应长时程任务、扰动恢复和一次示范模仿。",
+          "url": "https://arxiv.org/abs/2607.15275v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents",
+          "summary": "安全 Agent 评测常只看是否攻破或完成 CTF，这篇把推理成本、工具调用和遥测查询一起纳入评价。它对企业安全团队有阅读价值，因为真实 SOC 场景里预算和成功率同等重要。",
+          "url": "https://arxiv.org/abs/2607.15263v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration",
+          "summary": "SearchOS 把开放域搜索改写成带持久共享状态的 schema completion，专门解决多轮搜索 Agent 重复搜索、忘记进度的问题。它适合做 research agent 的工程参考，尤其是如何把隐式上下文变成可检查状态。",
+          "url": "https://arxiv.org/abs/2607.15257v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "AutoSynthesis: An agentic system for automated meta-analysis",
+          "summary": "这篇把文献检索、筛选、全文资格判断、统计抽取、效应量计算和 PRISMA 报告串成多 Agent 系统。它的新意在于把 Agent 用在高规范、强审计的 evidence synthesis，而不是只做摘要。",
+          "url": "https://arxiv.org/abs/2607.15247v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "Coding Agent",
       "count": 10,
       "dates": [
@@ -8579,8 +9807,9 @@
     },
     {
       "name": "AI 治理",
-      "count": 8,
+      "count": 9,
       "dates": [
+        "2026-07-28",
         "2026-07-27",
         "2026-07-23",
         "2026-07-21",
@@ -8589,7 +9818,7 @@
       "sections": [
         {
           "name": "今日要闻",
-          "count": 7
+          "count": 8
         },
         {
           "name": "社区热议",
@@ -8597,6 +9826,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Anthropic 澄清开放权重立场：反对全面禁令，主张出口管制与安全测试",
+          "summary": "相比昨天围绕 OpenAI、Anthropic 游说限制中国开源模型的报道，今天的新进展是 Anthropic 发布正式澄清：公司称从未主张全面禁止开源权重模型，而是支持芯片出口管制、危险能力测试和更细的安全门槛。这把争议从“开源/闭源二选一”推进到“哪些模型、哪些能力、哪些出口路径需要管制”。",
+          "url": "https://www.anthropic.com/news/position-open-weights-models",
+          "source": "Anthropic Newsroom / AI HOT",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
         {
           "date": "2026-07-27",
           "title": "OpenAI、Anthropic 游说限制中国开源模型，开源阵营公开反对",
@@ -8668,94 +9906,6 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "cs.AI",
-      "count": 8,
-      "dates": [
-        "2026-07-27",
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "AI 论文",
-          "count": 8
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-27",
-          "title": "The Regression Tax: Decomposing Why Skills Help and Hurt LLM Agents",
-          "summary": "这篇把“给 Agent 加技能一定更好”的直觉拆开，关注技能何时反而造成回归。对正在沉淀 Claude Code/Codex skills 的团队有直接价值，因为它逼你用评测看清技能边界和副作用。",
-          "url": "https://arxiv.org/abs/2607.22520",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI",
-          "summary": "Agent 系统开始从“一个强模型包办”转向在线路由和任务一致性。TRACE-ROUTER 值得看，因为它把模型/工具选择做成运行时问题，而不是静态 prompt 约定。",
-          "url": "https://arxiv.org/abs/2607.22465",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture",
-          "summary": "企业 Agent 最难的不是调用工具，而是按任务动态缩小权限。它把 synthetic dataset 与三源权限架构放在一起，适合安全、内控和 Agent 平台团队阅读。",
-          "url": "https://arxiv.org/abs/2607.22445",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "Do Agent Benchmarks Measure Capability? Protocol Validity in the Age of Agentic AI",
-          "summary": "Agent benchmark 很容易测到 prompt 熟悉度、工具泄漏或协议偏差，而不是能力本身。该文把 protocol validity 放到中心，适合评测负责人检查自家 benchmark 是否真的能代表生产任务。",
-          "url": "https://arxiv.org/abs/2607.22368",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "RoboTTT: Context Scaling for Robot Policies",
-          "summary": "这篇把 test-time training 引入机器人策略，让视觉运动上下文扩到 8K timesteps，同时不增加推理延迟。它值得读，因为它把“长上下文”从语言模型迁移到机器人控制，直接对应长时程任务、扰动恢复和一次示范模仿。",
-          "url": "https://arxiv.org/abs/2607.15275v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents",
-          "summary": "安全 Agent 评测常只看是否攻破或完成 CTF，这篇把推理成本、工具调用和遥测查询一起纳入评价。它对企业安全团队有阅读价值，因为真实 SOC 场景里预算和成功率同等重要。",
-          "url": "https://arxiv.org/abs/2607.15263v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration",
-          "summary": "SearchOS 把开放域搜索改写成带持久共享状态的 schema completion，专门解决多轮搜索 Agent 重复搜索、忘记进度的问题。它适合做 research agent 的工程参考，尤其是如何把隐式上下文变成可检查状态。",
-          "url": "https://arxiv.org/abs/2607.15257v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "AutoSynthesis: An agentic system for automated meta-analysis",
-          "summary": "这篇把文献检索、筛选、全文资格判断、统计抽取、效应量计算和 PRISMA 报告串成多 Agent 系统。它的新意在于把 Agent 用在高规范、强审计的 evidence synthesis，而不是只做摘要。",
-          "url": "https://arxiv.org/abs/2607.15247v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
         }
       ]
     },
@@ -9011,6 +10161,74 @@
       ]
     },
     {
+      "name": "AI 安全",
+      "count": 5,
+      "dates": [
+        "2026-07-28",
+        "2026-07-27",
+        "2026-07-21",
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 4
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "NVIDIA 等行业组织成立 Open Secure AI Alliance，推动 AI 安全与防御开源化",
+          "summary": "Open Secure AI Alliance 把 AI 安全从企业内部红队扩展到可复用的开源工具和防御协作。它和今天的开放权重争议形成呼应：开源风险不只靠封闭解决，也需要共享测试、评估和防护能力。",
+          "url": "https://blogs.nvidia.com/blog/open-secure-ai-alliance",
+          "source": "NVIDIA Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "报告称数百用户向 ChatGPT 索要毒药与生物武器配方",
+          "summary": "The Decoder 援引报道称，OpenAI 内部曾因 GPT-5 可能帮助低门槛用户制造生物危害而标记高风险，部分危险查询甚至获得可执行步骤。它提醒团队不要只看越狱样例，而要把账户处置、上报路径和高风险领域拒答策略纳入产品责任链。",
+          "url": "https://the-decoder.com/hundreds-asked-chatgpt-for-poison-and-bioweapon-recipes-and-some-got-step-by-step-high-school-level-guides",
+          "source": "The Decoder",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "OpenAI 总结长时运行模型安全实践：Agent 评估要覆盖新型故障模式",
+          "summary": "OpenAI 把长时运行模型的对齐问题放到更接近 Agent 的场景中讨论，重点不只是回答是否安全，而是模型在多步任务、工具使用和延迟反馈下会出现哪些新故障。",
+          "url": "https://openai.com/index/safety-alignment-long-horizon-models",
+          "source": "OpenAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "xAI 起诉涉嫌滥用 Grok 生成 CSAM 的用户，模型滥用治理进入司法层面",
+          "summary": "Ars Technica 报道称，xAI 首次就 Grok 被用于生成儿童性虐待图像起诉用户。案件把责任焦点放在滥用者身上，但也会推动外界继续追问模型防护、检测和平台处置流程是否充分。",
+          "url": "https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users",
+          "source": "Ars Technica",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
+          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
+          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "Agent",
       "count": 5,
       "dates": [
@@ -9228,70 +10446,13 @@
       ]
     },
     {
-      "name": "AI 安全",
-      "count": 4,
+      "name": "开发者工具",
+      "count": 5,
       "dates": [
-        "2026-07-27",
-        "2026-07-21",
-        "2026-07-17",
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 3
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-27",
-          "title": "报告称数百用户向 ChatGPT 索要毒药与生物武器配方",
-          "summary": "The Decoder 援引报道称，OpenAI 内部曾因 GPT-5 可能帮助低门槛用户制造生物危害而标记高风险，部分危险查询甚至获得可执行步骤。它提醒团队不要只看越狱样例，而要把账户处置、上报路径和高风险领域拒答策略纳入产品责任链。",
-          "url": "https://the-decoder.com/hundreds-asked-chatgpt-for-poison-and-bioweapon-recipes-and-some-got-step-by-step-high-school-level-guides",
-          "source": "The Decoder",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "OpenAI 总结长时运行模型安全实践：Agent 评估要覆盖新型故障模式",
-          "summary": "OpenAI 把长时运行模型的对齐问题放到更接近 Agent 的场景中讨论，重点不只是回答是否安全，而是模型在多步任务、工具使用和延迟反馈下会出现哪些新故障。",
-          "url": "https://openai.com/index/safety-alignment-long-horizon-models",
-          "source": "OpenAI",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "xAI 起诉涉嫌滥用 Grok 生成 CSAM 的用户，模型滥用治理进入司法层面",
-          "summary": "Ars Technica 报道称，xAI 首次就 Grok 被用于生成儿童性虐待图像起诉用户。案件把责任焦点放在滥用者身上，但也会推动外界继续追问模型防护、检测和平台处置流程是否充分。",
-          "url": "https://arstechnica.com/tech-policy/2026/07/xai-cant-deny-grok-makes-csam-anymore-so-its-suing-users",
-          "source": "Ars Technica",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "三秒语音样本为何让 AI 语音欺诈更难防",
-          "summary": "讨论焦点从“能不能克隆声音”转向防御滞后：低成本样本、实时生成和社工场景叠加后，传统声纹与电话验证都变得脆弱。",
-          "url": "https://smarterarticles.co.uk/the-three-second-theft-why-ai-voice-fraud-outruns-every-defence",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "开源模型",
-      "count": 4,
-      "dates": [
+        "2026-07-28",
         "2026-07-24",
-        "2026-07-20",
-        "2026-07-16"
+        "2026-07-21",
+        "2026-07-20"
       ],
       "sections": [
         {
@@ -9303,11 +10464,95 @@
           "count": 1
         },
         {
+          "name": "开源热门",
+          "count": 1
+        },
+        {
           "name": "社区热议",
           "count": 1
         }
       ],
       "items": [
+        {
+          "date": "2026-07-28",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "wmux",
+          "summary": "多 Agent 并行之后，工作区隔离、上下文切换和会话管理会成为真实痛点。wmux 的定位说明工具链正在补齐“让多个 Agent 同时工作”的基础设施。",
+          "url": "https://github.com/openwong2kim/wmux",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "onecli/onecli",
+          "summary": "内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。",
+          "url": "https://github.com/onecli/onecli",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "Nativ 在 Mac 上运行前沿开放模型，本地推理体验继续升温",
+          "summary": "Nativ 的讨论延续了本地模型热潮，但新意在于面向普通 Mac 用户包装体验。社区关注点集中在内存占用、模型兼容性和离线隐私收益。",
+          "url": "https://blaizzy.github.io/nativ/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "Ollama 获 8800 万美元融资，继续押注本地与混合开放模型",
+          "summary": "Ollama 公布新一轮融资，强调其已服务 890 万开发者并进入大量企业环境。它值得放进今日头条，是因为开放模型运行栈正在从个人开发工具变成企业基础设施，下一步竞争点会落在混合推理、模型上架速度与数据所有权。",
+          "url": "https://ollama.com/blog/all-aboard-open-models",
+          "source": "Ollama",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "开源模型",
+      "count": 5,
+      "dates": [
+        "2026-07-28",
+        "2026-07-24",
+        "2026-07-20",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Kimi K3 相关发布密集出现：2.8T MoE、AgentENV 与推理平台支持同步推进",
+          "summary": "Kimi 官方与 LMSYS 相关消息显示，Kimi K3 不只是模型权重和技术报告，还同步推进 AgentENV 分布式智能体环境、Modal 部署和发布日推理支持。值得关注的是大模型发布正在绑定工具链与 Agent 环境，而不是只发模型卡。",
+          "url": "https://www.lmsys.org/blog/2026-07-27-kimi-k3-day0-support",
+          "source": "Kimi / LMSYS",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
         {
           "date": "2026-07-24",
           "title": "MagenticLite",
@@ -9343,6 +10588,129 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "Claude",
+      "count": 4,
+      "dates": [
+        "2026-07-28",
+        "2026-07-27",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "bradautomates/claude-video",
+          "summary": "给 Claude 增加 /watch 能力，下载视频、抽帧、转录并把材料交给 Claude 分析。",
+          "url": "https://github.com/bradautomates/claude-video",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "Claude 5 代模型上下文工程新规则引发 HN 热议",
+          "summary": "Anthropic 删除 Claude Code 超 80% 系统提示词仍保持评测表现，HN 讨论焦点转向：上下文应该是运行时可控结构，而不是越写越长的系统提示词。",
+          "url": "https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "anthropics/claude-cookbooks",
+          "summary": "Anthropic 官方 Claude recipes/notebooks 集合，覆盖提示、工具、评测和应用样例，是 Claude 开发者常用参考库。",
+          "url": "https://github.com/anthropics/claude-cookbooks",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "Claude 语音模式扩展到 Opus、Sonnet、工具连接器与多语言",
+          "summary": "Anthropic 将 Claude 语音模式扩展到 Opus、Sonnet、Haiku，并支持 Gmail、Slack 等连接工具。对工作流用户来说，语音不再只是输入方式，而是可以携带模型选择和外部工具权限的会话层。",
+          "url": "https://claude.com/blog/think-through-hard-problems-in-voice-mode",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "工作流",
+      "count": 4,
+      "dates": [
+        "2026-07-28",
+        "2026-07-23",
+        "2026-07-22",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "ComposioHQ/awesome-claude-skills",
+          "summary": "Claude Skills、资源与自定义工作流工具的 curated list。",
+          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "Fractal",
+          "summary": "Fractal 代表了今天反复出现的“Agent 递归/分治”趋势：把复杂任务拆成可重复调用的循环，而不是单次长提示。看点会落在循环终止、状态压缩和人工接管。",
+          "url": "https://github.com/plasma-ai/fractal",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "概念 · Workflow-first Agent",
+          "summary": "今天的 YouTube 课程、SearchOS 论文和 HN 讨论共同指向一个趋势：Agent 的上限越来越取决于流程状态、计划审查、证据登记和验收标准，而不是简单堆上下文或工具数量。",
+          "url": "https://classmatexiaoming96-ux.github.io/youtube_course/bcM9dP_uXJU.html",
+          "source": "Daily Digest",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -9467,6 +10835,53 @@
       ]
     },
     {
+      "name": "AI 编程",
+      "count": 3,
+      "dates": [
+        "2026-07-28",
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
+          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
+          "url": "https://claude.com/blog/ai-code-migration",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "MiniMax Code 2.0 桌面端",
+          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
+          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
+          "source": "MiniMax",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "AI 设计",
       "count": 3,
       "dates": [
@@ -9519,57 +10934,6 @@
       ]
     },
     {
-      "name": "Claude",
-      "count": 3,
-      "dates": [
-        "2026-07-27",
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        },
-        {
-          "name": "开源热门",
-          "count": 1
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-27",
-          "title": "Claude 5 代模型上下文工程新规则引发 HN 热议",
-          "summary": "Anthropic 删除 Claude Code 超 80% 系统提示词仍保持评测表现，HN 讨论焦点转向：上下文应该是运行时可控结构，而不是越写越长的系统提示词。",
-          "url": "https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "anthropics/claude-cookbooks",
-          "summary": "Anthropic 官方 Claude recipes/notebooks 集合，覆盖提示、工具、评测和应用样例，是 Claude 开发者常用参考库。",
-          "url": "https://github.com/anthropics/claude-cookbooks",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "Claude 语音模式扩展到 Opus、Sonnet、工具连接器与多语言",
-          "summary": "Anthropic 将 Claude 语音模式扩展到 Opus、Sonnet、Haiku，并支持 Gmail、Slack 等连接工具。对工作流用户来说，语音不再只是输入方式，而是可以携带模型选择和外部工具权限的会话层。",
-          "url": "https://claude.com/blog/think-through-hard-problems-in-voice-mode",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "SDK",
       "count": 3,
       "dates": [
@@ -9611,6 +10975,96 @@
           "title": "github/copilot-sdk",
           "summary": "GitHub Copilot SDK 提供跨平台集成 Copilot Agent 的能力，值得关注第三方应用如何嵌入官方编程 Agent。",
           "url": "https://github.com/github/copilot-sdk",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "cs.LG",
+      "count": 3,
+      "dates": [
+        "2026-07-28",
+        "2026-07-27"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 3
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Agentic Root Cause Analysis through Evidence-Grounded Reasoning",
+          "summary": "Root cause analysis 是企业 Agent 最容易产生幻觉也最需要落地的场景。这篇强调 evidence-grounded reasoning，阅读价值在于看它如何把诊断链条绑定到证据，而不是让 Agent 只给漂亮解释。",
+          "url": "https://arxiv.org/abs/2607.22385",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "Reasoning Denoiser: Denoising Reasoning Traces for Hallucination Detection in Large Reasoning Models",
+          "summary": "推理模型的幻觉不只出现在最终答案，也藏在中间 reasoning trace。它的新意是把“清理推理轨迹”作为检测信号，适合做 reasoning model 评测、安全审查和可解释性工具的人读。",
+          "url": "https://arxiv.org/abs/2607.22098",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI",
+          "summary": "Agent 系统开始从“一个强模型包办”转向在线路由和任务一致性。TRACE-ROUTER 值得看，因为它把模型/工具选择做成运行时问题，而不是静态 prompt 约定。",
+          "url": "https://arxiv.org/abs/2607.22465",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "代码审查",
+      "count": 3,
+      "dates": [
+        "2026-07-28",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源混合式代码审查工具，结合确定性流水线与 LLM Agent，支持行级评论和安全规则集。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。",
+          "url": "https://github.com/alibaba/open-code-review",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -9665,102 +11119,49 @@
       ]
     },
     {
-      "name": "工作流",
+      "name": "开放权重",
       "count": 3,
       "dates": [
-        "2026-07-23",
-        "2026-07-22",
-        "2026-07-20"
+        "2026-07-28",
+        "2026-07-27"
       ],
       "sections": [
         {
-          "name": "产品 / 概念",
+          "name": "今日要闻",
           "count": 2
-        },
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-23",
-          "title": "ComposioHQ/awesome-claude-skills",
-          "summary": "Claude Skills、资源与自定义工作流工具的 curated list。",
-          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "Fractal",
-          "summary": "Fractal 代表了今天反复出现的“Agent 递归/分治”趋势：把复杂任务拆成可重复调用的循环，而不是单次长提示。看点会落在循环终止、状态压缩和人工接管。",
-          "url": "https://github.com/plasma-ai/fractal",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "概念 · Workflow-first Agent",
-          "summary": "今天的 YouTube 课程、SearchOS 论文和 HN 讨论共同指向一个趋势：Agent 的上限越来越取决于流程状态、计划审查、证据登记和验收标准，而不是简单堆上下文或工具数量。",
-          "url": "https://classmatexiaoming96-ux.github.io/youtube_course/bcM9dP_uXJU.html",
-          "source": "Daily Digest",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
-      "name": "开发者工具",
-      "count": 3,
-      "dates": [
-        "2026-07-24",
-        "2026-07-21",
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
         },
         {
           "name": "社区热议",
           "count": 1
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-24",
-          "title": "onecli/onecli",
-          "summary": "内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。",
-          "url": "https://github.com/onecli/onecli",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
+          "date": "2026-07-28",
+          "title": "Anthropic 澄清开放权重立场：反对全面禁令，主张出口管制与安全测试",
+          "summary": "相比昨天围绕 OpenAI、Anthropic 游说限制中国开源模型的报道，今天的新进展是 Anthropic 发布正式澄清：公司称从未主张全面禁止开源权重模型，而是支持芯片出口管制、危险能力测试和更细的安全门槛。这把争议从“开源/闭源二选一”推进到“哪些模型、哪些能力、哪些出口路径需要管制”。",
+          "url": "https://www.anthropic.com/news/position-open-weights-models",
+          "source": "Anthropic Newsroom / AI HOT",
+          "section": "headlines",
+          "section_label": "今日要闻"
         },
         {
-          "date": "2026-07-21",
-          "title": "Nativ 在 Mac 上运行前沿开放模型，本地推理体验继续升温",
-          "summary": "Nativ 的讨论延续了本地模型热潮，但新意在于面向普通 Mac 用户包装体验。社区关注点集中在内存占用、模型兼容性和离线隐私收益。",
-          "url": "https://blaizzy.github.io/nativ/",
+          "date": "2026-07-27",
+          "title": "OpenAI、Anthropic 游说限制中国开源模型，开源阵营公开反对",
+          "summary": "OpenAI 与 Anthropic 被曝正游说美国监管机构限制中国开源 AI 模型；英伟达、微软、Meta、马斯克和近 200 家硅谷创业公司则强调开放权重对美国竞争力和创业生态的重要性。相比 7 月 24 日的开放权重讨论，今天的新进展是矛盾焦点从行业倡议升级到对中国模型的具体监管游说。",
+          "url": "https://www.ithome.com/0/981/797.htm",
+          "source": "IT之家",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "“开放权重 AI 正迎来 Kubernetes 时刻”成为高热讨论",
+          "summary": "文章把开放权重模型类比 Kubernetes：一旦部署、治理和生态工具成熟，企业可能像当年上云原生一样把模型能力内化。评论区主要争论安全、成本和厂商锁定。",
+          "url": "https://tobi.knaup.me/2026-07-25-open-weight-ai-is-having-its-kubernetes-moment/",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "Ollama 获 8800 万美元融资，继续押注本地与混合开放模型",
-          "summary": "Ollama 公布新一轮融资，强调其已服务 890 万开发者并进入大量企业环境。它值得放进今日头条，是因为开放模型运行栈正在从个人开发工具变成企业基础设施，下一步竞争点会落在混合推理、模型上架速度与数据所有权。",
-          "url": "https://ollama.com/blog/all-aboard-open-models",
-          "source": "Ollama",
-          "section": "headlines",
-          "section_label": "今日要闻"
         }
       ]
     },
@@ -9904,6 +11305,54 @@
       ]
     },
     {
+      "name": "模型路由",
+      "count": 3,
+      "dates": [
+        "2026-07-28",
+        "2026-07-24",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "Echo",
+          "summary": "Echo 在 HN 上主打“Fable 级结果、1/3 成本”，本质是把开源权重模型和路由/评估包装成可落地产品。它适合观察开源模型如何争夺商业 Agent 成本曲线。",
+          "url": "https://news.ycombinator.com/item?id=49026810",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "Cursor 发布 Cursor Router，把智能模型路由作为 IDE 基础能力",
+          "summary": "模型路由从后端网关能力进入开发者 IDE：不同任务、上下文长度和成本约束可以被自动分配到不同模型。它的阅读价值在于，AI 编程工具竞争正在从单模型体验转向路由、缓存、回退和成本治理。",
+          "url": "https://cursor.com/blog/router",
+          "source": "Cursor Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "软件工程",
       "count": 3,
       "dates": [
@@ -9989,6 +11438,78 @@
       ]
     },
     {
+      "name": "AI 搜索",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-21"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "数据显示 Google AI Overviews 在搜索结果中的出现率升至 43%",
+          "summary": "TechCrunch 引用第三方数据称，Google 的 AI 搜索摘要正在快速成为默认入口。这对内容站、SEO、新闻分发和电商检索都有直接影响：用户可能更少点击传统蓝链，更多在摘要层完成初步判断。",
+          "url": "https://techcrunch.com/2026/07/27/googles-ai-search-is-rapidly-becoming-the-default-new-data-shows",
+          "source": "TechCrunch",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "every-app/open-seo",
+          "summary": "围绕 AI 搜索和内容可见性的开源工具，新增 stars 说明从传统 SEO 转向 LLM/搜索摘要曝光的需求正在升温。",
+          "url": "https://github.com/every-app/open-seo",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "AI 泡沫",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HN 讨论 Apple 是否会在 AI 泡沫破裂时受益",
+          "summary": "235 points / 310 comments 的争论反映了社区对 AI 资本开支与产品价值脱节的担忧。讨论焦点不是 Apple 是否落后，而是保守平台在基础设施泡沫阶段可能反而少承担风险。",
+          "url": "https://www.macrumors.com/2026/07/27/ed-zitron-apple-watch-it-burn-ai-bubble-bursts/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "“AI Mania”文章热议：组织不是缺模型，而是缺软件交付能力",
+          "summary": "社区围绕一篇批判 AI 狂热的长文展开讨论，重点在于许多企业项目失败并非 LLM 不够强，而是需求、流程、治理和软件项目管理本就薄弱。",
+          "url": "https://news.ycombinator.com/item?id=48964185",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "AI 监管",
       "count": 2,
       "dates": [
@@ -10019,43 +11540,6 @@
           "source": "The Verge",
           "section": "headlines",
           "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
-      "name": "AI 编程",
-      "count": 2,
-      "dates": [
-        "2026-07-17"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-17",
-          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
-          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
-          "url": "https://claude.com/blog/ai-code-migration",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "MiniMax Code 2.0 桌面端",
-          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
-          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
-          "source": "MiniMax",
-          "section": "products",
-          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -10132,6 +11616,40 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "Agent Skill",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-22"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "mvanhorn/last30days-skill",
+          "summary": "面向 AI Agent 的研究 skill，可跨 Reddit、X、YouTube、HN、Polymarket 和 Web 汇总最近 30 天信息。",
+          "url": "https://github.com/mvanhorn/last30days-skill",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "ayghri/i-have-adhd",
+          "summary": "一个约束 coding agent 输出更短、更直接的 skill。它虽轻量，但反映了开发者开始用技能层修正 Agent 交流风格和注意力成本。",
+          "url": "https://github.com/ayghri/i-have-adhd",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -10463,6 +11981,40 @@
           "source": "GitHub",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "LLM Agent",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源混合式代码审查工具，结合确定性流水线与 LLM Agent，支持行级评论和安全规则集。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -11065,43 +12617,6 @@
       ]
     },
     {
-      "name": "开放权重",
-      "count": 2,
-      "dates": [
-        "2026-07-27"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-27",
-          "title": "OpenAI、Anthropic 游说限制中国开源模型，开源阵营公开反对",
-          "summary": "OpenAI 与 Anthropic 被曝正游说美国监管机构限制中国开源 AI 模型；英伟达、微软、Meta、马斯克和近 200 家硅谷创业公司则强调开放权重对美国竞争力和创业生态的重要性。相比 7 月 24 日的开放权重讨论，今天的新进展是矛盾焦点从行业倡议升级到对中国模型的具体监管游说。",
-          "url": "https://www.ithome.com/0/981/797.htm",
-          "source": "IT之家",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "“开放权重 AI 正迎来 Kubernetes 时刻”成为高热讨论",
-          "summary": "文章把开放权重模型类比 Kubernetes：一旦部署、治理和生态工具成熟，企业可能像当年上云原生一样把模型能力内化。评论区主要争论安全、成本和厂商锁定。",
-          "url": "https://tobi.knaup.me/2026-07-25-open-weight-ai-is-having-its-kubernetes-moment/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
       "name": "开放模型",
       "count": 2,
       "dates": [
@@ -11174,6 +12689,77 @@
       ]
     },
     {
+      "name": "推理",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Kimi K3 相关发布密集出现：2.8T MoE、AgentENV 与推理平台支持同步推进",
+          "summary": "Kimi 官方与 LMSYS 相关消息显示，Kimi K3 不只是模型权重和技术报告，还同步推进 AgentENV 分布式智能体环境、Modal 部署和发布日推理支持。值得关注的是大模型发布正在绑定工具链与 Agent 环境，而不是只发模型卡。",
+          "url": "https://www.lmsys.org/blog/2026-07-27-kimi-k3-day0-support",
+          "source": "Kimi / LMSYS",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "GPT-5.6 相关凸优化讨论登顶 HN：社区追问“提示词是否能补上证明缺口”",
+          "summary": "HN 对一则 GPT-5.6 用 prompt 关闭凸优化 30 年缺口的讨论热度很高，焦点不是单个模型名字，而是数学证明中的机器辅助、可复核性和“prompt 是否算方法贡献”。",
+          "url": "https://news.ycombinator.com/item?id=48957779",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "推理成本",
+      "count": 2,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "world-model-optimizer",
+          "summary": "项目把讨论点放在“frontier quality for half the cost”，适合关注模型服务成本、蒸馏和线上质量保持的团队跟进。",
+          "url": "https://github.com/experientiallabs/world-model-optimizer",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "OpenLake",
+          "summary": "长上下文和 long-horizon agent 继续推高推理成本，OpenLake 的方向是把 KV cache 外置化，减少重复计算与显存压力。",
+          "url": "https://github.com/openlake-project/openlake",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "教育 AI",
       "count": 2,
       "dates": [
@@ -11212,6 +12798,40 @@
       ]
     },
     {
+      "name": "数学",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Terence Tao《AI 时代的数学》幻灯片在 HN 引发讨论",
+          "summary": "157 points / 62 comments 的讨论集中在 AI 对数学发现、证明检查和协作研究的影响。相比普通“AI 会不会取代研究者”的争论，这份材料更适合看顶级数学家如何拆分工具能力和研究判断。",
+          "url": "https://teorth.github.io/tao-web/slides/age-of-ai-icm-2026.pdf",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "GPT-5.6 相关凸优化讨论登顶 HN：社区追问“提示词是否能补上证明缺口”",
+          "summary": "HN 对一则 GPT-5.6 用 prompt 关闭凸优化 30 年缺口的讨论热度很高，焦点不是单个模型名字，而是数学证明中的机器辅助、可复核性和“prompt 是否算方法贡献”。",
+          "url": "https://news.ycombinator.com/item?id=48957779",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "数据库",
       "count": 2,
       "dates": [
@@ -11246,6 +12866,40 @@
       ]
     },
     {
+      "name": "时间序列",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "shiyu-coder/Kronos",
+          "summary": "面向金融市场语言的 foundation model，把时序市场数据建模为可迁移的模型能力。",
+          "url": "https://github.com/shiyu-coder/Kronos",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "shiyu-coder/Kronos",
+          "summary": "面向金融市场语言的基础模型，把价格、成交和市场事件视作可建模序列，适合观察垂直基础模型如何落地到量化场景。",
+          "url": "https://github.com/shiyu-coder/Kronos",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "桌面 Agent",
       "count": 2,
       "dates": [
@@ -11276,6 +12930,44 @@
           "source": "MiniMax",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "模型安全",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Anthropic 澄清开放权重立场：反对全面禁令，主张出口管制与安全测试",
+          "summary": "相比昨天围绕 OpenAI、Anthropic 游说限制中国开源模型的报道，今天的新进展是 Anthropic 发布正式澄清：公司称从未主张全面禁止开源权重模型，而是支持芯片出口管制、危险能力测试和更细的安全门槛。这把争议从“开源/闭源二选一”推进到“哪些模型、哪些能力、哪些出口路径需要管制”。",
+          "url": "https://www.anthropic.com/news/position-open-weights-models",
+          "source": "Anthropic Newsroom / AI HOT",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Demis Hassabis 的 AI 安全路线引发社区讨论",
+          "summary": "社区围绕 DeepMind 的安全治理、标准机构和前沿模型部署节奏展开争论，关注点在于谁有资格定义“足够安全”。",
+          "url": "https://twitter.com/demishassabis/status/2076957440109625718",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -11318,44 +13010,6 @@
       ]
     },
     {
-      "name": "模型路由",
-      "count": 2,
-      "dates": [
-        "2026-07-24",
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-24",
-          "title": "Echo",
-          "summary": "Echo 在 HN 上主打“Fable 级结果、1/3 成本”，本质是把开源权重模型和路由/评估包装成可落地产品。它适合观察开源模型如何争夺商业 Agent 成本曲线。",
-          "url": "https://news.ycombinator.com/item?id=49026810",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "Cursor 发布 Cursor Router，把智能模型路由作为 IDE 基础能力",
-          "summary": "模型路由从后端网关能力进入开发者 IDE：不同任务、上下文长度和成本约束可以被自动分配到不同模型。它的阅读价值在于，AI 编程工具竞争正在从单模型体验转向路由、缓存、回退和成本治理。",
-          "url": "https://cursor.com/blog/router",
-          "source": "Cursor Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "能源",
       "count": 2,
       "dates": [
@@ -11388,6 +13042,44 @@
           "summary": "今日 Google News 头部条目聚焦数据中心与 AI 能源消耗。随着模型训练、推理和主权 AI 工厂同时扩张，能源不再只是成本项，也会变成选址、监管、企业 ESG 与模型效率路线的共同约束。",
           "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPZTdJQ0Ywb3FHcmNHRHFScm9RdzlIcWNRa1NZV0ZJVW0xTVFHSFdwTFk3VEMyTDBuMTlDbEFMTWZ2WlpPTGZXakx4SnJUQzgySGlmZVVZemRXUXpnYV9UWjhQenlBazl0X21pbEtQSzdRUFlRUFVfX3RqMk1UdzhOd1FkN19OTUtYZE5fc2tvbG01Uno1?oc=5",
           "source": "Google News",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "训练数据",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HN 热议：AI 公司为了训练数据处理稀有书籍，引发版权和文化保存争论",
+          "summary": "742 points / 468 comments 的讨论集中在训练数据稀缺之后，AI 公司会把成本转嫁到图书馆、档案和版权边界上。它不是单纯新闻，而是关于“数据来源是否可审计、是否可替代”的长期问题。",
+          "url": "https://twitter.com/HedgieMarkets/status/2081534588485296565",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "Anthropic 盗版书籍版权案达成 15 亿美元和解，训练数据合规成本被重新定价",
+          "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
+          "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
+          "source": "The Decoder",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -11612,6 +13304,78 @@
       ]
     },
     {
+      "name": "金融模型",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "shiyu-coder/Kronos",
+          "summary": "面向金融市场语言的 foundation model，把时序市场数据建模为可迁移的模型能力。",
+          "url": "https://github.com/shiyu-coder/Kronos",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "shiyu-coder/Kronos",
+          "summary": "面向金融市场语言的基础模型，把价格、成交和市场事件视作可建模序列，适合观察垂直基础模型如何落地到量化场景。",
+          "url": "https://github.com/shiyu-coder/Kronos",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "长上下文",
+      "count": 2,
+      "dates": [
+        "2026-07-28",
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "OpenLake",
+          "summary": "长上下文和 long-horizon agent 继续推高推理成本，OpenLake 的方向是把 KV cache 外置化，减少重复计算与显存压力。",
+          "url": "https://github.com/openlake-project/openlake",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "AI Coding",
       "count": 1,
       "dates": [
@@ -11708,6 +13472,30 @@
       ]
     },
     {
+      "name": "AI OS",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HART OS",
+          "summary": "虽然还需要看实现成熟度，但它代表了一个明显趋势：开发者正在把模型、工具、运行时和设备侧环境打包成更完整的 AI 操作系统叙事。",
+          "url": "https://github.com/hertz-ai/HARTOS",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "AI Observability",
       "count": 1,
       "dates": [
@@ -11800,6 +13588,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "AI 伴侣",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "moeru-ai/airi",
+          "summary": "自托管 AI companion，支持实时语音聊天、Minecraft/Factorio 场景和 Web/macOS/Windows 多端运行。",
+          "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -12044,6 +13856,30 @@
       ]
     },
     {
+      "name": "AI 工作流",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "社区转向讨论 AI 时代的新能力：专注与持续推进",
+          "summary": "这条讨论的价值在于把 AI 使用能力从“会不会写提示词”拉回到人类工作方式：能否拆任务、持续验证、处理反馈和把 Agent 输出接进真实行动。",
+          "url": "https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "AI 工程",
       "count": 1,
       "dates": [
@@ -12116,26 +13952,26 @@
       ]
     },
     {
-      "name": "AI 搜索",
+      "name": "AI 教育",
       "count": 1,
       "dates": [
-        "2026-07-21"
+        "2026-07-28"
       ],
       "sections": [
         {
-          "name": "开源热门",
+          "name": "社区热议",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-21",
-          "title": "every-app/open-seo",
-          "summary": "围绕 AI 搜索和内容可见性的开源工具，新增 stars 说明从传统 SEO 转向 LLM/搜索摘要曝光的需求正在升温。",
-          "url": "https://github.com/every-app/open-seo",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
+          "date": "2026-07-28",
+          "title": "教授用不可见提示词识别 AI 作业作弊，引发教育场景的攻防讨论",
+          "summary": "91 points / 80 comments 的讨论说明，AI 教育治理已经进入 prompt injection 与检测规避的现实阶段。它也提醒老师和平台：只靠陷阱很难长期治理，课程设计需要更强调过程证据。",
+          "url": "https://www.techspot.com/news/113243-professor-invisible-prompt-trap-catches-32-students-cheating.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -12212,30 +14048,6 @@
       ]
     },
     {
-      "name": "AI 泡沫",
-      "count": 1,
-      "dates": [
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-20",
-          "title": "“AI Mania”文章热议：组织不是缺模型，而是缺软件交付能力",
-          "summary": "社区围绕一篇批判 AI 狂热的长文展开讨论，重点在于许多企业项目失败并非 LLM 不够强，而是需求、流程、治理和软件项目管理本就薄弱。",
-          "url": "https://news.ycombinator.com/item?id=48964185",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
       "name": "AI 浏览器",
       "count": 1,
       "dates": [
@@ -12304,6 +14116,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "AI 辅助研究",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Terence Tao《AI 时代的数学》幻灯片在 HN 引发讨论",
+          "summary": "157 points / 62 comments 的讨论集中在 AI 对数学发现、证明检查和协作研究的影响。相比普通“AI 会不会取代研究者”的争论，这份材料更适合看顶级数学家如何拆分工具能力和研究判断。",
+          "url": "https://teorth.github.io/tao-web/slides/age-of-ai-icm-2026.pdf",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -12404,26 +14240,26 @@
       ]
     },
     {
-      "name": "Agent Skill",
+      "name": "Agent 工作区",
       "count": 1,
       "dates": [
-        "2026-07-22"
+        "2026-07-28"
       ],
       "sections": [
         {
-          "name": "开源热门",
+          "name": "产品 / 概念",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-22",
-          "title": "ayghri/i-have-adhd",
-          "summary": "一个约束 coding agent 输出更短、更直接的 skill。它虽轻量，但反映了开发者开始用技能层修正 Agent 交流风格和注意力成本。",
-          "url": "https://github.com/ayghri/i-have-adhd",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
+          "date": "2026-07-28",
+          "title": "wmux",
+          "summary": "多 Agent 并行之后，工作区隔离、上下文切换和会话管理会成为真实痛点。wmux 的定位说明工具链正在补齐“让多个 Agent 同时工作”的基础设施。",
+          "url": "https://github.com/openwong2kim/wmux",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -12496,6 +14332,30 @@
           "source": "Microsoft Research",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "Agent 环境",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Kimi K3 相关发布密集出现：2.8T MoE、AgentENV 与推理平台支持同步推进",
+          "summary": "Kimi 官方与 LMSYS 相关消息显示，Kimi K3 不只是模型权重和技术报告，还同步推进 AgentENV 分布式智能体环境、Modal 部署和发布日推理支持。值得关注的是大模型发布正在绑定工具链与 Agent 环境，而不是只发模型卡。",
+          "url": "https://www.lmsys.org/blog/2026-07-27-kimi-k3-day0-support",
+          "source": "Kimi / LMSYS",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -12788,6 +14648,30 @@
       ]
     },
     {
+      "name": "Foundation Model",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "shiyu-coder/Kronos",
+          "summary": "面向金融市场语言的 foundation model，把时序市场数据建模为可迁移的模型能力。",
+          "url": "https://github.com/shiyu-coder/Kronos",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "GRPO",
       "count": 1,
       "dates": [
@@ -13004,6 +14888,30 @@
       ]
     },
     {
+      "name": "KV Cache",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "OpenLake",
+          "summary": "长上下文和 long-horizon agent 继续推高推理成本，OpenLake 的方向是把 KV cache 外置化，减少重复计算与显存压力。",
+          "url": "https://github.com/openlake-project/openlake",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "LLM",
       "count": 1,
       "dates": [
@@ -13024,30 +14932,6 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "LLM Agent",
-      "count": 1,
-      "dates": [
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-24",
-          "title": "alibaba/open-code-review",
-          "summary": "阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。",
-          "url": "https://github.com/alibaba/open-code-review",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         }
       ]
     },
@@ -13772,6 +15656,30 @@
       ]
     },
     {
+      "name": "cs.CL",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills",
+          "summary": "这篇把 skill 从静态工具说明推进到可共同演化的训练对象，和当前 Agent skill / workflow 生态高度相关。值得读它如何用自博弈扩展能力边界，而不是只靠人工写更多提示词。",
+          "url": "https://arxiv.org/abs/2607.22529",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "cs.IR",
       "count": 1,
       "dates": [
@@ -13789,30 +15697,6 @@
           "title": "SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration",
           "summary": "SearchOS 把开放域搜索改写成带持久共享状态的 schema completion，专门解决多轮搜索 Agent 重复搜索、忘记进度的问题。它适合做 research agent 的工程参考，尤其是如何把隐式上下文变成可检查状态。",
           "url": "https://arxiv.org/abs/2607.15257v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "cs.LG",
-      "count": 1,
-      "dates": [
-        "2026-07-27"
-      ],
-      "sections": [
-        {
-          "name": "AI 论文",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-27",
-          "title": "TRACE-ROUTER: Task-Consistent and Adaptive Online Routing for Agentic AI",
-          "summary": "Agent 系统开始从“一个强模型包办”转向在线路由和任务一致性。TRACE-ROUTER 值得看，因为它把模型/工具选择做成运行时问题，而不是静态 prompt 约定。",
-          "url": "https://arxiv.org/abs/2607.22465",
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
@@ -14008,6 +15892,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "个人效率",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "社区转向讨论 AI 时代的新能力：专注与持续推进",
+          "summary": "这条讨论的价值在于把 AI 使用能力从“会不会写提示词”拉回到人类工作方式：能否拆任务、持续验证、处理反馈和把 Agent 输出接进真实行动。",
+          "url": "https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -14444,30 +16352,6 @@
       ]
     },
     {
-      "name": "代码审查",
-      "count": 1,
-      "dates": [
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-24",
-          "title": "alibaba/open-code-review",
-          "summary": "阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。",
-          "url": "https://github.com/alibaba/open-code-review",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
       "name": "代码理解",
       "count": 1,
       "dates": [
@@ -14774,6 +16658,30 @@
           "summary": "Seed Audio 1.0 将语音、音效和影视级音频创作放在同一模型叙事中，说明多模态生成正在从单点能力走向端到端内容流水线。对创作工具来说，接下来要看可控性、版权边界和与视频生成的联动。",
           "url": "https://seed.bytedance.com/zh/blog/%E4%BB%8E-%E4%BC%9A%E8%AF%B4-%E8%B5%B0%E5%90%91-%E4%BC%9A%E5%88%9B%E4%BD%9C-seed-audio-1-0-%E9%9F%B3%E9%A2%91%E5%88%9B%E4%BD%9C%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B8%83",
           "source": "字节 Seed",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "内容生态",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "数据显示 Google AI Overviews 在搜索结果中的出现率升至 43%",
+          "summary": "TechCrunch 引用第三方数据称，Google 的 AI 搜索摘要正在快速成为默认入口。这对内容站、SEO、新闻分发和电商检索都有直接影响：用户可能更少点击传统蓝链，更多在摘要层完成初步判断。",
+          "url": "https://techcrunch.com/2026/07/27/googles-ai-search-is-rapidly-becoming-the-default-new-data-shows",
+          "source": "TechCrunch",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -15236,6 +17144,30 @@
       ]
     },
     {
+      "name": "多平台",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "moeru-ai/airi",
+          "summary": "自托管 AI companion，支持实时语音聊天、Minecraft/Factorio 场景和 Web/macOS/Windows 多端运行。",
+          "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "多智能体",
       "count": 1,
       "dates": [
@@ -15304,6 +17236,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "多模态工具",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "bradautomates/claude-video",
+          "summary": "给 Claude 增加 /watch 能力，下载视频、抽帧、转录并把材料交给 Claude 分析。",
+          "url": "https://github.com/bradautomates/claude-video",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -15380,6 +17336,30 @@
       ]
     },
     {
+      "name": "大厂竞争",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HN 讨论 Apple 是否会在 AI 泡沫破裂时受益",
+          "summary": "235 points / 310 comments 的争论反映了社区对 AI 资本开支与产品价值脱节的担忧。讨论焦点不是 Apple 是否落后，而是保守平台在基础设施泡沫阶段可能反而少承担风险。",
+          "url": "https://www.macrumors.com/2026/07/27/ed-zitron-apple-watch-it-burn-ai-bubble-bursts/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "学术出版",
       "count": 1,
       "dates": [
@@ -15397,6 +17377,30 @@
           "title": "arXiv AI 写作测量方法引发讨论：检测器本身在哪里会失真？",
           "summary": "围绕 arXiv 新投稿中 AI 写作特征比例的讨论，社区更关注测量边界：学科、语言、模板化写作和改写工具都会影响检测结论。",
           "url": "https://unslop.run/blog/measuring-ai-writing-on-arxiv",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "学术诚信",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "教授用不可见提示词识别 AI 作业作弊，引发教育场景的攻防讨论",
+          "summary": "91 points / 80 comments 的讨论说明，AI 教育治理已经进入 prompt injection 与检测规避的现实阶段。它也提醒老师和平台：只靠陷阱很难长期治理，课程设计需要更强调过程证据。",
+          "url": "https://www.techspot.com/news/113243-professor-invisible-prompt-trap-catches-32-students-cheating.html",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
@@ -15424,6 +17428,30 @@
           "source": "Google DeepMind",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "安全规则",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源混合式代码审查工具，结合确定性流水线与 LLM Agent，支持行级评论和安全规则集。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -15472,6 +17500,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "实时语音",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "moeru-ai/airi",
+          "summary": "自托管 AI companion，支持实时语音聊天、Minecraft/Factorio 场景和 Web/macOS/Windows 多端运行。",
+          "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -15592,6 +17644,54 @@
           "source": "The Verge",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "平台战略",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HN 讨论 Apple 是否会在 AI 泡沫破裂时受益",
+          "summary": "235 points / 310 comments 的争论反映了社区对 AI 资本开支与产品价值脱节的担忧。讨论焦点不是 Apple 是否落后，而是保守平台在基础设施泡沫阶段可能反而少承担风险。",
+          "url": "https://www.macrumors.com/2026/07/27/ed-zitron-apple-watch-it-burn-ai-bubble-bursts/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "并行任务",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "wmux",
+          "summary": "多 Agent 并行之后，工作区隔离、上下文切换和会话管理会成为真实痛点。wmux 的定位说明工具链正在补齐“让多个 Agent 同时工作”的基础设施。",
+          "url": "https://github.com/openwong2kim/wmux",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -15884,6 +17984,78 @@
       ]
     },
     {
+      "name": "开源生态",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "NVIDIA 等行业组织成立 Open Secure AI Alliance，推动 AI 安全与防御开源化",
+          "summary": "Open Secure AI Alliance 把 AI 安全从企业内部红队扩展到可复用的开源工具和防御协作。它和今天的开放权重争议形成呼应：开源风险不只靠封闭解决，也需要共享测试、评估和防护能力。",
+          "url": "https://blogs.nvidia.com/blog/open-secure-ai-alliance",
+          "source": "NVIDIA Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "开源系统",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HART OS",
+          "summary": "虽然还需要看实现成熟度，但它代表了一个明显趋势：开发者正在把模型、工具、运行时和设备侧环境打包成更完整的 AI 操作系统叙事。",
+          "url": "https://github.com/hertz-ai/HARTOS",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "开源训练",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "FeyNoBg",
+          "summary": "Show HN 上升最快的视觉工具之一，面向图片背景移除和训练流程复用。它的看点在于把常见视觉能力做成更可直接集成的模型/库，而不是只提供网页 demo。",
+          "url": "https://usefeyn.com/blog/feynobg/",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "性能优化",
       "count": 1,
       "dates": [
@@ -16028,6 +18200,30 @@
       ]
     },
     {
+      "name": "执行力",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "社区转向讨论 AI 时代的新能力：专注与持续推进",
+          "summary": "这条讨论的价值在于把 AI 使用能力从“会不会写提示词”拉回到人类工作方式：能否拆任务、持续验证、处理反馈和把 Agent 输出接进真实行动。",
+          "url": "https://www.rickmanelius.com/p/the-new-ai-superpowers-focus-and",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "扩散语言模型",
       "count": 1,
       "dates": [
@@ -16072,30 +18268,6 @@
           "source": "Claude",
           "section": "products",
           "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
-      "name": "推理",
-      "count": 1,
-      "dates": [
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-20",
-          "title": "GPT-5.6 相关凸优化讨论登顶 HN：社区追问“提示词是否能补上证明缺口”",
-          "summary": "HN 对一则 GPT-5.6 用 prompt 关闭凸优化 30 年缺口的讨论热度很高，焦点不是单个模型名字，而是数学证明中的机器辅助、可复核性和“prompt 是否算方法贡献”。",
-          "url": "https://news.ycombinator.com/item?id=48957779",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
         }
       ]
     },
@@ -16148,6 +18320,30 @@
       ]
     },
     {
+      "name": "推理服务",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "推理模型",
       "count": 1,
       "dates": [
@@ -16192,6 +18388,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "提示注入",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "教授用不可见提示词识别 AI 作业作弊，引发教育场景的攻防讨论",
+          "summary": "91 points / 80 comments 的讨论说明，AI 教育治理已经进入 prompt injection 与检测规避的现实阶段。它也提醒老师和平台：只靠陷阱很难长期治理，课程设计需要更强调过程证据。",
+          "url": "https://www.techspot.com/news/113243-professor-invisible-prompt-trap-catches-32-students-cheating.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -16388,30 +18608,6 @@
       ]
     },
     {
-      "name": "数学",
-      "count": 1,
-      "dates": [
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-20",
-          "title": "GPT-5.6 相关凸优化讨论登顶 HN：社区追问“提示词是否能补上证明缺口”",
-          "summary": "HN 对一则 GPT-5.6 用 prompt 关闭凸优化 30 年缺口的讨论热度很高，焦点不是单个模型名字，而是数学证明中的机器辅助、可复核性和“prompt 是否算方法贡献”。",
-          "url": "https://news.ycombinator.com/item?id=48957779",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
       "name": "数据中心",
       "count": 1,
       "dates": [
@@ -16484,6 +18680,54 @@
       ]
     },
     {
+      "name": "数据版权",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HN 热议：AI 公司为了训练数据处理稀有书籍，引发版权和文化保存争论",
+          "summary": "742 points / 468 comments 的讨论集中在训练数据稀缺之后，AI 公司会把成本转嫁到图书馆、档案和版权边界上。它不是单纯新闻，而是关于“数据来源是否可审计、是否可替代”的长期问题。",
+          "url": "https://twitter.com/HedgieMarkets/status/2081534588485296565",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "文化遗产",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HN 热议：AI 公司为了训练数据处理稀有书籍，引发版权和文化保存争论",
+          "summary": "742 points / 468 comments 的讨论集中在训练数据稀缺之后，AI 公司会把成本转嫁到图书馆、档案和版权边界上。它不是单纯新闻，而是关于“数据来源是否可审计、是否可替代”的长期问题。",
+          "url": "https://twitter.com/HedgieMarkets/status/2081534588485296565",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "新闻聚合",
       "count": 1,
       "dates": [
@@ -16501,30 +18745,6 @@
           "title": "koala73/worldmonitor",
           "summary": "实时全球情报仪表盘，把 AI 新闻聚合、地缘监控和基础设施追踪放在统一界面，适合观察事件监控型 Agent 产品如何组织信号流。",
           "url": "https://github.com/koala73/worldmonitor",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
-      "name": "时间序列",
-      "count": 1,
-      "dates": [
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-24",
-          "title": "shiyu-coder/Kronos",
-          "summary": "面向金融市场语言的基础模型，把价格、成交和市场事件视作可建模序列，适合观察垂直基础模型如何落地到量化场景。",
-          "url": "https://github.com/shiyu-coder/Kronos",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -16700,30 +18920,6 @@
       ]
     },
     {
-      "name": "模型安全",
-      "count": 1,
-      "dates": [
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-16",
-          "title": "Demis Hassabis 的 AI 安全路线引发社区讨论",
-          "summary": "社区围绕 DeepMind 的安全治理、标准机构和前沿模型部署节奏展开争论，关注点在于谁有资格定义“足够安全”。",
-          "url": "https://twitter.com/demishassabis/status/2076957440109625718",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
       "name": "模型工程",
       "count": 1,
       "dates": [
@@ -16838,6 +19034,30 @@
           "summary": "OpenRouter 把 Whisper 与 token 计价 STT 模型接入统一 API，说明路由平台正在从文本模型扩展到多模态输入管线。",
           "url": "https://openrouter.ai/blog/tutorials/transcription-on-openrouter",
           "source": "OpenRouter",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "模型蒸馏",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "world-model-optimizer",
+          "summary": "项目把讨论点放在“frontier quality for half the cost”，适合关注模型服务成本、蒸馏和线上质量保持的团队跟进。",
+          "url": "https://github.com/experientiallabs/world-model-optimizer",
+          "source": "Show HN",
           "section": "products",
           "section_label": "产品 / 概念"
         }
@@ -16982,6 +19202,30 @@
           "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
           "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
           "source": "The Decoder",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "流量入口",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "数据显示 Google AI Overviews 在搜索结果中的出现率升至 43%",
+          "summary": "TechCrunch 引用第三方数据称，Google 的 AI 搜索摘要正在快速成为默认入口。这对内容站、SEO、新闻分发和电商检索都有直接影响：用户可能更少点击传统蓝链，更多在摘要层完成初步判断。",
+          "url": "https://techcrunch.com/2026/07/27/googles-ai-search-is-rapidly-becoming-the-default-new-data-shows",
+          "source": "TechCrunch",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -17372,6 +19616,30 @@
       ]
     },
     {
+      "name": "研究自动化",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "mvanhorn/last30days-skill",
+          "summary": "面向 AI Agent 的研究 skill，可跨 Reddit、X、YouTube、HN、Polymarket 和 Web 汇总最近 30 天信息。",
+          "url": "https://github.com/mvanhorn/last30days-skill",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "硬件设计",
       "count": 1,
       "dates": [
@@ -17488,6 +19756,30 @@
           "source": "AL.com",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "科研工具",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "Terence Tao《AI 时代的数学》幻灯片在 HN 引发讨论",
+          "summary": "157 points / 62 comments 的讨论集中在 AI 对数学发现、证明检查和协作研究的影响。相比普通“AI 会不会取代研究者”的争论，这份材料更适合看顶级数学家如何拆分工具能力和研究判断。",
+          "url": "https://teorth.github.io/tao-web/slides/age-of-ai-icm-2026.pdf",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -17996,6 +20288,54 @@
       ]
     },
     {
+      "name": "视觉模型",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "FeyNoBg",
+          "summary": "Show HN 上升最快的视觉工具之一，面向图片背景移除和训练流程复用。它的看点在于把常见视觉能力做成更可直接集成的模型/库，而不是只提供网页 demo。",
+          "url": "https://usefeyn.com/blog/feynobg/",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "视频理解",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "bradautomates/claude-video",
+          "summary": "给 Claude 增加 /watch 能力，下载视频、抽帧、转录并把材料交给 Claude 分析。",
+          "url": "https://github.com/bradautomates/claude-video",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "视频生成",
       "count": 1,
       "dates": [
@@ -18068,30 +20408,6 @@
       ]
     },
     {
-      "name": "训练数据",
-      "count": 1,
-      "dates": [
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-23",
-          "title": "Anthropic 盗版书籍版权案达成 15 亿美元和解，训练数据合规成本被重新定价",
-          "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
-          "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
-          "source": "The Decoder",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "设计 Agent",
       "count": 1,
       "dates": [
@@ -18110,6 +20426,30 @@
           "summary": "Miora 面向品牌设计、影视创意等场景开放，支持自定义多模态模型、Agent 推理深度、Skill 市场和记忆系统。它说明设计类 Agent 正从单次生成图像走向可配置工作台。",
           "url": "https://mp.weixin.qq.com/s/qQhq9nxoeCD68iMwQoEVFQ",
           "source": "数字生命卡兹克",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "设计工具",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "FeyNoBg",
+          "summary": "Show HN 上升最快的视觉工具之一，面向图片背景移除和训练流程复用。它的看点在于把常见视觉能力做成更可直接集成的模型/库，而不是只提供网页 demo。",
+          "url": "https://usefeyn.com/blog/feynobg/",
+          "source": "Show HN",
           "section": "products",
           "section_label": "产品 / 概念"
         }
@@ -18356,6 +20696,30 @@
       ]
     },
     {
+      "name": "跨源摘要",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "mvanhorn/last30days-skill",
+          "summary": "面向 AI Agent 的研究 skill，可跨 Reddit、X、YouTube、HN、Polymarket 和 Web 汇总最近 30 天信息。",
+          "url": "https://github.com/mvanhorn/last30days-skill",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "路由",
       "count": 1,
       "dates": [
@@ -18472,6 +20836,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "边缘部署",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "HART OS",
+          "summary": "虽然还需要看实现成熟度，但它代表了一个明显趋势：开发者正在把模型、工具、运行时和设备侧环境打包成更完整的 AI 操作系统叙事。",
+          "url": "https://github.com/hertz-ai/HARTOS",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -18596,26 +20984,26 @@
       ]
     },
     {
-      "name": "金融模型",
+      "name": "部署优化",
       "count": 1,
       "dates": [
-        "2026-07-24"
+        "2026-07-28"
       ],
       "sections": [
         {
-          "name": "开源热门",
+          "name": "产品 / 概念",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-24",
-          "title": "shiyu-coder/Kronos",
-          "summary": "面向金融市场语言的基础模型，把价格、成交和市场事件视作可建模序列，适合观察垂直基础模型如何落地到量化场景。",
-          "url": "https://github.com/shiyu-coder/Kronos",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
+          "date": "2026-07-28",
+          "title": "world-model-optimizer",
+          "summary": "项目把讨论点放在“frontier quality for half the cost”，适合关注模型服务成本、蒸馏和线上质量保持的团队跟进。",
+          "url": "https://github.com/experientiallabs/world-model-optimizer",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -18644,30 +21032,6 @@
       ]
     },
     {
-      "name": "长上下文",
-      "count": 1,
-      "dates": [
-        "2026-07-17"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-17",
-          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
-          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
-          "url": "https://www.kimi.com/blog/kimi-k3",
-          "source": "Moonshot AI",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "长时任务",
       "count": 1,
       "dates": [
@@ -18686,6 +21050,30 @@
           "summary": "OpenAI 把长时运行模型的对齐问题放到更接近 Agent 的场景中讨论，重点不只是回答是否安全，而是模型在多步任务、工具使用和延迟反馈下会出现哪些新故障。",
           "url": "https://openai.com/index/safety-alignment-long-horizon-models",
           "source": "OpenAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "防御工具",
+      "count": 1,
+      "dates": [
+        "2026-07-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-07-28",
+          "title": "NVIDIA 等行业组织成立 Open Secure AI Alliance，推动 AI 安全与防御开源化",
+          "summary": "Open Secure AI Alliance 把 AI 安全从企业内部红队扩展到可复用的开源工具和防御协作。它和今天的开放权重争议形成呼应：开源风险不只靠封闭解决，也需要共享测试、评估和防护能力。",
+          "url": "https://blogs.nvidia.com/blog/open-secure-ai-alliance",
+          "source": "NVIDIA Blog",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -18791,30 +21179,30 @@
   "sources": [
     {
       "name": "GitHub",
-      "count": 46
+      "count": 51
     },
     {
       "name": "Hacker News",
-      "count": 43
+      "count": 48
     },
     {
       "name": "arXiv",
-      "count": 31
+      "count": 36
     },
     {
       "name": "Show HN",
-      "count": 9
+      "count": 14
     },
     {
       "name": "AI HOT",
       "count": 8
     },
     {
-      "name": "IT之家",
-      "count": 4
+      "name": "TechCrunch",
+      "count": 5
     },
     {
-      "name": "TechCrunch",
+      "name": "IT之家",
       "count": 4
     },
     {
@@ -18844,6 +21232,10 @@
     {
       "name": "Moonshot AI",
       "count": 3
+    },
+    {
+      "name": "GitHub Blog",
+      "count": 2
     },
     {
       "name": "OpenRouter",
@@ -18876,6 +21268,30 @@
     {
       "name": "Ars Technica",
       "count": 2
+    },
+    {
+      "name": "Anthropic Newsroom / AI HOT",
+      "count": 1
+    },
+    {
+      "name": "Anthropic Newsroom",
+      "count": 1
+    },
+    {
+      "name": "IT之家背景报道",
+      "count": 1
+    },
+    {
+      "name": "OpenRouter Blog",
+      "count": 1
+    },
+    {
+      "name": "Kimi / LMSYS",
+      "count": 1
+    },
+    {
+      "name": "NVIDIA Blog",
+      "count": 1
     },
     {
       "name": "CNBC 开放权重报道",
@@ -18947,10 +21363,6 @@
     },
     {
       "name": "Google DeepMind",
-      "count": 1
-    },
-    {
-      "name": "GitHub Blog",
       "count": 1
     },
     {
