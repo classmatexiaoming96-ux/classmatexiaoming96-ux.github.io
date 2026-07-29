@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 分钟把 Claude Code 调顺：终端、记忆、插件、MCP 与上下文管理 - Tech With Tim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+    .back-link svg { width: 14px; height: 14px; }
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); margin: -4px 0 18px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #000;
+      margin: 0 0 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+    }
+    .video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    }
+    .section { margin: 36px 0; }
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 24px 0 12px; }
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.7; }
+    table { border-collapse: collapse; width: 100%; margin: 18px 0; font-size: 0.875rem; }
+    th, td { border: 1px solid var(--border-color); padding: 10px 14px; text-align: left; vertical-align: top; line-height: 1.55; }
+    th { background: rgba(255, 255, 255, 0.03); font-weight: 600; color: var(--text-primary); }
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+    code { background: rgba(255, 255, 255, 0.06); padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; color: var(--accent-cyan); }
+    .timestamp-list { display: grid; gap: 10px; padding-left: 0; list-style: none; }
+    .timestamp-list li { display: grid; grid-template-columns: 72px 1fr; gap: 12px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: rgba(255, 255, 255, 0.025); }
+    .timestamp-list a, .related a { color: var(--accent-cyan); text-decoration: none; }
+    .timestamp-list a:hover, .related a:hover { text-decoration: underline; }
+    footer { text-align: center; padding: 40px 0 50px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color); margin-top: 20px; }
+    footer a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s ease; }
+    footer a:hover { color: var(--accent-cyan); }
+    @media (max-width: 768px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.4rem; }
+      .content-card { padding: 20px; border-radius: 12px; }
+      .section { margin: 28px 0; }
+      table { font-size: 0.8rem; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      返回课程列表
+    </a>
+    <h1 class="page-title">15 分钟把 Claude Code 调顺：终端、记忆、插件、MCP 与上下文管理</h1>
+    <p class="subtitle">原视频：FULL Claude Code Tutorial for Beginners in 2026! (Step-By-Step)</p>
+    <div class="page-meta">
+      <span class="meta-badge time">⏱ 15:09</span>
+      <span class="meta-badge source">📺 Tech With Tim</span>
+      <span class="meta-badge">👀 369,243 views</span>
+      <span class="meta-badge">📅 2026-03-29</span>
+    </div>
+  </header>
+
+  <main style="position: relative; z-index: 1;">
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/qYqIhX9hTQk" title="FULL Claude Code Tutorial for Beginners in 2026! (Step-By-Step)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <div class="content-card">
+      <div class="section">
+        <h2 class="section-title"><span class="num">一</span>问题引入：为什么同一个 Claude Code，有人好用、有人卡壳</h2>
+        <p>这个视频不是从零解释“什么是 AI 编程”，而是把注意力放在一个更具体的问题上：同样打开 Claude Code，为什么有的人能稳定让它理解项目、运行工具、提交代码，有的人却总是在“它忘了规则”“它不知道文件结构”“它缺少工具权限”这些小问题上来回消耗。</p>
+        <p>Tech With Tim 的核心判断很直接：Claude Code 的效果不只取决于模型本身，还取决于你是否给它一个适合工作的环境。视频里的设置都很低门槛，包括在编辑器里使用 Claude Code、维护项目级 <code>CLAUDE.md</code>、安装常用插件、连接 GitHub MCP、理解模型切换和上下文压缩。这些动作单独看都不复杂，但组合起来能显著减少新会话里的重复解释。</p>
+        <blockquote>这节课最值得记住的一点是：不要把 Claude Code 当成孤立聊天框，而要把它放进真实项目工作台，让它能看文件、记规则、调用工具、检查自己做过什么。</blockquote>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">二</span>核心概念：Claude Code 工作台的五个组成部分</h2>
+        <p>视频里的内容可以整理成五层。第一层是运行位置：终端、VS Code、Cursor、Windsurf 这类编辑器都可以，关键是你要能同步看到 Claude 正在创建或修改的文件。第二层是项目记忆：根目录的 <code>CLAUDE.md</code> 用来存放长期规则。第三层是工具能力：Playwright、Superpowers、Context7、DBHub 等插件或连接器会扩展 Claude 能做的事。第四层是外部系统连接：GitHub MCP 让 Claude 能创建仓库、推送代码、读取远程项目。第五层是会话管理：<code>/model</code>、<code>/compact</code>、<code>/insights</code> 这些命令决定你如何控制成本、上下文和复盘。</p>
+        <p>对初学者来说，最容易误解的是“插件越多越好”。视频明确提醒：插件可以按项目级或全局级安装，不要为了显得强大而给 Claude 塞一百个工具。真正的目标是让每个项目拥有刚好够用的上下文和能力，避免工具列表本身变成噪声。</p>
+        <table>
+          <thead><tr><th>组成部分</th><th>解决的问题</th><th>常见误区</th><th>建议做法</th></tr></thead>
+          <tbody>
+            <tr><td>编辑器/终端</td><td>让 Claude 能在真实项目里改文件</td><td>只在网页聊天框里复制粘贴代码</td><td>在 Cursor、VS Code 或终端中直接运行，并随时检查 diff</td></tr>
+            <tr><td><code>CLAUDE.md</code></td><td>保存项目长期规则和约定</td><td>每次开新会话都重新解释技术栈</td><td>把技术栈、命令、目录约定、代码风格写进去，并持续维护</td></tr>
+            <tr><td>插件与技能</td><td>提供浏览器自动化、文档检索、代码评审等能力</td><td>一次性安装过多工具</td><td>按项目需要启用，先选高频能力</td></tr>
+            <tr><td>MCP server</td><td>连接 GitHub、数据库等外部系统</td><td>把 token 和权限随意暴露</td><td>使用最小权限 token，并明确 local/project/user 作用域</td></tr>
+            <tr><td>会话命令</td><td>控制模型、上下文和使用情况</td><td>上下文快满时直接开新会话</td><td>先用 <code>/compact</code> 压缩，再用 <code>/insights</code> 复盘使用模式</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">三</span>关键步骤：从“能用”到“稳定好用”</h2>
+        <h3>1. 在能看见文件的位置运行 Claude Code</h3>
+        <p>视频开头建议把 Claude Code 放在终端或编辑器扩展里使用，例如 Cursor、VS Code、Windsurf 或同类编辑器。这样做的价值不是 UI 更酷，而是你能看到目录结构、生成文件、修改范围和错误反馈。Claude 生成页面、组件或配置时，你不用等到最后才发现它写到了错误目录。</p>
+        <p>如果你刚开始用 Claude Code，最小可行设置就是打开项目根目录，在编辑器侧边栏保留文件树，同时让 Claude Code 在同一个项目上下文里运行。每次让它做改动前先说明目标文件和边界，改完后检查 diff。</p>
+        <h3>2. 先建 <code>CLAUDE.md</code>，再开始大量开发</h3>
+        <p>视频强调 <code>CLAUDE.md</code> 必须放在项目根目录，并按这个名字拼写。Claude Code 开启新会话时会参考它，因此它适合存放“每次都应该知道”的信息：技术栈、开发命令、测试命令、目录结构、API 约定、代码风格、团队偏好、禁止修改的区域等。</p>
+        <p>更重要的是，<code>CLAUDE.md</code> 不是一次性文档。视频建议在开发过程中持续让 Claude 把重要经验更新进去。比如一次构建失败后发现必须先运行某个生成命令，就应该把这条规则写回文件。这样新会话不会重踩同样的坑，团队成员也能共享同一套项目记忆。</p>
+        <h3>3. 选择少量高价值插件，而不是堆满工具箱</h3>
+        <p>视频示例推荐了三个方向：Playwright 用于浏览器自动化和 Web 应用测试；Superpowers 类插件提供 brainstorming、sub-agent driven development、systematic debugging、code review 等工作流技能；Context7 用于获取更新的文档，减少模型引用过期 API 的概率。</p>
+        <p>这组推荐背后的决策逻辑比插件名字更重要：优先补齐 Claude Code 经常缺的能力。Web 项目最常缺的是“真实点击和验证”，所以 Playwright 有价值；新库升级后最常见的是“文档过期”，所以 Context7 有价值；复杂任务容易缺少“流程纪律”，所以工作流型技能有价值。</p>
+        <h3>4. 用 GitHub MCP 打通远程代码流，但要谨慎处理 token</h3>
+        <p>视频中 GitHub MCP 的作用是让 Claude 能帮你创建远程仓库、推送当前代码、访问云端项目。它演示了从 GitHub 个人设置进入 Developer settings，创建 Personal Access Token，并把 token 填入 MCP 安装命令的流程。</p>
+        <p>这里需要额外注意安全边界：视频面向初学者，演示时会讲“把 token 复制到命令里”。实际工程里更推荐临时环境变量、最小 scope、短有效期 token，避免把 token 写进仓库、日志或共享配置。安装作用域也要区分清楚：<code>local</code> 只在当前项目可见，<code>project</code> 会随项目共享，<code>user</code> 则对当前用户所有项目可用。GitHub 这类通用能力可以考虑 user 级，但包含公司内部系统权限的 MCP 更适合项目级或更严格的环境。</p>
+        <h3>5. 熟悉 <code>/model</code>、<code>/compact</code> 和 <code>/insights</code></h3>
+        <p><code>/model</code> 用来切换不同模型。视频提到 Sonnet、Opus、Opus 1 million、Haiku 这类选项，并建议多数日常任务使用 Sonnet，复杂任务才升级到 Opus，大上下文任务再考虑 1 million context，简单快速任务可以用 Haiku。</p>
+        <p><code>/compact</code> 用来把当前长上下文压缩成摘要，避免因为上下文窗口变大而失去连续性。视频也提醒，它在接近上下文上限时会自动发生，但你可以主动触发。<code>/insights</code> 则会生成一份使用报告，帮助你看到会话数量、消息行为、并行会话、代码改动等统计，并给出改进建议。对长期使用者来说，这是一种“反向调试自己工作方式”的入口。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">四</span>决策矩阵：这些能力该什么时候加</h2>
+        <table>
+          <thead><tr><th>能力</th><th>适用场景</th><th>优点</th><th>风险</th><th>决策建议</th></tr></thead>
+          <tbody>
+            <tr><td>编辑器扩展</td><td>日常编码、文件生成、组件修改、调试项目结构</td><td>能直接观察文件树和 diff，反馈闭环短</td><td>如果不看 diff，仍然可能误改文件</td><td>几乎所有项目都应该优先使用</td></tr>
+            <tr><td><code>CLAUDE.md</code></td><td>有固定技术栈、团队规则、重复命令或禁止区的项目</td><td>让新会话继承长期规则，减少重复解释</td><td>写得太长会变成另一个噪声源</td><td>保留稳定规则，不要塞临时聊天记录</td></tr>
+            <tr><td>Playwright</td><td>需要登录、点击、表单流、视觉/端到端验证的 Web 项目</td><td>能把“看起来能跑”变成可复现脚本</td><td>选择器不稳定时会产生脆弱测试</td><td>前端应用优先安装；纯后端项目按需</td></tr>
+            <tr><td>Context7 / 文档检索</td><td>使用更新很快的库、框架或 API</td><td>减少过期代码和幻觉 API</td><td>文档质量仍需人工判断</td><td>新框架、新 SDK、云服务接入时很值得</td></tr>
+            <tr><td>GitHub MCP</td><td>需要远程仓库、issue、PR、代码托管自动化</td><td>打通从本地生成到远程管理的闭环</td><td>token scope、组织权限和误操作风险更高</td><td>只给必要权限；敏感组织先用手动审批</td></tr>
+            <tr><td><code>/compact</code></td><td>长会话、跨多个功能点、上下文接近上限</td><td>保留连续性，降低开新会话的重建成本</td><td>摘要可能丢掉细节</td><td>在阶段性完成后主动压缩，而不是临界时才救火</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">五</span>关键观点引用块：把 Claude Code 当团队成员管理</h2>
+        <blockquote>Claude Code 默认没有跨会话记忆；如果你希望它遵守项目长期规则，就要把这些规则写进根目录的 <code>CLAUDE.md</code>，并在项目推进中持续维护。</blockquote>
+        <blockquote>插件和 MCP 的价值不是“让工具列表看起来很长”，而是补齐真实开发链路中缺失的一环：浏览器验证、最新文档、代码评审、数据库访问或远程仓库操作。</blockquote>
+        <p>把这两句话合在一起，其实就是 Agent 工程里的一个普遍规律：上下文、工具、权限要被明确设计。模型越来越强以后，真正拖慢工作的往往不是“它不会写代码”，而是“它不知道该遵守哪条规则”“它没有可以验证结果的工具”“它拿不到项目外部状态”。</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"><span class="num">六</span>时间戳目录</h2>
+        <ul class="timestamp-list">
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=0s" target="_blank">00:00</a><span>开场：用几分钟配置让 Claude Code 效果明显提升。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=25s" target="_blank">00:25</a><span>建议在终端或编辑器扩展里使用，方便查看 Claude 生成的文件和目录结构。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=78s" target="_blank">01:18</a><span>创建根目录 <code>CLAUDE.md</code>，写入技术栈、命令、目录结构、代码约定和长期规则。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=170s" target="_blank">02:50</a><span>介绍插件与连接器的安装入口，区分项目级和全局级配置。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=210s" target="_blank">03:30</a><span>Playwright：让 Claude 做浏览器自动化、登录流程、按钮点击和 Web 测试。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=278s" target="_blank">04:38</a><span>Superpowers：用 brainstorming、sub-agent、debugging、review 等技能约束工作流。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=342s" target="_blank">05:42</a><span>Context7：获取更新文档，减少旧 API 和废弃模块带来的错误。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=390s" target="_blank">06:30</a><span>现场测试 brainstorming skill，并展示 Claude 如何按技能要求展开步骤。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=520s" target="_blank">08:40</a><span>插入求职场景提醒：AI 编程很实用，但面试仍常考 DSA。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=650s" target="_blank">10:50</a><span>配置 GitHub MCP：生成 token、运行安装命令、理解 scope。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=790s" target="_blank">13:10</a><span>用 <code>/MCP</code> 检查 GitHub server 连接，并尝试创建远程仓库。</span></li>
+          <li><a href="https://www.youtube.com/watch?v=qYqIhX9hTQk&t=842s" target="_blank">14:02</a><span>补充 DBHub 等数据库连接能力，随后讲 <code>/model</code>、<code>/compact</code>、<code>/insights</code>。</span></li>
+        </ul>
+      </div>
+
+      <div class="section related">
+        <h2 class="section-title"><span class="num">七</span>相关推荐</h2>
+        <p>如果你想继续沿着 Claude Code 和 Agent 工程方向看，可以回到 <a href="index.html">课程列表</a>，也可以直接阅读这些相关页面：</p>
+        <ul>
+          <li><a href="mWvtOHlZM-I.html">工具、技能还是子智能体？拆解一个过度膨胀的 Agent</a>：更偏 Agent 架构拆解。</li>
+          <li><a href="uogzSxOw4LU.html">The Ultimate Claude Code Guide | MCP, Skills &amp; More</a>：更长版本的 Claude Code 工作流指南。</li>
+          <li><a href="bcM9dP_uXJU.html">How to Build an AI Agent with Claude Code</a>：更聚焦 Claude Code 里的 Agent 构建实践。</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a> ·
+    <a href="https://www.youtube.com/watch?v=qYqIhX9hTQk" target="_blank">▶ 原视频</a>
+  </footer>
+</body>
+</html>
