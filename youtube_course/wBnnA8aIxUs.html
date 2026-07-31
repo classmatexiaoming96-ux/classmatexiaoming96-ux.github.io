@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 MCP 把 AI Agent 接入真实工具 - Google Cloud Tech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9aa0ac;
+      --text-muted: #646477;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    }
+
+    .kicker {
+      color: var(--accent-cyan);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(1.9rem, 4vw, 2.7rem);
+      line-height: 1.18;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      margin: 0 0 28px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 24px 70px rgba(0,0,0,.36);
+    }
+
+    .video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .content-card {
+      background: rgba(22, 22, 31, 0.96);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(12px);
+    }
+
+    .section { margin: 38px 0; }
+    .section:first-child { margin-top: 0; }
+
+    h2 {
+      font-size: 1.34rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      margin: 24px 0 10px;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0 0 14px;
+      font-size: 0.96rem;
+    }
+
+    .lead {
+      color: #d7deec;
+      font-size: 1.03rem;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86em;
+      color: #b7d9ff;
+      background: rgba(99, 179, 237, 0.10);
+      border: 1px solid rgba(99, 179, 237, 0.16);
+      padding: 1px 5px;
+      border-radius: 5px;
+    }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.07);
+      border-radius: 0 10px 10px 0;
+      color: #d4d7e1;
+    }
+
+    blockquote p { margin-bottom: 0; color: #d4d7e1; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      display: table;
+    }
+
+    th, td {
+      border: 1px solid rgba(255,255,255,.07);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    th {
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.08);
+      font-weight: 700;
+    }
+
+    ul, ol {
+      margin: 12px 0 18px 22px;
+      color: var(--text-secondary);
+    }
+
+    li { margin: 8px 0; }
+    li::marker { color: var(--accent-cyan); }
+
+    .timestamp-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .timestamp {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      padding: 13px 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    .timestamp b {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.86rem;
+    }
+
+    .timestamp span { color: var(--text-secondary); }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .rec {
+      display: block;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255,255,255,.035);
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all .2s ease;
+    }
+
+    .rec:hover {
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .rec strong { display: block; color: var(--text-primary); margin-bottom: 6px; }
+    .rec span { font-size: 0.86rem; color: var(--text-muted); }
+
+    footer {
+      text-align: center;
+      padding: 34px 0 48px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    footer a { color: var(--text-secondary); text-decoration: none; }
+    footer a:hover { color: var(--accent-cyan); }
+
+    @media (max-width: 760px) {
+      body { padding: 0 16px; }
+      .hero, .content-card { padding: 24px 20px; }
+      .timestamp { grid-template-columns: 1fr; gap: 4px; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 返回课程列表</a>
+    <section class="hero">
+      <div class="kicker">Google Cloud Tech · ADK + MCP</div>
+      <h1>用 MCP 把 AI Agent 接入真实工具</h1>
+      <p class="subtitle">How to build an AI Agent and MCP Server (step-by-step)</p>
+      <div class="meta">
+        <span class="meta-badge source">Google Cloud Tech</span>
+        <span class="meta-badge time">7 分 54 秒</span>
+        <span class="meta-badge">约 65,848 次观看</span>
+        <span class="meta-badge">Model Context Protocol</span>
+      </div>
+    </section>
+  </header>
+
+  <div class="video-frame">
+    <iframe
+      src="https://www.youtube.com/embed/wBnnA8aIxUs"
+      title="How to build an AI Agent and MCP Server (step-by-step)"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <main class="content-card">
+    <section class="section">
+      <h2><span class="num">01</span>问题引入：Agent 为什么需要 MCP</h2>
+      <p class="lead">这支短视频解决的是一个很典型的 Agent 工程问题：一个会规划、会写作的智能体，如果只依赖语言模型本身，它的能力上限仍然停留在“生成文本”。一旦任务要求它查询数据库、读取实时趋势、运行代码、访问内部系统，就需要一个干净的工具接入层。</p>
+      <p>Google Cloud Tech 在视频里把目标压得很具体：给一个基于 ADK 的博客写作 Agent 接入一个 MCP server，让它在写文章前先调用 Google Trends 工具，获取真实的趋势数据。这个例子不追求复杂的多智能体编排，而是专注说明 MCP 的核心价值：把 Agent 的推理过程和外部工具的执行过程拆开。</p>
+      <p>如果把 Agent 看作“大脑”，MCP 就是大脑连接外部能力的标准线缆。大脑决定要问什么，MCP 负责把请求传给外部工具，工具执行后再把 JSON 结果送回模型上下文。这样一来，Agent 不需要知道工具是 Python、Go 还是 Node 写的，也不需要把每一种工具的细节硬编码进主流程。</p>
+    </section>
+
+    <section class="section">
+      <h2><span class="num">02</span>核心概念：MCP 到底抽象了什么</h2>
+      <p>MCP 是 Model Context Protocol 的缩写。视频里的解释很务实：它是 Agent 与外部工具之间的一套通用对话方式。工具通常作为独立进程运行，Agent 通过标准输入输出连接过去，先询问“你有哪些工具”，再基于工具返回的名称、参数 schema 和返回结构发起调用。</p>
+      <p>这背后有三个关键抽象。第一是<strong>发现</strong>：Agent 不必提前写死所有工具参数，MCP server 会在握手阶段暴露工具列表。第二是<strong>调用</strong>：Agent 发送工具名和 JSON 参数，server 执行后返回 JSON-friendly 的结果。第三是<strong>隔离</strong>：工具运行在自己的进程里，崩溃、升级、替换都不应拖垮主 Agent。</p>
+      <p>视频中提到的 ADK function tool 负责把普通 Python 函数包装成可被 Agent 识别的工具。它会读取函数签名和 docstring，生成工具名称、参数说明和返回结构。这一步减少了手写 schema 的负担，也让“本地函数工具”和“MCP 暴露的远程工具”在 Agent 眼里尽量一致。</p>
+      <blockquote>
+        <p>视频的核心判断可以概括为：Agent 不需要懂工具内部实现，只要工具会说 MCP，就能被发现、被调用、被替换。</p>
+      </blockquote>
+    </section>
+
+    <section class="section">
+      <h2><span class="num">03</span>关键步骤：从普通函数到可调用的 MCP 工具</h2>
+      <h3>1. 写一个 JSON 友好的业务函数</h3>
+      <p>示例工具叫 <code>Trends</code>，职责很单一：查询 Google Trends 并返回趋势数据。这里的设计重点不是 Google Trends 本身，而是函数边界。参数要是 JSON 友好的类型，返回值也要能被序列化成 JSON 字典；这样后续 MCP server 才能稳定地把调用结果交回 Agent。</p>
+
+      <h3>2. 用 ADK 的 FunctionTool 包装函数</h3>
+      <p>视频强调 <code>FunctionTool</code> 做了很多隐形工作：它根据函数签名和 docstring 推导 schema，给工具一个可发现的名字，并描述参数和返回值。对工程实践来说，这一步相当于把“普通代码函数”变成“Agent 可以理解的工具契约”。</p>
+
+      <h3>3. 创建 MCP server 并实现两个核心 handler</h3>
+      <p>MCP server 的核心并不复杂。第一个 handler 负责 listing tools：当 Agent 连接上来并询问工具列表时，server 返回 <code>Trends</code> 工具的 schema。第二个 handler 负责 calling tool：当 Agent 指定工具名和参数时，server 检查工具名，然后把参数转发给 function tool 执行。</p>
+      <p>视频里反复强调的简洁性在这里体现得最明显：协议层的输入是“工具名 + 参数字典”，输出是“JSON 结果”。只要这条边界保持干净，业务工具内部可以继续使用自己的依赖、缓存、认证方式或错误处理策略。</p>
+
+      <h3>4. 通过标准输入输出启动传输</h3>
+      <p>最后，server 通过 stdio transport 接入 MCP。ADK 可以启动这个脚本，完成初始化握手，询问工具列表，再像调用本地工具一样调用 <code>Trends</code>。这种 stdio 方式特别适合本地开发、CLI 工具和编辑器插件场景，因为它不要求额外开启 HTTP 服务。</p>
+
+      <h3>5. 把 MCP 工具挂到 root agent</h3>
+      <p>在主 <code>agent.py</code> 中，示例把 <code>trends_mcp</code> 放入 root agent 的 tools 列表，和 planner、writer 等工具并列。对 Agent 来说，调用趋势工具与调用本地函数工具没有本质区别；但行为结果已经从“模型猜测”升级为“先查实时趋势，再生成内容”。</p>
+    </section>
+
+    <section class="section">
+      <h2><span class="num">04</span>决策矩阵：什么时候该用 MCP</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>接入方式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险 / 取舍</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>直接在 Agent 代码里写函数</td>
+            <td>工具很少、只服务一个 Agent、部署环境单一</td>
+            <td>实现最快，调试路径短，不需要额外进程</td>
+            <td>工具与 Agent 耦合强；多语言、跨团队复用和版本化会变困难</td>
+          </tr>
+          <tr>
+            <td>HTTP API 工具</td>
+            <td>已有 Web 服务，需要跨机器访问，权限体系已经成熟</td>
+            <td>基础设施成熟，易于监控和限流</td>
+            <td>Agent 侧仍要维护 schema、认证和错误映射；本地工具体验较重</td>
+          </tr>
+          <tr>
+            <td>MCP server</td>
+            <td>希望工具可发现、可替换、可由不同语言实现，并被多个 Agent 客户端复用</td>
+            <td>隔离性好，schema 可发现，Agent 不必理解工具内部实现</td>
+            <td>需要管理工具进程、stdio/transport 生命周期和错误返回格式</td>
+          </tr>
+          <tr>
+            <td>多 Agent 工作流</td>
+            <td>任务需要角色分工、长链路协作或独立策略</td>
+            <td>可以把规划、执行、审查拆分成更清晰的职责</td>
+            <td>如果只是查一个趋势工具，多 Agent 会过度设计；先用 MCP 扩展单 Agent 更稳</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>这张表的结论是：MCP 不是为了替代所有 API，也不是为了把简单函数复杂化。它最适合用在“Agent 需要标准化接入一批外部工具”的场景，尤其是工具会不断增加、来自不同语言栈、需要被不同客户端复用的时候。</p>
+    </section>
+
+    <section class="section">
+      <h2><span class="num">05</span>工程拆解：这个例子真正教会了什么</h2>
+      <p>第一，工具边界要比模型提示更重要。视频里的 blog-writing agent 原本能规划章节、写初稿、给替代标题，但它不知道当下发生了什么。接入趋势工具后，模型提示并没有变得更“神奇”，只是上下文里多了一份真实世界数据。这说明很多 Agent 能力提升来自工具边界，而不是继续堆提示词。</p>
+      <p>第二，工具要自描述。MCP server 在 listing tools 阶段返回名称、参数和说明，让 Agent 在运行时知道怎么构造调用。这对长期维护很关键：工具参数变更时，server 暴露的 schema 就是最新契约；Agent 客户端不应该依赖陈旧的手写说明。</p>
+      <p>第三，错误也要协议化。视频提到如果工具调用出错，server 会返回小的 JSON error，并把细节记录到 stderr。这个习惯值得保留：给 Agent 的错误要足够结构化，便于模型判断是否重试、换参数或向用户解释；给开发者的日志则可以包含更具体的堆栈和依赖信息。</p>
+      <p>第四，stdio 不是玩具。很多本地 Agent、编辑器和 CLI 环境都适合用 stdio 启动工具进程。它减少了端口管理和 HTTP 服务部署的成本，也自然形成进程隔离。等工具需要远程化时，再考虑 HTTP 或其他 transport，并不会推翻 MCP 抽象本身。</p>
+    </section>
+
+    <section class="section">
+      <h2><span class="num">06</span>时间戳目录</h2>
+      <div class="timestamp-list">
+        <div class="timestamp"><b>00:00</b><span>开场：本节要把 AI Agent 接到 MCP server，让它能调用外部工具。</span></div>
+        <div class="timestamp"><b>00:25</b><span>解释 MCP：一种让 Agent 与外部工具通信的标准方式，工具可作为独立进程运行。</span></div>
+        <div class="timestamp"><b>01:35</b><span>说明 MCP 的价值：隔离、互操作、可发现、可扩展，Agent 不关心工具语言和内部实现。</span></div>
+        <div class="timestamp"><b>02:30</b><span>回到前置示例：博客写作 Agent 原本只依赖模型，缺少真实世界趋势数据。</span></div>
+        <div class="timestamp"><b>03:05</b><span>创建 <code>server.py</code>：暴露一个 Google Trends 工具，作为 MCP server 的唯一工具。</span></div>
+        <div class="timestamp"><b>03:35</b><span>用 FunctionTool 包装普通 Python 函数，自动生成工具 schema 和参数描述。</span></div>
+        <div class="timestamp"><b>04:20</b><span>实现工具发现：Agent 连接后询问工具列表，server 返回 trends 工具的 MCP schema。</span></div>
+        <div class="timestamp"><b>05:15</b><span>实现工具调用：校验工具名，把 JSON 参数转发给函数工具，并返回 JSON 文本结果。</span></div>
+        <div class="timestamp"><b>06:10</b><span>启动 stdio transport 与初始化握手，让 ADK 可以把 server 当作外部工具进程。</span></div>
+        <div class="timestamp"><b>06:55</b><span>在 <code>agent.py</code> 中把 <code>trends_mcp</code> 加入 root agent 的工具列表。</span></div>
+        <div class="timestamp"><b>07:25</b><span>收束：Agent 先获取 Google Trends 实时数据，再开始写博客，形成更可靠的工具增强模式。</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2><span class="num">07</span>相关推荐</h2>
+      <p>如果你已经理解了 MCP 作为工具接入层的价值，可以继续看 Agent 架构、Claude Code 工程流和多 Agent 系统相关课程。下面几页和本视频的主题最接近。</p>
+      <div class="rec-grid">
+        <a class="rec" href="index.html">
+          <strong>返回课程列表</strong>
+          <span>浏览全部 AI / Agent / Claude 技术视频整理。</span>
+        </a>
+        <a class="rec" href="bcM9dP_uXJU.html">
+          <strong>Claude Code Agent 教程</strong>
+          <span>理解编码 Agent 如何在工程任务中调用工具与执行步骤。</span>
+        </a>
+        <a class="rec" href="96jN2OCOfLs.html">
+          <strong>从 Vibe Coding 到 Agentic Engineering</strong>
+          <span>把工具增强从单次 demo 推到系统化工程工作流。</span>
+        </a>
+        <a class="rec" href="EAeUiipzCTE.html">
+          <strong>Microsoft Agent Framework</strong>
+          <span>从函数工具调用、上下文和记忆角度对照 MCP 的边界。</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>中文整理基于视频字幕生成 · <a href="https://www.youtube.com/watch?v=wBnnA8aIxUs" target="_blank" rel="noopener">原视频</a></p>
+  </footer>
+</body>
+</html>
