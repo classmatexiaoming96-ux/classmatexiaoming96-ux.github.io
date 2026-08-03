@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Skills 会取代 MCP 吗？Claude Code 时代的边界判断 - Confluent Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1d1d2a;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 179, 237, 0.35);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a1a1b5;
+      --text-muted: #6f6f83;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-violet: #9f7aea;
+      --accent-green: #68d391;
+      --accent-orange: #f6ad55;
+      --gradient-start: #181826;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.75;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    a { color: var(--accent-cyan); text-decoration: none; }
+    a:hover { color: var(--accent-blue); }
+
+    .page-header, main, footer { position: relative; z-index: 1; }
+
+    .page-header { padding: 40px 0 30px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 24px;
+      transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: rgba(22, 22, 31, 0.92);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet), var(--accent-green));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-green);
+      font-size: 0.78rem;
+      letter-spacing: 0;
+      padding: 4px 10px;
+      border: 1px solid rgba(104, 211, 145, 0.28);
+      background: rgba(104, 211, 145, 0.08);
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.35rem);
+      line-height: 1.12;
+      letter-spacing: 0;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 760px;
+      margin-bottom: 22px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.045);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 6px 11px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .video-wrap {
+      margin: 28px 0;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #050508;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    .video-wrap iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      height: auto;
+      border: 0;
+    }
+
+    .content-card {
+      background: rgba(22, 22, 31, 0.88);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      margin: 24px 0;
+      backdrop-filter: blur(14px);
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .content-card:hover {
+      border-color: var(--border-hover);
+      background: rgba(24, 24, 36, 0.94);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.24);
+      border-radius: 5px;
+      padding: 2px 8px;
+    }
+
+    h2, h3 { letter-spacing: 0; }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      margin: 24px 0 10px;
+    }
+
+    p { color: var(--text-secondary); margin-bottom: 14px; }
+
+    strong { color: var(--text-primary); }
+
+    ul, ol {
+      color: var(--text-secondary);
+      padding-left: 22px;
+      margin: 10px 0 16px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-violet);
+      background: rgba(159, 122, 234, 0.08);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-secondary);
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    .decision-note {
+      border-left-color: var(--accent-orange);
+      background: rgba(246, 173, 85, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 12px;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+      color: var(--text-secondary);
+    }
+
+    th {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.055);
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-green);
+      background: rgba(104, 211, 145, 0.08);
+      border: 1px solid rgba(104, 211, 145, 0.16);
+      border-radius: 4px;
+      padding: 2px 5px;
+    }
+
+    .timeline {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .timecode {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.86rem;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .related-card {
+      display: block;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.035);
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+
+    .related-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.07);
+    }
+
+    .related-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    footer {
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.86rem;
+      padding: 20px 0;
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 0 16px 42px; }
+      .hero, .content-card { padding: 22px; border-radius: 14px; }
+      .timeline li { grid-template-columns: 1fr; gap: 4px; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="eyebrow">MCP · Skills · Claude Code</div>
+      <h1>Agent Skills 会取代 MCP 吗？</h1>
+      <p class="subtitle">英文原题：Agent Skills or MCP in the era of Claude Code? 这支视频用不到 10 分钟，把 MCP 和 Skills 的重叠、分工和工程边界讲得很清楚。</p>
+      <div class="meta-row">
+        <span class="meta-badge">频道：Confluent Developer</span>
+        <span class="meta-badge">时长：9 分 56 秒</span>
+        <span class="meta-badge">播放量：217,748</span>
+        <span class="meta-badge">字幕：英文自动字幕</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/pvxNcQTcIy4" title="Agent Skills or MCP in the era of Claude Code?" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">01</span>问题引入：为什么大家突然拿 Skills 和 MCP 比？</h2>
+      <p>这个视频的切入点很实际：随着 Claude Code、Claude Desktop 和各种本地编码 Agent 把 <strong>Skills</strong> 推到台前，很多开发者开始问一个听起来很诱人的问题：如果一个 skill 目录里可以放 Markdown 指令、参考资料和脚本，那我是不是不需要再写 MCP server 了？</p>
+      <p>讲者的答案不是简单的“是”或“不是”。更准确地说，Skills 确实吃掉了一部分早期 MCP 使用场景，尤其是本地开发者工作台上的小型自动化；但 MCP 仍然负责另一类更硬的基础设施问题：标准化工具接口、实时资源访问、认证，以及让自研 Agent 微服务也能可靠调用外部系统。</p>
+      <blockquote>
+        <p>核心判断可以这样转述：Skills 和 MCP 有交叠，但它们的重心不同。Skills 更像把本地经验、脚本和静态知识打包给 Agent；MCP 更像把外部系统变成可发现、可调用、可治理的标准接口。</p>
+      </blockquote>
+      <p>如果你正在搭 Claude Code 工作流，这支视频特别值得看，因为它没有陷入“新东西替代旧东西”的兴奋叙事，而是在帮你决定：哪些能力应该沉淀成 skill，哪些能力应该继续放进 MCP。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">02</span>核心概念：先把 MCP 和 Skills 摆正</h2>
+      <h3>MCP：给 Agent 一个标准化的外部世界接口</h3>
+      <p>视频先复习 MCP 的基本设定：你有一个 Agent，它可能跑在开发者电脑上，也可能是云里的微服务。用户把 prompt 发给 Agent，Agent 再调用大模型判断下一步。问题在于，大模型默认不知道你的内部 wiki、客户工单、Google Docs、Kafka topic，也不能自己改变外部系统状态。</p>
+      <p>MCP server 就站在 Agent 和外部系统之间。它知道怎么访问这些资源，也知道怎么调用这些工具，并用标准接口把能力“广告”给 Agent。对 Agent 来说，这个接口是可插拔的；对系统团队来说，这是一层可以治理、授权、升级和复用的协议边界。</p>
+
+      <h3>Skills：把本地工作经验变成 Agent 可读的目录树</h3>
+      <p>Skills 的形态则轻得多。一个 skill 本质上是一个目录，里面通常有一个 <code>SKILL.md</code>，写着触发条件、操作步骤、注意事项和领域知识。目录下面还可以放脚本、模板、资源文件，供 Agent 在执行任务时读取或调用。</p>
+      <p>这让 Skills 很适合承载“流程知识”：比如怎么编辑 Excel、怎么生成某种报告、怎么用固定脚本跑一次检查、怎么在当前代码库里按团队习惯做代码审查。它像是把资深同事的操作手册和工具箱装进 Agent 的背包里。</p>
+
+      <h3>真正的分界：本地上下文 vs 外部系统边界</h3>
+      <p>视频最有价值的一点，是把两者的差别从“功能清单”拉回到“部署位置”和“数据新鲜度”。Skills 通常贴近本地文件系统，适合静态知识、操作流程、脚本包装和当前工作区里的任务。MCP 更常面对外部系统、实时数据、网络资源、鉴权流程和跨 Agent 的标准化接入。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">03</span>关键论点：Skills 没有杀死 MCP，只是改变了 MCP 的使用边界</h2>
+      <h3>论点一：MCP 的 resources 用得少，tools 反而成了主流</h3>
+      <p>讲者观察到，过去 9 到 12 个月里，MCP 生态一个明显变化是：很多人没有大量使用 resources API，而是把资源查询也包装成 tool call。比如查询工单、读文档、拿实时状态，都可以设计成一个带参数的方法调用。这个现象不是 MCP 失败，而是 API 设计在真实社区里自然收敛的结果。</p>
+      <p>这也解释了为什么 Skills 看起来能替代一部分 MCP：如果你只是调用一个本地 CLI、读一批固定文件、跑一个可预测脚本，那 skill 里的脚本入口确实可以完成工作，不一定要为了这件事起一个 MCP server。</p>
+
+      <h3>论点二：Streamable HTTP 和 OAuth 2.1 让 MCP 更像真实基础设施</h3>
+      <p>视频也提醒，MCP 本身并没有停在早期形态。相比早期依赖 server-sent events 的体验，streamable HTTP 对云端部署和网络基础设施更友好。OAuth 2.1 支持也让“用户在本地 Agent 前授权 GitHub、Google 或其他服务”这种体验更自然。</p>
+      <p>不过讲者也指出，OAuth 对本地 Agent 很顺手，但对无人值守的 Agent 微服务仍然有边界。一个云端长期运行的 agentic microservice 不一定适合弹出一个用户授权窗口，它需要另一套服务端身份、授权委托和密钥治理方案。</p>
+
+      <h3>论点三：本地 coding agent 场景里，Skills 的替代性最强</h3>
+      <p>如果你讨论的是 Claude Code 这类本地 coding agent，Skills 的确非常强。它可以访问当前工作目录，可以调用已经登录过的 CLI，可以读取项目里的配置和约定。此时一个 skill 脚本调用云厂商 CLI、GitHub CLI 或内部工具，体验上会很像调用一个 MCP tool。</p>
+      <blockquote class="decision-note">
+        <p>判断点很简单：如果能力强依赖本机环境、当前代码库、现成 CLI 登录态和团队操作流程，优先考虑 Skill；如果能力要给多个 Agent、多个环境或云端服务稳定复用，优先考虑 MCP。</p>
+      </blockquote>
+
+      <h3>论点四：自研 Agent 微服务仍然需要 MCP 这类标准接口</h3>
+      <p>视频后半段把视角从“我电脑上的 Claude Code”切到“我自己写的 Agent 微服务”。这时 Skills 的本地目录树优势就弱了：微服务要访问的是外部系统，要处理的是认证、实时数据、可观测性、错误边界和接口契约。对这种场景，MCP 提供的标准接口仍然有意义。</p>
+      <p>讲者还提到一个值得关注的趋势：未来 Skills 也可能通过 Python API 等方式进入自研 Agent 运行时。但至少在视频录制时，这种用法还不够普遍，不应该因此提前把 MCP 判死刑。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">04</span>决策矩阵：到底该用 Skill、MCP，还是两者一起用？</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>场景</th>
+            <th>优先方案</th>
+            <th>为什么</th>
+            <th>主要风险</th>
+            <th>工程建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Claude Code 本地代码审查、文档生成、测试流程</td>
+            <td>Skill</td>
+            <td>流程知识、模板、脚本和项目文件都在本地，Agent 可以直接读取并执行。</td>
+            <td>容易把临时脚本写成隐式依赖，换机器后复现困难。</td>
+            <td>把触发条件、依赖、输入输出和失败处理写进 <code>SKILL.md</code>。</td>
+          </tr>
+          <tr>
+            <td>调用已登录的 GitHub CLI、云厂商 CLI、内部命令行工具</td>
+            <td>Skill 或 Skill + CLI</td>
+            <td>本机已有认证态，脚本包装成本低，适合个人或小团队工作台。</td>
+            <td>权限边界不够显式，日志里可能泄露敏感参数。</td>
+            <td>限制脚本参数，避免输出 token，把 destructive 操作做成显式步骤。</td>
+          </tr>
+          <tr>
+            <td>多个 Agent 都要访问同一套工单、知识库、数据库或消息流</td>
+            <td>MCP</td>
+            <td>需要标准化能力发现、实时数据访问、鉴权和跨运行时复用。</td>
+            <td>server 维护成本更高，接口设计不好会让 tool 变得碎片化。</td>
+            <td>把常用查询设计成少量高质量 tools，并保留清晰错误语义。</td>
+          </tr>
+          <tr>
+            <td>云端无人值守 Agent 微服务，需要执行外部副作用</td>
+            <td>MCP 或专门服务 API</td>
+            <td>这类系统需要服务端认证、审计、重试、限流和可观测性。</td>
+            <td>本地 skill 脚本很难表达长期运行服务的权限和状态模型。</td>
+            <td>用 MCP 承接工具边界，用应用层处理策略、队列和恢复逻辑。</td>
+          </tr>
+          <tr>
+            <td>团队流程既有本地操作手册，又要访问远端系统</td>
+            <td>Skill + MCP</td>
+            <td>Skill 负责告诉 Agent “怎么做”，MCP 负责提供稳定的外部能力。</td>
+            <td>重复封装同一个能力，导致文档和接口漂移。</td>
+            <td>让 Skill 引导流程，让 MCP server 成为唯一外部数据/副作用入口。</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>这张表的背后，其实是一条很朴素的架构原则：不要因为某个机制“也能做到”就把它推到所有场景里。Skills 是低摩擦的本地知识和脚本分发方式；MCP 是面向工具生态和外部系统的协议边界。好的 Agent 系统往往会同时用到二者。</p>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">05</span>引用块：这支视频最值得带走的判断</h2>
+      <blockquote>
+        <p>Skills 不需要运行在云端，它们是 Agent 能看见的一组本地文件；MCP server 则更像一段基础设施，负责把真实系统里的工具和资源标准化暴露出来。</p>
+      </blockquote>
+      <blockquote>
+        <p>在本地 coding agent 场景里，Skill 调 CLI 的确会让人感觉像 MCP tool；但一旦转向自己写的云端 Agent 微服务，MCP 的接口和治理价值又会回来。</p>
+      </blockquote>
+      <blockquote>
+        <p>开发者不应该只学其中一个。这个领域变化很快，MCP 和 Skills 都是 2026 年 Agent 工程的基础词汇。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">06</span>时间戳目录：按视频脉络快速复看</h2>
+      <ul class="timeline">
+        <li><span class="timecode">00:00</span><span>提出争议：Skills 到处出现，是否意味着 MCP 的结束？</span></li>
+        <li><span class="timecode">00:35</span><span>快速复习 MCP：Agent、LLM、tools/resources 与 MCP server 的关系。</span></li>
+        <li><span class="timecode">01:35</span><span>生态观察：resources API 使用不多，很多资源访问被包装成 tool call。</span></li>
+        <li><span class="timecode">02:05</span><span>MCP 的新进展：streamable HTTP 更适合网络和云端部署。</span></li>
+        <li><span class="timecode">02:35</span><span>OAuth 2.1：本地 Agent 通过用户授权访问 GitHub 等服务的体验。</span></li>
+        <li><span class="timecode">03:45</span><span>转入 Skills：一个 skill 是 Markdown 指令加目录树，可包含资源和脚本。</span></li>
+        <li><span class="timecode">05:05</span><span>Skills 与 MCP 的资源差异：静态本地参考 vs 实时外部数据。</span></li>
+        <li><span class="timecode">06:10</span><span>脚本和 tools 的重叠：CLI 登录态让 skill 脚本看起来像 MCP tool。</span></li>
+        <li><span class="timecode">07:15</span><span>关键分界：本地 coding agent 可以用 Skills，但云端 Agent 微服务仍需要 MCP。</span></li>
+        <li><span class="timecode">08:35</span><span>未来趋势：Skills API 可能进入自研 Agent，但目前仍要同时理解 MCP 与 Skills。</span></li>
+      </ul>
+    </section>
+
+    <section class="content-card">
+      <h2 class="section-title"><span class="num">07</span>相关推荐：继续补齐 Agent 工程地图</h2>
+      <p>如果你看完这支视频，最自然的下一步不是再追一个新名词，而是把三个层次串起来：本地 Agent 工作台怎么组织流程，MCP 怎么接入真实工具，团队级 Agent 系统怎么做治理。</p>
+      <div class="related-grid">
+        <a class="related-card" href="index.html">
+          <strong>返回课程列表</strong>
+          <span>查看全部 YouTube 技术课程页。</span>
+        </a>
+        <a class="related-card" href="wBnnA8aIxUs.html">
+          <strong>用 MCP 把 AI Agent 接入真实工具</strong>
+          <span>Google Cloud Tech 的 ADK + MCP 入门案例。</span>
+        </a>
+        <a class="related-card" href="qYqIhX9hTQk.html">
+          <strong>Claude Code 初学者工作台配置</strong>
+          <span>从 MCP、Context7 到项目记忆的基础配置。</span>
+        </a>
+        <a class="related-card" href="uogzSxOw4LU.html">
+          <strong>Claude Code 专业工作流</strong>
+          <span>把 MCP、Skills、子智能体和持久记忆放进一套工作流。</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    基于视频字幕整理 · 页面遵循 dark ghost-button 课程主题 · <a href="https://www.youtube.com/watch?v=pvxNcQTcIy4">观看原视频</a>
+  </footer>
+</body>
+</html>
