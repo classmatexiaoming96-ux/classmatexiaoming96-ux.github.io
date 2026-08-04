@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用 Claude Code 构建第一个 AI Agent — Teacher's Tech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a2a2b8;
+      --text-muted: #62627a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 58px 58px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .video-shell, .content-card, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 26px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99, 179, 237, 0.08); transform: translateX(-2px); }
+    .page-title {
+      font-size: clamp(1.8rem, 4vw, 2.65rem);
+      font-weight: 700;
+      line-height: 1.22;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 20px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+    .video-shell {
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 28px;
+      background: #000;
+      box-shadow: 0 20px 45px rgba(0,0,0,.32);
+    }
+    .video-shell iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; display: block; border: 0; }
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: clamp(24px, 4vw, 36px);
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .content-card::before {
+      content: '';
+      display: block;
+      height: 2px;
+      margin: calc(clamp(24px, 4vw, 36px) * -1) calc(clamp(24px, 4vw, 36px) * -1) 28px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    }
+    .section { margin: 36px 0; }
+    .section-title {
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    h3 { color: var(--text-primary); font-size: 1.02rem; margin: 24px 0 10px; }
+    ul, ol { padding-left: 22px; margin: 12px 0 18px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      display: block;
+      overflow-x: auto;
+    }
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+      min-width: 150px;
+    }
+    th { color: var(--text-primary); background: rgba(99, 179, 237, 0.08); text-align: left; }
+    td { color: var(--text-secondary); }
+    tr:last-child td { border-bottom: 0; }
+    .timestamp-list { list-style: none; padding-left: 0; }
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .timestamp-list span { color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; font-size: .86rem; }
+    .recommendations a, footer a { color: var(--accent-cyan); text-decoration: none; border-bottom: 1px dotted rgba(99,179,237,.35); }
+    .recommendations a:hover, footer a:hover { color: var(--accent-blue); }
+    footer { color: var(--text-muted); font-size: .85rem; padding: 24px 0; }
+    @media (max-width: 640px) {
+      body { padding: 0 16px 42px; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 返回课程列表</a>
+    <h1 class="page-title">用 Claude Code 构建第一个 AI Agent</h1>
+    <p class="subtitle">Claude Code: Build Your First AI Agent</p>
+    <div class="page-meta">
+      <span class="meta-badge source">Teacher's Tech</span>
+      <span class="meta-badge time">25:37</span>
+      <span class="meta-badge">363,282 views</span>
+      <span class="meta-badge">Claude Code · Plan Mode · CLAUDE.md</span>
+    </div>
+  </header>
+
+  <div class="video-shell">
+    <iframe src="https://www.youtube.com/embed/gHB4JFG9i3k" title="Claude Code: Build Your First AI Agent" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+
+  <article class="content-card">
+    <section class="section">
+      <h2 class="section-title"><span class="num">01</span>问题引入 / 背景</h2>
+      <p>这个视频不是在演示“让 AI 写一个小应用”这么简单。讲者先把上一集的 bookmark dashboard 作为对照：那一次，用户给 Claude Code 明确需求，Claude Code 负责实现；这一次，目标是让 Claude Code 从一句任务描述里自己拆步骤、提问题、查资料、整理证据并产出报告。换句话说，重点从“代码生成”转向“工作流自治”。</p>
+      <p>这类教程的价值在于它把 agentic workflow 拆成普通人能操作的几个抓手：VS Code 里的 Claude Code 面板、项目根目录的 <strong>CLAUDE.md</strong>、先计划再执行的 Plan Mode，以及用可复用工作流文件沉淀任务规则。对于刚开始用 coding agent 的人，真正的难点往往不是模型会不会写代码，而是怎样把目标、约束、验收标准和迭代方式说清楚。</p>
+      <blockquote>核心判断可以转述为：不要把 agent 当成更长的聊天窗口；要把它当成会读项目上下文、会维护文件、会按计划推进的工作系统。</blockquote>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">02</span>核心概念解释</h2>
+      <h3>从 chat、build 到 agentic</h3>
+      <p>视频用三层模型解释 AI 使用方式。第一层是 chat：问一句、答一句，适合解释概念或临时查询。第二层是 build：用户明确告诉 AI 要做什么，AI 负责写代码、改文件、生成页面。第三层才是 agentic：用户描述目标，AI 先制定计划，再选择工具、提出澄清问题，并在执行过程中处理偏差。</p>
+      <p>这个区分很关键。很多人以为“我让 AI 连续做十步”就是 agent，其实那仍然可能是用户在手动驱动流程。更接近 agentic 的模式是：你定义成功标准和边界，系统自己拆解“澄清问题、研究、综合、输出、修订”这些阶段，并在执行前把计划亮出来让你审查。</p>
+
+      <h3>CLAUDE.md 是项目级 onboarding</h3>
+      <p>讲者强调的 <strong>CLAUDE.md</strong> 可以理解为给 Agent 的入职文档。它不负责某一次提示词，而负责长期上下文：项目是什么、目标用户是谁、文件命名习惯是什么、输出格式怎么定、什么时候要先问问题。Claude Code 启动时会读这个文件，所以它比临时聊天里的补充说明更稳定。</p>
+      <p>在教程示例里，CLAUDE.md 被用来写清“你是研究助手”“在研究前询问范围、受众和我最关心的问题”“输出要有结构化报告和来源”。这让后续每次研究任务不必重新解释底层规范，用户只需要给一个主题，就能触发一套相对固定的工作方式。</p>
+
+      <h3>Plan Mode 是执行前的制动器</h3>
+      <p>Plan Mode 的作用不是让模型更慢，而是让它先把行动路径暴露出来。讲者在 VS Code 里切到计划模式后，只描述“我想给你一个主题，你研究、组织并输出报告”，Claude Code 立刻拆出澄清、研究、综合、写作、保存等阶段。用户可以接受、继续规划或补充约束。</p>
+      <p>这一步对初学者尤其重要。没有计划模式时，Agent 可能过早改文件、产出一堆不符合目标的内容；有了计划模式，用户可以先审查任务边界，补充“结尾要有行动建议”这样的要求，再允许它真正落地文件。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">03</span>关键论点 / 实操步骤</h2>
+      <h3>第一步：在 VS Code 里建立可观察的工作区</h3>
+      <p>讲者选择在 VS Code 中完成教程，而不是只在终端里操作。原因很实际：文件浏览器能实时看到 Agent 创建了什么，Claude Code 面板能显示计划和执行过程，Markdown 文件可以直接预览。对于第一次构建 agent workflow 的人，可观察性比炫技更重要。</p>
+      <p>示例项目文件夹叫做 “my first agent”。它一开始几乎是空的，只先放入 CLAUDE.md。这个设计故意降低复杂度：先让学习者理解 Agent 如何根据项目说明组织工作，而不是被已有代码库、框架或部署问题干扰。</p>
+
+      <h3>第二步：先写规则，再写任务</h3>
+      <p>视频里最值得记住的顺序是：不要一上来就说“研究某个主题”。先写项目规则，让 Claude Code 知道自己是什么角色、应该怎样问问题、最终应该产出什么格式。讲者把 CLAUDE.md 比作新员工入职资料，这个比喻很准确，因为 Agent 的稳定性很大程度来自上下文制度，而不是单次提示词灵感。</p>
+      <p>一个可执行的 CLAUDE.md 至少要覆盖四件事：角色定位、工作步骤、输出格式和质量要求。比如“研究前先问清范围和受众”“报告要有 executive summary、background、key findings、sources”“结尾要给下一步行动建议”。这些规则越明确，Agent 越不容易生成泛泛而谈的内容。</p>
+
+      <h3>第三步：用目标描述触发计划</h3>
+      <p>在示例中，用户并没有列一套机械步骤，而是描述目标：“给一个主题，你要深入研究、组织发现并输出结构化报告；开始前问清范围、受众和特别想知道的问题。”Claude Code 的价值就在这里体现：它能把目标拆成阶段，还会主动提出质量检查。</p>
+      <p>这里的关键不是“提示词写得很长”，而是把任务中的决策权和检查点放对位置。用户保留目标和验收标准，Agent 负责路径设计；用户再审查计划，决定是否执行。这样既有自动化，也有控制力。</p>
+
+      <h3>第四步：接受计划后观察文件级产出</h3>
+      <p>当用户接受计划后，Agent 会创建研究报告 Markdown 文件。视频中讲者强调要看左侧文件浏览器，因为 Agent 创建、修改和保存的文件都会直接出现在项目中。这个细节让新手理解：Claude Code 不是只返回一段聊天内容，而是在工作区里形成可继续编辑的真实产物。</p>
+      <p>生成的报告包含主题、时间范围、受众、执行摘要、背景、关键发现和来源。随后，讲者又要求把执行摘要缩成三条，并增加一个“前五个 AI agent 工具”的对比表。Agent 没有从头重写，而是在已有报告里定位相关段落并做定向修改，这就是项目上下文带来的复利。</p>
+
+      <h3>第五步：把一次成功变成可复用 workflow</h3>
+      <p>视频后半段的隐含目标是把“研究报告”变成可重复执行的工作方式。一次 prompt 成功不等于 workflow 成功；只有当规则能放进 CLAUDE.md，输出结构能稳定复现，后续修改能基于已有文件迭代，才算真的进入 agentic 工作流。</p>
+      <p>讲者也提醒不要沉迷插件。内置文件读写、计划、提问和 Markdown 输出已经足够完成一个可靠的研究 Agent。额外工具应当服务于清晰流程，而不是替代流程设计。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">04</span>对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工作模式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>普通聊天</td>
+            <td>概念解释、临时问答、快速改写</td>
+            <td>启动成本最低，不需要项目文件</td>
+            <td>缺少持久上下文，难以积累工作成果</td>
+            <td>用于探索问题，不要用来承载复杂交付</td>
+          </tr>
+          <tr>
+            <td>指令式构建</td>
+            <td>明确知道要做什么页面、脚本或功能</td>
+            <td>产出快，用户控制细节强</td>
+            <td>用户仍要拆解所有步骤，容易变成微操</td>
+            <td>适合一次性开发任务，复杂任务要加计划审查</td>
+          </tr>
+          <tr>
+            <td>Agentic Workflow</td>
+            <td>研究、分析、内容生产、需要多阶段判断的任务</td>
+            <td>能主动拆步骤、问问题、使用工具、迭代文件</td>
+            <td>目标不清时会扩大范围，可能产出看似完整但不聚焦的报告</td>
+            <td>先写 CLAUDE.md，再用 Plan Mode 审查路径</td>
+          </tr>
+          <tr>
+            <td>插件优先</td>
+            <td>需要外部系统权限或专业数据源时</td>
+            <td>能扩展 Agent 可用工具和数据边界</td>
+            <td>流程没设计好时，工具越多越容易失控</td>
+            <td>先证明工作流可跑，再逐步接入工具</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">05</span>引用块 / 核心判断</h2>
+      <blockquote>“先计划，再执行”是本视频的主线。Plan Mode 让 Agent 在改文件前先交出路线图，用户可以在成本最低的时候纠偏。</blockquote>
+      <blockquote>CLAUDE.md 的价值不在于神秘语法，而在于把团队规则、输出格式和常见偏好写成项目级常识，让每次会话都从同一套上下文出发。</blockquote>
+      <p>如果只看一个实践建议，就是把每个 Agent 任务拆成三份材料：项目说明、当前目标、验收标准。项目说明放进 CLAUDE.md，当前目标放进 prompt，验收标准在计划阶段确认。这样做比不断追加“再帮我改一下”更稳。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">06</span>时间戳目录</h2>
+      <ul class="timestamp-list">
+        <li><span>00:00</span><div>回顾上一集从自然语言生成 bookmark dashboard，本集目标升级为构建会拆任务的 AI Agent。</div></li>
+        <li><span>01:15</span><div>解释 chat、build、agentic 三层差异：从问答，到按指令构建，再到目标驱动工作流。</div></li>
+        <li><span>03:10</span><div>介绍最终示例：输入一个研究主题，Agent 会先问澄清问题，再研究、组织和写报告。</div></li>
+        <li><span>05:00</span><div>切换到 VS Code 环境，说明文件浏览器、Claude Code 面板和实时文件变化为什么重要。</div></li>
+        <li><span>07:05</span><div>创建项目文件夹，准备一个干净工作区，避免第一次练习被复杂工程环境干扰。</div></li>
+        <li><span>09:15</span><div>创建 CLAUDE.md，把角色、工作方式、输出结构和质量标准写进项目上下文。</div></li>
+        <li><span>12:30</span><div>说明内置工具与插件的关系：先写清 workflow，基础工具也能完成高质量任务。</div></li>
+        <li><span>14:10</span><div>进入 Plan Mode，输入研究报告目标，让 Claude Code 先生成分阶段计划。</div></li>
+        <li><span>16:20</span><div>审查计划并追加约束，例如报告末尾要加入行动建议，再允许 Agent 执行。</div></li>
+        <li><span>18:50</span><div>查看生成的 Markdown 报告，确认主题、范围、受众、摘要、背景、发现和来源都被结构化保存。</div></li>
+        <li><span>21:10</span><div>演示迭代：把执行摘要压缩成三条，再新增 AI agent 工具对比表。</div></li>
+        <li><span>23:00</span><div>总结五个常见错误：跳过 CLAUDE.md、提示太泛、不用计划模式、不迭代、过早依赖插件。</div></li>
+      </ul>
+    </section>
+
+    <section class="section recommendations">
+      <h2 class="section-title"><span class="num">07</span>相关推荐</h2>
+      <p>如果你想继续沿着 Claude Code 和 Agent 工作流学习，可以回到 <a href="index.html">课程列表</a>，优先看 <a href="uogzSxOw4LU.html">Claude Code 专业工作流：MCP、Skills、子智能体与持久记忆</a>、<a href="qYqIhX9hTQk.html">Claude Code 初学者工作台配置</a>，以及 <a href="bcM9dP_uXJU.html">不用写代码，在 Claude 里搭一个真正会跑流程的 AI Agent</a>。这三篇分别补足高级工具治理、基础配置和 no-code 工作流抽象。</p>
+      <p>对工程师来说，本视频最值得落地的是一个非常朴素的习惯：每个新项目先写一份 CLAUDE.md，每个高风险任务先让 Agent 交计划，每个完成结果都要求它基于现有文件定向修改。做到这三点，Claude Code 才会从“会生成代码的聊天窗口”变成“能被审查、能复用、能迭代的工作伙伴”。</p>
+    </section>
+  </article>
+
+  <footer>
+    字幕证据来自 YouTube 自动英文字幕 · 页面生成于 2026-08-04 · <a href="https://www.youtube.com/watch?v=gHB4JFG9i3k">观看原视频</a>
+  </footer>
+</body>
+</html>
