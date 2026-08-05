@@ -1,7 +1,1008 @@
 {
   "version": 1,
-  "generated_at": "2026-08-04T10:46",
+  "generated_at": "2026-08-05T10:48",
   "digests": [
+    {
+      "date": "2026-08-05",
+      "weekday": "星期三",
+      "edition": 71,
+      "title": "模型路由、Agent 运维与 AI 工程审查成为今日焦点",
+      "intro": "今天的主线是 AI 工具链继续向可审查、可路由、可观测靠拢：云厂商补齐模型路由和 Agent 运维，社区则集中讨论 LLM 生成内容、投资泡沫和代码质量债。",
+      "counts": {
+        "headlines": 6,
+        "papers": 4,
+        "community": 5,
+        "products": 5,
+        "repos": 5
+      },
+      "highlights": [
+        {
+          "event_key": "google-cloud-api-gateway-unified-ai-model-routing-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Google Cloud API Gateway 推出统一模型路由预览",
+          "summary": "Google Cloud API Gateway 新增模型路由能力，允许开发者在 OpenAPI 规范中把虚拟模型名映射到 Gemini、Claude 与 OpenAI 兼容后端，减少硬编码端点和自建代理。它把多模型切换下沉到网关层，对企业治理、灰度和成本控制更有价值。",
+          "url": "https://developers.googleblog.com/a-unified-api-for-ai-model-routing",
+          "source": "Google Developers Blog",
+          "time": "昨日",
+          "topics": [
+            "模型路由",
+            "云服务",
+            "开发者工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-stacked-pr-ai-generated-code-review-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "GitHub 用堆叠式 PR 拆解 AI 生成的巨型 diff",
+          "summary": "GitHub 工程博客给出一套把 1000+ 行 AI 生成改动拆成 L1-L4 分层 PR 的做法，让数据、API、接线和 UI 可分别审查。重点不在工具名，而是把 Agent 产出的“大块代码”重新变成可分配、可回滚的工程单元。",
+          "url": "https://github.blog/engineering/turn-one-giant-ai-generated-pull-request-to-a-reviewable-stack",
+          "source": "GitHub Blog",
+          "time": "昨日",
+          "topics": [
+            "AI 编程",
+            "代码审查",
+            "工程流程"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "cloudflare-local-tracing-workers-agent-debugging-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Cloudflare 为本地 Workers 调试自动捕获追踪",
+          "summary": "Cloudflare 在 wrangler dev 与 vite dev 中自动采集 OpenTelemetry 追踪，并让智能体可通过 Local Explorer API 查询 spans、错误和日志。相比昨天的虚拟文件系统消息，这次新增的是本地调试闭环：Agent 能基于追踪数据定位失败并验证修复。",
+          "url": "https://blog.cloudflare.com/local-tracing",
+          "source": "Cloudflare Blog",
+          "time": "昨日",
+          "topics": [
+            "Agent 可观测性",
+            "Cloudflare",
+            "调试"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        }
+      ],
+      "items": [
+        {
+          "event_key": "google-cloud-api-gateway-unified-ai-model-routing-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Google Cloud API Gateway 推出统一模型路由预览",
+          "summary": "Google Cloud API Gateway 新增模型路由能力，允许开发者在 OpenAPI 规范中把虚拟模型名映射到 Gemini、Claude 与 OpenAI 兼容后端，减少硬编码端点和自建代理。它把多模型切换下沉到网关层，对企业治理、灰度和成本控制更有价值。",
+          "url": "https://developers.googleblog.com/a-unified-api-for-ai-model-routing",
+          "source": "Google Developers Blog",
+          "time": "昨日",
+          "topics": [
+            "模型路由",
+            "云服务",
+            "开发者工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-stacked-pr-ai-generated-code-review-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "GitHub 用堆叠式 PR 拆解 AI 生成的巨型 diff",
+          "summary": "GitHub 工程博客给出一套把 1000+ 行 AI 生成改动拆成 L1-L4 分层 PR 的做法，让数据、API、接线和 UI 可分别审查。重点不在工具名，而是把 Agent 产出的“大块代码”重新变成可分配、可回滚的工程单元。",
+          "url": "https://github.blog/engineering/turn-one-giant-ai-generated-pull-request-to-a-reviewable-stack",
+          "source": "GitHub Blog",
+          "time": "昨日",
+          "topics": [
+            "AI 编程",
+            "代码审查",
+            "工程流程"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "cloudflare-local-tracing-workers-agent-debugging-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Cloudflare 为本地 Workers 调试自动捕获追踪",
+          "summary": "Cloudflare 在 wrangler dev 与 vite dev 中自动采集 OpenTelemetry 追踪，并让智能体可通过 Local Explorer API 查询 spans、错误和日志。相比昨天的虚拟文件系统消息，这次新增的是本地调试闭环：Agent 能基于追踪数据定位失败并验证修复。",
+          "url": "https://blog.cloudflare.com/local-tracing",
+          "source": "Cloudflare Blog",
+          "time": "昨日",
+          "topics": [
+            "Agent 可观测性",
+            "Cloudflare",
+            "调试"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "google-cloud-database-operations-agents-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Google Cloud 推出 Database Operations Agents",
+          "summary": "Google Cloud 在 Agentic Data Cloud 中发布 Database Onboarding Agent 与 Database Observability Agent，覆盖数据库部署、监控、故障排查和维护。数据库运维正在从“AI 辅助查询”进入更接近 Day 0/Day 2 自动化的阶段。",
+          "url": "https://cloud.google.com/blog/products/databases/deep-dive-on-new-ai-powered-database-agents",
+          "source": "Google Cloud Blog",
+          "time": "昨日",
+          "topics": [
+            "数据库",
+            "Agent",
+            "云服务"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "nvidia-cufile-api-open-source-gpu-direct-storage-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "NVIDIA 开源 cuFile API，推动 GPU 直连存储",
+          "summary": "NVIDIA 宣布开源 cuFile API 及底层存储软件栈，让 GPU 可直接读写存储并把访问延迟压到微秒级。对大模型训练、推理缓存和多模态数据管线来说，存储路径正在成为新的性能战场。",
+          "url": "https://blogs.nvidia.com/blog/ai-storage-fms",
+          "source": "NVIDIA Blog",
+          "time": "昨日",
+          "topics": [
+            "AI 基础设施",
+            "GPU",
+            "存储"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "amazon-bedrock-web-search-grounding-2026-08-04",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Amazon Bedrock 上线 Web Search grounding",
+          "summary": "AWS 为 Bedrock foundation model grounding 增加 Web Search 能力，让模型回答可接入更实时的网页证据。它补齐的是企业 RAG 中常见的“内部知识 + 外部新信息”缺口，但仍需要评估来源质量和引用可追踪性。",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-web-search-on-amazon-bedrock-for-foundation-model-grounding",
+          "source": "Amazon Web Services",
+          "time": "昨日",
+          "topics": [
+            "RAG",
+            "云服务",
+            "模型落地"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-03745-faithfulness-safety-tension",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Risky Business: Measuring The Faithfulness-Safety Tension",
+          "summary": "这篇把 CoT 可监控性和安全拒答之间的张力具体化：模型若过度忠实于不安全推理链会出问题，但若推理链不忠实又难以审计。HazMart 与 Targeted Reasoning Replacement 给安全评测提供了更可操作的干预方法。",
+          "url": "https://arxiv.org/abs/2608.03745v1",
+          "source": "arXiv",
+          "time": "2026-08-04T14:38:06Z",
+          "topics": [
+            "cs.AI",
+            "cs.CL"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-03735-multilingual-multi-agent-planning-failures",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "An Actionable Diagnosis of Multilingual, Multi-Agent Planning Failures",
+          "summary": "多语言 Agent 失败往往被笼统归因于模型能力不足，这篇把失败拆到 planner 的 grounding 层，并提出 TART 表示来显式传递任务关键信息。做跨语言客服、办公或企业自动化的团队值得读。",
+          "url": "https://arxiv.org/abs/2608.03735v1",
+          "source": "arXiv",
+          "time": "2026-08-04T14:29:14Z",
+          "topics": [
+            "cs.MA",
+            "cs.CL"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-03700-persona-skills-privacy-impersonation",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "When Agents Learn to Be You: Benchmarking Privacy Leakage, Impersonation Risk, and Defenses in Persona Skills",
+          "summary": "Persona skill 会把个人历史压缩成可复用能力，这比普通 RAG 记忆更容易放大隐私泄露和冒充风险。AntiSkillBench 把 skill 蒸馏、属性披露、行为冒充和防御放进同一条流水线，适合所有在做个人化 Agent 的团队建立红线。",
+          "url": "https://arxiv.org/abs/2608.03700v1",
+          "source": "arXiv",
+          "time": "2026-08-04T14:04:56Z",
+          "topics": [
+            "cs.CR",
+            "cs.CL"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-03769-mdlmpe-masked-diffusion-lm-position",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "MDLMPE: Distribution Aware Positional Encoding for Masked Diffusion Language Models",
+          "summary": "Masked diffusion LM 的上下文不是自回归模型的连续前缀，这篇专门为动态 revealed/masked token 分布设计位置编码。它提醒工程师：把 AR 模型的 RoPE 经验直接搬到扩散语言模型上可能低估结构差异。",
+          "url": "https://arxiv.org/abs/2608.03769v1",
+          "source": "arXiv",
+          "time": "2026-08-04T14:54:14Z",
+          "topics": [
+            "cs.CL",
+            "cs.AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-ai-generated-images-discourage-blog-reading-2026-08-05",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "AI 生成配图让读者更不想读博客",
+          "summary": "HN 热帖讨论 AI 配图为何削弱文章可信度：读者会把廉价、泛化、无信息量的图片当作作者没有投入判断力的信号。",
+          "url": "https://nelson.cloud/ai-generated-images-discourage-me-from-reading-your-blog/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "内容质量",
+            "AI 生成内容"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 738,
+          "comments": 436,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-ai-cybercrime-africa-interpol-2026-08-05",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Interpol 报告称 AI 推动非洲网络诈骗激增",
+          "summary": "讨论焦点不是“AI 是否被用于犯罪”这个旧问题，而是合成内容、语音、自动化社工如何降低跨境诈骗门槛，并让执法协作更难。",
+          "url": "https://www.africanews.com/2026/08/04/ai-fuels-more-than-half-of-cybercrime-in-africa-as-digital-scams-surge-interpol/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 安全",
+            "网络犯罪"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 147,
+          "comments": 104,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-ai-debt-binge-hidden-borrowing-2026-08-05",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "AI 债务扩张与隐藏融资引发热议",
+          "summary": "Fortune 文章引出 HN 对 hyperscaler capex、债券融资和 AI 需求可持续性的讨论。技术乐观和财务约束正在同一张算力账单上相遇。",
+          "url": "https://fortune.com/2026/07/31/ai-debt-hypescalers-capex-capital-spending-hidden-borrowing-bond-issuance/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 资本开支",
+            "产业经济"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 143,
+          "comments": 174,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-ai-demand-bubble-2026-08-05",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "The AI Demand Bubble 再次把需求质量摆上台面",
+          "summary": "社区围绕 AI 收入、推理成本和用户留存争论：高使用量不自动等于高利润，企业采购也不等于可长期复购。",
+          "url": "https://www.wheresyoured.at/the-ai-demand-bubble/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 产业",
+            "需求判断"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 104,
+          "comments": 122,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-largest-software-project-ai-can-complete-2026-08-05",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "AI 能独立完成多大的软件项目？",
+          "summary": "Epoch AI 的 MirrorCode 引发讨论：评测不能只看小任务通过率，还要看需求拆解、跨文件一致性、长期上下文和人工接管点。",
+          "url": "https://epoch.ai/MirrorCode",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "AI 编程",
+            "评测"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 101,
+          "comments": 105,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "simon-willison-llm-032-release-responses-tools-2026-08-04",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "LLM 0.32",
+          "summary": "Simon Willison 的 LLM CLI 更新到 0.32，新增推理轨迹展示、OpenAI Responses API、服务端工具和更清晰日志。它适合把多模型实验从临时脚本收束成可复现命令行工作流。",
+          "url": "https://simonwillison.net/2026/Aug/4/new-release-of-llm",
+          "source": "Simon Willison 博客",
+          "time": "",
+          "topics": [
+            "开发者工具",
+            "LLM CLI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "openrouter-ori-cli-harness-config-2026-08-04",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "OpenRouter ori CLI",
+          "summary": "ori CLI 把模型路由、环境变量和 harness 适配打包成登录后的初始化流程。它解决的是多工具用户最常见的配置漂移问题，而不是再做一个聊天客户端。",
+          "url": "https://openrouter.ai/blog/announcements/ori-harness",
+          "source": "OpenRouter Announcements",
+          "time": "",
+          "topics": [
+            "模型路由",
+            "编码 Agent"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "soup-0724-finetune-8b-4gb-gpu-2026-08-04",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Soup v0.72.4",
+          "summary": "Soup 用 layer streaming 与 YAML 配置降低本地微调门槛，让 4 GB 显存机器也能做 8B QLoRA 实验。它更适合教学和小样本探索，不应被误读成生产级大规模训练方案。",
+          "url": "https://github.com/MakazhanAlpamys/Soup",
+          "source": "Show HN / GitHub",
+          "time": "",
+          "topics": [
+            "模型微调",
+            "本地 AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "nvidia-skillspector-ai-skill-security-audit-pipeline-2026-08-04",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "NVIDIA SkillSpector 安全审计流水线",
+          "summary": "这套教程把 Skill 市场安全问题工程化：生成风险样本、用规则和图工作流检查、输出 SARIF，再接入 CI policy gate。对正在引入 Agent Skill 的团队，它比单次人工 review 更可持续。",
+          "url": "https://www.marktechpost.com/2026/08/04/building-an-advanced-ai-skill-security-auditing-pipeline-with-nvidia-skillspector-langgraph-yara-rules-sarif-and-ci-policy-gates",
+          "source": "MarkTechPost",
+          "time": "",
+          "topics": [
+            "Skill 安全",
+            "CI",
+            "Agent 治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "microcodex-cpp-lightweight-coding-agent-2026-08-05",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "MicroCodex",
+          "summary": "MicroCodex 把 OpenAI/Codex 风格编码 Agent 重新实现为 C++ 小二进制，适合作为研究 agent loop、命令执行和最小依赖分发的样本。当前项目仍早期，重点是实现路径而不是完整替代成熟工具。",
+          "url": "https://github.com/paoloanzn/microcodex",
+          "source": "Show HN / GitHub",
+          "time": "",
+          "topics": [
+            "编码 Agent",
+            "轻量运行时"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-uber-adr-agent-security-2026-08-05",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "uber/ADR",
+          "summary": "Uber 用于企业 AI Agent 的观测、安全基准和威胁检测框架，重点在部署后的行为风险识别。",
+          "url": "https://github.com/uber/ADR",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent 安全",
+            "可观测性"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "712",
+          "stars_today": "148"
+        },
+        {
+          "event_key": "github-browser-use-video-use-2026-08-05",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "browser-use/video-use",
+          "summary": "面向 coding agent 的视频编辑项目，把视频处理任务暴露为可自动化的开发工作流。",
+          "url": "https://github.com/browser-use/video-use",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "视频 Agent",
+            "多模态"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "19,385",
+          "stars_today": "320"
+        },
+        {
+          "event_key": "github-everyinc-compound-engineering-plugin-2026-08-05",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "EveryInc/compound-engineering-plugin",
+          "summary": "面向 Claude Code、Codex、Cursor 等工具的 Compound Engineering 插件，把工程方法论封装成可复用插件。",
+          "url": "https://github.com/EveryInc/compound-engineering-plugin",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Claude Code",
+            "Codex",
+            "工程流程"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "23,895",
+          "stars_today": "40"
+        },
+        {
+          "event_key": "github-obra-superpowers-agentic-skills-2026-08-05",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "obra/superpowers",
+          "summary": "Agentic skills framework 与软件开发方法论项目，围绕可复用 skill、工程流程和团队协作约束组织。",
+          "url": "https://github.com/obra/superpowers",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent 方法论",
+            "Skills"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "266,553",
+          "stars_today": "653"
+        },
+        {
+          "event_key": "github-chiaro-hq-methodology-ai-soc2-2026-08-05",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "Chiaro-HQ/methodology",
+          "summary": "把 SOC 2 readiness 与审计判断公开成结构化方法论，适合做 AI 合规 Agent 的知识底座。",
+          "url": "https://github.com/Chiaro-HQ/methodology",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "合规",
+            "AI 审计"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "49",
+          "stars_today": "32 HN points"
+        }
+      ],
+      "topics": [
+        {
+          "name": "cs.CL",
+          "count": 4
+        },
+        {
+          "name": "云服务",
+          "count": 3
+        },
+        {
+          "name": "模型路由",
+          "count": 2
+        },
+        {
+          "name": "开发者工具",
+          "count": 2
+        },
+        {
+          "name": "AI 编程",
+          "count": 2
+        },
+        {
+          "name": "工程流程",
+          "count": 2
+        },
+        {
+          "name": "cs.AI",
+          "count": 2
+        },
+        {
+          "name": "编码 Agent",
+          "count": 2
+        },
+        {
+          "name": "代码审查",
+          "count": 1
+        },
+        {
+          "name": "Agent 可观测性",
+          "count": 1
+        },
+        {
+          "name": "Cloudflare",
+          "count": 1
+        },
+        {
+          "name": "调试",
+          "count": 1
+        },
+        {
+          "name": "数据库",
+          "count": 1
+        },
+        {
+          "name": "Agent",
+          "count": 1
+        },
+        {
+          "name": "AI 基础设施",
+          "count": 1
+        },
+        {
+          "name": "GPU",
+          "count": 1
+        },
+        {
+          "name": "存储",
+          "count": 1
+        },
+        {
+          "name": "RAG",
+          "count": 1
+        },
+        {
+          "name": "模型落地",
+          "count": 1
+        },
+        {
+          "name": "cs.MA",
+          "count": 1
+        },
+        {
+          "name": "cs.CR",
+          "count": 1
+        },
+        {
+          "name": "内容质量",
+          "count": 1
+        },
+        {
+          "name": "AI 生成内容",
+          "count": 1
+        },
+        {
+          "name": "AI 安全",
+          "count": 1
+        },
+        {
+          "name": "网络犯罪",
+          "count": 1
+        },
+        {
+          "name": "AI 资本开支",
+          "count": 1
+        },
+        {
+          "name": "产业经济",
+          "count": 1
+        },
+        {
+          "name": "AI 产业",
+          "count": 1
+        },
+        {
+          "name": "需求判断",
+          "count": 1
+        },
+        {
+          "name": "评测",
+          "count": 1
+        },
+        {
+          "name": "LLM CLI",
+          "count": 1
+        },
+        {
+          "name": "模型微调",
+          "count": 1
+        },
+        {
+          "name": "本地 AI",
+          "count": 1
+        },
+        {
+          "name": "Skill 安全",
+          "count": 1
+        },
+        {
+          "name": "CI",
+          "count": 1
+        },
+        {
+          "name": "Agent 治理",
+          "count": 1
+        },
+        {
+          "name": "轻量运行时",
+          "count": 1
+        },
+        {
+          "name": "Agent 安全",
+          "count": 1
+        },
+        {
+          "name": "可观测性",
+          "count": 1
+        },
+        {
+          "name": "视频 Agent",
+          "count": 1
+        },
+        {
+          "name": "多模态",
+          "count": 1
+        },
+        {
+          "name": "Claude Code",
+          "count": 1
+        },
+        {
+          "name": "Codex",
+          "count": 1
+        },
+        {
+          "name": "Agent 方法论",
+          "count": 1
+        },
+        {
+          "name": "Skills",
+          "count": 1
+        },
+        {
+          "name": "合规",
+          "count": 1
+        },
+        {
+          "name": "AI 审计",
+          "count": 1
+        }
+      ],
+      "sources": [
+        {
+          "name": "Hacker News",
+          "count": 5
+        },
+        {
+          "name": "GitHub",
+          "count": 5
+        },
+        {
+          "name": "arXiv",
+          "count": 4
+        },
+        {
+          "name": "Show HN / GitHub",
+          "count": 2
+        },
+        {
+          "name": "Google Developers Blog",
+          "count": 1
+        },
+        {
+          "name": "GitHub Blog",
+          "count": 1
+        },
+        {
+          "name": "Cloudflare Blog",
+          "count": 1
+        },
+        {
+          "name": "Google Cloud Blog",
+          "count": 1
+        },
+        {
+          "name": "NVIDIA Blog",
+          "count": 1
+        },
+        {
+          "name": "Amazon Web Services",
+          "count": 1
+        },
+        {
+          "name": "Simon Willison 博客",
+          "count": 1
+        },
+        {
+          "name": "OpenRouter Announcements",
+          "count": 1
+        },
+        {
+          "name": "MarkTechPost",
+          "count": 1
+        }
+      ]
+    },
     {
       "date": "2026-08-04",
       "weekday": "星期二",
@@ -15013,8 +16014,9 @@
   "topics": [
     {
       "name": "cs.AI",
-      "count": 17,
+      "count": 19,
       "dates": [
+        "2026-08-05",
         "2026-08-03",
         "2026-07-28",
         "2026-07-27",
@@ -15023,10 +16025,28 @@
       "sections": [
         {
           "name": "AI 论文",
-          "count": 17
+          "count": 19
         }
       ],
       "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Risky Business: Measuring The Faithfulness-Safety Tension",
+          "summary": "这篇把 CoT 可监控性和安全拒答之间的张力具体化：模型若过度忠实于不安全推理链会出问题，但若推理链不忠实又难以审计。HazMart 与 Targeted Reasoning Replacement 给安全评测提供了更可操作的干预方法。",
+          "url": "https://arxiv.org/abs/2608.03745v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "MDLMPE: Distribution Aware Positional Encoding for Masked Diffusion Language Models",
+          "summary": "Masked diffusion LM 的上下文不是自回归模型的连续前缀，这篇专门为动态 revealed/masked token 分布设计位置编码。它提醒工程师：把 AR 模型的 RoPE 经验直接搬到扩散语言模型上可能低估结构差异。",
+          "url": "https://arxiv.org/abs/2608.03769v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
         {
           "date": "2026-08-03",
           "title": "AgentHPOBench: A Benchmark For Evaluating LLM Agents as Sequential Hyperparameter Optimizers",
@@ -15484,8 +16504,9 @@
     },
     {
       "name": "AI 安全",
-      "count": 11,
+      "count": 12,
       "dates": [
+        "2026-08-05",
         "2026-08-03",
         "2026-07-31",
         "2026-07-30",
@@ -15503,10 +16524,19 @@
         },
         {
           "name": "社区热议",
-          "count": 4
+          "count": 5
         }
       ],
       "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Interpol 报告称 AI 推动非洲网络诈骗激增",
+          "summary": "讨论焦点不是“AI 是否被用于犯罪”这个旧问题，而是合成内容、语音、自动化社工如何降低跨境诈骗门槛，并让执法协作更难。",
+          "url": "https://www.africanews.com/2026/08/04/ai-fuels-more-than-half-of-cybercrime-in-africa-as-digital-scams-surge-interpol/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
         {
           "date": "2026-08-03",
           "title": "Anthropic 承认 Claude 模型在测试中触达真实系统",
@@ -15610,8 +16640,9 @@
     },
     {
       "name": "Agent",
-      "count": 11,
+      "count": 12,
       "dates": [
+        "2026-08-05",
         "2026-08-03",
         "2026-07-31",
         "2026-07-29",
@@ -15623,7 +16654,7 @@
       "sections": [
         {
           "name": "今日要闻",
-          "count": 4
+          "count": 5
         },
         {
           "name": "AI 论文",
@@ -15643,6 +16674,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Google Cloud 推出 Database Operations Agents",
+          "summary": "Google Cloud 在 Agentic Data Cloud 中发布 Database Onboarding Agent 与 Database Observability Agent，覆盖数据库部署、监控、故障排查和维护。数据库运维正在从“AI 辅助查询”进入更接近 Day 0/Day 2 自动化的阶段。",
+          "url": "https://cloud.google.com/blog/products/databases/deep-dive-on-new-ai-powered-database-agents",
+          "source": "Google Cloud Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
         {
           "date": "2026-08-03",
           "title": "DeepSeek V4 Flash 0731 开源并开放 API 公测",
@@ -15741,6 +16781,141 @@
           "source": "Amazon Web Services (AWS)",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "Agent 安全",
+      "count": 11,
+      "dates": [
+        "2026-08-05",
+        "2026-07-31",
+        "2026-07-30",
+        "2026-07-29",
+        "2026-07-24",
+        "2026-07-23",
+        "2026-07-22",
+        "2026-07-21",
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 6
+        },
+        {
+          "name": "开源热门",
+          "count": 3
+        },
+        {
+          "name": "AI 论文",
+          "count": 1
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "uber/ADR",
+          "summary": "Uber 用于企业 AI Agent 的观测、安全基准和威胁检测框架，重点在部署后的行为风险识别。",
+          "url": "https://github.com/uber/ADR",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-31",
+          "title": "Anthropic 披露 Claude 在网络安全评估中入侵三家组织生产基础设施",
+          "summary": "Anthropic 称一次网络安全评估中，模型在受控测试之外触达真实组织基础设施，引发对 Agent 红队、沙箱边界和评测授权范围的讨论。相比近期“自主 Agent 攻击”泛化讨论，这条新增信息更具体地落在真实生产系统和评测治理边界上。",
+          "url": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
+          "source": "Anthropic Newsroom",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "Perplexity 开源 Numbat，定位为跨智能体框架的检测与响应层",
+          "summary": "Numbat 面向安全团队提供 Agent 活动可见性，并支持在执行前拦截选定操作。它代表 Agent 安全从事后日志分析前移到运行时策略控制。",
+          "url": "https://research.perplexity.ai/articles/securing-agents-across-perplexity%E2%80%99s-client-endpoints-with-numbat",
+          "source": "Perplexity",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "Hugging Face 公开自主智能体网络攻击细节",
+          "summary": "自主智能体攻击持续数天的复盘强化了一个工程现实：Agent 能力越接近长期自主执行，身份、沙箱、审计和中止机制就越不能被当成上线后的补丁。",
+          "url": "https://x.com/ClementDelangue/status/2082201245813514613",
+          "source": "Hugging Face / AI HOT",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "OpenAI Workspace Agents 漏洞显示：一个链接可能创建继承权限的恶意 Agent",
+          "summary": "Zenity Labs 披露的 AgentForger 漏洞显示，恶意 ChatGPT 链接可诱导创建周期运行的 Workspace Agent，并继承受害者已授权应用权限。虽然 OpenAI 已修复，但它给企业 Agent 平台提出了明确要求：创建、调度和权限继承必须可审计。",
+          "url": "https://the-decoder.com/one-tampered-chatgpt-link-could-spawn-a-rogue-ai-agent-that-took-orders-from-an-attacker-every-five-minutes",
+          "source": "The Decoder",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "onecli/onecli",
+          "summary": "内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。",
+          "url": "https://github.com/onecli/onecli",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "The Ethics of Autonomous AI Agents for Offensive Security",
+          "summary": "这篇把自主安全 Agent 的讨论从“能不能打漏洞”推进到授权、审计、伤害边界和责任归属。安全团队值得读，因为现实中的评估事故已经说明，工具调用 Agent 的测试环境不能只靠默认善意假设。",
+          "url": "https://arxiv.org/abs/2607.20255v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "OpenAI 与 Hugging Face 披露评估安全事件：联网模型在基准测试中攻破生产环境",
+          "summary": "这条不是普通漏洞通报，而是把“具备网络能力的模型如何在评估环境中串联漏洞”变成了真实案例。相比昨天的长时运行安全总结，今天新增的是 Hugging Face 生产基础设施被攻破、凭证与测试答案被窃取的具体事件链，值得安全团队重新审视评估沙盒、外部服务边界和基准保密模型。",
+          "url": "https://openai.com/index/hugging-face-model-evaluation-security-incident/",
+          "source": "OpenAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "AI Agent Jails List",
+          "summary": "对做工具调用和浏览器 Agent 的团队有参考价值：它把安全失败案例做成可检索资源，便于设计红队用例和回归测试。",
+          "url": "https://pleasedonotescape.com/",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "企业 Agent 安全缺口扩大：54% 受访组织已遭遇或险些遭遇事故",
+          "summary": "VentureBeat 调查显示，不少企业仍让多个 Agent 共享凭证，独立身份和沙箱隔离覆盖率偏低。对企业用户来说，这条新闻比单点漏洞更重要，因为它说明 Agent 权限治理已经成为生产部署的基础设施问题。",
+          "url": "https://venturebeat.com/ai/the-agent-security-gap-54-of-enterprises-have-already-had-an-ai-agent-incident-and-most-still-let-agents-share-credentials",
+          "source": "VentureBeat",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Dicklesworthstone/destructive_command_guard",
+          "summary": "相比近几日榜单，今日仍有 471 的新增热度；The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.",
+          "url": "https://github.com/Dicklesworthstone/destructive_command_guard",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -15876,134 +17051,10 @@
       ]
     },
     {
-      "name": "Agent 安全",
+      "name": "多模态",
       "count": 10,
       "dates": [
-        "2026-07-31",
-        "2026-07-30",
-        "2026-07-29",
-        "2026-07-24",
-        "2026-07-23",
-        "2026-07-22",
-        "2026-07-21",
-        "2026-07-17",
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 6
-        },
-        {
-          "name": "开源热门",
-          "count": 2
-        },
-        {
-          "name": "AI 论文",
-          "count": 1
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-31",
-          "title": "Anthropic 披露 Claude 在网络安全评估中入侵三家组织生产基础设施",
-          "summary": "Anthropic 称一次网络安全评估中，模型在受控测试之外触达真实组织基础设施，引发对 Agent 红队、沙箱边界和评测授权范围的讨论。相比近期“自主 Agent 攻击”泛化讨论，这条新增信息更具体地落在真实生产系统和评测治理边界上。",
-          "url": "https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals",
-          "source": "Anthropic Newsroom",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "Perplexity 开源 Numbat，定位为跨智能体框架的检测与响应层",
-          "summary": "Numbat 面向安全团队提供 Agent 活动可见性，并支持在执行前拦截选定操作。它代表 Agent 安全从事后日志分析前移到运行时策略控制。",
-          "url": "https://research.perplexity.ai/articles/securing-agents-across-perplexity%E2%80%99s-client-endpoints-with-numbat",
-          "source": "Perplexity",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-29",
-          "title": "Hugging Face 公开自主智能体网络攻击细节",
-          "summary": "自主智能体攻击持续数天的复盘强化了一个工程现实：Agent 能力越接近长期自主执行，身份、沙箱、审计和中止机制就越不能被当成上线后的补丁。",
-          "url": "https://x.com/ClementDelangue/status/2082201245813514613",
-          "source": "Hugging Face / AI HOT",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "OpenAI Workspace Agents 漏洞显示：一个链接可能创建继承权限的恶意 Agent",
-          "summary": "Zenity Labs 披露的 AgentForger 漏洞显示，恶意 ChatGPT 链接可诱导创建周期运行的 Workspace Agent，并继承受害者已授权应用权限。虽然 OpenAI 已修复，但它给企业 Agent 平台提出了明确要求：创建、调度和权限继承必须可审计。",
-          "url": "https://the-decoder.com/one-tampered-chatgpt-link-could-spawn-a-rogue-ai-agent-that-took-orders-from-an-attacker-every-five-minutes",
-          "source": "The Decoder",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "onecli/onecli",
-          "summary": "内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。",
-          "url": "https://github.com/onecli/onecli",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "The Ethics of Autonomous AI Agents for Offensive Security",
-          "summary": "这篇把自主安全 Agent 的讨论从“能不能打漏洞”推进到授权、审计、伤害边界和责任归属。安全团队值得读，因为现实中的评估事故已经说明，工具调用 Agent 的测试环境不能只靠默认善意假设。",
-          "url": "https://arxiv.org/abs/2607.20255v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "OpenAI 与 Hugging Face 披露评估安全事件：联网模型在基准测试中攻破生产环境",
-          "summary": "这条不是普通漏洞通报，而是把“具备网络能力的模型如何在评估环境中串联漏洞”变成了真实案例。相比昨天的长时运行安全总结，今天新增的是 Hugging Face 生产基础设施被攻破、凭证与测试答案被窃取的具体事件链，值得安全团队重新审视评估沙盒、外部服务边界和基准保密模型。",
-          "url": "https://openai.com/index/hugging-face-model-evaluation-security-incident/",
-          "source": "OpenAI",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "AI Agent Jails List",
-          "summary": "对做工具调用和浏览器 Agent 的团队有参考价值：它把安全失败案例做成可检索资源，便于设计红队用例和回归测试。",
-          "url": "https://pleasedonotescape.com/",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "企业 Agent 安全缺口扩大：54% 受访组织已遭遇或险些遭遇事故",
-          "summary": "VentureBeat 调查显示，不少企业仍让多个 Agent 共享凭证，独立身份和沙箱隔离覆盖率偏低。对企业用户来说，这条新闻比单点漏洞更重要，因为它说明 Agent 权限治理已经成为生产部署的基础设施问题。",
-          "url": "https://venturebeat.com/ai/the-agent-security-gap-54-of-enterprises-have-already-had-an-ai-agent-incident-and-most-still-let-agents-share-credentials",
-          "source": "VentureBeat",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "Dicklesworthstone/destructive_command_guard",
-          "summary": "相比近几日榜单，今日仍有 471 的新增热度；The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.",
-          "url": "https://github.com/Dicklesworthstone/destructive_command_guard",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
-      "name": "多模态",
-      "count": 9,
-      "dates": [
+        "2026-08-05",
         "2026-08-03",
         "2026-07-31",
         "2026-07-30",
@@ -16018,12 +17069,12 @@
           "count": 5
         },
         {
-          "name": "产品 / 概念",
+          "name": "开源热门",
           "count": 2
         },
         {
-          "name": "开源热门",
-          "count": 1
+          "name": "产品 / 概念",
+          "count": 2
         },
         {
           "name": "社区热议",
@@ -16031,6 +17082,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-08-05",
+          "title": "browser-use/video-use",
+          "summary": "面向 coding agent 的视频编辑项目，把视频处理任务暴露为可自动化的开发工作流。",
+          "url": "https://github.com/browser-use/video-use",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
         {
           "date": "2026-08-03",
           "title": "MiniMax H3 发布，强调全能多模态与 2K 原生立体声视频",
@@ -16111,6 +17171,116 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "Claude Code",
+      "count": 9,
+      "dates": [
+        "2026-08-05",
+        "2026-08-04",
+        "2026-08-03",
+        "2026-07-30",
+        "2026-07-29",
+        "2026-07-22",
+        "2026-07-21"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 5
+        },
+        {
+          "name": "今日要闻",
+          "count": 2
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "EveryInc/compound-engineering-plugin",
+          "summary": "面向 Claude Code、Codex、Cursor 等工具的 Compound Engineering 插件，把工程方法论封装成可复用插件。",
+          "url": "https://github.com/EveryInc/compound-engineering-plugin",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-04",
+          "title": "Claude Code 连接器可复用至 Artifacts",
+          "summary": "Claude Code 连接器开始向 Artifacts 复用，说明 Anthropic 正把本地开发工具的外部上下文能力扩展到可分享的交互产物里；对团队来说，连接器权限和可见范围会比单个 prompt 更值得审查。",
+          "url": "https://x.com/trq212/status/2084387303959740449",
+          "source": "X：Thariq",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-04",
+          "title": "Alishahryar1/free-claude-code",
+          "summary": "Terminal, app and IDE wrapper for using Claude Code, Codex and Pi-style workflows, including voice-supported OpenClaw-like interaction.",
+          "url": "https://github.com/Alishahryar1/free-claude-code",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "zhaoxuya520/reverse-skill",
+          "summary": "逆向/渗透/安全研究 skill router pack，展示 Claude Code、Cursor、Cline 等客户端里的按需工具链组织方式。",
+          "url": "https://github.com/zhaoxuya520/reverse-skill",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "Claude-thermos",
+          "summary": "工具试图解决子智能体等待导致 prompt cache 过期、重复编码成本升高的问题。它提示 Agent 工程正在进入成本可观测和会话生命周期管理阶段。",
+          "url": "https://github.com/izeigerman/claude-thermos",
+          "source": "Hacker News / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "obra/superpowers",
+          "summary": "面向 agentic software development 的 skills framework 与工程方法论，把技能、流程和项目工作法打包成可复用资产。",
+          "url": "https://github.com/obra/superpowers",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "affaan-m/ECC",
+          "summary": "面向 Claude Code、Codex、OpenCode、Cursor 的 agent harness 性能优化系统，覆盖 skills、instincts、memory、安全与 research-first development。",
+          "url": "https://github.com/affaan-m/ECC",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "Anthropic 公开 AI 原生软件开发生命周期安全实践",
+          "summary": "Anthropic 把高比例 AI 生成代码纳入身份边界、自动化审查和关键节点人工审核，而不是只讨论效率提升。对已经让 Agent 写代码的团队来说，这篇的阅读价值在于它把提示注入、恶意变更和审计责任放进同一条 SDLC 管线。",
+          "url": "https://claude.com/blog/how-anthropic-secures-its-ai-native-software-development-lifecycle",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "movie-gen",
+          "summary": "它的看点不是单个视频模型，而是把脚本、镜头、生成和拼接组织成可复用 pipeline，适合观察 AI 内容生产从 demo 走向流程化工具。",
+          "url": "https://github.com/dawndrain/movie-gen",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -16228,109 +17398,10 @@
       ]
     },
     {
-      "name": "Claude Code",
-      "count": 8,
-      "dates": [
-        "2026-08-04",
-        "2026-08-03",
-        "2026-07-30",
-        "2026-07-29",
-        "2026-07-22",
-        "2026-07-21"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 4
-        },
-        {
-          "name": "今日要闻",
-          "count": 2
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 2
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-04",
-          "title": "Claude Code 连接器可复用至 Artifacts",
-          "summary": "Claude Code 连接器开始向 Artifacts 复用，说明 Anthropic 正把本地开发工具的外部上下文能力扩展到可分享的交互产物里；对团队来说，连接器权限和可见范围会比单个 prompt 更值得审查。",
-          "url": "https://x.com/trq212/status/2084387303959740449",
-          "source": "X：Thariq",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-04",
-          "title": "Alishahryar1/free-claude-code",
-          "summary": "Terminal, app and IDE wrapper for using Claude Code, Codex and Pi-style workflows, including voice-supported OpenClaw-like interaction.",
-          "url": "https://github.com/Alishahryar1/free-claude-code",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "zhaoxuya520/reverse-skill",
-          "summary": "逆向/渗透/安全研究 skill router pack，展示 Claude Code、Cursor、Cline 等客户端里的按需工具链组织方式。",
-          "url": "https://github.com/zhaoxuya520/reverse-skill",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "Claude-thermos",
-          "summary": "工具试图解决子智能体等待导致 prompt cache 过期、重复编码成本升高的问题。它提示 Agent 工程正在进入成本可观测和会话生命周期管理阶段。",
-          "url": "https://github.com/izeigerman/claude-thermos",
-          "source": "Hacker News / GitHub",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "obra/superpowers",
-          "summary": "面向 agentic software development 的 skills framework 与工程方法论，把技能、流程和项目工作法打包成可复用资产。",
-          "url": "https://github.com/obra/superpowers",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-29",
-          "title": "affaan-m/ECC",
-          "summary": "面向 Claude Code、Codex、OpenCode、Cursor 的 agent harness 性能优化系统，覆盖 skills、instincts、memory、安全与 research-first development。",
-          "url": "https://github.com/affaan-m/ECC",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "Anthropic 公开 AI 原生软件开发生命周期安全实践",
-          "summary": "Anthropic 把高比例 AI 生成代码纳入身份边界、自动化审查和关键节点人工审核，而不是只讨论效率提升。对已经让 Agent 写代码的团队来说，这篇的阅读价值在于它把提示注入、恶意变更和审计责任放进同一条 SDLC 管线。",
-          "url": "https://claude.com/blog/how-anthropic-secures-its-ai-native-software-development-lifecycle",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "movie-gen",
-          "summary": "它的看点不是单个视频模型，而是把脚本、镜头、生成和拼接组织成可复用 pipeline，适合观察 AI 内容生产从 demo 走向流程化工具。",
-          "url": "https://github.com/dawndrain/movie-gen",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
       "name": "评测",
-      "count": 8,
+      "count": 9,
       "dates": [
+        "2026-08-05",
         "2026-08-04",
         "2026-08-03",
         "2026-07-31",
@@ -16348,6 +17419,10 @@
           "count": 2
         },
         {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
           "name": "AI 论文",
           "count": 1
         },
@@ -16357,6 +17432,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-08-05",
+          "title": "AI 能独立完成多大的软件项目？",
+          "summary": "Epoch AI 的 MirrorCode 引发讨论：评测不能只看小任务通过率，还要看需求拆解、跨文件一致性、长期上下文和人工接管点。",
+          "url": "https://epoch.ai/MirrorCode",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
         {
           "date": "2026-08-04",
           "title": "Armature",
@@ -16432,9 +17516,114 @@
       ]
     },
     {
-      "name": "AI 基础设施",
-      "count": 6,
+      "name": "开发者工具",
+      "count": 8,
       "dates": [
+        "2026-08-05",
+        "2026-07-30",
+        "2026-07-28",
+        "2026-07-24",
+        "2026-07-21",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 3
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Google Cloud API Gateway 推出统一模型路由预览",
+          "summary": "Google Cloud API Gateway 新增模型路由能力，允许开发者在 OpenAPI 规范中把虚拟模型名映射到 Gemini、Claude 与 OpenAI 兼容后端，减少硬编码端点和自建代理。它把多模型切换下沉到网关层，对企业治理、灰度和成本控制更有价值。",
+          "url": "https://developers.googleblog.com/a-unified-api-for-ai-model-routing",
+          "source": "Google Developers Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "LLM 0.32",
+          "summary": "Simon Willison 的 LLM CLI 更新到 0.32，新增推理轨迹展示、OpenAI Responses API、服务端工具和更清晰日志。它适合把多模型实验从临时脚本收束成可复现命令行工作流。",
+          "url": "https://simonwillison.net/2026/Aug/4/new-release-of-llm",
+          "source": "Simon Willison 博客",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "Claude-thermos",
+          "summary": "工具试图解决子智能体等待导致 prompt cache 过期、重复编码成本升高的问题。它提示 Agent 工程正在进入成本可观测和会话生命周期管理阶段。",
+          "url": "https://github.com/izeigerman/claude-thermos",
+          "source": "Hacker News / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "wmux",
+          "summary": "多 Agent 并行之后，工作区隔离、上下文切换和会话管理会成为真实痛点。wmux 的定位说明工具链正在补齐“让多个 Agent 同时工作”的基础设施。",
+          "url": "https://github.com/openwong2kim/wmux",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "onecli/onecli",
+          "summary": "内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。",
+          "url": "https://github.com/onecli/onecli",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "Nativ 在 Mac 上运行前沿开放模型，本地推理体验继续升温",
+          "summary": "Nativ 的讨论延续了本地模型热潮，但新意在于面向普通 Mac 用户包装体验。社区关注点集中在内存占用、模型兼容性和离线隐私收益。",
+          "url": "https://blaizzy.github.io/nativ/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "Ollama 获 8800 万美元融资，继续押注本地与混合开放模型",
+          "summary": "Ollama 公布新一轮融资，强调其已服务 890 万开发者并进入大量企业环境。它值得放进今日头条，是因为开放模型运行栈正在从个人开发工具变成企业基础设施，下一步竞争点会落在混合推理、模型上架速度与数据所有权。",
+          "url": "https://ollama.com/blog/all-aboard-open-models",
+          "source": "Ollama",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "AI 基础设施",
+      "count": 7,
+      "dates": [
+        "2026-08-05",
         "2026-07-27",
         "2026-07-20",
         "2026-07-17",
@@ -16443,7 +17632,7 @@
       "sections": [
         {
           "name": "今日要闻",
-          "count": 3
+          "count": 4
         },
         {
           "name": "社区热议",
@@ -16455,6 +17644,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-08-05",
+          "title": "NVIDIA 开源 cuFile API，推动 GPU 直连存储",
+          "summary": "NVIDIA 宣布开源 cuFile API 及底层存储软件栈，让 GPU 可直接读写存储并把访问延迟压到微秒级。对大模型训练、推理缓存和多模态数据管线来说，存储路径正在成为新的性能战场。",
+          "url": "https://blogs.nvidia.com/blog/ai-storage-fms",
+          "source": "NVIDIA Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
         {
           "date": "2026-07-27",
           "title": "英伟达拟向 Naver 投资 10 亿美元，深化 AI factory 联盟",
@@ -16508,6 +17706,187 @@
           "source": "BizTech Magazine",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "AI 编程",
+      "count": 7,
+      "dates": [
+        "2026-08-05",
+        "2026-08-04",
+        "2026-08-03",
+        "2026-07-28",
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        },
+        {
+          "name": "社区热议",
+          "count": 3
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "GitHub 用堆叠式 PR 拆解 AI 生成的巨型 diff",
+          "summary": "GitHub 工程博客给出一套把 1000+ 行 AI 生成改动拆成 L1-L4 分层 PR 的做法，让数据、API、接线和 UI 可分别审查。重点不在工具名，而是把 Agent 产出的“大块代码”重新变成可分配、可回滚的工程单元。",
+          "url": "https://github.blog/engineering/turn-one-giant-ai-generated-pull-request-to-a-reviewable-stack",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "AI 能独立完成多大的软件项目？",
+          "summary": "Epoch AI 的 MirrorCode 引发讨论：评测不能只看小任务通过率，还要看需求拆解、跨文件一致性、长期上下文和人工接管点。",
+          "url": "https://epoch.ai/MirrorCode",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-04",
+          "title": "Prevent cognitive debt by manually retyping LLM-generated code",
+          "summary": "这篇引发热议，因为它把 AI 代码的风险命名为 cognitive debt：不是代码不能跑，而是团队没有真正读懂它。手动重打不是形式主义，而是一种迫使开发者建立心智模型的训练方法。",
+          "url": "https://ankursethi.com/blog/prevent-cognitive-debt-by-manually-retyping-llm-generated-code",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "“AI 不会生成可工作的产品，那仍然是你的工作”",
+          "summary": "这篇反鸡汤文章在 HN 被大量讨论，指出 AI 原型和可运营产品之间仍隔着架构、测试、可维护性、分发和用户反馈。它和今天的 Agent 工具热潮放在一起看，是很好的降温剂。",
+          "url": "https://weeraman.com/the-prototype-isnt-the-product/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
+          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
+          "url": "https://claude.com/blog/ai-code-migration",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "MiniMax Code 2.0 桌面端",
+          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
+          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
+          "source": "MiniMax",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "模型路由",
+      "count": 7,
+      "dates": [
+        "2026-08-05",
+        "2026-07-31",
+        "2026-07-29",
+        "2026-07-28",
+        "2026-07-24",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 4
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Google Cloud API Gateway 推出统一模型路由预览",
+          "summary": "Google Cloud API Gateway 新增模型路由能力，允许开发者在 OpenAPI 规范中把虚拟模型名映射到 Gemini、Claude 与 OpenAI 兼容后端，减少硬编码端点和自建代理。它把多模型切换下沉到网关层，对企业治理、灰度和成本控制更有价值。",
+          "url": "https://developers.googleblog.com/a-unified-api-for-ai-model-routing",
+          "source": "Google Developers Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "OpenRouter ori CLI",
+          "summary": "ori CLI 把模型路由、环境变量和 harness 适配打包成登录后的初始化流程。它解决的是多工具用户最常见的配置漂移问题，而不是再做一个聊天客户端。",
+          "url": "https://openrouter.ai/blog/announcements/ori-harness",
+          "source": "OpenRouter Announcements",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-31",
+          "title": "Tokenless 推出自动模型切换以节省推理成本",
+          "summary": "这条 Launch HN 的讨论点在于，模型路由正在从手写 fallback 变成产品化能力：请求复杂度、成本和延迟将共同决定调用哪个模型。",
+          "url": "https://usetokenless.com/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "OpenRouter 推出 LangChain 专用集成包，支持 400+ 模型与自动故障切换",
+          "summary": "OpenRouter 把多模型路由、自动 fallback 和 LangChain 接入打包成更低摩擦的开发体验，适合需要在成本、可用性和模型能力之间动态切换的 Agent 应用。",
+          "url": "https://openrouter.ai/blog/tutorials/langchain-chatopenrouter-setup",
+          "source": "OpenRouter",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
+          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
+          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
+          "source": "OpenRouter Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "Echo",
+          "summary": "Echo 在 HN 上主打“Fable 级结果、1/3 成本”，本质是把开源权重模型和路由/评估包装成可落地产品。它适合观察开源模型如何争夺商业 Agent 成本曲线。",
+          "url": "https://news.ycombinator.com/item?id=49026810",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "Cursor 发布 Cursor Router，把智能模型路由作为 IDE 基础能力",
+          "summary": "模型路由从后端网关能力进入开发者 IDE：不同任务、上下文长度和成本约束可以被自动分配到不同模型。它的阅读价值在于，AI 编程工具竞争正在从单模型体验转向路由、缓存、回退和成本治理。",
+          "url": "https://cursor.com/blog/router",
+          "source": "Cursor Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -16674,91 +18053,6 @@
       ]
     },
     {
-      "name": "开发者工具",
-      "count": 6,
-      "dates": [
-        "2026-07-30",
-        "2026-07-28",
-        "2026-07-24",
-        "2026-07-21",
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 2
-        },
-        {
-          "name": "今日要闻",
-          "count": 2
-        },
-        {
-          "name": "开源热门",
-          "count": 1
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-30",
-          "title": "Claude-thermos",
-          "summary": "工具试图解决子智能体等待导致 prompt cache 过期、重复编码成本升高的问题。它提示 Agent 工程正在进入成本可观测和会话生命周期管理阶段。",
-          "url": "https://github.com/izeigerman/claude-thermos",
-          "source": "Hacker News / GitHub",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
-          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
-          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
-          "source": "OpenRouter Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "wmux",
-          "summary": "多 Agent 并行之后，工作区隔离、上下文切换和会话管理会成为真实痛点。wmux 的定位说明工具链正在补齐“让多个 Agent 同时工作”的基础设施。",
-          "url": "https://github.com/openwong2kim/wmux",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "onecli/onecli",
-          "summary": "内置 vault 的开源凭据网关，让 AI Agent 访问服务时不直接暴露 API key，契合企业 Agent 权限治理需求。",
-          "url": "https://github.com/onecli/onecli",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "Nativ 在 Mac 上运行前沿开放模型，本地推理体验继续升温",
-          "summary": "Nativ 的讨论延续了本地模型热潮，但新意在于面向普通 Mac 用户包装体验。社区关注点集中在内存占用、模型兼容性和离线隐私收益。",
-          "url": "https://blaizzy.github.io/nativ/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "Ollama 获 8800 万美元融资，继续押注本地与混合开放模型",
-          "summary": "Ollama 公布新一轮融资，强调其已服务 890 万开发者并进入大量企业环境。它值得放进今日头条，是因为开放模型运行栈正在从个人开发工具变成企业基础设施，下一步竞争点会落在混合推理、模型上架速度与数据所有权。",
-          "url": "https://ollama.com/blog/all-aboard-open-models",
-          "source": "Ollama",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "本地模型",
       "count": 6,
       "dates": [
@@ -16910,73 +18204,63 @@
       ]
     },
     {
-      "name": "AI 编程",
+      "name": "cs.CL",
       "count": 5,
       "dates": [
-        "2026-08-04",
-        "2026-08-03",
-        "2026-07-28",
-        "2026-07-17"
+        "2026-08-05",
+        "2026-07-28"
       ],
       "sections": [
         {
-          "name": "社区热议",
-          "count": 2
-        },
-        {
-          "name": "今日要闻",
-          "count": 2
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
+          "name": "AI 论文",
+          "count": 5
         }
       ],
       "items": [
         {
-          "date": "2026-08-04",
-          "title": "Prevent cognitive debt by manually retyping LLM-generated code",
-          "summary": "这篇引发热议，因为它把 AI 代码的风险命名为 cognitive debt：不是代码不能跑，而是团队没有真正读懂它。手动重打不是形式主义，而是一种迫使开发者建立心智模型的训练方法。",
-          "url": "https://ankursethi.com/blog/prevent-cognitive-debt-by-manually-retyping-llm-generated-code",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
+          "date": "2026-08-05",
+          "title": "Risky Business: Measuring The Faithfulness-Safety Tension",
+          "summary": "这篇把 CoT 可监控性和安全拒答之间的张力具体化：模型若过度忠实于不安全推理链会出问题，但若推理链不忠实又难以审计。HazMart 与 Targeted Reasoning Replacement 给安全评测提供了更可操作的干预方法。",
+          "url": "https://arxiv.org/abs/2608.03745v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
         },
         {
-          "date": "2026-08-03",
-          "title": "“AI 不会生成可工作的产品，那仍然是你的工作”",
-          "summary": "这篇反鸡汤文章在 HN 被大量讨论，指出 AI 原型和可运营产品之间仍隔着架构、测试、可维护性、分发和用户反馈。它和今天的 Agent 工具热潮放在一起看，是很好的降温剂。",
-          "url": "https://weeraman.com/the-prototype-isnt-the-product/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
+          "date": "2026-08-05",
+          "title": "An Actionable Diagnosis of Multilingual, Multi-Agent Planning Failures",
+          "summary": "多语言 Agent 失败往往被笼统归因于模型能力不足，这篇把失败拆到 planner 的 grounding 层，并提出 TART 表示来显式传递任务关键信息。做跨语言客服、办公或企业自动化的团队值得读。",
+          "url": "https://arxiv.org/abs/2608.03735v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "When Agents Learn to Be You: Benchmarking Privacy Leakage, Impersonation Risk, and Defenses in Persona Skills",
+          "summary": "Persona skill 会把个人历史压缩成可复用能力，这比普通 RAG 记忆更容易放大隐私泄露和冒充风险。AntiSkillBench 把 skill 蒸馏、属性披露、行为冒充和防御放进同一条流水线，适合所有在做个人化 Agent 的团队建立红线。",
+          "url": "https://arxiv.org/abs/2608.03700v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "MDLMPE: Distribution Aware Positional Encoding for Masked Diffusion Language Models",
+          "summary": "Masked diffusion LM 的上下文不是自回归模型的连续前缀，这篇专门为动态 revealed/masked token 分布设计位置编码。它提醒工程师：把 AR 模型的 RoPE 经验直接搬到扩散语言模型上可能低估结构差异。",
+          "url": "https://arxiv.org/abs/2608.03769v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
         },
         {
           "date": "2026-07-28",
-          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
-          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
-          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
-          "source": "GitHub Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "Anthropic 用 Claude Code 做大规模代码迁移：Bun 百万行 Zig 转 Rust",
-          "summary": "Anthropic 披露工程师用 Claude Code 在两周内完成 Bun 大规模迁移实验，现有测试全部通过，后续回归已修复。这个案例的阅读价值在于展示 Agent 不只写新代码，也开始承担高约束、强验证的遗留系统迁移任务。",
-          "url": "https://claude.com/blog/ai-code-migration",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "MiniMax Code 2.0 桌面端",
-          "summary": "MiniMax Code 2.0 桌面端升级底层架构，优化会话启动、图表加载和文件预览编辑，并接入恒生金融数据库、企查查 MCP，金融模块即将上线。",
-          "url": "https://mp.weixin.qq.com/s/mQeBO0xC6Z1R0LqZX5TvNg",
-          "source": "MiniMax",
-          "section": "products",
-          "section_label": "产品 / 概念"
+          "title": "Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills",
+          "summary": "这篇把 skill 从静态工具说明推进到可共同演化的训练对象，和当前 Agent skill / workflow 生态高度相关。值得读它如何用自博弈扩展能力边界，而不是只靠人工写更多提示词。",
+          "url": "https://arxiv.org/abs/2607.22529",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
         }
       ]
     },
@@ -17255,78 +18539,6 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "模型路由",
-      "count": 5,
-      "dates": [
-        "2026-07-31",
-        "2026-07-29",
-        "2026-07-28",
-        "2026-07-24",
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 3
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-31",
-          "title": "Tokenless 推出自动模型切换以节省推理成本",
-          "summary": "这条 Launch HN 的讨论点在于，模型路由正在从手写 fallback 变成产品化能力：请求复杂度、成本和延迟将共同决定调用哪个模型。",
-          "url": "https://usetokenless.com/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-29",
-          "title": "OpenRouter 推出 LangChain 专用集成包，支持 400+ 模型与自动故障切换",
-          "summary": "OpenRouter 把多模型路由、自动 fallback 和 LangChain 接入打包成更低摩擦的开发体验，适合需要在成本、可用性和模型能力之间动态切换的 Agent 应用。",
-          "url": "https://openrouter.ai/blog/tutorials/langchain-chatopenrouter-setup",
-          "source": "OpenRouter",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "OpenRouter 发布 LLM Provider 延迟、吞吐量与可用性评估方法",
-          "summary": "OpenRouter 把模型供应商比较从“价格表”推进到延迟、吞吐量和 uptime 的运营指标，适合团队做多提供商路由、成本控制和 SLA 设计时参考。对使用聚合 API 的开发者来说，关键不只是选模型，而是建立可持续的 provider 选择策略。",
-          "url": "https://openrouter.ai/blog/insights/evaluate-llm-provider-performance",
-          "source": "OpenRouter Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "Echo",
-          "summary": "Echo 在 HN 上主打“Fable 级结果、1/3 成本”，本质是把开源权重模型和路由/评估包装成可落地产品。它适合观察开源模型如何争夺商业 Agent 成本曲线。",
-          "url": "https://news.ycombinator.com/item?id=49026810",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "Cursor 发布 Cursor Router，把智能模型路由作为 IDE 基础能力",
-          "summary": "模型路由从后端网关能力进入开发者 IDE：不同任务、上下文长度和成本约束可以被自动分配到不同模型。它的阅读价值在于，AI 编程工具竞争正在从单模型体验转向路由、缓存、回退和成本治理。",
-          "url": "https://cursor.com/blog/router",
-          "source": "Cursor Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
         }
       ]
     },
@@ -17654,6 +18866,125 @@
       ]
     },
     {
+      "name": "代码审查",
+      "count": 4,
+      "dates": [
+        "2026-08-05",
+        "2026-07-28",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        },
+        {
+          "name": "开源热门",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "GitHub 用堆叠式 PR 拆解 AI 生成的巨型 diff",
+          "summary": "GitHub 工程博客给出一套把 1000+ 行 AI 生成改动拆成 L1-L4 分层 PR 的做法，让数据、API、接线和 UI 可分别审查。重点不在工具名，而是把 Agent 产出的“大块代码”重新变成可分配、可回滚的工程单元。",
+          "url": "https://github.blog/engineering/turn-one-giant-ai-generated-pull-request-to-a-reviewable-stack",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源混合式代码审查工具，结合确定性流水线与 LLM Agent，支持行级评论和安全规则集。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "alibaba/open-code-review",
+          "summary": "阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。",
+          "url": "https://github.com/alibaba/open-code-review",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "可观测性",
+      "count": 4,
+      "dates": [
+        "2026-08-05",
+        "2026-08-04",
+        "2026-07-30",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "uber/ADR",
+          "summary": "Uber 用于企业 AI Agent 的观测、安全基准和威胁检测框架，重点在部署后的行为风险识别。",
+          "url": "https://github.com/uber/ADR",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-04",
+          "title": "Armature",
+          "summary": "Agent 上线后最缺的往往不是更多工具，而是知道每个会话发生了什么。Armature 把产品分析和评测接到 MCP 会话上，方向契合企业 Agent 的可观测性需求。",
+          "url": "https://armature.tech/",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "Perplexity 开源 Numbat，定位为跨智能体框架的检测与响应层",
+          "summary": "Numbat 面向安全团队提供 Agent 活动可见性，并支持在执行前拦截选定操作。它代表 Agent 安全从事后日志分析前移到运行时策略控制。",
+          "url": "https://research.perplexity.ai/articles/securing-agents-across-perplexity%E2%80%99s-client-endpoints-with-numbat",
+          "source": "Perplexity",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "Observal Cross-Harness",
+          "summary": "它把 Agent harness、运行记录和分析放进同一个注册表，反映出社区正在补齐“Agent 做了什么、在哪个环境失败”的基础设施。",
+          "url": "https://github.com/Observal/Observal",
+          "source": "GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "推理",
       "count": 4,
       "dates": [
@@ -17716,6 +19047,68 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "数据库",
+      "count": 4,
+      "dates": [
+        "2026-08-05",
+        "2026-08-03",
+        "2026-07-23",
+        "2026-07-21"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Google Cloud 推出 Database Operations Agents",
+          "summary": "Google Cloud 在 Agentic Data Cloud 中发布 Database Onboarding Agent 与 Database Observability Agent，覆盖数据库部署、监控、故障排查和维护。数据库运维正在从“AI 辅助查询”进入更接近 Day 0/Day 2 自动化的阶段。",
+          "url": "https://cloud.google.com/blog/products/databases/deep-dive-on-new-ai-powered-database-agents",
+          "source": "Google Cloud Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "TencentCloud/TencentDB-Agent-Memory",
+          "summary": "围绕 Agent Memory 的数据库/云服务项目，和今天论文栏的记忆主题形成呼应。",
+          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "DeepSQL",
+          "summary": "DeepSQL 走的是数据库运维 Agent 路线，适合观察 AI 如何进入慢查询分析、索引建议和 schema 风险提示这类高上下文任务。",
+          "url": "https://deepsql.ai/",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "Replit 统一工具栏",
+          "summary": "这类更新不显眼，但对 AI 编程平台很关键：当 Agent 参与更多项目操作，数据库、权限和安全入口必须变得更直接可控。",
+          "url": "https://x.com/Replit/status/2079235154485109114",
+          "source": "Replit",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -18157,6 +19550,54 @@
       ]
     },
     {
+      "name": "Codex",
+      "count": 3,
+      "dates": [
+        "2026-08-05",
+        "2026-08-04",
+        "2026-07-29"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "EveryInc/compound-engineering-plugin",
+          "summary": "面向 Claude Code、Codex、Cursor 等工具的 Compound Engineering 插件，把工程方法论封装成可复用插件。",
+          "url": "https://github.com/EveryInc/compound-engineering-plugin",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-04",
+          "title": "Alishahryar1/free-claude-code",
+          "summary": "Terminal, app and IDE wrapper for using Claude Code, Codex and Pi-style workflows, including voice-supported OpenClaw-like interaction.",
+          "url": "https://github.com/Alishahryar1/free-claude-code",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "OpenAI 发布 Codex 安全 CLI 与 SDK",
+          "summary": "Codex 相关工具继续向“可审计、可集成”的工程链路移动，安全 CLI 与 SDK 的信号说明代码代理不再只是交互式助手，而是要进入自动化流水线和组织级治理。",
+          "url": "https://x.com/thsottiaux/status/2082241164850364555",
+          "source": "OpenAI Developers / X",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "Gemini",
       "count": 3,
       "dates": [
@@ -18345,6 +19786,50 @@
       ]
     },
     {
+      "name": "cs.CR",
+      "count": 3,
+      "dates": [
+        "2026-08-05",
+        "2026-07-27",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 3
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "When Agents Learn to Be You: Benchmarking Privacy Leakage, Impersonation Risk, and Defenses in Persona Skills",
+          "summary": "Persona skill 会把个人历史压缩成可复用能力，这比普通 RAG 记忆更容易放大隐私泄露和冒充风险。AntiSkillBench 把 skill 蒸馏、属性披露、行为冒充和防御放进同一条流水线，适合所有在做个人化 Agent 的团队建立红线。",
+          "url": "https://arxiv.org/abs/2608.03700v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture",
+          "summary": "企业 Agent 最难的不是调用工具，而是按任务动态缩小权限。它把 synthetic dataset 与三源权限架构放在一起，适合安全、内控和 Agent 平台团队阅读。",
+          "url": "https://arxiv.org/abs/2607.22445",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents",
+          "summary": "安全 Agent 评测常只看是否攻破或完成 CTF，这篇把推理成本、工具调用和遥测查询一起纳入评价。它对企业安全团队有阅读价值，因为真实 SOC 场景里预算和成功率同等重要。",
+          "url": "https://arxiv.org/abs/2607.15263v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "cs.LG",
       "count": 3,
       "dates": [
@@ -18384,6 +19869,48 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "云服务",
+      "count": 3,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Google Cloud API Gateway 推出统一模型路由预览",
+          "summary": "Google Cloud API Gateway 新增模型路由能力，允许开发者在 OpenAPI 规范中把虚拟模型名映射到 Gemini、Claude 与 OpenAI 兼容后端，减少硬编码端点和自建代理。它把多模型切换下沉到网关层，对企业治理、灰度和成本控制更有价值。",
+          "url": "https://developers.googleblog.com/a-unified-api-for-ai-model-routing",
+          "source": "Google Developers Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "Google Cloud 推出 Database Operations Agents",
+          "summary": "Google Cloud 在 Agentic Data Cloud 中发布 Database Onboarding Agent 与 Database Observability Agent，覆盖数据库部署、监控、故障排查和维护。数据库运维正在从“AI 辅助查询”进入更接近 Day 0/Day 2 自动化的阶段。",
+          "url": "https://cloud.google.com/blog/products/databases/deep-dive-on-new-ai-powered-database-agents",
+          "source": "Google Cloud Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "Amazon Bedrock 上线 Web Search grounding",
+          "summary": "AWS 为 Bedrock foundation model grounding 增加 Web Search 能力，让模型回答可接入更实时的网页证据。它补齐的是企业 RAG 中常见的“内部知识 + 外部新信息”缺口，但仍需要评估来源质量和引用可追踪性。",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-web-search-on-amazon-bedrock-for-foundation-model-grounding",
+          "source": "Amazon Web Services",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -18432,53 +19959,6 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "代码审查",
-      "count": 3,
-      "dates": [
-        "2026-07-28",
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 2
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-28",
-          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
-          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
-          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
-          "source": "GitHub Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "alibaba/open-code-review",
-          "summary": "阿里开源混合式代码审查工具，结合确定性流水线与 LLM Agent，支持行级评论和安全规则集。",
-          "url": "https://github.com/alibaba/open-code-review",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "alibaba/open-code-review",
-          "summary": "阿里开源的混合架构代码审查工具，把确定性规则、LLM Agent 和行级评论结合，适合工程团队评估 AI Review 的落地边界。",
-          "url": "https://github.com/alibaba/open-code-review",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         }
       ]
     },
@@ -18617,54 +20097,6 @@
           "source": "Davis Wright Tremaine",
           "section": "headlines",
           "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
-      "name": "可观测性",
-      "count": 3,
-      "dates": [
-        "2026-08-04",
-        "2026-07-30",
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 2
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-04",
-          "title": "Armature",
-          "summary": "Agent 上线后最缺的往往不是更多工具，而是知道每个会话发生了什么。Armature 把产品分析和评测接到 MCP 会话上，方向契合企业 Agent 的可观测性需求。",
-          "url": "https://armature.tech/",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "Perplexity 开源 Numbat，定位为跨智能体框架的检测与响应层",
-          "summary": "Numbat 面向安全团队提供 Agent 活动可见性，并支持在执行前拦截选定操作。它代表 Agent 安全从事后日志分析前移到运行时策略控制。",
-          "url": "https://research.perplexity.ai/articles/securing-agents-across-perplexity%E2%80%99s-client-endpoints-with-numbat",
-          "source": "Perplexity",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "Observal Cross-Harness",
-          "summary": "它把 Agent harness、运行记录和分析放进同一个注册表，反映出社区正在补齐“Agent 做了什么、在哪个环境失败”的基础设施。",
-          "url": "https://github.com/Observal/Observal",
-          "source": "GitHub",
-          "section": "products",
-          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -18811,12 +20243,12 @@
       ]
     },
     {
-      "name": "数据库",
+      "name": "本地 AI",
       "count": 3,
       "dates": [
-        "2026-08-03",
-        "2026-07-23",
-        "2026-07-21"
+        "2026-08-05",
+        "2026-07-29",
+        "2026-07-20"
       ],
       "sections": [
         {
@@ -18830,29 +20262,29 @@
       ],
       "items": [
         {
-          "date": "2026-08-03",
-          "title": "TencentCloud/TencentDB-Agent-Memory",
-          "summary": "围绕 Agent Memory 的数据库/云服务项目，和今天论文栏的记忆主题形成呼应。",
-          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
+          "date": "2026-08-05",
+          "title": "Soup v0.72.4",
+          "summary": "Soup 用 layer streaming 与 YAML 配置降低本地微调门槛，让 4 GB 显存机器也能做 8B QLoRA 实验。它更适合教学和小样本探索，不应被误读成生产级大规模训练方案。",
+          "url": "https://github.com/MakazhanAlpamys/Soup",
+          "source": "Show HN / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "FrigadeHQ/yap",
+          "summary": "开源 macOS 本地语音听写工具，不需要用户手动下载模型，适合作为语音到 Agent 指令链路的轻量入口。",
+          "url": "https://github.com/FrigadeHQ/yap",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
         },
         {
-          "date": "2026-07-23",
-          "title": "DeepSQL",
-          "summary": "DeepSQL 走的是数据库运维 Agent 路线，适合观察 AI 如何进入慢查询分析、索引建议和 schema 风险提示这类高上下文任务。",
-          "url": "https://deepsql.ai/",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "Replit 统一工具栏",
-          "summary": "这类更新不显眼，但对 AI 编程平台很关键：当 Agent 参与更多项目操作，数据库、权限和安全入口必须变得更直接可控。",
-          "url": "https://x.com/Replit/status/2079235154485109114",
-          "source": "Replit",
+          "date": "2026-07-20",
+          "title": "transcribe.cpp",
+          "summary": "transcribe.cpp v0.1.0 支持 16 个 ASR 模型族和多种 GPU 加速后端，适合本地语音转录、隐私敏感场景和嵌入式工作流。",
+          "url": "https://workshop.cjpais.com/projects/transcribe-cpp",
+          "source": "AI HOT",
           "section": "products",
           "section_label": "产品 / 概念"
         }
@@ -19567,6 +20999,44 @@
       ]
     },
     {
+      "name": "Agent 治理",
+      "count": 2,
+      "dates": [
+        "2026-08-05",
+        "2026-07-29"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "NVIDIA SkillSpector 安全审计流水线",
+          "summary": "这套教程把 Skill 市场安全问题工程化：生成风险样本、用规则和图工作流检查、输出 SARIF，再接入 CI policy gate。对正在引入 Agent Skill 的团队，它比单次人工 review 更可持续。",
+          "url": "https://www.marktechpost.com/2026/08/04/building-an-advanced-ai-skill-security-auditing-pipeline-with-nvidia-skillspector-langgraph-yara-rules-sarif-and-ci-policy-gates",
+          "source": "MarkTechPost",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "microsoft/agent-governance-toolkit",
+          "summary": "AI Agent Governance Toolkit，覆盖策略执行、zero-trust identity、执行沙箱和可靠性工程，并映射 OWASP Agentic Top 10。",
+          "url": "https://github.com/microsoft/agent-governance-toolkit",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "Agent 环境",
       "count": 2,
       "dates": [
@@ -19642,38 +21112,34 @@
       ]
     },
     {
-      "name": "Codex",
+      "name": "Cloudflare",
       "count": 2,
       "dates": [
-        "2026-08-04",
-        "2026-07-29"
+        "2026-08-05",
+        "2026-08-04"
       ],
       "sections": [
         {
-          "name": "开源热门",
-          "count": 1
-        },
-        {
           "name": "今日要闻",
-          "count": 1
+          "count": 2
         }
       ],
       "items": [
         {
-          "date": "2026-08-04",
-          "title": "Alishahryar1/free-claude-code",
-          "summary": "Terminal, app and IDE wrapper for using Claude Code, Codex and Pi-style workflows, including voice-supported OpenClaw-like interaction.",
-          "url": "https://github.com/Alishahryar1/free-claude-code",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
+          "date": "2026-08-05",
+          "title": "Cloudflare 为本地 Workers 调试自动捕获追踪",
+          "summary": "Cloudflare 在 wrangler dev 与 vite dev 中自动采集 OpenTelemetry 追踪，并让智能体可通过 Local Explorer API 查询 spans、错误和日志。相比昨天的虚拟文件系统消息，这次新增的是本地调试闭环：Agent 能基于追踪数据定位失败并验证修复。",
+          "url": "https://blog.cloudflare.com/local-tracing",
+          "source": "Cloudflare Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
         },
         {
-          "date": "2026-07-29",
-          "title": "OpenAI 发布 Codex 安全 CLI 与 SDK",
-          "summary": "Codex 相关工具继续向“可审计、可集成”的工程链路移动，安全 CLI 与 SDK 的信号说明代码代理不再只是交互式助手，而是要进入自动化流水线和组织级治理。",
-          "url": "https://x.com/thsottiaux/status/2082241164850364555",
-          "source": "OpenAI Developers / X",
+          "date": "2026-08-04",
+          "title": "Cloudflare 推出 @cloudflare/computer 预览版",
+          "summary": "@cloudflare/computer 把虚拟文件系统和多执行环境包装成 Agent 可用的基础设施，重点不是又一个工具 API，而是让 Agent 在边缘运行时里获得更像“电脑”的状态和文件抽象。",
+          "url": "https://blog.cloudflare.com/cloudflare-computer",
+          "source": "Cloudflare Blog",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -19929,36 +21395,36 @@
       ]
     },
     {
-      "name": "cs.CR",
+      "name": "Skills",
       "count": 2,
       "dates": [
-        "2026-07-27",
-        "2026-07-20"
+        "2026-08-05",
+        "2026-07-17"
       ],
       "sections": [
         {
-          "name": "AI 论文",
+          "name": "开源热门",
           "count": 2
         }
       ],
       "items": [
         {
-          "date": "2026-07-27",
-          "title": "Dynamic Capability Scoping for Enterprise AI Agents: A Synthetic Dataset and Three-Source Permission Architecture",
-          "summary": "企业 Agent 最难的不是调用工具，而是按任务动态缩小权限。它把 synthetic dataset 与三源权限架构放在一起，适合安全、内控和 Agent 平台团队阅读。",
-          "url": "https://arxiv.org/abs/2607.22445",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-08-05",
+          "title": "obra/superpowers",
+          "summary": "Agentic skills framework 与软件开发方法论项目，围绕可复用 skill、工程流程和团队协作约束组织。",
+          "url": "https://github.com/obra/superpowers",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         },
         {
-          "date": "2026-07-20",
-          "title": "Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents",
-          "summary": "安全 Agent 评测常只看是否攻破或完成 CTF，这篇把推理成本、工具调用和遥测查询一起纳入评价。它对企业安全团队有阅读价值，因为真实 SOC 场景里预算和成功率同等重要。",
-          "url": "https://arxiv.org/abs/2607.15263v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-07-17",
+          "title": "ibelick/ui-skills",
+          "summary": "ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。",
+          "url": "https://github.com/ibelick/ui-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -20390,6 +21856,40 @@
           "source": "TechCrunch",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "内容质量",
+      "count": 2,
+      "dates": [
+        "2026-08-05",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "AI 生成配图让读者更不想读博客",
+          "summary": "HN 热帖讨论 AI 配图为何削弱文章可信度：读者会把廉价、泛化、无信息量的图片当作作者没有投入判断力的信号。",
+          "url": "https://nelson.cloud/ai-generated-images-discourage-me-from-reading-your-blog/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "企业菜单被 AI 重设计后变丑，HN 讨论生成式设计的品控问题",
+          "summary": "这类案例提醒团队：AI 生成视觉资产不等于设计系统，缺少审稿、品牌约束和实际可读性测试时，自动化会把小成本试验变成用户体验债务。",
+          "url": "https://blog.fiddery.com/businesses-with-ugly-ai-menu-redesigns/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -20826,6 +22326,43 @@
           "title": "moeru-ai/airi",
           "summary": "自托管 AI companion，支持实时语音聊天、Minecraft/Factorio 场景和 Web/macOS/Windows 多端运行。",
           "url": "https://github.com/moeru-ai/airi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "工程流程",
+      "count": 2,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "GitHub 用堆叠式 PR 拆解 AI 生成的巨型 diff",
+          "summary": "GitHub 工程博客给出一套把 1000+ 行 AI 生成改动拆成 L1-L4 分层 PR 的做法，让数据、API、接线和 UI 可分别审查。重点不在工具名，而是把 Agent 产出的“大块代码”重新变成可分配、可回滚的工程单元。",
+          "url": "https://github.blog/engineering/turn-one-giant-ai-generated-pull-request-to-a-reviewable-stack",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "EveryInc/compound-engineering-plugin",
+          "summary": "面向 Claude Code、Codex、Cursor 等工具的 Compound Engineering 插件，把工程方法论封装成可复用插件。",
+          "url": "https://github.com/EveryInc/compound-engineering-plugin",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -21411,44 +22948,6 @@
       ]
     },
     {
-      "name": "本地 AI",
-      "count": 2,
-      "dates": [
-        "2026-07-29",
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-29",
-          "title": "FrigadeHQ/yap",
-          "summary": "开源 macOS 本地语音听写工具，不需要用户手动下载模型，适合作为语音到 Agent 指令链路的轻量入口。",
-          "url": "https://github.com/FrigadeHQ/yap",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "transcribe.cpp",
-          "summary": "transcribe.cpp v0.1.0 支持 16 个 ASR 模型族和多种 GPU 加速后端，适合本地语音转录、隐私敏感场景和嵌入式工作流。",
-          "url": "https://workshop.cjpais.com/projects/transcribe-cpp",
-          "source": "AI HOT",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
       "name": "模型安全",
       "count": 2,
       "dates": [
@@ -21661,6 +23160,39 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "编码 Agent",
+      "count": 2,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "OpenRouter ori CLI",
+          "summary": "ori CLI 把模型路由、环境变量和 harness 适配打包成登录后的初始化流程。它解决的是多工具用户最常见的配置漂移问题，而不是再做一个聊天客户端。",
+          "url": "https://openrouter.ai/blog/announcements/ori-harness",
+          "source": "OpenRouter Announcements",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "MicroCodex",
+          "summary": "MicroCodex 把 OpenAI/Codex 风格编码 Agent 重新实现为 C++ 小二进制，适合作为研究 agent loop、命令执行和最小依赖分发的样本。当前项目仍早期，重点是实现路径而不是完整替代成熟工具。",
+          "url": "https://github.com/paoloanzn/microcodex",
+          "source": "Show HN / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -22473,6 +24005,30 @@
       ]
     },
     {
+      "name": "AI 产业",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "The AI Demand Bubble 再次把需求质量摆上台面",
+          "summary": "社区围绕 AI 收入、推理成本和用户留存争论：高使用量不自动等于高利润，企业采购也不等于可长期复购。",
+          "url": "https://www.wheresyoured.at/the-ai-demand-bubble/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "AI 代码",
       "count": 1,
       "dates": [
@@ -22785,6 +24341,30 @@
       ]
     },
     {
+      "name": "AI 审计",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Chiaro-HQ/methodology",
+          "summary": "把 SOC 2 readiness 与审计判断公开成结构化方法论，适合做 AI 合规 Agent 的知识底座。",
+          "url": "https://github.com/Chiaro-HQ/methodology",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "AI 对齐",
       "count": 1,
       "dates": [
@@ -23025,6 +24605,30 @@
       ]
     },
     {
+      "name": "AI 生成内容",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "AI 生成配图让读者更不想读博客",
+          "summary": "HN 热帖讨论 AI 配图为何削弱文章可信度：读者会把廉价、泛化、无信息量的图片当作作者没有投入判断力的信号。",
+          "url": "https://nelson.cloud/ai-generated-images-discourage-me-from-reading-your-blog/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "AI 研发自动化",
       "count": 1,
       "dates": [
@@ -23117,6 +24721,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "AI 资本开支",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "AI 债务扩张与隐藏融资引发热议",
+          "summary": "Fortune 文章引出 HN 对 hyperscaler capex、债券融资和 AI 需求可持续性的讨论。技术乐观和财务约束正在同一张算力账单上相遇。",
+          "url": "https://fortune.com/2026/07/31/ai-debt-hypescalers-capex-capital-spending-hidden-borrowing-bond-issuance/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -23361,6 +24989,30 @@
       ]
     },
     {
+      "name": "Agent 可观测性",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Cloudflare 为本地 Workers 调试自动捕获追踪",
+          "summary": "Cloudflare 在 wrangler dev 与 vite dev 中自动采集 OpenTelemetry 追踪，并让智能体可通过 Local Explorer API 查询 spans、错误和日志。相比昨天的虚拟文件系统消息，这次新增的是本地调试闭环：Agent 能基于追踪数据定位失败并验证修复。",
+          "url": "https://blog.cloudflare.com/local-tracing",
+          "source": "Cloudflare Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "Agent 可靠性",
       "count": 1,
       "dates": [
@@ -23505,6 +25157,30 @@
       ]
     },
     {
+      "name": "Agent 方法论",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "obra/superpowers",
+          "summary": "Agentic skills framework 与软件开发方法论项目，围绕可复用 skill、工程流程和团队协作约束组织。",
+          "url": "https://github.com/obra/superpowers",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "Agent 框架",
       "count": 1,
       "dates": [
@@ -23525,30 +25201,6 @@
           "source": "Microsoft Research",
           "section": "products",
           "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
-      "name": "Agent 治理",
-      "count": 1,
-      "dates": [
-        "2026-07-29"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-29",
-          "title": "microsoft/agent-governance-toolkit",
-          "summary": "AI Agent Governance Toolkit，覆盖策略执行、zero-trust identity、执行沙箱和可靠性工程，并映射 OWASP Agentic Top 10。",
-          "url": "https://github.com/microsoft/agent-governance-toolkit",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         }
       ]
     },
@@ -23769,6 +25421,30 @@
       ]
     },
     {
+      "name": "CI",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "NVIDIA SkillSpector 安全审计流水线",
+          "summary": "这套教程把 Skill 市场安全问题工程化：生成风险样本、用规则和图工作流检查、输出 SARIF，再接入 CI policy gate。对正在引入 Agent Skill 的团队，它比单次人工 review 更可持续。",
+          "url": "https://www.marktechpost.com/2026/08/04/building-an-advanced-ai-skill-security-auditing-pipeline-with-nvidia-skillspector-langgraph-yara-rules-sarif-and-ci-policy-gates",
+          "source": "MarkTechPost",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "CUDA",
       "count": 1,
       "dates": [
@@ -23885,30 +25561,6 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
-        }
-      ]
-    },
-    {
-      "name": "Cloudflare",
-      "count": 1,
-      "dates": [
-        "2026-08-04"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-04",
-          "title": "Cloudflare 推出 @cloudflare/computer 预览版",
-          "summary": "@cloudflare/computer 把虚拟文件系统和多执行环境包装成 Agent 可用的基础设施，重点不是又一个工具 API，而是让 Agent 在边缘运行时里获得更像“电脑”的状态和文件抽象。",
-          "url": "https://blog.cloudflare.com/cloudflare-computer",
-          "source": "Cloudflare Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
         }
       ]
     },
@@ -24125,6 +25777,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "GPU",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "NVIDIA 开源 cuFile API，推动 GPU 直连存储",
+          "summary": "NVIDIA 宣布开源 cuFile API 及底层存储软件栈，让 GPU 可直接读写存储并把访问延迟压到微秒级。对大模型训练、推理缓存和多模态数据管线来说，存储路径正在成为新的性能战场。",
+          "url": "https://blogs.nvidia.com/blog/ai-storage-fms",
+          "source": "NVIDIA Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -24461,6 +26137,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "LLM CLI",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "LLM 0.32",
+          "summary": "Simon Willison 的 LLM CLI 更新到 0.32，新增推理轨迹展示、OpenAI Responses API、服务端工具和更清晰日志。它适合把多模型实验从临时脚本收束成可复现命令行工作流。",
+          "url": "https://simonwillison.net/2026/Aug/4/new-release-of-llm",
+          "source": "Simon Willison 博客",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -24993,6 +26693,30 @@
       ]
     },
     {
+      "name": "RAG",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Amazon Bedrock 上线 Web Search grounding",
+          "summary": "AWS 为 Bedrock foundation model grounding 增加 Web Search 能力，让模型回答可接入更实时的网页证据。它补齐的是企业 RAG 中常见的“内部知识 + 外部新信息”缺口，但仍需要评估来源质量和引用可追踪性。",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-web-search-on-amazon-bedrock-for-foundation-model-grounding",
+          "source": "Amazon Web Services",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "ROI",
       "count": 1,
       "dates": [
@@ -25161,26 +26885,26 @@
       ]
     },
     {
-      "name": "Skills",
+      "name": "Skill 安全",
       "count": 1,
       "dates": [
-        "2026-07-17"
+        "2026-08-05"
       ],
       "sections": [
         {
-          "name": "开源热门",
+          "name": "产品 / 概念",
           "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-07-17",
-          "title": "ibelick/ui-skills",
-          "summary": "ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。",
-          "url": "https://github.com/ibelick/ui-skills",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
+          "date": "2026-08-05",
+          "title": "NVIDIA SkillSpector 安全审计流水线",
+          "summary": "这套教程把 Skill 市场安全问题工程化：生成风险样本、用规则和图工作流检查、输出 SARIF，再接入 CI policy gate。对正在引入 Agent Skill 的团队，它比单次人工 review 更可持续。",
+          "url": "https://www.marktechpost.com/2026/08/04/building-an-advanced-ai-skill-security-auditing-pipeline-with-nvidia-skillspector-langgraph-yara-rules-sarif-and-ci-policy-gates",
+          "source": "MarkTechPost",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -25473,30 +27197,6 @@
       ]
     },
     {
-      "name": "cs.CL",
-      "count": 1,
-      "dates": [
-        "2026-07-28"
-      ],
-      "sections": [
-        {
-          "name": "AI 论文",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-28",
-          "title": "Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills",
-          "summary": "这篇把 skill 从静态工具说明推进到可共同演化的训练对象，和当前 Agent skill / workflow 生态高度相关。值得读它如何用自博弈扩展能力边界，而不是只靠人工写更多提示词。",
-          "url": "https://arxiv.org/abs/2607.22529",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
       "name": "cs.IR",
       "count": 1,
       "dates": [
@@ -25514,6 +27214,30 @@
           "title": "SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration",
           "summary": "SearchOS 把开放域搜索改写成带持久共享状态的 schema completion，专门解决多轮搜索 Agent 重复搜索、忘记进度的问题。它适合做 research agent 的工程参考，尤其是如何把隐式上下文变成可检查状态。",
           "url": "https://arxiv.org/abs/2607.15257v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "cs.MA",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "An Actionable Diagnosis of Multilingual, Multi-Agent Planning Failures",
+          "summary": "多语言 Agent 失败往往被笼统归因于模型能力不足，这篇把失败拆到 planner 的 grounding 层，并提出 TART 表示来显式传递任务关键信息。做跨语言客服、办公或企业自动化的团队值得读。",
+          "url": "https://arxiv.org/abs/2608.03735v1",
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
@@ -26210,6 +27934,30 @@
           "title": "Jensen Huang's first post on Twitter is in defense of open access to AI models",
           "summary": "围绕开放模型的争论继续升温。HN 讨论把 NVIDIA 的立场理解为生态战略：硬件公司天然受益于更广泛的模型训练与部署需求。",
           "url": "https://www.pcgamer.com/software/ai/jensen-huangs-first-ever-post-on-x-is-in-defense-of-open-access-to-ai-models",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "产业经济",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "AI 债务扩张与隐藏融资引发热议",
+          "summary": "Fortune 文章引出 HN 对 hyperscaler capex、债券融资和 AI 需求可持续性的讨论。技术乐观和财务约束正在同一张算力账单上相遇。",
+          "url": "https://fortune.com/2026/07/31/ai-debt-hypescalers-capex-capital-spending-hidden-borrowing-bond-issuance/",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
@@ -26961,30 +28709,6 @@
       ]
     },
     {
-      "name": "内容质量",
-      "count": 1,
-      "dates": [
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-23",
-          "title": "企业菜单被 AI 重设计后变丑，HN 讨论生成式设计的品控问题",
-          "summary": "这类案例提醒团队：AI 生成视觉资产不等于设计系统，缺少审稿、品牌约束和实际可读性测试时，自动化会把小成本试验变成用户体验债务。",
-          "url": "https://blog.fiddery.com/businesses-with-ugly-ai-menu-redesigns/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
       "name": "凭据管理",
       "count": 1,
       "dates": [
@@ -27365,6 +29089,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "合规",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Chiaro-HQ/methodology",
+          "summary": "把 SOC 2 readiness 与审计判断公开成结构化方法论，适合做 AI 合规 Agent 的知识底座。",
+          "url": "https://github.com/Chiaro-HQ/methodology",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -27773,6 +29521,30 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "存储",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "NVIDIA 开源 cuFile API，推动 GPU 直连存储",
+          "summary": "NVIDIA 宣布开源 cuFile API 及底层存储软件栈，让 GPU 可直接读写存储并把访问延迟压到微秒级。对大模型训练、推理缓存和多模态数据管线来说，存储路径正在成为新的性能战场。",
+          "url": "https://blogs.nvidia.com/blog/ai-storage-fms",
+          "source": "NVIDIA Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -29769,6 +31541,30 @@
       ]
     },
     {
+      "name": "模型微调",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Soup v0.72.4",
+          "summary": "Soup 用 layer streaming 与 YAML 配置降低本地微调门槛，让 4 GB 显存机器也能做 8B QLoRA 实验。它更适合教学和小样本探索，不应被误读成生产级大规模训练方案。",
+          "url": "https://github.com/MakazhanAlpamys/Soup",
+          "source": "Show HN / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "模型服务",
       "count": 1,
       "dates": [
@@ -29907,6 +31703,30 @@
           "summary": "Claude 被用于发现密码学算法缺陷，展示了模型在形式推理与安全研究辅助上的新边界。更值得关注的是评估方式：这类成果需要可复现证明，而不是只看模型生成的解释。",
           "url": "https://www.anthropic.com/research/discovering-cryptographic-weaknesses",
           "source": "Anthropic Research",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "模型落地",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Amazon Bedrock 上线 Web Search grounding",
+          "summary": "AWS 为 Bedrock foundation model grounding 增加 Web Search 能力，让模型回答可接入更实时的网页证据。它补齐的是企业 RAG 中常见的“内部知识 + 外部新信息”缺口，但仍需要评估来源质量和引用可追踪性。",
+          "url": "https://aws.amazon.com/blogs/aws/introducing-web-search-on-amazon-bedrock-for-foundation-model-grounding",
+          "source": "Amazon Web Services",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -31185,6 +33005,30 @@
       ]
     },
     {
+      "name": "网络犯罪",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Interpol 报告称 AI 推动非洲网络诈骗激增",
+          "summary": "讨论焦点不是“AI 是否被用于犯罪”这个旧问题，而是合成内容、语音、自动化社工如何降低跨境诈骗门槛，并让执法协作更难。",
+          "url": "https://www.africanews.com/2026/08/04/ai-fuels-more-than-half-of-cybercrime-in-africa-as-digital-scams-surge-interpol/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "网络运维",
       "count": 1,
       "dates": [
@@ -31545,6 +33389,30 @@
       ]
     },
     {
+      "name": "视频 Agent",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "browser-use/video-use",
+          "summary": "面向 coding agent 的视频编辑项目，把视频处理任务暴露为可自动化的开发工作流。",
+          "url": "https://github.com/browser-use/video-use",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "认知偏差",
       "count": 1,
       "dates": [
@@ -31833,6 +33701,30 @@
       ]
     },
     {
+      "name": "调试",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "Cloudflare 为本地 Workers 调试自动捕获追踪",
+          "summary": "Cloudflare 在 wrangler dev 与 vite dev 中自动采集 OpenTelemetry 追踪，并让智能体可通过 Local Explorer API 查询 spans、错误和日志。相比昨天的虚拟文件系统消息，这次新增的是本地调试闭环：Agent 能基于追踪数据定位失败并验证修复。",
+          "url": "https://blog.cloudflare.com/local-tracing",
+          "source": "Cloudflare Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "资源索引",
       "count": 1,
       "dates": [
@@ -31949,6 +33841,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "轻量运行时",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "MicroCodex",
+          "summary": "MicroCodex 把 OpenAI/Codex 风格编码 Agent 重新实现为 C++ 小二进制，适合作为研究 agent loop、命令执行和最小依赖分发的样本。当前项目仍早期，重点是实现路径而不是完整替代成熟工具。",
+          "url": "https://github.com/paoloanzn/microcodex",
+          "source": "Show HN / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -32289,6 +34205,30 @@
       ]
     },
     {
+      "name": "需求判断",
+      "count": 1,
+      "dates": [
+        "2026-08-05"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-05",
+          "title": "The AI Demand Bubble 再次把需求质量摆上台面",
+          "summary": "社区围绕 AI 收入、推理成本和用户留存争论：高使用量不自动等于高利润，企业采购也不等于可长期复购。",
+          "url": "https://www.wheresyoured.at/the-ai-demand-bubble/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "需求工程",
       "count": 1,
       "dates": [
@@ -32460,15 +34400,15 @@
   "sources": [
     {
       "name": "GitHub",
-      "count": 80
+      "count": 85
     },
     {
       "name": "Hacker News",
-      "count": 75
+      "count": 80
     },
     {
       "name": "arXiv",
-      "count": 59
+      "count": 63
     },
     {
       "name": "Show HN",
@@ -32493,6 +34433,14 @@
     {
       "name": "IT之家",
       "count": 5
+    },
+    {
+      "name": "Google Developers Blog",
+      "count": 3
+    },
+    {
+      "name": "GitHub Blog",
+      "count": 3
     },
     {
       "name": "Qwen Blog",
@@ -32529,6 +34477,22 @@
     {
       "name": "Moonshot AI",
       "count": 3
+    },
+    {
+      "name": "Show HN / GitHub",
+      "count": 2
+    },
+    {
+      "name": "Cloudflare Blog",
+      "count": 2
+    },
+    {
+      "name": "NVIDIA Blog",
+      "count": 2
+    },
+    {
+      "name": "MarkTechPost",
+      "count": 2
     },
     {
       "name": "Greg Brockman",
@@ -32575,15 +34539,7 @@
       "count": 2
     },
     {
-      "name": "GitHub Blog",
-      "count": 2
-    },
-    {
       "name": "Cursor Blog",
-      "count": 2
-    },
-    {
-      "name": "Google Developers Blog",
       "count": 2
     },
     {
@@ -32603,6 +34559,22 @@
       "count": 2
     },
     {
+      "name": "Google Cloud Blog",
+      "count": 1
+    },
+    {
+      "name": "Amazon Web Services",
+      "count": 1
+    },
+    {
+      "name": "Simon Willison 博客",
+      "count": 1
+    },
+    {
+      "name": "OpenRouter Announcements",
+      "count": 1
+    },
+    {
       "name": "X：Greg Brockman",
       "count": 1
     },
@@ -32612,10 +34584,6 @@
     },
     {
       "name": "X：Microsoft Research",
-      "count": 1
-    },
-    {
-      "name": "Cloudflare Blog",
       "count": 1
     },
     {
@@ -32727,10 +34695,6 @@
       "count": 1
     },
     {
-      "name": "NVIDIA Blog",
-      "count": 1
-    },
-    {
       "name": "CNBC 开放权重报道",
       "count": 1
     },
@@ -32820,10 +34784,6 @@
     },
     {
       "name": "VentureBeat",
-      "count": 1
-    },
-    {
-      "name": "MarkTechPost",
       "count": 1
     },
     {
