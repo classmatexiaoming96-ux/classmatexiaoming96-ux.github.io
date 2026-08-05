@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP 实战课：从 Docker 网关到自定义工具服务器 — NetworkChuck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a2a2b8;
+      --text-muted: #62627a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-green: #7fcf9e;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 58px 58px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .video-shell, .content-card, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 26px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99, 179, 237, 0.08); transform: translateX(-2px); }
+    .page-title {
+      font-size: clamp(1.85rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 20px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+    .video-shell {
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-card);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      margin-bottom: 28px;
+    }
+    .video-shell iframe { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; }
+    .content-card {
+      background: rgba(22, 22, 31, 0.88);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: clamp(22px, 4vw, 36px);
+      backdrop-filter: blur(12px);
+      margin-bottom: 20px;
+    }
+    .section { margin: 0 0 34px; }
+    .section-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+      color: var(--text-primary);
+    }
+    .num { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); font-size: 0.9rem; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    ul { margin: 12px 0 0 20px; color: var(--text-secondary); }
+    li { margin-bottom: 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.025);
+    }
+    th, td {
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+      color: var(--text-secondary);
+    }
+    th {
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.08);
+      font-size: 0.9rem;
+    }
+    tr:last-child td { border-bottom: 0; }
+    blockquote {
+      border-left: 3px solid var(--accent-cyan);
+      padding: 14px 18px;
+      margin: 18px 0;
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.07);
+      border-radius: 0 10px 10px 0;
+    }
+    .timeline { display: grid; gap: 10px; margin-top: 14px; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+    .time { font-family: 'JetBrains Mono', monospace; color: var(--accent-green); font-size: 0.86rem; }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 14px; }
+    .rec-card {
+      display: block;
+      padding: 14px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      transition: all 0.2s ease;
+    }
+    .rec-card:hover { color: var(--accent-cyan); border-color: var(--border-hover); transform: translateY(-2px); }
+    code { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); }
+    footer { padding: 28px 0; color: var(--text-muted); font-size: 0.86rem; text-align: center; }
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+    @media (max-width: 720px) {
+      body { padding: 0 16px 44px; }
+      .timeline-item { grid-template-columns: 1fr; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <h1 class="page-title">MCP 实战课：从 Docker 网关到自定义工具服务器</h1>
+    <p class="subtitle">英文原题：you need to learn MCP RIGHT NOW!! (Model Context Protocol)</p>
+    <div class="page-meta">
+      <span class="meta-badge">NetworkChuck</span>
+      <span class="meta-badge">38:40</span>
+      <span class="meta-badge">约 1,627,017 次观看</span>
+      <span class="meta-badge">MCP · Docker · Claude Desktop · stdio</span>
+    </div>
+  </header>
+
+  <div class="video-shell">
+    <iframe src="https://www.youtube.com/embed/GuTcle5edjk" title="you need to learn MCP RIGHT NOW!! (Model Context Protocol)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+
+  <main class="content-card">
+    <section class="section">
+      <h2 class="section-title"><span class="num">01</span>问题引入：为什么 LLM 需要 MCP</h2>
+      <p>这期视频的重点不是“又一个新协议名词”，而是把一个工程事实讲透：大模型如果只能聊天，就只能给建议；它要真正完成任务，就必须安全地调用外部工具、读写本地资料、访问 API、运行命令，并且知道每个工具能做什么、需要什么参数、该不该请求用户授权。</p>
+      <p>NetworkChuck 用 Obsidian、Brave、Docker 和 Kali Linux 串起整条线。人类使用软件靠图形界面，程序之间使用 API，而 LLM 最擅长的是文本和结构化描述。MCP 正好站在中间：它把工具包装成模型能理解的“能力清单”，让客户端按统一方式发现工具、请求调用、接收结果。</p>
+      <blockquote>视频的核心判断可以转述为：MCP 的价值不是让模型变聪明，而是让模型在边界清楚、权限可控的前提下动手做事。</blockquote>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">02</span>核心概念：MCP 扮演的三层角色</h2>
+      <p><strong>第一层是工具描述层。</strong>服务器不只是暴露一个 HTTP 接口，而是用自然语言和 schema 告诉客户端：“我有这些工具，每个工具适合什么任务，需要哪些输入，返回什么结果。”这解决了视频开头提到的 API 文档过重问题：模型不需要读完整开发者文档，只需要读对当前任务必要的工具契约。</p>
+      <p><strong>第二层是客户端治理层。</strong>Claude Desktop 这类客户端会把 MCP 服务器挂载为可用工具，同时在模型调用工具前弹出授权。视频里写 Obsidian 笔记和搜索 vault 时，Claude 并不是直接拿到了主机所有权限，而是通过客户端弹窗确认后调用特定工具。</p>
+      <p><strong>第三层是运行隔离层。</strong>Docker MCP Toolkit 把 MCP server 放进容器，把安装、运行、注册和连接统一起来。对初学者来说，这比手动配置 Python 环境、依赖、路径和 Claude Desktop JSON 要稳得多；对工程团队来说，容器也让复现和撤销更容易。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">03</span>关键论点与实操步骤</h2>
+      <p><strong>先用现成服务器建立直觉。</strong>视频先在 Docker MCP Toolkit 中启用 Obsidian server，查看它暴露出的工具，例如 append content、simple search、get file contents。随后在 Claude Desktop 中连接 Docker MCP，并让 Claude 创建一条法压壶咖啡笔记。这个演示的价值在于：模型只看到“创建笔记”这种任务级工具，认证、REST API 调用和文件写入都被服务器封装在后面。</p>
+      <p><strong>再从最小 server 入手。</strong>作者随后创建一个 dice MCP server：目录里包含 <code>Dockerfile</code>、<code>requirements.txt</code>、<code>dice_server.py</code> 和 README。构建镜像后，把它加入 Docker MCP catalog/registry，再重启 Claude Desktop。这里真正要学的不是骰子本身，而是 server 如何把一个很小的函数包装成可发现、可调用、可授权的工具。</p>
+      <p><strong>然后扩展到有状态工具。</strong>计时器 server 让模型能查看、启动、停止、重启当前计时器。这个例子比骰子更接近真实应用，因为它包含状态、命名对象和重复操作。视频中 Claude 没有被明确告知使用哪个工具，而是从“有没有当前 timer”“停止它”“重启它”这些自然语言指令里自行选择 MCP 工具。</p>
+      <p><strong>最后讨论高风险能力。</strong>Kali Linux 容器演示说明 MCP 可以把安全测试工具也暴露给模型，但这正是需要权限、边界和授权语义的地方。课程页读者应该把它理解为“授权实验环境”的模式：只在受控容器、受控目标和明确许可下使用，不要把这种能力直接接到真实生产资产。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">04</span>决策矩阵：什么时候用哪种 MCP 部署方式</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>方案</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>主要风险</th>
+            <th>建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Docker MCP Toolkit + 现成 catalog</td>
+            <td>快速接入 Obsidian、Brave、数据库、GitHub 等常见工具</td>
+            <td>安装路径短，隔离好，Claude Desktop 配置更少</td>
+            <td>容易忽略 server 背后实际权限；catalog 质量参差</td>
+            <td>适合入门和个人工作台，但要逐个检查工具权限</td>
+          </tr>
+          <tr>
+            <td>自定义本地 stdio server</td>
+            <td>包装公司内部 CLI、本地脚本、个人知识库或小型自动化</td>
+            <td>低延迟、无需公网服务、部署和调试直接</td>
+            <td>本地文件和命令权限边界需要自己设计</td>
+            <td>优先用于单机工具和受控开发环境</td>
+          </tr>
+          <tr>
+            <td>远程 HTTP/SSE server</td>
+            <td>多人共享服务、云端数据源、跨设备 Agent 工作流</td>
+            <td>集中部署，便于审计、限流和统一认证</td>
+            <td>认证、网络暴露、租户隔离和日志合规更复杂</td>
+            <td>有团队运维能力时再上，必须先做鉴权和审计</td>
+          </tr>
+          <tr>
+            <td>Kali/安全测试类 server</td>
+            <td>授权靶场、CTF、内部红队自动化、教学实验</td>
+            <td>能把复杂命令行工具变成模型可规划的动作</td>
+            <td>误用风险最高，目标边界不清会造成真实损害</td>
+            <td>只在隔离容器和明确授权目标中使用</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">05</span>值得记住的两条判断</h2>
+      <blockquote>MCP server 最好被理解成“给模型看的工具界面”，不是简单的 API 代理。它要负责描述能力、约束输入、隐藏实现细节，并把结果整理成模型能继续推理的文本或结构。</blockquote>
+      <blockquote>本地 MCP 的默认通信常常是标准输入/输出和 JSON-RPC 管道；远程 MCP 才需要 HTTP、SSE、鉴权、服务器运维和更完整的安全设计。</blockquote>
+      <p>这两条判断能帮助读者避免两个常见误区。第一，不要把任何 API 简单套一层 MCP 就当成“Agent ready”；工具命名、参数、错误返回和权限提示都需要面向模型重新设计。第二，不要一上来就做远程服务；如果任务只需要本地文件、命令行或个人工具，stdio server 通常更简单、更快，也更少暴露面。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">06</span>时间戳目录</h2>
+      <div class="timeline">
+        <div class="timeline-item"><span class="time">00:00</span><span>MCP 为什么让模型从“会说”变成“能做”：Obsidian、Brave、Kali Linux 预告。</span></div>
+        <div class="timeline-item"><span class="time">02:10</span><span>从 GUI、API 到 MCP：解释为什么普通 API 文档并不适合直接交给 LLM。</span></div>
+        <div class="timeline-item"><span class="time">07:00</span><span>Docker MCP Toolkit 入门：catalog、server、client，以及把 Claude Desktop 连接到 Docker MCP。</span></div>
+        <div class="timeline-item"><span class="time">10:30</span><span>Obsidian server 演示：创建笔记、搜索 vault、授权工具调用。</span></div>
+        <div class="timeline-item"><span class="time">15:00</span><span>创建自定义 dice server：文件结构、Dockerfile、Python server、构建镜像。</span></div>
+        <div class="timeline-item"><span class="time">20:20</span><span>把自定义 server 加入 Docker MCP registry，让 Claude 发现并调用新工具。</span></div>
+        <div class="timeline-item"><span class="time">24:00</span><span>计时器 server：有状态工具、查看当前 timer、停止和重启流程。</span></div>
+        <div class="timeline-item"><span class="time">28:10</span><span>Kali Linux MCP 容器演示：只适合授权实验环境的高风险能力。</span></div>
+        <div class="timeline-item"><span class="time">33:00</span><span>传输机制：本地 stdio/JSON-RPC、远程 HTTP/SSE，以及 Docker MCP gateway 的作用。</span></div>
+        <div class="timeline-item"><span class="time">37:00</span><span>收束：把 MCP 接到 n8n 等自动化平台，扩展个人或团队工作流。</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">07</span>相关推荐</h2>
+      <p>如果你已经理解了本视频的 Docker MCP 路线，下一步可以沿两条线继续：一条是从协议层补足 MCP client/server 基础；另一条是把 MCP 放回 Claude Code、Skills 和 Agent workflow 的整体工具治理里。</p>
+      <div class="rec-grid">
+        <a class="rec-card" href="index.html">返回课程列表</a>
+        <a class="rec-card" href="RhTiAOGwbYE.html">MCP 从零实战：亲手构建 Server 与 Client</a>
+        <a class="rec-card" href="pvxNcQTcIy4.html">Agent Skills 会取代 MCP 吗？</a>
+        <a class="rec-card" href="uogzSxOw4LU.html">Claude Code 专业工作流：MCP、Skills、子智能体与持久记忆</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    基于 YouTube 字幕自动整理 · <a href="https://www.youtube.com/watch?v=GuTcle5edjk">原视频</a>
+  </footer>
+</body>
+</html>
