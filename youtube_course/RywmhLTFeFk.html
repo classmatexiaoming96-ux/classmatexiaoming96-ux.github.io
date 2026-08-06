@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 入门：用四个小项目练会 AI 编程工作流 — AI Master</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a2a2b8;
+      --text-muted: #62627a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-green: #7fcf9e;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 58px 58px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .video-shell, .content-card, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 26px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99, 179, 237, 0.08); transform: translateX(-2px); }
+    .page-title {
+      font-size: clamp(1.85rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 20px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+    .video-shell {
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--bg-card);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      margin-bottom: 28px;
+    }
+    .video-shell iframe { width: 100%; aspect-ratio: 16 / 9; display: block; border: 0; }
+    .content-card {
+      background: rgba(22, 22, 31, 0.88);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: clamp(22px, 4vw, 36px);
+      backdrop-filter: blur(12px);
+      margin-bottom: 20px;
+    }
+    .section { margin: 0 0 34px; }
+    .section-title {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+      color: var(--text-primary);
+    }
+    .num { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); font-size: 0.9rem; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    ul { margin: 12px 0 0 20px; color: var(--text-secondary); }
+    li { margin-bottom: 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.025);
+    }
+    th, td {
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 14px;
+      vertical-align: top;
+      text-align: left;
+      color: var(--text-secondary);
+    }
+    th {
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.08);
+      font-size: 0.9rem;
+    }
+    tr:last-child td { border-bottom: 0; }
+    blockquote {
+      border-left: 3px solid var(--accent-cyan);
+      padding: 14px 18px;
+      margin: 18px 0;
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.07);
+      border-radius: 0 10px 10px 0;
+    }
+    .timeline { display: grid; gap: 10px; margin-top: 14px; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+    .time { font-family: 'JetBrains Mono', monospace; color: var(--accent-green); font-size: 0.86rem; }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 14px; }
+    .rec-card {
+      display: block;
+      padding: 14px;
+      text-decoration: none;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+      transition: all 0.2s ease;
+    }
+    .rec-card:hover { color: var(--accent-cyan); border-color: var(--border-hover); transform: translateY(-2px); }
+    code { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); }
+    footer { padding: 28px 0; color: var(--text-muted); font-size: 0.86rem; text-align: center; }
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+    @media (max-width: 720px) {
+      body { padding: 0 16px 44px; }
+      .timeline-item { grid-template-columns: 1fr; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <h1 class="page-title">Claude Code 入门：用四个小项目练会 AI 编程工作流</h1>
+    <p class="subtitle">英文原题：Ultimate Claude Code Guide: How to Use Claude Code for Beginners in 2026</p>
+    <div class="page-meta">
+      <span class="meta-badge">AI Master</span>
+      <span class="meta-badge">18:42</span>
+      <span class="meta-badge">约 78,917 次观看</span>
+      <span class="meta-badge">Claude Code · Opus/Sonnet · 小工具开发</span>
+    </div>
+  </header>
+
+  <div class="video-shell">
+    <iframe src="https://www.youtube.com/embed/RywmhLTFeFk" title="Ultimate Claude Code Guide: How to Use Claude Code for Beginners in 2026" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+
+  <main class="content-card">
+    <section class="section">
+      <h2 class="section-title"><span class="num">01</span>问题引入：这不是“学语法”，而是换一种交付方式</h2>
+      <p>这期视频面向的不是已经会写大量代码的工程师，而是想用 Claude Code 把具体工作流做成小软件的人。讲者没有从 API、框架或算法开始，而是连续构建四个很小但完整的项目：个人落地页、Chrome 右键摘要扩展、图片自动文案脚本、浏览器本地习惯追踪器。它们覆盖网页、浏览器扩展、后台脚本和单文件本地应用，目的是让观众看到同一种 AI 编程循环如何迁移到不同形态的工具。</p>
+      <p>真正值得看的地方在于，它把 Claude Code 解释成一种“描述目标、审阅计划、让模型写代码、再用视觉或错误反馈迭代”的工作方式，而不是把它包装成万能程序员。视频反复强调：人仍然要负责判断结果是否好、需求是否具体、什么时候该换模型、什么时候该重开上下文。这比“让 AI 一键写 App”的宣传更有实践价值。</p>
+      <blockquote>可以把视频的核心观点转述为：Claude Code 不会让你自动变成软件工程师，但它能让你用自然语言快速验证一个具体工具是否值得继续投入。</blockquote>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">02</span>核心概念：Opus 负责思考，Sonnet 负责执行</h2>
+      <p>视频最重要的操作模式是“先规划、再建造”。复杂一点的任务先切到 Opus，让它像资深架构师一样列出方案、文件结构、依赖和边界；确认计划后切到 Sonnet，让它按计划写代码。讲者用个人落地页和图片文案脚本演示这个交接：Opus 花更多 token 做判断，Sonnet 用更快速度落地实现。</p>
+      <p>这个模式不只是省钱技巧。它背后的工程含义是：当任务涉及多个文件、状态保存、API 调用或长期可维护性时，先把设计暴露出来，比直接让模型改文件更容易发现遗漏。反过来，如果任务很小，比如一个本地习惯追踪器或简单 Chrome 扩展，就可以直接用 Sonnet，从一版可运行结果开始迭代。</p>
+      <p>另一个关键概念是 <code>CLAUDE.md</code>。视频里建议初始化项目上下文，让 Claude 生成项目记忆文件，避免每个 session 都重新解释文件结构、技术选择和偏好。对真实项目而言，这相当于给 AI 一份轻量级开发手册：它不保证模型永远正确，但能显著减少“忘记上文”和“重复踩坑”。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">03</span>四个项目怎么串起完整工作流</h2>
+      <p><strong>第一个项目是个人落地页。</strong>它用来展示基础安装和第一次生成：安装 Node.js、Claude Code 和 Cursor，登录 Claude，信任项目目录，安装 Claude Code 扩展，然后在 Cursor 里看到 Claude 修改哪些文件。讲者先让 Opus 规划，再切 Sonnet 执行，最后用 Live Server 或直接拖拽 HTML 到浏览器验证页面。这一步训练的是“先让模型把结构想清楚，再让它写”的基本肌肉。</p>
+      <p><strong>第二个项目是 Chrome 摘要扩展。</strong>提示词要求 Claude 生成一套浏览器扩展文件：选中网页文本后右键出现 summarize 菜单，点击后调用 OpenAI API，把选中文本压缩成三句话。这个例子很适合初学者，因为 Chrome 扩展本身文件数少、交互清晰，安装方式也具体：打开扩展页面、启用开发者模式、加载 unpacked 文件夹。视频强调的是“为一个非常具体的个人痛点做工具”，而不是泛泛做一个聊天机器人。</p>
+      <p><strong>第三个项目是图片文案自动化脚本。</strong>它监听本地文件夹，发现新图片后调用 OpenAI Vision API，分别生成 Instagram 和 LinkedIn 风格的文案，再把结果写入同名 txt 文件。这个项目让观众理解 Claude Code 不只能做前端页面，也能写在本机后台运行的小自动化。更重要的是，出错时把错误粘回 Claude Code，让它定位行号和修复实现，这才是日常使用中最常见的循环。</p>
+      <p><strong>第四个项目是本地习惯追踪器。</strong>它是一个不用服务器、双击即可打开的浏览器单文件应用，数据保存在本地。讲者随后要求 Claude 增加最长 streak 统计和新纪录礼花动画，用它演示“先出可用版本，再一点点打磨”的体验。这里的人类角色更像产品负责人：决定保留什么、删掉什么、怎样才算顺手，而不是逐行写实现。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">04</span>决策矩阵：什么时候用哪种 Claude Code 模式</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>场景</th>
+            <th>推荐模式</th>
+            <th>优点</th>
+            <th>风险与提醒</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>跨 3 个以上文件、需要状态设计或 API 边界</td>
+            <td>先 Opus 计划，再 Sonnet 实现</td>
+            <td>更容易提前发现结构问题，减少返工；适合落地页、后台脚本、复杂自动化。</td>
+            <td>Opus 成本更高，计划需要人工审阅，不能把计划当作事实保证。</td>
+          </tr>
+          <tr>
+            <td>简单单文件应用或明确的小功能</td>
+            <td>直接 Sonnet 生成第一版</td>
+            <td>速度快，反馈周期短，适合习惯追踪器、简单表单、一次性小工具。</td>
+            <td>需求太模糊时会生成“看起来能跑但不好用”的结果，需要快速验收。</td>
+          </tr>
+          <tr>
+            <td>视觉样式不符合预期</td>
+            <td>截图或 Figma 导出 + 明确修改目标</td>
+            <td>Claude 能同时看图和读项目文件，容易定位要改的组件与样式。</td>
+            <td>不要只说“更好看”；要指出字号、间距、色彩、按钮状态等具体变化。</td>
+          </tr>
+          <tr>
+            <td>错误连续修不好</td>
+            <td>压缩上下文或新开 session</td>
+            <td>清掉噪声后更容易让 Claude 聚焦关键代码和报错。</td>
+            <td>同一问题连续修三次仍失败时，不要继续堆聊天记录，重述问题更有效。</td>
+          </tr>
+          <tr>
+            <td>试探某个业务想法值不值得投开发资源</td>
+            <td>用 Claude Code 做下午级原型</td>
+            <td>快速给真实用户看可运行版本，避免只停留在需求文档。</td>
+            <td>金融、医疗、安全敏感后台不应只靠 AI 原型上线，需要专业工程审查。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">05</span>容易被忽略的五个新手坑</h2>
+      <p><strong>第一，不初始化项目记忆。</strong>没有 <code>CLAUDE.md</code>，每次新会话都像从零开始，Claude 很容易忘记技术栈、命名约定和你已经做过的选择。视频建议先运行初始化，让项目规则固化下来。</p>
+      <p><strong>第二，提示词太抽象。</strong>“让它好看一点”几乎没有约束，模型只能猜。更好的说法是指出页面哪一段、哪种视觉问题、期望改成什么，例如“hero 字体太重，换轻一点并增加行距”。</p>
+      <p><strong>第三，复杂任务跳过计划模式。</strong>如果一个任务会碰多个文件，模型边写边发现结构不对，就容易重复改动。先进入 plan mode，把文件清单、依赖和步骤确认下来，通常更稳。</p>
+      <p><strong>第四，不主动压缩上下文。</strong>长会话里堆了大量尝试、废弃方案和错误输出后，模型可能开始循环或给出互相矛盾的答案。中途 compact 相当于保留关键决定、清掉噪声。</p>
+      <p><strong>第五，在坏上下文里反复修同一个问题。</strong>如果 Claude 连续两次修不好同一处错误，问题可能不是代码本身，而是上下文已经被污染。新开会话，只贴相关代码和报错，往往比继续原会话更快。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">06</span>时间戳目录</h2>
+      <div class="timeline">
+        <div class="timeline-item"><div class="time">00:00</div><div>开场：四个真实项目，不手写代码也能完成可运行工具。</div></div>
+        <div class="timeline-item"><div class="time">00:35</div><div>安装 Node.js、Claude Code、Cursor，并在项目里运行初始化生成记忆文件。</div></div>
+        <div class="timeline-item"><div class="time">01:20</div><div>个人落地页：用 Opus 规划，用 Sonnet 按计划生成页面。</div></div>
+        <div class="timeline-item"><div class="time">03:05</div><div>用截图和 Figma 导出进行视觉修改，让 Claude 同时理解界面和项目文件。</div></div>
+        <div class="timeline-item"><div class="time">05:15</div><div>Chrome 摘要扩展：选中网页文字后右键生成三句话摘要。</div></div>
+        <div class="timeline-item"><div class="time">08:00</div><div>图片文案自动化：监听文件夹，调用视觉模型生成 Instagram 和 LinkedIn 文案。</div></div>
+        <div class="timeline-item"><div class="time">11:10</div><div>从“写代码的人”转成“做判断的人”：品味、取舍和验收仍由人负责。</div></div>
+        <div class="timeline-item"><div class="time">12:15</div><div>本地习惯追踪器：单文件浏览器应用、localStorage、streak 和礼花动画。</div></div>
+        <div class="timeline-item"><div class="time">14:40</div><div>总结四类工具形态：网页、扩展、后台脚本、个人本地 App。</div></div>
+        <div class="timeline-item"><div class="time">15:40</div><div>边界提醒：Claude Code 适合验证具体工作流，不替代复杂高风险系统的专业工程。</div></div>
+        <div class="timeline-item"><div class="time">16:25</div><div>五个新手坑：记忆文件、具体提示、计划模式、compact、坏上下文重开。</div></div>
+        <div class="timeline-item"><div class="time">17:45</div><div>成本选择：Pro、API 和 Max 的适用场景，以及先从实际使用频率判断。</div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">07</span>学习建议：把视频当作练习清单，而不是神奇演示</h2>
+      <p>如果你已经会写代码，这期视频的价值不在“Claude 能不能生成 HTML”，而在于它给出了一套适合带非工程背景同事入门的节奏：先让他们做一个无部署压力的单文件工具，再做浏览器扩展，再做本地自动化。每一步都能看到真实反馈，也能暴露需求表达、授权、安全和验收问题。</p>
+      <p>如果你还不是程序员，建议不要一开始就做“完整 SaaS”或“替代现有系统”的大目标。选一个你每天真的会遇到的、边界很小的痛点：把截图批量改名、把会议纪要整理成任务、把网页文本变成摘要、把个人习惯记录在本机。Claude Code 最适合把这种具体问题变成可试用原型。</p>
+      <p>最实用的练习方式是：照着视频完成一个项目，然后故意提出三个改动。比如给习惯追踪器加导出 CSV、给 Chrome 扩展加翻译选项、给图片文案脚本加失败重试。你会很快感受到，Claude Code 的上限不只取决于模型，也取决于你是否能清楚描述目标、及时验收结果、在错误上下文里果断重开。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">08</span>相关推荐</h2>
+      <div class="rec-grid">
+        <a class="rec-card" href="index.html"><strong>返回课程列表</strong><br>继续浏览所有 AI 编程与 Agent 课程。</a>
+        <a class="rec-card" href="qYqIhX9hTQk.html"><strong>Claude Code 初学者完整教程</strong><br>更偏向逐步上手和基础命令。</a>
+        <a class="rec-card" href="gHB4JFG9i3k.html"><strong>用 Claude Code 构建第一个 AI Agent</strong><br>从 CLAUDE.md、计划模式到工作流沉淀。</a>
+        <a class="rec-card" href="pvxNcQTcIy4.html"><strong>Agent Skills 会取代 MCP 吗？</strong><br>理解 Skills、MCP 与 CLI 脚本的边界。</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a>
+  </footer>
+</body>
+</html>
