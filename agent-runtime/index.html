@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="主流 Agent Runtime 的运行循环、存储、多租户与高 QPS 架构研究报告。">
+  <title>主流 Agent Runtime：运行、存储与多用户高 QPS 架构</title>
+  <style>
+    :root{--bg:#08111f;--panel:#101c2e;--panel2:#15243a;--text:#eef4ff;--muted:#b8c5d9;--line:#344760;--accent:#75e6c4;--link:#8ecbff;--fact:#70e0a5;--infer:#ffd479;--design:#aeb9ff;--unknown:#f3a6b5;--max:1180px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:1rem}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.72 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;overflow-wrap:anywhere}a{color:var(--link);text-underline-offset:.2em}a:hover{text-decoration-thickness:2px}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:.2rem}.skip{position:absolute;left:.75rem;top:-5rem;background:var(--accent);color:#07131f;padding:.65rem 1rem;z-index:9}.skip:focus{top:.75rem}.wrap{width:min(calc(100% - 2rem),var(--max));margin:auto}.hero{padding:4.5rem 0 2.5rem;background:radial-gradient(circle at 80% 0,#173d50 0,transparent 42%)}.eyebrow{color:var(--accent);font-weight:750;letter-spacing:.08em;text-transform:uppercase}.hero h1{font-size:clamp(2rem,5vw,4.2rem);line-height:1.06;max-width:15ch;margin:.45rem 0 1rem}.lede{font-size:clamp(1.05rem,2vw,1.3rem);max-width:75ch;color:var(--muted)}.meta,.legend{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1.25rem}.pill,.label{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:.25rem .65rem;background:#0b1728;font-size:.86rem}.fact{color:var(--fact)}.infer{color:var(--infer)}.design{color:var(--design)}.unknown{color:var(--unknown)}nav.toc{margin:1.5rem auto 0;background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem 1.25rem}nav.toc ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.35rem 1rem;margin:.5rem 0;padding-left:1.2rem}main{padding:1rem 0 5rem}section{padding:2.7rem 0;border-top:1px solid var(--line)}h2{font-size:clamp(1.55rem,3vw,2.35rem);line-height:1.2;margin:0 0 1rem}h3{font-size:1.25rem;margin:2rem 0 .65rem}h4{font-size:1.05rem}.muted{color:var(--muted)}.callout{border-left:.28rem solid var(--accent);background:var(--panel);padding:1rem 1.2rem;border-radius:0 .65rem .65rem 0;margin:1rem 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:1rem}.card{background:var(--panel);border:1px solid var(--line);border-radius:.85rem;padding:1rem 1.1rem;min-width:0}.card h3,.card h4{margin-top:.2rem}.card ul{padding-left:1.25rem}.architecture{display:grid;gap:.75rem;background:var(--panel);border:1px solid var(--line);border-radius:1rem;padding:1rem}.arch-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:.65rem}.node{background:var(--panel2);border:1px solid #55708f;border-radius:.65rem;padding:.75rem;text-align:center}.arrow{text-align:center;color:var(--accent);font-weight:800;letter-spacing:.2em}.async{border-style:dashed}.figure{margin:1.4rem 0}.figure figcaption{margin-top:.65rem;color:var(--muted);font-size:.92rem}.sequence{display:grid;grid-template-columns:repeat(6,minmax(8rem,1fr));gap:.5rem;min-width:55rem;padding:.25rem}.step{position:relative;background:var(--panel2);border:1px solid var(--line);border-radius:.65rem;padding:.75rem}.step:not(:last-child)::after{content:"→";position:absolute;right:-.55rem;top:50%;z-index:1;color:var(--accent);font-weight:900}.scroll{max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;border-radius:.75rem}.life{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}.life .node{flex:1 1 8.5rem}.life .sep{color:var(--accent);font-weight:800}table{width:100%;border-collapse:collapse;min-width:58rem;background:var(--panel)}caption{text-align:left;font-weight:700;padding:.75rem 0}th,td{border:1px solid var(--line);padding:.7rem;vertical-align:top;text-align:left}th{background:#182a42}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#17263b;padding:.1em .32em;border-radius:.25rem;overflow-wrap:anywhere}pre{overflow:auto;background:#06101d;border:1px solid var(--line);border-radius:.7rem;padding:1rem}.source-list{padding-left:1.35rem}.source-list li{margin:.8rem 0}.source-list a[href^="http"]::after{content:" ↗";font-size:.8em}.kicker{font-weight:750}.note{font-size:.92rem;color:var(--muted)}footer{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted)}
+    @media(max-width:650px){.wrap{width:min(calc(100% - 1.1rem),var(--max))}.hero{padding-top:3rem}.architecture{padding:.65rem}.arch-row{grid-template-columns:1fr}.arrow{transform:rotate(90deg);height:1.25rem}.life{display:grid;grid-template-columns:1fr}.life .sep{text-align:center;transform:rotate(90deg)}nav.toc ul{grid-template-columns:1fr}.card{padding:.9rem}section{padding:2rem 0}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+    @media print{ :root{--bg:#fff;--panel:#fff;--panel2:#f4f4f4;--text:#111;--muted:#333;--line:#999;--link:#0645ad}body{font-size:10.5pt}.skip,nav.toc{display:none}.hero{padding:1rem 0;background:none}section{padding:1rem 0;break-inside:auto}.card,.figure,table{break-inside:avoid}a{color:#111;text-decoration:none}a[href^="http"]::after{content:" (" attr(href) ")";font-size:8pt}.scroll{overflow:visible}table{min-width:0;font-size:8pt}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <header class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Engineering Research · 2026</div>
+      <h1>主流 Agent Runtime：运行、存储与多用户高 QPS 架构</h1>
+      <p class="lede">从可核验的公开产品面出发，分开呈现消费产品、开发框架与云端 Agent 平台。重点回答：循环怎样运行，状态放在哪里，多租户并发怎样守住边界，以及哪些事情公开资料仍无法确认。</p>
+      <div class="meta"><span class="pill">调研截止：2026-08-06</span><span class="pill">语言：中文</span><span class="pill">静态独立页面</span></div>
+      <div class="legend" aria-label="证据标签图例"><span class="label fact">公开事实</span><span class="label infer">基于证据的推断</span><span class="label design">参考设计建议</span><span class="label unknown">未公开 / 无法确认</span></div>
+    </div>
+  </header>
+  <nav class="toc wrap" aria-label="报告目录"><strong>目录</strong><ul>
+    <li><a href="#summary">摘要与边界</a></li><li><a href="#model">统一架构</a></li><li><a href="#flows">请求与长任务</a></li><li><a href="#products">五个产品</a></li><li><a href="#storage">存储专题</a></li><li><a href="#concurrency">多用户高 QPS</a></li><li><a href="#comparison">横向对比</a></li><li><a href="#reliability">可靠性与安全</a></li><li><a href="#sources">证据附录</a></li><li><a href="#terms">术语表</a></li>
+  </ul></nav>
+  <main id="main" class="wrap">
+    <section id="summary" aria-labelledby="summary-title"><h2 id="summary-title">摘要与研究边界</h2>
+      <div class="callout"><strong>最重要的边界：</strong>OpenAI Agents SDK、Google ADK / Vertex Agent Engine、Qwen-Agent、火山 AgentKit、阿里云百炼和腾讯云能力，只能证明各自公开产品面的实现。除官方明确点名的有限路径外，它们不能被当作 ChatGPT、Gemini、通义千问、豆包或腾讯元宝完整生产架构的证据。</div>
+      <div class="grid"><article class="card"><h3>可以确认</h3><p><span class="fact kicker">公开事实</span> 公开框架和云平台展示了 Agent Loop、流式运行、会话适配器、长期记忆、沙箱、工具调用与耐久任务等组成部分。术语和状态归属并不统一。</p></article><article class="card"><h3>合理判断</h3><p><span class="infer kicker">基于证据的推断 · 高置信度</span> 五个消费产品均呈现会话、搜索、记忆、工具或长任务体验中的一部分；但生产数据库、调度器、分片、锁、缓存和真实容量通常未公开。</p></article><article class="card"><h3>工程落点</h3><p><span class="design kicker">参考设计建议</span> 将入口、执行器、队列、流式网关、模型网关、工具池与状态分片分别扩容；依靠事件、检查点、幂等键与租户键建立恢复和隔离边界。</p></article></div>
+    </section>
+
+    <section id="model" aria-labelledby="model-title"><h2 id="model-title">统一 Agent Runtime 分层模型</h2><p class="design">以下全部是参考设计建议，不表示任一厂商已按此部署。</p>
+      <figure class="figure" aria-labelledby="arch-caption"><div class="architecture" role="img" aria-label="从入口鉴权与租户路由，经流式网关、交互执行器和任务队列进入 Agent Loop，再调用模型网关与工具沙箱池，并读写会话、检查点、记忆、对象、缓存和审计存储。虚线边框表示异步组件。">
+        <div class="arch-row"><div class="node">1 请求入口与鉴权<br><small>身份、配额、request_id</small></div><div class="node">2 租户路由<br><small>tenant / region / policy</small></div><div class="node">13 安全治理<br><small>授权、加密、审计</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+        <div class="arch-row"><div class="node">7 流式事件网关</div><div class="node">3 交互执行器 / Agent Loop</div><div class="node async">6 任务队列与异步调度</div></div><div class="arrow" aria-hidden="true">↓</div>
+        <div class="arch-row"><div class="node">4 模型网关<br><small>路由、超时、成本</small></div><div class="node">5 工具 / MCP / 沙箱池<br><small>最小权限、资源上限</small></div><div class="node">12 可观测性<br><small>trace、SLI、脱敏</small></div></div><div class="arrow" aria-hidden="true">↓</div>
+        <div class="arch-row"><div class="node">8 会话状态</div><div class="node">检查点 / 事件日志</div><div class="node">9 长期记忆 / 向量索引</div><div class="node">10 产物对象存储</div><div class="node">11 缓存</div></div>
+      </div><figcaption id="arch-caption">图 1：统一分层架构。实线组件服务同步路径，虚线组件承接异步工作；移动端自动转换为单列。文本替代已写入图形的可访问标签。</figcaption></figure>
+      <div class="grid"><article class="card"><h3>执行面</h3><ol><li>入口验证身份并生成请求标识。</li><li>可信租户路由决定区域、策略和资源池。</li><li>Agent Loop 装载上下文，调用模型，执行工具并回填结果，直到完成或触及轮次、时间、成本上限。</li><li>模型网关集中管理凭证、选择、配额、超时和重试。</li><li>工具面分离结构化函数、远程 API、MCP、浏览器与隔离代码。</li></ol></article><article class="card"><h3>状态面</h3><ol start="6"><li>调度器将短任务与长任务分流。</li><li>流式事件具有 invocation、event、序号和恢复游标。</li><li>会话状态用版本条件写或单会话串行化维持顺序。</li><li>长期记忆按授权 scope 隔离并支持结构化过滤。</li><li>对象产物保存大文件，元数据保存归属、版本和校验和。</li><li>缓存键包含租户、权限与版本，且不是权威状态源。</li></ol></article><article class="card"><h3>控制面</h3><ol start="12"><li>可观测性贯穿 request、invocation、session、模型、工具、状态写入与成本。</li><li>安全治理覆盖权限、提示注入边界、密钥、加密、隔离、删除、审计与敏感追踪控制。</li></ol></article></div>
+    </section>
+
+    <section id="flows" aria-labelledby="flows-title"><h2 id="flows-title">请求时序与异步生命周期</h2>
+      <figure class="figure"><div class="scroll" tabindex="0" aria-label="同步请求时序图，可横向滚动"><div class="sequence" role="img" aria-label="客户端提交请求，入口鉴权准入，建立 invocation 并读取上下文，Agent Loop 调用模型，授权后执行工具，提交会话并异步提炼记忆。"><div class="step"><b>1 客户端</b><br>request_id<br>idempotency_key</div><div class="step"><b>2 入口</b><br>鉴权、租户、配额、准入</div><div class="step"><b>3 状态</b><br>写受理事件，读会话版本与记忆</div><div class="step"><b>4 Loop</b><br>模型调用，事件先编号落盘再流送</div><div class="step"><b>5 工具</b><br>重新授权；副作用先登记幂等键</div><div class="step"><b>6 提交</b><br>最终版本、完成事件；记忆与归档异步</div></div></div><figcaption>图 2：同步请求时序。横向容器可聚焦并滚动；正文替代说明：入口先做身份与准入，事件在发送前持久化，工具副作用以幂等记录保护，最终提交会话后再异步提炼记忆。</figcaption></figure>
+      <figure class="figure"><div class="life" role="img" aria-label="长任务从耐久登记开始，经租户队列、租约领取、检查点恢复、步骤执行与结果提交，可继续、暂停或退避，最终归档或进入死信人工处置。"><div class="node">耐久登记</div><span class="sep">→</span><div class="node async">按租户 / 优先级入队</div><span class="sep">→</span><div class="node">租约领取</div><span class="sep">→</span><div class="node">恢复检查点</div><span class="sep">→</span><div class="node">模型 / 工具步骤</div><span class="sep">→</span><div class="node">提交事件与副作用结果</div><span class="sep">→</span><div class="node">归档或死信</div></div><figcaption>图 3：异步生命周期。等待审批和退避不会占住交互进程；客户端使用 <code>task_id</code> 查询或按事件游标续传。</figcaption></figure>
+      <p><strong>状态写入点：</strong>受理记录、队列记录、模型或工具步骤后的事件和检查点、工具幂等结果、会话最终版本、长期记忆、产物元数据与审计。<strong>故障边界：</strong>入口、流连接、队列、执行器、模型供应商、各类工具池、会话库、检查点、索引与对象存储分别隔离。<strong>扩容单元：</strong>入口、活动连接、交互执行器、异步消费者、模型并发槽、每类工具池和各状态分片独立伸缩。</p>
+    </section>
+
+    <section id="products" aria-labelledby="products-title"><h2 id="products-title">消费产品与相关公开产品面</h2><p class="muted">产品体验事实与平台实现事实分开列出。没有直接来源的内部实现一律标为未知。</p>
+      <div class="grid">
+        <article class="card" id="doubao"><h3>豆包</h3><p><span class="fact">公开事实</span> 上游报告稿记录：官方材料公开记忆管理与浏览器任务模式；关联的火山 AgentKit 则公开 Runtime、沙箱、记忆和可观测等平台能力。</p><p><span class="infer">基于证据的推断 · 中置信度</span> 浏览器任务呈现“任务—工具—观察—继续”的外部循环特征。</p><p><span class="unknown">未公开 / 无法确认</span> 消费产品是否使用 AgentKit、内部调度器、数据库、分片、缓存和容量。</p></article>
+        <article class="card" id="qwen"><h3>通义千问</h3><p><span class="fact">公开事实</span> Qwen-Agent 官方仓库公开工具、MCP、代码解释器与 RAG，并称其作为 Qwen Chat 后端；阿里云百炼另行公开长期记忆。</p><p><span class="infer">基于证据的推断 · 高置信度</span> “作为后端”没有定义覆盖范围，不能外推到全部线上基础设施。</p><p><span class="unknown">未公开 / 无法确认</span> 消费产品完整存储、调度、隔离和真实容量。</p></article>
+        <article class="card" id="yuanbao"><h3>腾讯元宝</h3><p><span class="fact">公开事实</span> 上游报告稿记录：官方材料公开搜索、文件读取、临时对话，并在有限场景关联沙箱和“规划—搜索—阅读—反思”循环；腾讯云 COS 智能体存储是独立云产品面。</p><p><span class="infer">基于证据的推断 · 中置信度</span> 部分搜索和编程路径存在工具或沙箱需求。</p><p><span class="unknown">未公开 / 无法确认</span> 临时对话 TTL、完整 Runtime、会话库与调度实现。</p></article>
+        <article class="card" id="chatgpt"><h3>ChatGPT</h3><p><span class="fact">公开事实</span> 上游报告稿记录：消费产品公开历史、Saved Memories、Temporary Chat、Search、Deep Research 与 Apps；Agents SDK 公开循环、流式、Session、工具并发与追踪。</p><p><span class="infer">基于证据的推断 · 高置信度</span> 消费产品具有会话、记忆、工具和长任务体验，但没有证据证明其使用 Agents SDK Session 适配器。</p><p><span class="unknown">未公开 / 无法确认</span> ChatGPT 生产数据库、调度、锁、分区与真实吞吐。</p></article>
+        <article class="card" id="gemini"><h3>Gemini</h3><p><span class="fact">公开事实</span> 上游报告稿记录：Gemini Apps 公开近期对话、个性化、Activity 设置与 Connected Apps；Google ADK 公开事件循环和三类 Service；Vertex Agent Engine Memory Bank 公开 scope、检索、TTL 与 IAM。</p><p><span class="infer">基于证据的推断 · 高置信度</span> Apps、ADK 和云端平台是不同产品面。</p><p><span class="unknown">未公开 / 无法确认</span> Gemini Apps 是否采用 ADK Session 或 Memory Bank 作为生产后端。</p></article>
+      </div>
+    </section>
+
+    <section id="storage" aria-labelledby="storage-title"><h2 id="storage-title">存储体系：先分职责，再谈选型</h2><div class="scroll" tabindex="0" aria-label="存储职责比较表，可横向滚动"><table><caption>表 1：多类状态的边界与一致性取舍（参考设计建议）</caption><thead><tr><th>类别</th><th>推荐租户键</th><th>生命周期 / TTL</th><th>隔离与加密</th><th>一致性取舍</th></tr></thead><tbody>
+      <tr><td>运行时临时状态</td><td><code>tenant_id/run_id/step_id</code></td><td>单次 invocation；短 TTL</td><td>进程或临时 KV 隔离；敏感字段加密</td><td>允许从检查点重算，不作权威源</td></tr>
+      <tr><td>会话历史</td><td><code>tenant_id/user_id/session_id/event_seq</code></td><td>依产品政策；支持删除</td><td>传输与静态加密；资源级或行级授权</td><td>单会话有序追加或乐观并发；无需跨会话全局强一致</td></tr>
+      <tr><td>检查点 / 事件日志</td><td><code>tenant_id/thread_id/checkpoint_id</code></td><td>至少覆盖最长恢复窗口</td><td>不可变追加、校验和、schema 版本</td><td>检查点条件写；事件至少一次投递配合幂等</td></tr>
+      <tr><td>长期记忆 / 向量检索</td><td><code>tenant_id/scope_id/memory_id</code></td><td>用户政策、用途和删除要求决定</td><td>检索前强制 scope 过滤；原文与向量同等敏感</td><td>生成与索引可最终一致；删除应传播到索引</td></tr>
+      <tr><td>文件 / 产物对象</td><td><code>tenant_id/artifact_id/version</code></td><td>保留策略 + 生命周期分层</td><td>对象权限、短期签名 URL、服务端加密</td><td>对象写完后条件提交元数据；校验和防错配</td></tr>
+      <tr><td>缓存</td><td><code>tenant_id/auth_scope/version/cache_key</code></td><td>短 TTL；权限变化主动失效</td><td>禁止跨租户共享未脱敏内容</td><td>允许陈旧但不可突破授权；击穿保护</td></tr>
+      <tr><td>审计日志</td><td><code>tenant_id/time_bucket/event_id</code></td><td>依法规和内控保留</td><td>追加保护、最小化正文、访问审计</td><td>安全事件优先耐久写；可异步分析</td></tr>
+      </tbody></table></div><p class="callout"><strong>关键原则：</strong><code>tenant_id</code> 必须来自可信身份，贯穿授权、分区、队列、缓存、对象路径和审计。TTL 不是删除保证；权威库、索引、缓存、备份和对象副本都需要可验证的删除传播。</p>
+    </section>
+
+    <section id="concurrency" aria-labelledby="concurrency-title"><h2 id="concurrency-title">多用户高 QPS：容量是多维约束</h2><div class="grid">
+      <article class="card"><h3>接入与扩缩</h3><ul><li>入口保持无状态，按并发连接、请求率和 CPU 横向扩缩。</li><li>准入控制在创建昂贵工作前检查租户配额、全局水位和预算。</li><li>交互与批处理分队列，设置有界容量、优先级和公平调度。</li><li>背压从模型、工具、数据库逐级传回，拒绝或排队优于无限堆积。</li></ul></article>
+      <article class="card"><h3>顺序与可靠性</h3><ul><li>单会话用分区消费者、租约锁或版本条件写串行化；避免全局锁。</li><li>重试只用于可判定的暂态错误，指数退避并带抖动。</li><li>所有副作用携带幂等键；超时不等于失败，先查询结果再重放。</li><li>按租户与 session 哈希分区，监测大租户、长会话和热点工具。</li></ul></article>
+      <article class="card"><h3>模型、工具与流</h3><ul><li>模型和每类工具各有独立并发信号量、速率限制和熔断器。</li><li>流式连接从执行器解耦，慢消费者有缓冲上限和恢复游标。</li><li>沙箱按镜像、资源和信任等级分池；冷启动与占用时长单独容量规划。</li><li>降级顺序预先定义：缩短上下文、关闭非关键工具、切模型、转异步或明确拒绝。</li></ul></article>
+      <article class="card"><h3>成本与恢复</h3><ul><li>按租户记录 token、模型时长、工具时长、沙箱秒数、检索与存储。</li><li>队列、检查点和租约使执行器崩溃后可恢复；连接断开不取消耐久任务。</li><li>跨区恢复明确 RPO / RTO；先恢复权威状态，再重建缓存和向量索引。</li><li>容量估算同时约束 QPS、活动流、模型槽、工具槽、数据库 IOPS 与队列滞留。</li></ul></article></div>
+      <h3>必须观测的 SLI / SLO</h3><p>准入成功率、端到端成功率、首 token 延迟、完成延迟、流中断率与续传成功率、队列深度和最老任务年龄、模型与工具错误率、重试与幂等命中率、会话版本冲突率、检查点恢复成功率、热点分区、各租户限流率、token / 工具 / 沙箱成本，以及敏感数据和越权告警。没有厂商直接来源时，本报告不提供产品真实 QPS、用户量、延迟或存储规模数字。</p>
+    </section>
+
+    <section id="comparison" aria-labelledby="comparison-title"><h2 id="comparison-title">横向对比：公开到什么程度</h2><div class="scroll" tabindex="0" aria-label="产品和平台横向对比表，可横向滚动"><table><caption>表 2：消费产品与相关公开产品面；“未知”不代表能力不存在</caption><thead><tr><th>对象</th><th>运行模型</th><th>状态归属</th><th>短期会话</th><th>长期记忆</th><th>工具 / 沙箱</th><th>持久化</th><th>多租户隔离</th><th>并发 / 可靠性</th><th>公开程度</th></tr></thead><tbody>
+      <tr><td>豆包</td><td>消费体验显示任务循环特征</td><td>未知</td><td>有对话体验；内部未知</td><td>上游稿记录用户可管理记忆</td><td>浏览器任务；AgentKit 是关联平台</td><td>未知</td><td>未知</td><td>未知</td><td>消费面有限；平台面较多</td></tr>
+      <tr><td>通义千问</td><td>Qwen-Agent 被称为 Qwen Chat 后端，范围未定义</td><td>未知</td><td>消费面存在；内部未知</td><td>百炼能力不可反推</td><td>Qwen-Agent 公开工具与代码解释器</td><td>未知</td><td>未知</td><td>未知</td><td>开源框架高；消费后端有限</td></tr>
+      <tr><td>腾讯元宝</td><td>有限搜索路径公开循环</td><td>未知</td><td>临时对话；TTL 未确认</td><td>未知</td><td>有限场景关联沙箱</td><td>COS 是独立云产品面</td><td>未知</td><td>未知</td><td>场景级有限</td></tr>
+      <tr><td>ChatGPT</td><td>会话、工具、Deep Research 体验；内部 Loop 未公开</td><td>Saved Memory 与历史产品语义分开</td><td>公开产品控制</td><td>公开 Saved Memories</td><td>Search、Apps、Deep Research</td><td>内部选型未知</td><td>内部未知</td><td>内部未知</td><td>产品行为较多；底层实现低</td></tr>
+      <tr><td>Gemini</td><td>Apps 体验公开；ADK 另行公开事件循环</td><td>Apps 与平台状态不可等同</td><td>近期对话与 Activity 规则</td><td>平台 Memory Bank 不证明 Apps</td><td>Connected Apps；平台有沙箱</td><td>内部选型未知</td><td>平台公开 scope / IAM</td><td>Apps 内部未知</td><td>平台高；消费实现低</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section id="reliability" aria-labelledby="reliability-title"><h2 id="reliability-title">可靠性、安全与治理</h2><div class="grid"><article class="card"><h3>可靠执行</h3><ul><li>事件先耐久化再广播，消费者以序号去重。</li><li>工作器用租约领取，检查点提交与副作用结果分开记录。</li><li>模型和工具故障域隔离，超预算任务进入死信或人工处置。</li><li>降级行为对用户可见，不把部分失败包装为成功。</li></ul></article><article class="card"><h3>租户与权限</h3><ul><li>租户键来自服务端身份上下文，客户端字段仅作输入。</li><li>工具在执行时重新授权，不继承模型文本中的权限声明。</li><li>队列、缓存、向量过滤、对象路径与日志使用同一授权范围。</li><li>大租户使用独立配额、分区或资源池控制 noisy neighbor。</li></ul></article><article class="card"><h3>提示注入边界</h3><ul><li>网页、文件、工具输出和记忆均是不可信数据。</li><li>系统策略与工具授权不可由检索内容改写。</li><li>高风险副作用要求结构化校验、最小权限和必要的人工确认。</li><li>追踪默认脱敏，敏感正文采用受控采样和短保留。</li></ul></article></div>
+    </section>
+
+    <section id="sources" aria-labelledby="sources-title"><h2 id="sources-title">证据附录与来源账本</h2><p>访问日期均为 <strong>2026-08-06</strong>。以下是本责任单元收到的、带直接 URL 的上游证据。页面没有把缺少直接 URL 的上游条目伪装为已复核来源；相应产品内部结论均保留“未公开 / 无法确认”。</p>
+      <ol class="source-list">
+        <li id="src-openai-running"><span class="fact">一手 · 官方文档</span> <a href="https://openai.github.io/openai-agents-python/running_agents/" rel="noopener noreferrer">OpenAI Agents SDK — Running agents</a>：Agent Loop、流式运行、工具并发控制与追踪。适用面：开发框架，不证明 ChatGPT 内部实现。</li>
+        <li id="src-openai-sessions"><span class="fact">一手 · 官方文档</span> <a href="https://openai.github.io/openai-agents-python/sessions/" rel="noopener noreferrer">OpenAI Agents SDK — Sessions</a>：会话历史接口与多种存储适配器。适用面：开发框架。</li>
+        <li id="src-qwen"><span class="fact">一手 · 官方仓库</span> <a href="https://github.com/QwenLM/Qwen-Agent" rel="noopener noreferrer">QwenLM / Qwen-Agent</a>：工具、MCP、代码解释器、RAG，并称作为 Qwen Chat 后端；覆盖范围未公开。</li>
+        <li id="src-google-memory"><span class="fact">一手 · 官方文档</span> <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/agent-engine/memory-bank/set-up" rel="noopener noreferrer">Vertex AI Agent Engine Memory Bank</a>：Runtime、Session、scope 隔离、相似检索、TTL 与服务账号权限。适用面：云平台。</li>
+        <li id="src-agentkit"><span class="fact">一手 · 官方产品文档</span> <a href="https://www.volcengine.com/product/agentkit" rel="noopener noreferrer">火山引擎 AgentKit</a>：身份、记忆、工具链、Runtime、安全、可观测与可靠性。适用面：平台，不能归因于豆包。</li>
+        <li id="src-bailian"><span class="fact">一手 · 官方文档</span> <a href="https://help.aliyun.com/zh/model-studio/long-term-memory" rel="noopener noreferrer">阿里云百炼长期记忆</a>：按 Memory ID 召回片段与变量并注入后续模型请求。适用面：云平台。</li>
+        <li id="src-cos"><span class="fact">一手 · 官方文档</span> <a href="https://cloud.tencent.com/document/product/436/132574" rel="noopener noreferrer">腾讯云 COS 智能体存储</a>：Space 隔离、独立配额、AccessToken 与对象产物存储。适用面：云产品，不能归因于腾讯元宝。</li>
+      </ol>
+      <h3>证据等级</h3><ul><li><strong>一手：</strong>官方产品说明、官方文档、官方开源仓库、论文或工程博客；可直接支持其明确陈述。</li><li><strong>二手：</strong>仅补充背景，不能单独支撑关键内部架构结论。本页没有使用二手来源。</li><li><strong>推断：</strong>从一个或多个公开事实推导，并标注置信度与边界。</li><li><strong>未知：</strong>公开证据不足、来源缺少适用范围，或只能观察到 UI 行为。</li></ul>
+      <h3>仍未知的关键项</h3><p>五个消费产品的完整拓扑、真实 QPS、用户规模、延迟、存储规模、生产数据库选型、分片与锁策略、缓存结构、跨区恢复参数以及 SDK / 平台与消费后端的等同关系。它们不能通过界面行为推定。</p>
+    </section>
+
+    <section id="terms" aria-labelledby="terms-title"><h2 id="terms-title">术语表</h2><dl><dt><strong>Agent Loop</strong></dt><dd>在模型输出、工具调用、工具结果和最终答案之间迭代的控制循环。</dd><dt><strong>Session / Conversation / Thread</strong></dt><dd>各平台语义不同；本报告统一指一组有权限边界和顺序关系的交互状态。</dd><dt><strong>Memory</strong></dt><dd>跨步骤或跨会话保留、可在后续调用中召回的信息；不等同于完整聊天历史。</dd><dt><strong>Checkpoint</strong></dt><dd>足以从某个边界恢复执行的耐久状态快照或状态引用。</dd><dt><strong>Artifact</strong></dt><dd>由用户、模型或工具产生的文件、报告、图像、代码包等对象及其元数据。</dd><dt><strong>Tenant</strong></dt><dd>共享基础设施上的授权与计费隔离单元，可能对应组织、项目或账户。</dd><dt><strong>幂等</strong></dt><dd>同一逻辑操作重复提交不会产生重复副作用的性质。</dd></dl></section>
+  </main>
+  <footer><div class="wrap">静态研究报告 · 正文、样式与图示全部内联，无在线运行时依赖。最后更新：2026-08-06。</div></footer>
+</body>
+</html>
