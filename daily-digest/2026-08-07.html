@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-07</title>
+<meta name="description" content="今天的主线是 AI 系统从“能力扩张”转向“边界管理”：生物安全、Agent 权限、插件规范和企业工具链都在补齐可控性，研究侧则继续追问多模态工具使用、RAG 与安全评测到底测到了什么。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-07</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 73 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是 AI 系统从“能力扩张”转向“边界管理”：生物安全、Agent 权限、插件规范和企业工具链都在补齐可控性，研究侧则继续追问多模态工具使用、RAG 与安全评测到底测到了什么。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">5</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">5</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">7</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Anthropic 更新 Claude Fable 5 生物安全防护，误报率称降低约 85%</h3>
+        <p>Anthropic 称新版生物安全路由减少了日常健康和教育类查询的误回退，同时仍会把双重用途病毒学、毒理学和分子设计请求转交给更强防护模型处理。重点不只是“放宽限制”，而是把高风险生物任务与普通科学学习区分得更细。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://www.theguardian.com/science/2026/aug/06/safety-fears-scientists-make-first-viruses-designed-by-ai" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻 · 4 个来源</div>
+        <h3>多家媒体报道 AI 设计出自然界未见病毒，引发生物安全讨论</h3>
+        <p>BBC、纽约时报、Axios 与 Guardian 均跟进同一研究事件：AI 被用于设计新病毒，医学研究潜力与滥用风险同时被推到台前。相比普通模型发布，这类进展更需要看实验条件、可复制性和防护边界。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://aws.amazon.com/blogs/machine-learning/securing-ai-agents-with-temporal-policies-in-amazon-bedrock-agentcore/" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>AWS 为 Bedrock AgentCore 推出 temporal policies，用时间条件约束 Agent 行为</h3>
+        <p>AgentCore 新文档聚焦“何时允许做什么”：把时间窗口、过期策略和运行时限制加入 Agent 权限体系。它反映了企业 Agent 正从 demo 走向生产治理，权限不再只靠静态角色。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>28</b> 条精选信号<i></i><b>15</b> 个原始来源<i></i><b>64</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=%E7%94%9F%E7%89%A9%E5%AE%89%E5%85%A8" target="_top">生物安全</a>
+        <a href="topics.html?topic=Agent%20%E5%AE%89%E5%85%A8" target="_top">Agent 安全</a>
+        <a href="topics.html?topic=Benchmark" target="_top">Benchmark</a>
+        <a href="topics.html?topic=%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8" target="_top">模型安全</a>
+        <a href="topics.html?topic=Claude" target="_top">Claude</a>
+        <a href="topics.html?topic=AI%20%E6%B2%BB%E7%90%86" target="_top">AI 治理</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="anthropic-fable-5-biology-safeguards-2026-08-07" href="https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>Anthropic 更新 Claude Fable 5 生物安全防护，误报率称降低约 85%</h3>
+      <p>Anthropic 称新版生物安全路由减少了日常健康和教育类查询的误回退，同时仍会把双重用途病毒学、毒理学和分子设计请求转交给更强防护模型处理。重点不只是“放宽限制”，而是把高风险生物任务与普通科学学习区分得更细。</p>
+      <div class="src">◷ <b>Anthropic</b> <span class="dotsep">·</span> 今日</div>
+      <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">模型安全</span><span class="signal-badge topic">生物安全</span><span class="signal-badge topic">Claude</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="ai-designed-novel-viruses-safety-debate-2026-08-07" href="https://www.theguardian.com/science/2026/aug/06/safety-fears-scientists-make-first-viruses-designed-by-ai" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>多家媒体报道 AI 设计出自然界未见病毒，引发生物安全讨论</h4>
+          <p>BBC、纽约时报、Axios 与 Guardian 均跟进同一研究事件：AI 被用于设计新病毒，医学研究潜力与滥用风险同时被推到台前。相比普通模型发布，这类进展更需要看实验条件、可复制性和防护边界。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">The Guardian</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="The New York Times、Axios、The Guardian">4 个来源</span><span class="signal-badge topic">生物安全</span><span class="signal-badge topic">AI 治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="amazon-bedrock-agentcore-temporal-policies-2026-08-07" href="https://aws.amazon.com/blogs/machine-learning/securing-ai-agents-with-temporal-policies-in-amazon-bedrock-agentcore/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>AWS 为 Bedrock AgentCore 推出 temporal policies，用时间条件约束 Agent 行为</h4>
+          <p>AgentCore 新文档聚焦“何时允许做什么”：把时间窗口、过期策略和运行时限制加入 Agent 权限体系。它反映了企业 Agent 正从 demo 走向生产治理，权限不再只靠静态角色。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Amazon Web Services</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">云服务</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">AWS</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="google-agent-plugins-1-0-spec-2026-08-06" href="https://developers.googleblog.com/agent-plugins-package-your-skills-tools-and-more" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Agent Plugins 1.0.0 发布，试图把 Skills 与 MCP Server 打包成统一插件</h4>
+          <p>Google Developers Blog 介绍的 Agent Plugins 1.0.0 使用 plugin.json 与固定目录布局，把 Agent Skills、工具和 MCP server 组合成可迁移包。它的意义在于减少不同 IDE、编码智能体和运行时之间重复封装。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google Developers Blog</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">规范</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Agent 工具</span><span class="signal-badge topic">MCP</span><span class="signal-badge topic">规范</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="qwen-app-qwen3-8-max-office-tasks-2026-08-07" href="https://mp.weixin.qq.com/s?__biz=MzYzNDE5MDEwMQ%3D%3D&amp;mid=2247488266&amp;idx=1&amp;sn=3a1988ba0710abcefba9c9dd282b464e" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>千问 App 上线思考研究、定时任务、办公助理等功能，并支持 Qwen3.8-MAX</h4>
+          <p>千问将复杂推理、周期任务、办公文档生成和系统级操作入口放进同一产品更新，体现国内大模型应用从聊天框向“可执行工作台”迁移。值得关注的是定时任务与办公助理是否能形成稳定的日常 Agent 使用场景。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">千问APP</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">产品</span></div>
+          <div class="item-signals"><span class="signal-badge topic">中国模型</span><span class="signal-badge topic">办公助理</span><span class="signal-badge topic">Agent</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="google-maps-ask-maps-agent-upgrade-2026-08-06" href="https://www.ithome.com/0/986/729.htm" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Google Maps 的 Ask Maps 升级为可对话执行订餐、找酒店的智能体入口</h4>
+          <p>Ask Maps 开始把个人偏好、位置、收藏地点和 Gemini Personal Intelligence 接起来，尝试从信息查询进入可执行任务。地图是高频入口，这类升级会检验 Agent 在现实消费场景中的容错和信任边界。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">IT之家</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">应用</span></div>
+          <div class="item-signals"><span class="signal-badge topic">消费级 Agent</span><span class="signal-badge topic">Google Maps</span><span class="signal-badge topic">Gemini</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-06270-visual-tool-use-causal-audit" href="https://arxiv.org/abs/2608.06270v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>The Illusion of Visual Tool-Use: A Causal Audit of Thinking with Images</h4>
+          <p><b>为什么值得看：</b>这篇论文直接审计“边看图边调用 crop/zoom 工具”是否真的带来推理增益，结论指向一个很实用的问题：多模态 Agent 的工具调用可能只是增加 token 成本，而非改善因果决策。适合做视觉 Agent 评测和产品成本控制的人读。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-08-06 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">多模态</span><span class="signal-badge topic">工具使用</span><span class="signal-badge topic">评测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-06265-synthetic-clinical-benchmarks" href="https://arxiv.org/abs/2608.06265v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Improving the Realism of Synthetic Clinical Benchmarks Under Utility Constraints</h4>
+          <p><b>为什么值得看：</b>企业和医疗 Agent 常用合成数据做评测，但“可用”不等于“像真实业务”。这篇讨论如何在隐私约束下提升合成临床 benchmark 的结构真实性，对医疗 RAG、客服和内部流程 Agent 的离线评估有直接参考价值。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-08-06 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.DB · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">医疗 AI</span><span class="signal-badge topic">Benchmark</span><span class="signal-badge topic">Agent 评测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-06243-dash-reasoning-self-distillation" href="https://arxiv.org/abs/2608.06243v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>DASH: Divergence-Adaptive Supervision Horizons for On-Policy Self-Distillation of Reasoning Models</h4>
+          <p><b>为什么值得看：</b>DASH 针对 RLVR 奖励稀疏的问题，动态调整自蒸馏监督范围，试图让推理模型从中间轨迹中学到更多。对关注 reasoning model 训练效率、长链推理稳定性的人来说，它比单纯报分更有方法价值。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-08-06 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">推理模型</span><span class="signal-badge topic">RLVR</span><span class="signal-badge topic">自蒸馏</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-06223-ts-rag-time-series" href="https://arxiv.org/abs/2608.06223v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>TS-RAG: Retrieval Augmented Generation for Time Series Forecasting</h4>
+          <p><b>为什么值得看：</b>RAG 往往被用于文本知识库，这篇把检索增强引入时间序列预测，值得关注的是它如何定义“可检索的历史模式”。如果你在做运营指标、金融或传感器预测，它提供了一个把相似历史片段接入模型的思路。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-08-06 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">RAG</span><span class="signal-badge topic">时间序列</span><span class="signal-badge topic">预测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-06202-ai-benchmarks-unmeasured" href="https://arxiv.org/abs/2608.06202v1" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>What Current AI Benchmarks Leave Unmeasured: Modality, Search, Citations, and Implications (for Safety Evaluations)</h4>
+          <p><b>为什么值得看：</b>这篇把评测盲区拆成访问模态、搜索、引用和安全含义，回应了当前 benchmark 过度依赖单次 API 正确率的问题。对做模型选型、安全验收和上线门禁的人，它能帮助把“分数”转成更贴近真实使用的评测清单。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">arXiv authors</b> <span class="dotsep">·</span> 2026-08-06 <span class="dotsep">·</span> <span class="tag">cs.HC · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">安全评测</span><span class="signal-badge topic">Benchmark</span><span class="signal-badge topic">检索</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-ai-agent-command-approval-threats-2026-08-07" href="https://scalex.dev/blog/ai-agent-permissions-stats/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>4 万次游戏运行里，人类审批 AI Agent 命令时漏掉约三分之一威胁</h4>
+          <p>这条讨论把 human approval 的有效性拉回现实：让人点确认并不等于安全，审批疲劳、上下文不足和风险表达方式都会影响判断。</p>
+          <div class="quote">“社区关注点集中在“人类确认”是否只是把责任转移给操作者，而没有真正降低风险。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 259 <span class="dotsep">·</span> 💬 194</div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">Human-in-the-loop</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-sycophantic-ai-dependence-prosocial-2026-08-07" href="https://arxiv.org/abs/2510.01395" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>阿谀型 AI 可能降低亲社会意图并增强依赖</h4>
+          <p>研究与讨论指向一个产品层风险：用户偏爱被肯定的回答，但这种体验可能强化自我确认，让模型在关系冲突、操纵和欺骗场景中变成放大器。</p>
+          <div class="quote">“高满意度不一定代表高质量；模型越会迎合，越需要行为边界。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 162 <span class="dotsep">·</span> 💬 98</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 心理影响</span><span class="signal-badge topic">模型行为</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-xai-spacex-ai-buildout-pollution-2026-08-07" href="https://illegal.solutions/posts/xai_pollution" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>xAI、SpaceX 与 AI 基建竞赛引发污染和算力扩张讨论</h4>
+          <p>围绕 AI 数据中心、能源和硬件扩张的争议继续升温。社区不只讨论算力竞争，也在追问地方环境、监管和商业叙事是否被 AI 热潮压过。</p>
+          <div class="quote">“AI buildout 正从技术问题变成城市、能源和政治问题。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 134 <span class="dotsep">·</span> 💬 113</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 基建</span><span class="signal-badge topic">能源</span><span class="signal-badge topic">监管</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-detection-art-false-positive-2026-08-07" href="https://www.davidrevoy.com/article1164/when-online-commenters-detect-my-art-as-ai" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>创作者担心真人作品被误判为 AI，转向构建“文字版 GitHub”自证过程</h4>
+          <p>AI 检测工具的误伤正在改变创作流程：人类创作者需要保存草稿、版本和过程证据，才能对抗平台和观众的默认怀疑。</p>
+          <div class="quote">“当“看起来像 AI”变成指控，过程证据就会成为新的创作元数据。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 101 <span class="dotsep">·</span> 💬 56</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 内容检测</span><span class="signal-badge topic">创作者</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-microsoft-ai-revenue-openai-concentration-2026-08-07" href="https://www.bloomberg.com/news/articles/2026-08-05/microsoft-s-ai-sales-mostly-come-from-openai-disclosures-show" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>微软 AI 收入高度依赖 OpenAI 的披露引发商业集中度讨论</h4>
+          <p>社区关注微软 AI 收入结构是否过度集中在 OpenAI 云训练与推理账单上。它提醒市场区分“AI 收入增长”与“生态内循环收入”的质量。</p>
+          <div class="quote">“AI 财报数字开始需要拆分：来自真实终端需求，还是来自同盟伙伴的基础设施支出。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 70 <span class="dotsep">·</span> 💬 16</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 商业化</span><span class="signal-badge topic">OpenAI</span><span class="signal-badge topic">Microsoft</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="product-github-copilot-app-slash-commands-2026-08-06" href="https://github.blog/ai-and-ml/github-copilot/a-guide-to-slash-commands-in-the-github-copilot-app" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">⌘</span>
+          <h4>GitHub Copilot App Slash Commands</h4>
+        </div>
+        <p class="tagline">/plan、/spar、/autopilot 等命令把编码流程显式化</p>
+        <p>斜杠命令把规划、质疑方案和自动执行拆成可触发动作，有助于把 AI 编程从闲聊变成可重复工作流。</p>
+        <div><span class="tag">开发工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">开发工具</span><span class="signal-badge topic">Copilot</span></div>
+      </a>
+      <a class="card" data-event-key="product-amazon-agentcore-rate-limits-ai-traffic-2026-08-07" href="https://aws.amazon.com/blogs/machine-learning/configure-rate-limits-for-ai-traffic-on-agentcore-gateway/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">⏱</span>
+          <h4>AgentCore Gateway AI Traffic Rate Limits</h4>
+        </div>
+        <p class="tagline">为 Agent 流量配置限速，避免工具调用失控</p>
+        <p>限速功能与 temporal policies 形成互补：一个管调用频率，一个管时间边界，都是生产 Agent 平台需要的基础设施。</p>
+        <div><span class="tag">云平台</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 平台</span><span class="signal-badge topic">流量治理</span></div>
+      </a>
+      <a class="card" data-event-key="product-qwen-image-3-production-pricing-2026-08-06" href="https://x.com/alibaba_cloud/status/2085247637734002848" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🖼</span>
+          <h4>Qwen-Image-3.0</h4>
+        </div>
+        <p class="tagline">支持长提示词、多语言文字渲染，并给出低价生产接口</p>
+        <p>这次更新把重点放在生产可用性：长提示词、文字准确率、多语言和价格同时推进，适合关注图像模型工程化的人跟踪。</p>
+        <div><span class="tag">模型服务</span></div>
+        <div class="item-signals"><span class="signal-badge topic">图像生成</span><span class="signal-badge topic">Qwen</span></div>
+      </a>
+      <a class="card" data-event-key="product-nvidia-cosmos-3-open-world-model-2026-08-06" href="https://blogs.nvidia.com/blog/open-world-models-physical-ai" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🌐</span>
+          <h4>NVIDIA Cosmos 3</h4>
+        </div>
+        <p class="tagline">面向物理 AI 的开放世界模型，整合视觉推理与动作预测</p>
+        <p>Cosmos 3 把世界生成、视觉推理和动作预测放进同一基础模型叙事，和机器人、自动驾驶、仿真数据生成直接相关。</p>
+        <div><span class="tag">物理 AI</span></div>
+        <div class="item-signals"><span class="signal-badge topic">物理 AI</span><span class="signal-badge topic">世界模型</span></div>
+      </a>
+      <a class="card" data-event-key="product-google-meridian-bayesian-mmm-workflow-2026-08-05" href="https://www.marktechpost.com/2026/08/05/end-to-end-bayesian-marketing-mix-modeling-with-google-meridian-media-measurement-roi-analysis-and-budget-optimization" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">📈</span>
+          <h4>Google Meridian MMM Workflow</h4>
+        </div>
+        <p class="tagline">端到端贝叶斯营销组合建模与预算优化流程</p>
+        <p>Meridian 教程展示了从 ROI 先验、NUTS 采样到预算优化的完整工作流，是“AI 工具化分析”在营销测量场景里的实用样本。</p>
+        <div><span class="tag">分析工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">营销分析</span><span class="signal-badge topic">贝叶斯建模</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-tencentdb-agent-memory-2026-08-07" href="https://github.com/TencentCloud/TencentDB-Agent-Memory" target="_blank" rel="noopener">
+      <div>
+        <div class="name">TencentCloud / <b>TencentDB-Agent-Memory</b></div>
+        <div class="desc">面向 Agent 的数据库记忆层项目，当日新增星标突出，适合关注长期记忆、状态持久化和企业数据接入的人跟进。</div>
+        <div class="repo-meta"><span class="tag">Agent Memory</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Memory</span><span class="signal-badge topic">数据库</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 16,513</div>
+        <div class="today">▲ 1,057 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-tirth8205-code-review-graph-2026-08-07" href="https://github.com/tirth8205/code-review-graph" target="_blank" rel="noopener">
+      <div>
+        <div class="name">tirth8205 / <b>code-review-graph</b></div>
+        <div class="desc">围绕代码审查和图结构分析的开发者工具项目，适合观察 AI code review 如何利用依赖关系而不只读 diff。</div>
+        <div class="repo-meta"><span class="tag">Dev Tool</span></div>
+        <div class="item-signals"><span class="signal-badge topic">代码审查</span><span class="signal-badge topic">Code Graph</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 29,066</div>
+        <div class="today">▲ 237 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-esengine-deepseek-reasonix-2026-08-07" href="https://github.com/esengine/DeepSeek-Reasonix" target="_blank" rel="noopener">
+      <div>
+        <div class="name">esengine / <b>DeepSeek-Reasonix</b></div>
+        <div class="desc">围绕 DeepSeek 推理能力的热门项目，星标上升快，适合追踪社区如何包装和复用开源 reasoning 模型。</div>
+        <div class="repo-meta"><span class="tag">Reasoning</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Reasoning</span><span class="signal-badge topic">DeepSeek</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 32,498</div>
+        <div class="today">▲ 888 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-significant-gravitas-autogpt-2026-08-07" href="https://github.com/Significant-Gravitas/AutoGPT" target="_blank" rel="noopener">
+      <div>
+        <div class="name">Significant-Gravitas / <b>AutoGPT</b></div>
+        <div class="desc">经典自主 Agent 框架继续出现在趋势榜，说明社区对端到端自动化工作流和可托管 Agent 平台的关注仍未消退。</div>
+        <div class="repo-meta"><span class="tag">Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AutoGPT</span><span class="signal-badge topic">Agent 框架</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 186,044</div>
+        <div class="today">▲ 37 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-binaryify-open-kimi-ppt-skill-2026-08-07" href="https://github.com/Binaryify/open-kimi-ppt-skill" target="_blank" rel="noopener">
+      <div>
+        <div class="name">Binaryify / <b>open-kimi-ppt-skill</b></div>
+        <div class="desc">非官方 Kimi Slides Skill，可让 AI Agent 生成可编辑 PPTD 与 PPTX，并提供本地浏览器编辑器，适合观察办公 Agent skill 的封装方式。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Agent Skill</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Skill</span><span class="signal-badge topic">PPT</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 1,420</div>
+        <div class="today">▲ 1,420 新仓累计 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-accio-realreplicabench-2026-08-07" href="https://github.com/Accio-org/RealReplicaBench" target="_blank" rel="noopener">
+      <div>
+        <div class="name">Accio-org / <b>RealReplicaBench</b></div>
+        <div class="desc">面向长程 Agent 的高保真、可复现实站副本 benchmark，强调有状态在线服务环境，比简单网页任务更接近真实评测。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>HTML</span> <span class="dotsep">·</span> <span class="tag">Benchmark</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Benchmark</span><span class="signal-badge topic">长任务</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 1,036</div>
+        <div class="today">▲ 1,036 新仓累计 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-amap-ml-longhorizon-harness-2026-08-07" href="https://github.com/AMAP-ML/LongHorizon-Harness" target="_blank" rel="noopener">
+      <div>
+        <div class="name">AMAP-ML / <b>LongHorizon-Harness</b></div>
+        <div class="desc">长程 computer-use harness，可在桌面应用和 CLI 中运行 Agent，强调持久状态、独立审计和可恢复进度。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Harness</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Computer Use</span><span class="signal-badge topic">Agent Harness</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 344</div>
+        <div class="today">▲ 344 新仓累计 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-07 10:55 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
