@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude AI 全功能路线图：从基础聊天到 Agentic AI — The AI Productivity Coach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1d1d2a;
+      --border-color: rgba(255,255,255,0.07);
+      --border-hover: rgba(99,179,237,0.35);
+      --text-primary: #edf2f7;
+      --text-secondary: #a8b0c5;
+      --text-muted: #747b92;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #a78bfa;
+      --accent-green: #68d391;
+      --accent-amber: #f6ad55;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.78;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(99,179,237,0.12), transparent 32%),
+        radial-gradient(circle at 85% 10%, rgba(167,139,250,0.10), transparent 34%),
+        linear-gradient(180deg, #0d0d15 0%, #0a0a0f 45%, #08080d 100%);
+      pointer-events: none;
+      z-index: -2;
+    }
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: -1;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 78%);
+    }
+    .container {
+      width: min(940px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      margin-bottom: 24px;
+      transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+    .back-link:hover { color: var(--accent); border-color: var(--border-hover); background: rgba(99,179,237,0.08); transform: translateX(-2px); }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(24px, 4vw, 38px);
+      backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.14;
+      margin-bottom: 14px;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 760px;
+      margin-bottom: 22px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .meta span {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.045);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .meta .time { color: var(--accent); background: rgba(99,179,237,0.08); border-color: rgba(99,179,237,0.22); }
+    .meta .views { color: var(--accent-green); background: rgba(104,211,145,0.08); border-color: rgba(104,211,145,0.2); }
+    .video-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: #000;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.35);
+      margin: 26px 0 10px;
+    }
+    .video-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(22px, 4vw, 32px);
+      margin-bottom: 18px;
+      backdrop-filter: blur(12px);
+    }
+    h2 {
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      color: #f7fafc;
+    }
+    h3 {
+      color: var(--accent);
+      font-size: 1.05rem;
+      margin: 24px 0 8px;
+    }
+    p { color: var(--text-secondary); margin: 12px 0; }
+    strong { color: var(--text-primary); }
+    .lead {
+      font-size: 1.05rem;
+      color: #dbe7f7;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .mini-card {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .mini-card b { display: block; color: var(--accent-amber); margin-bottom: 6px; }
+    .mini-card span { color: var(--text-secondary); font-size: 0.92rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 8px;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      font-size: 0.94rem;
+    }
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--card-border);
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: rgba(99,179,237,0.12);
+      color: #e7f2ff;
+      font-weight: 700;
+    }
+    td { color: var(--text-secondary); background: rgba(10,10,15,0.28); }
+    tr:last-child td { border-bottom: 0; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      background: rgba(99,179,237,0.08);
+      color: #dbeafe;
+      padding: 16px 18px;
+      border-radius: 8px;
+      margin: 18px 0;
+    }
+    .timestamp-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .timestamp {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.035);
+    }
+    .timestamp code {
+      color: var(--accent-green);
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.86rem;
+    }
+    .timestamp span { color: var(--text-secondary); }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    button:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+    ul { margin: 12px 0 0 18px; color: var(--text-secondary); }
+    li { margin: 8px 0; }
+    footer {
+      color: var(--text-muted);
+      text-align: center;
+      font-size: 0.88rem;
+      padding-top: 22px;
+    }
+    @media (max-width: 760px) {
+      .container { width: min(100% - 28px, 940px); padding-top: 24px; }
+      .grid { grid-template-columns: 1fr; }
+      .timestamp { grid-template-columns: 1fr; }
+      th, td { display: block; width: 100%; }
+      th { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">YouTube Course · Claude Ecosystem</div>
+      <h1>Claude AI 全功能路线图：从基础聊天到 Agentic AI</h1>
+      <p class="subtitle">英文原题：Claude AI Full Tutorial: From Basics to Agentic AI (2026)。这节课把 Claude 拆成三个层级：基础层、Power User 层和 Agentic 层，适合用来判断自己下一步该学什么，而不是只把 Claude 当成另一个聊天框。</p>
+      <div class="meta">
+        <span>The AI Productivity Coach</span>
+        <span class="time">14:20</span>
+        <span class="views">约 162,826 次观看</span>
+        <span>Claude · Memory · Skills · Claude Code</span>
+      </div>
+    </header>
+
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/XTWb5oEfqdY" title="Claude AI Full Tutorial: From Basics to Agentic AI (2026)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <main>
+      <section class="content-card">
+        <h2>一、问题引入：Claude 不是“聊天窗口”，而是一套分层工作系统</h2>
+        <p class="lead">这支视频的价值不在于逐个按钮演示，而在于给 Claude 建了一张能力地图。很多人打开 Claude，只停留在输入问题、等待回答的阶段；但视频反复强调，Claude 的真实形态更像一个分层生态：底层是聊天、网页搜索、Artifacts、Memory、Styles、Projects；中间层是 Connectors、Skills、Extended Thinking、Research；再往上则是 Claude Code、Co-work、Computer Use 这类能触碰文件、工具和界面的 agentic 能力。</p>
+        <p>对学习者来说，这个分层很重要。你不需要一开始就冲向 Claude Code 或 Computer Use，也不应该把所有任务都塞给最高级能力。更稳妥的路径是：先把“什么时候需要实时搜索、什么时候需要结构化输出、哪些偏好应该进入 Memory、哪些上下文应该放入 Project”想清楚，再进入连接器、技能和代码代理。这样 Claude 才不是一个临时答题器，而会逐渐变成可复用的工作系统。</p>
+        <div class="grid">
+          <div class="mini-card"><b>基础层</b><span>Chat、Web Search、Artifacts、Memory、Styles、Projects，解决日常问答、文档、偏好和上下文管理。</span></div>
+          <div class="mini-card"><b>增强层</b><span>Connectors、Skills、Extended Thinking、Research，把 Claude 接入真实工作资料，并让重复流程标准化。</span></div>
+          <div class="mini-card"><b>Agentic 层</b><span>Claude Code、Co-work、Computer Use，让 Claude 开始处理文件、代码和可操作界面。</span></div>
+        </div>
+      </section>
+
+      <section class="content-card">
+        <h2>二、核心概念解释：先分清模型、上下文和工具</h2>
+        <h3>Haiku、Sonnet、Opus 不是“越贵越好”的线性选择</h3>
+        <p>视频用跑步选手的比喻解释模型层级：Haiku 适合快速、轻量、低成本的短任务；Sonnet 是多数人的日常主力，兼顾速度和推理能力；Opus 则用于更慢但更难的分析，例如长文档、复杂判断、细致策略或需要多步推理的问题。这里的关键不是背模型名，而是形成任务分流：快问快答不必消耗高阶模型，真正要“想清楚”的任务才值得切到更强模型。</p>
+        <h3>Memory 与 Projects 解决的是两种不同上下文</h3>
+        <p>Memory 更像跨会话的个人偏好和长期事实，例如你的目标、写作风格、常用工作流；Projects 更像一个独立工作区，把同一主题的聊天、文件、指令和上下文集中管理。把两者混用会带来噪音：项目临时资料不应进入长期记忆，长期偏好也不该每次都靠文件重复上传。视频的隐含建议是，把 Memory 看成“个人层”，把 Project 看成“任务层”。</p>
+        <h3>Artifacts 把一次回答变成可操作资产</h3>
+        <p>Artifacts 是很多用户低估的功能。Claude 生成表格、页面、图表、二维码或结构化内容时，可以把结果放进独立面板，用户可以继续对话、修改和下载。它改变的是工作方式：不是“复制一段回答到别处”，而是在同一个对话里生成一个可以被迭代的半成品。对非开发者来说，这是从聊天走向轻量应用制作的第一步。</p>
+      </section>
+
+      <section class="content-card">
+        <h2>三、关键论点与实操路径：从个人助理走到工作代理</h2>
+        <h3>1. 先把实时性问题交给 Web Search</h3>
+        <p>视频提醒，Claude 的训练数据有截止日期。如果问题涉及当前价格、最近新闻、上月变化、工具版本或政策更新，就应该打开 Web Search。反过来，如果你只是要改写、总结、构思、分析已有材料，关闭搜索反而能减少外部噪音。这个判断会直接影响答案质量：该联网时不联网会过时，不该联网时联网会分散注意力。</p>
+        <h3>2. 用 Styles 管住输出口吻，而不是每次重复提示词</h3>
+        <p>Styles 的作用是把输出方式固定下来，例如“简洁、正式、解释型、销售型、技术型”。如果你经常要求 Claude 用某种语气写邮件、提案、说明文或报告，就应该把风格沉淀下来。它和 Memory 的关系是：Memory 记住你是谁、你做什么；Styles 约束本次输出长什么样。</p>
+        <h3>3. 用 Connectors 连接工作现场</h3>
+        <p>Connectors 把 Claude 接到 Gmail、Google Drive、Docs、Slack、Notion、Calendar 等工具。视频强调它不是复制粘贴，而是让 Claude 从实际工作资料中读取、整理和写回。最适合连接的不是“看起来高级”的工具，而是你每天真正处理信息的地方。比如邮箱总结、Drive 文档检索、日历周计划，都是 Connectors 的典型入口。</p>
+        <h3>4. 用 Skills 固化可重复流程</h3>
+        <p>Skills 是视频中特别值得关注的一段：它把一套稳定步骤变成可复用能力。比如作者举例的 YouTube metadata skill，本质是把标题、描述、标签、发布格式这些重复任务做成标准流程。对于个人工作流，最好的 skill 候选通常不是一次性大任务，而是“每周都做、每次格式相似、但又容易忘细节”的任务。</p>
+        <h3>5. Extended Thinking 和 Research 适合高不确定性任务</h3>
+        <p>当任务不是简单生成，而是需要权衡、比较、拆解、多源整理时，Extended Thinking 和 Research 的价值才出来。前者让模型先推理再回答，适合复杂决策；后者更像把 Claude 派出去做资料收集和综合，适合竞品研究、市场扫描、资料汇总。它们都不该滥用，因为会消耗更多配额和时间。</p>
+        <h3>6. Claude Code 与 Computer Use 是最后一级，不是入门捷径</h3>
+        <p>视频最后进入 agentic 层：Claude Code 可以在项目文件中读写代码、运行命令、修 bug、加功能；Computer Use 则让 Claude 看屏幕、移动光标、点击和输入，适合结构化、步骤明确的界面任务。这里的风险也更高，因为它们从“回答问题”进入了“改变环境”。所以更合理的学习顺序是先学会描述结果、提供上下文和验证输出，再让 agent 接触文件或界面。</p>
+      </section>
+
+      <section class="content-card">
+        <h2>四、对比表格：不同 Claude 能力该用在什么场景</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>能力层</th>
+              <th>适用场景</th>
+              <th>优点</th>
+              <th>风险与决策建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Chat + Web Search</td>
+              <td>问答、改写、当前信息查询、快速解释概念。</td>
+              <td>启动成本最低，能覆盖大部分日常信息工作。</td>
+              <td>不要让搜索替代判断；涉及最新事实时必须开启，处理私有材料时要注意信息边界。</td>
+            </tr>
+            <tr>
+              <td>Artifacts</td>
+              <td>表格、矩阵、网页草稿、追踪器、可下载结构化输出。</td>
+              <td>把回答变成可迭代资产，适合和 Claude 来回打磨。</td>
+              <td>适合原型和轻量内容，不等同于生产系统；发布前仍要人工校验。</td>
+            </tr>
+            <tr>
+              <td>Memory + Projects</td>
+              <td>长期偏好、个人背景、项目资料、专项工作区。</td>
+              <td>减少重复解释，让 Claude 更懂个人语境和项目上下文。</td>
+              <td>Memory 要保持精简，Projects 要按主题隔离；不要把临时资料永久化。</td>
+            </tr>
+            <tr>
+              <td>Connectors + Skills</td>
+              <td>邮箱、文档、日历、团队工具，以及重复流程自动化。</td>
+              <td>真正接入工作现场，并能把最佳提示词流程沉淀为标准能力。</td>
+              <td>连接器需要权限治理；Skills 要先定义清楚输入、输出和验收标准。</td>
+            </tr>
+            <tr>
+              <td>Claude Code + Computer Use</td>
+              <td>代码修改、内部工具、脚本、浏览器/桌面中的重复操作。</td>
+              <td>从建议进入执行，能处理多步任务并根据错误迭代。</td>
+              <td>必须有明确边界和回滚机制；先让它处理可验证的小任务，再扩大权限。</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="content-card">
+        <h2>五、引用块：这节课真正想让你记住什么</h2>
+        <blockquote>
+          Claude 的核心不是多一个聊天入口，而是从基础问答、结构化输出、长期记忆、连接器、技能，到代码和界面代理的一条能力阶梯。
+        </blockquote>
+        <p>这句话是对视频主线的转述。它提醒我们，学习 Claude 不应该只问“哪个功能最强”，而应该问“我现在的工作流在哪一层卡住”。如果卡在资料新鲜度，就补 Web Search；如果卡在重复格式，就补 Styles 或 Skills；如果卡在项目上下文，就补 Projects；如果卡在真实执行，才进入 Claude Code 或 Computer Use。</p>
+      </section>
+
+      <section class="content-card">
+        <h2>六、时间戳目录</h2>
+        <div class="timestamp-list">
+          <div class="timestamp"><code>00:00</code><span>开场：Claude 不只是聊天工具，而是从基础到 agentic 的多层生态。</span></div>
+          <div class="timestamp"><code>00:55</code><span>解释 Claude 与 Anthropic：强调可靠性、诚实回答和安全取向。</span></div>
+          <div class="timestamp"><code>01:35</code><span>模型分层：Haiku 负责快，Sonnet 负责日常，Opus 负责复杂推理。</span></div>
+          <div class="timestamp"><code>02:25</code><span>Level 1：Chat、Web Search、Artifacts 的基础工作方式。</span></div>
+          <div class="timestamp"><code>04:10</code><span>Memory：跨会话保留偏好、目标和工作背景，也能导入其他工具里的上下文。</span></div>
+          <div class="timestamp"><code>05:25</code><span>Styles 与 Projects：把输出风格和项目上下文分开管理。</span></div>
+          <div class="timestamp"><code>07:15</code><span>Level 2：Connectors 把 Claude 接入 Gmail、Drive、Slack、Notion、Calendar 等工作现场。</span></div>
+          <div class="timestamp"><code>08:35</code><span>Skills：把重复任务做成可复用工作流，避免每次重新写同一套提示词。</span></div>
+          <div class="timestamp"><code>09:45</code><span>Extended Thinking 与 Research：用于复杂推理、多源收集和不确定性较高的问题。</span></div>
+          <div class="timestamp"><code>11:30</code><span>Level 3：Co-work、Claude Code、Computer Use 进入能操作文件、代码和界面的 agentic 能力。</span></div>
+          <div class="timestamp"><code>13:10</code><span>定价建议：先从免费层验证需求，认真用于工作再考虑 Pro，高频重度使用才看 Max。</span></div>
+        </div>
+      </section>
+
+      <section class="content-card">
+        <h2>七、相关推荐</h2>
+        <p>如果你想沿着“Claude 基础能力 → Claude Code → MCP / Skills”继续学，下面几页更适合接着看。建议先掌握 Projects、Memory、Styles 和 Skills 的边界，再进入需要本地文件和工具权限的 coding agent 工作流。</p>
+        <div class="links">
+          <a class="btn" href="index.html">返回全部课程</a>
+          <a class="btn" href="RywmhLTFeFk.html">Claude Code 入门小项目</a>
+          <a class="btn" href="gHB4JFG9i3k.html">Claude Code 构建 AI Agent</a>
+          <a class="btn" href="pvxNcQTcIy4.html">Agent Skills 与 MCP 边界</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>由 AI 自动整理字幕并生成 · XTWb5oEfqdY · GitHub Pages</footer>
+  </div>
+</body>
+</html>
