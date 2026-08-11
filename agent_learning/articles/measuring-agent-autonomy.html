@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实践中衡量 AI Agent 自主性 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: Inter, system-ui, sans-serif; }
+  .article-nav, .article-content { max-width: 980px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  .article-nav { padding-top: 28px; }
+  .back-link, .article-footer a { color: #63b3ed; text-decoration: none; font-family: monospace; font-size: 13px; }
+  .article-content { padding-top: 32px; padding-bottom: 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .translation-note, blockquote { border-left: 3px solid #63b3ed; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav"><a href="../index.html" class="back-link">← Agent Learning 索引</a></nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta"><span>2026-02-18</span><span>Anthropic Research</span></div>
+      <h1 class="article-title">实践中衡量 AI Agent 自主性</h1>
+      <p class="article-original-title">原文：Measuring AI agent autonomy in practice</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Anthropic 用 Claude Code 和公开 API 的真实交互数据观察 agent 自主性：用户正在让 agent 跑得更久、更独立，但有效监督并不是每一步审批，而是可见、可中断、可校准的协作。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做中文转述与解读，保留关键数字和技术含义，不做逐字镜像。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>agent 被定义为“带工具、能采取行动”的 AI 系统，工具调用是观察真实部署的基本单位。</li>
+        <li>Claude Code 最长尾 turn duration 在三个月内从不到 25 分钟增长到超过 45 分钟。</li>
+        <li>新用户约 20% 会话使用 full auto-approve，经验用户可超过 40%。</li>
+        <li>经验用户 auto-approve 更多，同时 interrupt 也更多，说明监督方式从逐步审批转向监控与干预。</li>
+        <li>复杂任务中，Claude Code 主动停下来澄清的频率超过人类 interrupt，且比简单任务高两倍以上。</li>
+        <li>公开 API 上 80% tool calls 看起来至少有一种 safeguard，73% 有某种 human-in-the-loop 信号。</li>
+        <li>软件工程约占 agentic activity 的近 50%，但医疗、金融、网络安全等高风险领域已经出现早期使用。</li>
+        <li>autonomy 是模型、用户和产品共同构造出的部署属性，不是模型本身的固定能力。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>为什么要从真实使用中衡量 autonomy</h3>
+      <p>能力评测能告诉我们模型在理想环境中的上限，但无法解释真实用户如何授权、监督和打断 agent。Anthropic 因此把 Claude Code 的完整会话和公开 API 的 tool calls 结合起来：前者能看完整 workflow，后者能覆盖更多行业部署。</p>
+      <p>这套研究没有试图复原每个客户的完整 agent 架构，而是从工具调用、会话时长、审批模式、interrupt、clarification 和风险分类中建立经验图景。它回答的是“agent 在现实里被允许做到什么程度”，不是“模型理论上能做到什么”。</p>
+      <h3>Claude Code 正在更久地自主工作</h3>
+      <p>多数 Claude Code turn 仍然很短，中位数大约 45 秒。但最有信息量的是最长尾：99.9 分位的 turn duration 在 2025 年 10 月到 2026 年 1 月之间接近翻倍，从不到 25 分钟到超过 45 分钟。</p>
+      <p>这个增长并没有紧贴模型发布形成跳变，而是比较平滑。这说明真实 autonomy 的增长不只来自模型能力，也来自用户信任、任务野心、产品效率和使用经验积累。</p>
+      <h3>经验用户不是放弃监督，而是换了监督方式</h3>
+      <p>Claude Code 默认要求用户批准 action。随着经验增加，用户更常打开 full auto-approve：少于 50 个 session 的新用户约 20%，到 750 个 session 的用户超过 40%。</p>
+      <p>有意思的是，interrupt rate 也随经验上升。新用户约 5% turns 会 interrupt Claude，经验用户约 9%。这不是矛盾，而是监督策略变化：新用户逐步审批，老用户让 Claude 先跑起来，在关键时刻中断和修正。</p>
+      <h3>agent 自己停下来也是一种监督</h3>
+      <p>文章强调 agent-initiated stops。复杂任务中，Claude Code 主动询问澄清的频率明显上升，并且比人类 interrupt 更常见。这说明模型是否知道“不确定时该问”是安全属性的一部分。</p>
+      <p>这也改变了产品设计的重心：可靠 agent 不应总是勇往直前，也不应被动等待人类发现问题。它需要在 ambiguity、偏好选择、权限边界和不可逆操作前主动交还控制权。</p>
+      <h3>风险和 autonomy 的分布</h3>
+      <p>公开 API 数据显示，大多数 agent actions 风险低、可逆。但风险前沿已经出现，包括安全相关动作、金融交易、医疗信息和客户服务自动化。作者提醒，某些高风险动作可能来自 eval 或 red-team，但单次错误也可能有真实后果。</p>
+      <p>当前 agentic activity 仍高度集中在软件工程，约占近 50%。这很合理：代码容易测试、回滚、review，因此更适合建立信任。但随着 agent 进入法律、医疗、金融等领域，验证成本会更高，风险边界也会移动。</p>
+      <h3>建议：监控、校准和可干预</h3>
+      <p>文章给 model developers、product developers 和 policymakers 的建议都围绕一件事：需要 post-deployment monitoring。预部署 eval 只能测能力，真实部署才会暴露用户如何授权、agent 如何停顿、风险如何扩散。</p>
+      <p>同时，产品不应僵硬要求“每一步都人类审批”。更好的目标是让用户处在能理解、监控和干预的位置：看得见 agent 在做什么，能在错误方向上及时打断，也能让 agent 在不确定时主动问。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章最重要的洞见是：autonomy 不是一个开关，而是一种社会技术关系。模型能力、用户信任、权限设计、任务风险、可观测性和可回滚性共同决定 agent 实际能走多远。对工程团队来说，真正成熟的 agent 平台不会只做“更强模型 + 更多工具”，而会把 session log、权限、interrupt、clarification、telemetry 和风险分层做成基础设施。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>用 turn duration、auto-approve、interrupt、clarification rate 共同衡量 autonomy。</li>
+        <li>不要用“是否每步审批”替代安全性，关注用户能否看懂并及时干预。</li>
+        <li>高风险工具要单独标记权限、审计日志和不可逆动作。</li>
+        <li>训练 agent 在不确定、偏好不明或权限敏感时主动澄清。</li>
+        <li>为真实部署建立 post-deployment monitoring，而不是只依赖 benchmark。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/research/measuring-agent-autonomy" target="_blank" rel="noopener">https://www.anthropic.com/research/measuring-agent-autonomy</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

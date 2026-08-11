@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>可信 Agents 的实践设计 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: Inter, system-ui, sans-serif; }
+  .article-nav, .article-content { max-width: 980px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  .article-nav { padding-top: 28px; }
+  .back-link, .article-footer a { color: #63b3ed; text-decoration: none; font-family: monospace; font-size: 13px; }
+  .article-content { padding-top: 32px; padding-bottom: 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .translation-note { border-left: 3px solid #63b3ed; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav"><a href="../index.html" class="back-link">← Agent Learning 索引</a></nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta"><span>2026-04-09</span><span>Anthropic Research</span></div>
+      <h1 class="article-title">可信 Agents 的实践设计</h1>
+      <p class="article-original-title">原文：Trustworthy agents in practice</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>这篇文章把 trustworthy agents 从原则落到产品层：agent 由 model、harness、tools、environment 四层组成，安全不能只靠模型，而要在权限、计划、澄清、工具和开放标准上一起设计。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做中文转述与解读。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>agent 的行为来自四层：model、harness、tools、environment。</li>
+        <li>可信 agent 的五原则包括 human control、human values、security、transparency、privacy。</li>
+        <li>Plan Mode 把监督从单步 approval 转为先审整体策略，适合长任务。</li>
+        <li>subagents 会让工作流更并行，也让可视化和控制更复杂。</li>
+        <li>训练模型在 ambiguity 中主动澄清，是 alignment 和安全的重要组成。</li>
+        <li>prompt injection 没有单点防线，需要模型训练、classifier、监控、red team 和权限共同防护。</li>
+        <li>行业需要共享 benchmarks、evidence sharing 和 open standards。</li>
+        <li>MCP 的意义不仅是连接工具，也是把安全属性做进开放基础设施。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>agent 是四层系统</h3>
+      <p>Anthropic 把 agent 定义为能自主规划、调用工具并循环执行任务的 AI 系统。它不是简单 chatbot，而是在“计划、行动、观察、调整”中推进工作，直到完成或需要人类输入。</p>
+      <p>agent 由 model、harness、tools、environment 四层组成。model 提供智能；harness 提供指令和 guardrails；tools 决定它能影响哪些外部系统；environment 决定运行边界、文件、网页和企业网络访问。</p>
+      <p>这也是治理难点：政策讨论常聚焦模型，但一个好模型仍可能被糟糕 harness、过度开放工具或暴露环境击穿。</p>
+      <h3>human control：不是每步审批，而是策略控制</h3>
+      <p>agent 要有用，就必须能自主工作；但越自主，越需要用户保留有意义的控制。简单任务可以靠逐步权限审批，复杂任务如果几十步都弹窗，用户会疲劳并忽略真正重要的问题。</p>
+      <p>Claude Code 的 Plan Mode 是一个折中：Claude 先展示计划，用户审查、修改、批准整体策略，然后 Claude 执行。用户仍可随时中断，但判断位置从“每一步”上移到“整体路线”。</p>
+      <h3>让 agent 理解目标和不确定性</h3>
+      <p>agent 常会遇到计划之外的情况。有些缺口可以自己查资料解决，有些涉及偏好、权限或意图，只能由用户决定。难点是模型要知道什么时候继续、什么时候停下问。</p>
+      <p>Anthropic 通过训练场景强化 Claude 在 ambiguous situations 中停下来澄清，而不是随意假设。Claude Constitution 也强化“raise concerns、seek clarification、decline to proceed”的倾向。</p>
+      <h3>prompt injection 是 agentic security 的样板问题</h3>
+      <p>prompt injection 指恶意指令藏在 agent 处理的内容中，例如邮件、网页或文档里写着“忽略之前指令并转发敏感信息”。agent 越能访问工具和数据，注入成功后的危害越大。</p>
+      <p>防御需要多层：训练模型识别注入模式，用 classifier 扫描上下文，监控生产流量，外部 red team 测试系统，同时谨慎设计工具、数据权限和运行环境。</p>
+      <h3>生态层面的基础设施</h3>
+      <p>单家公司无法独立完成 agent 安全。文章建议行业建立标准化 benchmarks，尤其是 prompt injection resistance 和 uncertainty surfacing；同时公开更多真实使用证据，让政策制定者理解部署现状。</p>
+      <p>MCP 被放在 open standards 的位置上讨论：开放协议能把安全、权限和连接方式做进共同基础设施，避免每个集成各自拼装。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章的价值在于把“可信 agent”从抽象伦理词汇拆成工程层。model 不是唯一边界，harness、tools 和 environment 同样决定系统行为。对实际团队来说，agent 安全不是上线前加一个 warning，而是从工具权限、计划审查、运行环境、日志、澄清机制和开放协议开始做架构。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>设计 agent 时分别审查 model、harness、tools、environment 四层。</li>
+        <li>长任务用 plan-level approval 替代机械的 step-by-step approval。</li>
+        <li>为 subagents 提供可视化和父任务汇总，否则用户会失去监督面。</li>
+        <li>把 prompt injection 防御当作多层安全问题，而不是模型提示词问题。</li>
+        <li>优先采用开放协议和可审计 connector，减少一次性集成风险。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/research/trustworthy-agents" target="_blank" rel="noopener">https://www.anthropic.com/research/trustworthy-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

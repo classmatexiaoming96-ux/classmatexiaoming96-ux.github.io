@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>构建安全可信 Agents 的框架 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: Inter, system-ui, sans-serif; }
+  .article-nav, .article-content { max-width: 980px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  .article-nav { padding-top: 28px; }
+  .back-link, .article-footer a { color: #63b3ed; text-decoration: none; font-family: monospace; font-size: 13px; }
+  .article-content { padding-top: 32px; padding-bottom: 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .translation-note { border-left: 3px solid #63b3ed; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav"><a href="../index.html" class="back-link">← Agent Learning 索引</a></nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta"><span>2025-08-04</span><span>Anthropic News</span></div>
+      <h1 class="article-title">构建安全可信 Agents 的框架</h1>
+      <p class="article-original-title">原文：Our framework for developing safe and trustworthy agents</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>这篇文章是 Anthropic 关于 trustworthy agents 的早期框架，提出五个原则：人类控制、透明行为、价值与预期对齐、隐私保护和交互安全。它更像后续 agent 治理文章的底稿。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做中文转述与解读。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>agent 的价值来自自主执行复杂任务，但风险也来自更少的人类即时监督。</li>
+        <li>人类应该保留对目标和高风险决策的控制权。</li>
+        <li>透明度让用户理解 agent 为什么采取某条路径，并在偏离时纠正。</li>
+        <li>agent 可能在“想帮忙”的情况下越界，例如重组文件、删除重复项或改变系统状态。</li>
+        <li>长期交互和跨任务记忆会带来隐私串扰风险。</li>
+        <li>MCP 类 connector 需要细粒度权限、一次性访问和组织级控制。</li>
+        <li>prompt injection 和工具漏洞要求 agent 交互层具备持续安全防护。</li>
+        <li>框架需要随 agent 能力和部署风险持续更新。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>从 assistant 到 agent</h3>
+      <p>文章开头区分了传统 assistant 和 agent：assistant 响应问题，agent 接收目标后能自主推进任务。比如规划婚礼、准备董事会报告、检索企业数据、比较供应商、生成时间线和预算。</p>
+      <p>Claude Code 是典型例子：它能写、调试、编辑代码，并已经被软件工程师广泛使用。企业也开始基于 Claude 构建面向安全、金融、数据系统的 agent。</p>
+      <h3>原则一：人类控制与 agent autonomy 的平衡</h3>
+      <p>agent 必须有足够 autonomy 才有价值，但人类需要在高风险决策前保留控制。文章举例：费用管理 agent 可以发现软件订阅超支，但取消订阅或降级服务前应该需要人类批准。</p>
+      <p>Claude Code 默认 read-only，修改代码或系统前需要 human approval；用户也可以为可信 routine tasks 授予持久权限。这种控制需要随任务风险和用户偏好调整。</p>
+      <h3>原则二：行为透明</h3>
+      <p>用户需要看到 agent 的推理和计划，否则很难判断它是否朝目标前进。透明不是输出所有细节，而是提供足够的信息让人类能校验数据来源、事实和路线。</p>
+      <p>Claude Code 的实时 to-do checklist 就是透明度设计：用户可以看到 Claude 计划做什么，并随时追问或调整。</p>
+      <h3>原则三：对齐人类价值和预期</h3>
+      <p>agent 并不总是知道用户真实意图。用户说“整理我的文件”，agent 可能删除它认为重复的内容并重构文件夹；这可能出于帮忙，却超出用户预期。</p>
+      <p>更危险的是 autonomous goal pursuit 可能产生和用户利益冲突的行为。文章认为，在可靠评估还不成熟之前，透明度和控制权尤其重要。</p>
+      <h3>原则四：隐私保护</h3>
+      <p>agent 能跨任务保留信息，因此可能把一个部门的敏感信息带到另一个上下文中。工具和流程必须支持访问控制、认证和数据隔离。</p>
+      <p>MCP 被用作例子：用户可以允许或阻止 Claude 在特定任务中访问 connector，也可以设置一次性或永久访问；企业管理员可以控制组织成员能连接哪些工具。</p>
+      <h3>原则五：交互安全</h3>
+      <p>agent 会与外部系统、工具和 subagents 交互，这带来 prompt injection 和工具漏洞风险。攻击者可能诱导 agent 忽略原指令、泄露信息或执行非预期动作。</p>
+      <p>Anthropic 使用 classifier、持续威胁监控、Claude Code 安全层和 MCP directory 审核来降低风险。文章强调，发现新恶意行为后要快速修复并持续改进。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇框架文朴素但重要：它把 agent 产品设计从“能不能自动完成任务”拉回到“用户如何保留控制”。越是有用的 agent，越会接触真实文件、账号、交易、客户和代码库；因此安全不只是拒绝恶意请求，而是让 autonomy 始终有边界、有解释、有权限、有隐私隔离。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>按任务风险设置不同 permission，而不是给 agent 一刀切权限。</li>
+        <li>提供可扫描的计划和进度，而不是只给最终结果。</li>
+        <li>把“用户意图不明时询问”写入训练和产品规则。</li>
+        <li>跨任务记忆必须有隔离、可见性和删除机制。</li>
+        <li>对外部 connector 建立审核、认证和最小权限原则。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/news/our-framework-for-developing-safe-and-trustworthy-agents" target="_blank" rel="noopener">https://www.anthropic.com/news/our-framework-for-developing-safe-and-trustworthy-agents</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>

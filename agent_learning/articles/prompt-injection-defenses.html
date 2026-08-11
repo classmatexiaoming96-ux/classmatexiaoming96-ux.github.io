@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>降低浏览器 Agent 的 Prompt Injection 风险 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: Inter, system-ui, sans-serif; }
+  .article-nav, .article-content { max-width: 980px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  .article-nav { padding-top: 28px; }
+  .back-link, .article-footer a { color: #63b3ed; text-decoration: none; font-family: monospace; font-size: 13px; }
+  .article-content { padding-top: 32px; padding-bottom: 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .translation-note { border-left: 3px solid #63b3ed; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav"><a href="../index.html" class="back-link">← Agent Learning 索引</a></nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta"><span>2025-11-24</span><span>Anthropic Research</span></div>
+      <h1 class="article-title">降低浏览器 Agent 的 Prompt Injection 风险</h1>
+      <p class="article-original-title">原文：Mitigating the risk of prompt injections in browser use</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>浏览器 agent 必须读取不可信网页、邮件和文档，也能点击、填表和下载文件。Anthropic 解释了 prompt injection 为什么是浏览器 agent 的核心安全问题，以及 Claude Opus 4.5 和 Claude for Chrome 的多层防御思路。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做中文转述与解读。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>prompt injection 是藏在模型处理内容中的对抗性指令。</li>
+        <li>浏览器 agent 风险更高，因为每个网页、广告、动态脚本和文档都可能成为攻击面。</li>
+        <li>浏览器 agent 还能点击、填表、下载和导航，一旦被劫持会产生真实行动后果。</li>
+        <li>Claude Opus 4.5 在浏览器 prompt injection robustness 上比旧模型更强。</li>
+        <li>1% attack success rate 仍然是有意义风险，不能宣称问题已解决。</li>
+        <li>防御包括 RL 训练、classifier 扫描 untrusted content、intervention 和 red teaming。</li>
+        <li>人类安全研究员仍能发现自动系统难以覆盖的创造性攻击。</li>
+        <li>浏览器 agent 的安全需要持续发布进展，而不是一次性“修复”。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>什么是 prompt injection</h3>
+      <p>agent 要真正有用，就必须能代表用户浏览网页、完成任务、使用上下文和数据。但只要 agent 处理互联网内容，它就会遇到不能完全信任的输入。攻击者可以把恶意指令藏进网页、邮件或文档，诱导模型改变行为。</p>
+      <p>文章举了一个典型场景：用户让 Claude 读取最近邮件并草拟会议回复，其中一封邮件用白色隐藏文字要求 agent 把包含 confidential 的邮件转发给外部地址。人类看不到这段文字，但 agent 可能处理并执行。</p>
+      <h3>浏览器使用为什么更危险</h3>
+      <p>所有处理不可信内容的 agent 都有 prompt injection 风险，浏览器场景尤其复杂。第一，攻击面巨大：网页、嵌入文档、广告、动态脚本都可能包含恶意指令。第二，浏览器 agent 能做的动作很多：导航、点击、填表、下载文件。</p>
+      <p>这意味着攻击者不仅能影响回答文本，还可能影响真实操作。agent 能力越强、权限越多，注入成功后的 blast radius 越大。</p>
+      <h3>Claude 的防御进展</h3>
+      <p>Anthropic 表示，Claude Opus 4.5 在浏览器使用中的 prompt injection robustness 相比旧模型有明显提升，Claude for Chrome 从 research preview 扩展到 Max 用户 beta 也基于这些改进。</p>
+      <p>但文章刻意保守：即使 attack success rate 只有 1%，对高价值任务仍是风险。没有浏览器 agent 对 prompt injection 免疫，当前结果代表进展，不代表终点。</p>
+      <h3>三层主要防线</h3>
+      <p>第一层是训练。Anthropic 用 reinforcement learning 把带有 prompt injection 的模拟网页内容放进训练，让 Claude 在识别并拒绝恶意指令时得到 reward。</p>
+      <p>第二层是 classifier。系统扫描进入 context window 的 untrusted content，识别隐藏文本、被操纵图片、欺骗性 UI 等对抗性命令，并在检测到攻击时调整 Claude 行为。</p>
+      <p>第三层是 red teaming。内部安全团队持续寻找漏洞，外部 Arena 风格挑战也用来测试行业范围的 robustness。文章强调，人类 red team 在发现创造性攻击向量上仍很强。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>prompt injection 是 agent 安全里最“互联网原生”的问题：模型不只是读用户指令，也读全世界写给它看的内容。浏览器 agent 把信息检索和真实操作放在同一个循环里，所以传统 Web 安全、权限设计、内容信任边界和模型行为训练必须合并考虑。对产品团队来说，关键不是问“有没有一个提示词能防注入”，而是把不可信输入、敏感工具、不可逆动作和用户确认做成系统边界。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>把网页、邮件、PDF、广告和动态内容全部视为 untrusted content。</li>
+        <li>对浏览器 agent 的外发、下载、填表、支付、删除等动作设置更高权限门槛。</li>
+        <li>结合模型训练、classifier、sandbox、权限和 red team，不依赖单点防御。</li>
+        <li>用自适应攻击集持续评估，而不是只测固定 prompt injection 样例。</li>
+        <li>公开风险进展时保留 attack success rate 的实际含义，避免过度承诺。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/research/prompt-injection-defenses" target="_blank" rel="noopener">https://www.anthropic.com/research/prompt-injection-defenses</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
