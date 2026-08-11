@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agentic Coding 与专业能力的持续回报 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-06-16</span>
+        <span class="article-author">Anthropic Research</span>
+      </div>
+      <h1 class="article-title">Agentic Coding 与专业能力的持续回报</h1>
+      <p class="article-original-title">原文：Agentic coding and persistent returns to expertise</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Anthropic 分析约 400,000 个 Claude Code 交互会话，研究 agentic coding 的分工、任务价值和成功率。结论很锋利：coding 背景的重要性在下降，但任务领域 expertise 仍然显著影响成功。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>研究基于 2025 年 10 月到 2026 年 4 月之间约 400,000 个 Claude Code 会话，覆盖约 235,000 名用户。</li>
+        <li>典型会话中，人类做约 70% 的 planning decisions，但只做约 20% 的 execution decisions。</li>
+        <li>Claude Code 平均每个用户 prompt 会触发约 10 个 Claude actions，有时超过 100 个。</li>
+        <li>用户越懂任务领域，每次指令触发的 Claude 工作越多：novice 会话约 5 个 actions，expert 会话超过 12 个 actions。</li>
+        <li>会话工作从单纯 debugging 转向更端到端的 agentic use：部署运行、数据分析和非代码文档都在增加。</li>
+        <li>10 月到 4 月之间，平均任务估计价值上升约 27%，多数工作类型都有提升。</li>
+        <li>软件相关职业与其他职业的 verified success 差距不大；在产出代码的会话中，主要职业组都接近软件工程师。</li>
+        <li>真正拉开成功率的是 task-specific expertise，而不是传统意义上的会不会手写代码。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>Agentic coding 使用正在扩张</h3>
+      <p>Claude Code 的使用数据让我们能观察 coding agent 进入真实工作后的形态。文章关注三个问题：人们拿 Claude Code 做什么、人与 agent 如何分工、什么因素影响会话是否成功。</p>
+      <p>研究样本来自隐私保护分析框架，对约 400,000 个交互式会话进行分类。作者特别强调，这里研究的是 CLI、Claude.ai 和 Claude Code desktop app 中的交互式使用，不包括所有非交互式自动化调用。</p>
+      <p>文章的核心判断是：agentic coding 可能预示知识工作的下一阶段。Claude 正在处理更复杂、更有价值的任务，但分工仍然清晰：人决定要做什么，agent 决定怎么做。</p>
+      <h3>九类工作模式</h3>
+      <p>研究团队把每个会话分类为九种 work modes。四类直接涉及代码：building 新东西、fixing broken code、testing code、orchestrating agents 或自动化 pipeline。另有 operating software，涵盖部署、配置、运行 pipeline 和监控系统。</p>
+      <p>还有两类偏向理解和决策：understanding 既有系统、planning 变更。最后两类是 data analysis 和 prose-based documents，此时代码可能只是手段，最终产物不是软件。</p>
+      <p>整体上，约 56% 会话是 writing、fixing、testing 或 orchestrating code；operating software 占 17%；planning 或 exploring 占 14%；analysis 或 prose 占 13%。分类器结果还与 telemetry 对齐，例如超过 90% 被分类为创建或修改代码的会话确实有代码变更。</p>
+      <h3>谁做决策：人定方向，Claude 做执行</h3>
+      <p>文章把 decision 分成 planning 和 execution。planning 包括做什么、采用什么方案、完成标准是什么；execution 包括改哪些文件、写什么代码、运行哪些命令。</p>
+      <p>平均来看，人类做大约 70% 的 planning decisions，但只做大约 20% 的 execution decisions。这说明 agentic coding 的实际分工不是“人类完全放手”，而是人类保留目标和判断，Claude 承担大量实现细节。</p>
+      <p>从 action 数量看，典型会话大约有 4 轮用户 prompt。每个 prompt 平均触发约 10 个 Claude actions，有时超过 100 个；每轮 Claude 会读文件、改代码、跑命令，并输出约 2,400 个词。</p>
+      <h3>Expertise 会放大每条指令的效力</h3>
+      <p>研究团队让 Claude 根据 transcript 评估用户在当前任务上的 expertise，从 novice 到 expert 共五级。这个 expertise 是任务特定的：资深工程师第一次问 Rust 可能是 beginner；不懂 Python 的会计，如果能准确描述 reconciliation rules 并发现月末结账 edge case，也可能是该任务的 expert。</p>
+      <p>结果显示，expertise 越高，每个 prompt 触发的 Claude 工作越多。典型 novice 会话中，每条 prompt 触发约 5 个 Claude actions、约 600 个词输出；expert 会话中 action chain 超过 12 个，输出约 3,200 个词。</p>
+      <p>这意味着高手不是更少用 agent，而是更会把 agent 放大。他们给出的指令更精确，知道要验证什么，也更能纠正 agent 的误解。</p>
+      <h3>谁在用 Claude Code</h3>
+      <p>研究团队尝试从会话上下文推断用户职业，并映射到美国 BLS 的 SOC 职业分类。分类器不能把“会写代码”本身当作软件职业证据，而要看项目上下文、文件结构、术语和引用材料。</p>
+      <p>约 70% 会话可以推断职业。软件相关职业当然是最大组，但商业和金融运营、艺术设计媒体、管理、生命/物理/社会科学也很常见。增长最快的非软件职业组包括管理、销售和法律。</p>
+      <h3>任务类型和价值在变化</h3>
+      <p>从 2025 年 10 月到 2026 年 4 月，Claude Code 使用结构明显改变。fixing broken code 的会话占比从 33% 降到 19%。与之相对，operating software 从 14% 增至 21%；writing 和 data analysis 大约从 10% 翻到 20%。</p>
+      <p>任务估计价值也在上升。研究团队用自由职业任务价格作为粗略参照，估计平均会话价值在 7 个月内上升 27%。building、operating 和 fixing 类任务分别大约上升 43%、34% 和 32%。作者提醒这些不是精确美元价值，而是用于比较任务复杂度变化。</p>
+      <h3>成功率取决于用户带来的理解</h3>
+      <p>研究用两类 transcript-based 指标衡量成功：一类是 judged success，即分类器判断用户是否完成目标；另一类是 verified success，需要出现硬证据，例如 commit、PR、测试通过或用户明确确认。</p>
+      <p>越有 expertise 的用户，会话越容易成功。novice 会话的 verified success 约 15%，至少 partial success 为 77%；intermediate 及以上会话 verified success 达到 28% 到 33%，partial success 达到 91% 到 92%。</p>
+      <p>差距主要发生在 novice 到 intermediate 之间；intermediate 到 expert 的增益更平缓。换句话说，掌握任务基本结构就能拿到大部分收益，深度专家仍有优势，但不是线性碾压。</p>
+      <h3>遇到问题时，expertise 更重要</h3>
+      <p>当会话出现错误、测试失败、重复尝试或用户不满时，expertise 对恢复能力尤其重要。在遇到 trouble 的会话中，novice 的 verified success 只有 4%，expert 达到 15%。</p>
+      <p>abandoned sessions 也有明显差异：当会话被判断失败且零行代码被写入时，novice 会话中这种情况占 19%，其他层级只有 5% 到 7%。这说明低 expertise 用户更容易在 agent 偏离目标时放弃。</p>
+      <h3>职业可能没 expertise 那么重要</h3>
+      <p>软件相关职业的 overall verified success 约 30%，其他职业约 26%。在实际产出代码的会话中，软件相关职业为 34%，其他职业为 29%。如果看更宽松的 partial success，代码产出会话里两者分别是 89% 和 88%。</p>
+      <p>十大主要职业组在代码产出会话中的成功率都落在软件工程师附近 7 个百分点内。某些管理职业甚至略高于软件职业，这可能体现管理技能在指挥 agent 时可迁移，也可能受到“管理者更常明确确认结果”的测量影响。</p>
+      <h3>未来要观察的信号</h3>
+      <p>文章认为，agentic coding 正在替代一部分实现密集型工作，同时奖励那些真正理解任务的人。如果这些模式延伸到整个经济，coding background 对软件生产的必要性可能下降，但 domain expertise 的价值会保留甚至放大。</p>
+      <p>未来需要观察两个变化：如果 expertise 回报下降，说明模型开始补足用户目前必须带来的判断；如果非软件职业的 coding session 成功率继续上升，说明软件生产会变成普通工作的一部分，而不再只属于软件职业。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章把“AI 会不会取代程序员”这个粗问题拆得更细。Claude Code 降低的是实现门槛，但没有消除问题理解的价值。真正会用 agent 的人，不一定是最会手写代码的人，而是最能定义目标、识别约束、判断结果、发现错误的人。这对团队组织很关键：未来的软件生产可能更多发生在业务、研究、运营、法务等领域内部，工程师角色也会从“唯一能写系统的人”转向“建立可靠性、架构、验证和工具边界的人”。agent 不是让 expertise 过时，而是让 expertise 有了新的放大器。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>培训非工程团队使用 coding agent 时，先训练任务表达、验收标准和错误识别，而不是语法。</li>
+        <li>评估 agent 工具效果时，不只看生成代码量，要看 verified success 和恢复失败的能力。</li>
+        <li>为 domain experts 提供安全的执行环境和模板，让他们能把专业判断转成可运行代码。</li>
+        <li>在团队中记录用户 prompt、agent actions、测试结果和 commit 信号，形成可审计的 agent workflow。</li>
+        <li>观察 novice 用户的 abandonment rate，它往往比平均成功率更能暴露工具门槛。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/research/claude-code-expertise" target="_blank" rel="noopener">https://www.anthropic.com/research/claude-code-expertise</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
