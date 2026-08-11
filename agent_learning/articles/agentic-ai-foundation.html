@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP 捐赠与 Agentic AI Foundation - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+  body.article-page{background:#0a0a0f;color:#e0e0e8;font-family:Inter,system-ui,sans-serif}.article-nav,.article-content{max-width:980px;margin:0 auto;padding-left:24px;padding-right:24px}.article-nav{padding-top:28px}.back-link,.article-footer a{color:#63b3ed;text-decoration:none;font-family:monospace;font-size:13px}.article-content{padding-top:32px;padding-bottom:80px;line-height:1.85}.article-header{border-bottom:1px solid rgba(99,179,237,.22);padding-bottom:26px;margin-bottom:32px}.article-meta{display:flex;gap:16px;color:#888;font-family:monospace;font-size:13px;margin-bottom:14px;flex-wrap:wrap}.article-title{font-size:clamp(32px,5vw,58px);line-height:1.12;margin:0 0 14px}.article-original-title{color:#999;margin:0;font-size:16px}.article-content section{margin:34px 0}.article-content h2{color:#63b3ed;margin:30px 0 16px;font-size:26px}.article-content h3{color:#e0e0e8;margin:28px 0 12px;font-size:20px}.article-content p,.article-content li{color:#c0c0c8}.article-content ul{padding-left:22px}.translation-note{border-left:3px solid #63b3ed;padding:12px 18px;color:#aaa;background:rgba(255,255,255,.03)}.article-footer{border-top:1px solid rgba(99,179,237,.22);margin-top:46px;padding-top:24px}
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav"><a href="../index.html" class="back-link">← Agent Learning 索引</a></nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta"><span>2025-12-09</span><span>Anthropic News</span></div>
+      <h1 class="article-title">MCP 捐赠与 Agentic AI Foundation</h1>
+      <p class="article-original-title">原文：Donating the Model Context Protocol and establishing the Agentic AI Foundation</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>Anthropic 将 Model Context Protocol 捐赠给 Linux Foundation 旗下的 Agentic AI Foundation。这标志着 MCP 从单家公司发起的协议，进入更中立、开放、社区驱动的治理阶段。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做中文转述与解读。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>MCP 被捐赠给 Agentic AI Foundation，后者是 Linux Foundation 旗下 directed fund。</li>
+        <li>AAIF 由 Anthropic、Block、OpenAI 共同发起，并获得 Google、Microsoft、AWS、Cloudflare、Bloomberg 支持。</li>
+        <li>MCP 生态已有超过 10,000 个活跃公开 servers。</li>
+        <li>MCP 已被 ChatGPT、Cursor、Gemini、Microsoft Copilot、VS Code 等产品采用。</li>
+        <li>Claude connector directory 已有 75+ connectors，背后由 MCP 驱动。</li>
+        <li>MCP spec 新增 asynchronous operations、statelessness、server identity 和 official extensions。</li>
+        <li>Python 和 TypeScript SDK 月下载量超过 97M。</li>
+        <li>捐赠目标是保持 MCP vendor-neutral、open-source、community-driven。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>MCP 从协议走向公共基础设施</h3>
+      <p>MCP 最初被定位为连接 AI applications 与外部系统的通用开放标准。一年后，它已经跨越产品、平台和基础设施层：从开发工具到 Fortune 500 部署，从 ChatGPT、Cursor 到 VS Code，从 AWS、Cloudflare 到 Google Cloud 和 Azure。</p>
+      <p>这说明 MCP 的价值不是某个模型专属功能，而是 agent 时代的连接层。agent 要可靠地使用工具和数据，需要协议、身份、权限、发现和 SDK 共同成熟。</p>
+      <h3>Agentic AI Foundation 的角色</h3>
+      <p>Linux Foundation 擅长维护关键开源生态，例如 Linux Kernel、Kubernetes、Node.js、PyTorch。AAIF 的目标是让 agentic AI 以透明、协作、公共利益导向的方式演进。</p>
+      <p>MCP 将与 Block 的 goose、OpenAI 的 AGENTS.md 一起成为 founding projects。文章强调，MCP 现有 governance model 保持不变，maintainers 继续优先考虑社区输入和透明决策。</p>
+      <h3>为什么这对 agent 生态重要</h3>
+      <p>开放协议降低集成碎片化，也能避免工具连接层被单一厂商控制。对企业来说，这意味着可以围绕标准建设安全、权限和审计；对开发者来说，connector 和 server 能复用；对用户来说，agent 能获得更一致的上下文体验。</p>
+    </section>
+    <section><h2>深度解读</h2><p>MCP 捐赠的意义在于 agent 基础设施开始“公共化”。模型竞争会继续，但工具协议如果封闭，agent 生态会被平台锁定和重复集成拖慢。把 MCP 放到 Linux Foundation 体系下，等于是承认 context、tool calling、connector governance 需要跨公司协作。未来 agent 的核心护城河可能不只是模型，而是谁能在开放协议上做出更安全、更好用的运行时和产品体验。</p></section>
+    <section><h2>落地启示</h2><ul><li>企业接入 agent 工具时优先选择开放协议，降低厂商锁定。</li><li>把 MCP Registry、server identity 和权限治理纳入内部平台设计。</li><li>关注 SDK 成熟度和云部署支持，不只看 demo connector。</li><li>把 AGENTS.md、MCP、goose 这类基础项目作为 agent 工程栈观察对象。</li><li>对核心 connector 建立版本、审计和安全评估流程。</li></ul></section>
+    <footer class="article-footer"><p><strong>原文链接：</strong><a href="https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation" target="_blank" rel="noopener">https://www.anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation</a></p><p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p></footer>
+  </article>
+</body>
+</html>
