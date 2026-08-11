@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社会科学中的 Coding Agents - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-05-27</span>
+        <span class="article-author">Anthropic Research</span>
+      </div>
+      <h1 class="article-title">社会科学中的 Coding Agents</h1>
+      <p class="article-original-title">原文：Coding agents in the social sciences</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>这篇文章用 1,260 位定量社会科学研究者的调查数据，观察 coding agents 如何进入科研工作流：它们已经被少数早期用户用于代码分析和项目启动，但采用率、收益和风险都呈现明显不均衡。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>调查覆盖 1,260 位定量社会科学研究者，时间在 2026 年 2 月到 3 月。</li>
+        <li>81% 受访者曾在研究中使用 AI chatbot，但只有 20% 每周使用 coding agents。</li>
+        <li>在 coding agent 用户中，Claude Code 是最常见工具，86% 用户报告使用过它；Codex 以 31% 位居其次。</li>
+        <li>采用率高度不均：经济学、政治学采用更多，公共卫生、教育、传播学明显更低。</li>
+        <li>早期采用者更多集中在职业早期研究者、男性姓名研究者和高声望大学。</li>
+        <li>coding agent 用户报告更多 working papers、grant proposals 和项目启动，但这只是描述性差异，不能直接解释为因果效果。</li>
+        <li>研究者普遍相信 AI 能提升论文产出效率，却更谨慎看待它对社会科学整体质量的影响。</li>
+        <li>agent 自动化带来的不仅是速度，也可能改变研究问题选择、分析路径和学术记录的拥堵程度。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>为什么 coding agents 会改变社会科学研究</h3>
+      <p>过去，AI chatbot 在学术场景中的使用更多集中于写作辅助、编辑文本和查找背景资料。coding agents 的影响更深，因为它们可以从研究想法和数据集出发，编写分析代码、运行代码、解释结果，并根据输出继续迭代。</p>
+      <p>这意味着定量研究中的一些核心步骤第一次可以被部分交给机器处理。快速执行研究想法可能让探索更便宜、更大胆，也可能让论文、working paper 和低质量自动化产出挤占学术注意力。</p>
+      <p>Anthropic 这项研究基于一项更大持续研究的基线调查，后续还包括为研究者随机提供 Claude Code 访问权限的实验。本文先报告早期采用者是谁、他们如何使用工具、产出指标有何差异，以及研究者如何预期 AI 对学科的影响。</p>
+      <h3>调查样本和边界</h3>
+      <p>调查在 2026 年 2 月下旬到 3 月进行，目标是活跃的定量社会科学研究者。样本并非完全代表总体，因为受访者被招募参加一项提供 Claude Max 账号的研究，因此可能更偏向对 AI 工具感兴趣的人。</p>
+      <p>学科分布较均衡：经济学、政治学和社会学各约占五分之一，管理科学和心理学也接近这一水平，另有公共卫生、教育和传播学研究者。职业阶段方面，约 40% 是正教授或副教授，25% 是助理教授，约 30% 是博士生。</p>
+      <h3>多数人用过 AI，但 coding agents 还没普及</h3>
+      <p>研究团队先问受访者是否曾用生成式 AI 辅助研究流程，81% 回答“是”。但当问题缩小到是否每周使用集成在命令行中的 AI coding assistant，例如 Codex、Cursor 或 Claude Code 时，采用率降到 20%。</p>
+      <p>这说明 AI chatbot 和 coding agent 仍是两个采用阶段。chatbot 已经成为广义研究辅助工具，而 coding agent 要求用户把代码、数据、终端和执行环境纳入 agent workflow，门槛更高，也更依赖研究者的编程工作占比。</p>
+      <h3>采用率非常不均</h3>
+      <p>不同学科之间差异很大：经济学采用率为 39%，政治学为 25%，而公共卫生、教育和传播学分别只有 6%、4% 和 6%。这大致跟整体 AI 使用差异同向，但 coding agent 的分化更陡。</p>
+      <p>职业阶段也影响采用率。博士生和博士后中，超过四分之一至少每周使用 coding agents；终身教授的比例则不到其一半。作者认为，这可能和早期研究者更直接处理代码和数据、技术适应更快、职业压力更强有关。</p>
+      <p>不均衡还体现在性别推断姓名和学校地位上。研究团队按姓名分类后发现，通常为男性姓名的研究者采用 coding agents 的比例超过通常为女性姓名者的两倍。高声望和私立大学的采用率也更高。这些差异比整体 AI 使用差异更明显，提示 coding agents 的早期扩散可能放大资源不平等。</p>
+      <h3>AI 主要被用于代码和编辑，而不是直接写论文</h3>
+      <p>学界关于 AI 的争论常集中在论文写作：虚构文献综述、模板化引言、自动生成论文等。但调查显示，最常见用法其实是为定量数据分析生成代码。97% 的 coding agent 用户、77% 的其他 AI 用户都报告用 AI 生成代码。</p>
+      <p>其次是编辑文字、询问方法建议和了解既有研究。总体来看，只有约三分之一 AI 用户曾用它起草正文。除了经济学和管理学研究者，许多学科并不把 AI 主要用于直接写 prose。</p>
+      <h3>早期用户产出更多，但不能直接推因果</h3>
+      <p>研究最关心的问题是：coding agents 是否提高研究生产率？当前文章只能做描述性比较，因为采用 coding agents 的人和未采用者可能本来就不同。</p>
+      <p>在控制职业阶段、学科和完成调查的周次后，coding agent 用户报告更多项目启动、更多 working papers、更多 grant proposals，也可能有更多 conference submissions。按比例看，他们在经验项目启动上约高 10%，在 working papers 发布上约高 75%。</p>
+      <p>但这种差异并没有出现在 journal submissions 和 resubmissions 上。这可能是因为从项目启动到正式投稿有时间滞后，也可能说明 coding agents 更擅长帮助研究起步、跑分析和搭建初稿，而不是完成投稿前的最后打磨。</p>
+      <h3>研究者看好生产率，但担心学科整体影响</h3>
+      <p>受访者对“AI 是否让社会科学家在写出可发表论文方面更高效”相当乐观。在 1 到 10 的量表上，88% 给出高于 5 的分数，一半给到 8 或以上。使用 AI 用途越多、使用 coding agents 的研究者，通常越乐观。</p>
+      <p>但这种乐观没有完全扩展到“AI 是否让社会科学整体变好”。70% 受访者对论文生产率的评价高于对学科整体影响的评价。这种落差很关键：更多论文并不自动等于更好的知识，可能也意味着同行评审拥堵、注意力竞争、选择性报告和更保守的增量研究。</p>
+      <h3>讨论：自动化改变的不只是速度</h3>
+      <p>文章最后强调，这些发现有不少限制：样本来自邮件调查，受访者可能比平均研究者更重度使用 LLM、更乐观；早期采用者也可能本来就更高产；当前指标只看数量，不评估项目质量。</p>
+      <p>但即便如此，coding agents 正在进入社会科学。经济和政治等领域的研究过程，越来越多会受到 AI coding agents 的分析决策影响。未来真正需要观察的，不只是 agent 能否让研究变快，而是它是否改变研究问题、方法选择、错误模式和学术激励。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章给 Agent Learning 的启发在于，它把 coding agent 从“开发者工具”放进了一个真实知识生产系统里。社会科学研究并不是单纯写代码，它包含问题提出、数据清洗、模型选择、稳健性检查、解释和投稿策略。agent 如果只提升执行速度，可能确实会增加项目数量；但如果它也悄悄标准化分析路径，就会把某些默认方法和偏差扩散到整个学术记录。对企业和研究团队也是一样：引入 coding agent 后，不应只看任务吞吐量，还要看谁更会用、谁被甩开、输出质量是否变窄、错误是否更难被发现。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>衡量 coding agent 价值时，把“项目启动数”和“最终高质量交付数”分开看。</li>
+        <li>为非工程用户设计 agent workflow 时，要降低终端、环境和数据权限的门槛。</li>
+        <li>追踪采用率差异，避免工具只增强已经更有资源和技术优势的人。</li>
+        <li>对 agent 生成的分析代码建立复核和稳健性检查，而不是只验运行成功。</li>
+        <li>评估 agent 输出时同时看数量、质量、方法多样性和错误模式。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/research/coding-agents-social-sciences" target="_blank" rel="noopener">https://www.anthropic.com/research/coding-agents-social-sciences</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
