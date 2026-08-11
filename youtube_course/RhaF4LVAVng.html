@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用规格驱动 AI 编程：把 Agent 从“猜需求”拉回工程流程</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a1a1b8;
+      --text-muted: #66667a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --accent-amber: #f6ad55;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, main, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 28px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+    .hero {
+      background: rgba(22, 22, 31, 0.82);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+    }
+    .eyebrow {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 20px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 0 0 28px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.35);
+    }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: .9;
+    }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 30px 0 16px;
+      padding-bottom: 9px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h2:first-child { margin-top: 0; }
+    h3 {
+      font-size: 1.02rem;
+      font-weight: 650;
+      color: var(--text-primary);
+      margin: 24px 0 10px;
+    }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    ul, ol { color: var(--text-secondary); margin: 0 0 16px; padding-left: 24px; }
+    li { margin: 0 0 8px; }
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.07);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-secondary);
+    }
+    blockquote p:last-child { margin-bottom: 0; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.58;
+    }
+    th { background: rgba(255, 255, 255, 0.04); color: var(--text-primary); font-weight: 650; }
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.018); }
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88em;
+      color: var(--accent-cyan);
+    }
+    .timestamp-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .timestamp {
+      display: block;
+      text-decoration: none;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 13px 14px;
+      transition: all .2s ease;
+    }
+    .timestamp:hover { color: var(--text-primary); border-color: var(--border-hover); background: rgba(99,179,237,.07); }
+    .timestamp strong { display: block; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; font-size: .82rem; margin-bottom: 4px; }
+    .related {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .related a {
+      display: block;
+      text-decoration: none;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,.035);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .related a:hover { color: var(--accent-cyan); border-color: var(--border-hover); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .btn:hover { background: var(--accent-cyan); color: var(--bg-primary); }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      padding: 22px 0 6px;
+    }
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+    @media (max-width: 720px) {
+      body { padding: 0 16px 36px; }
+      .hero, .content-card { padding: 22px; border-radius: 12px; }
+      .page-title { font-size: 1.55rem; }
+      table { font-size: .84rem; }
+      th, td { padding: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="eyebrow">Spec-Driven AI Coding Workflow</div>
+      <h1 class="page-title">用规格驱动 AI 编程：把 Agent 从“猜需求”拉回工程流程</h1>
+      <p class="subtitle">英文原题：How I Code With AI Agents (Spec-Driven Development)</p>
+      <div class="page-meta">
+        <span class="meta-badge source">频道：Owain Lewis</span>
+        <span class="meta-badge time">时长：19:06</span>
+        <span class="meta-badge">播放量：108,514</span>
+        <span class="meta-badge">主题：AI Agents · Spec · Claude Code</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/RhaF4LVAVng" title="How I Code With AI Agents (Spec-Driven Development)" allowfullscreen></iframe>
+    </div>
+
+    <article class="content-card">
+      <h2>一、问题引入：AI Agent 最怕的不是能力不够，而是目标太松</h2>
+      <p>这个视频讨论的是一个很实际的问题：当你让 AI 编程 Agent “加一个认证功能”“做一个分析页面”“接一个搜索能力”时，它通常不是完全做不出来，而是会主动填补大量你没有说清楚的细节。它会选择库、改 API、决定存储方式、甚至顺手补一些你没有要求的功能。单次看似聪明，累计起来就是架构漂移。</p>
+      <p>Owain Lewis 给出的解法是规格驱动开发。这里的 spec 不是为了写一份漂亮文档，而是一份给 Agent 执行的合同：明确要做什么、为什么做、哪些东西不要做、任务怎么拆、每个任务如何验收。重点不是多写文档，而是让 Agent 在执行前先被约束。</p>
+      <p>视频的价值在于它没有把 spec-driven development 包装成新理论，而是把它还原成工程团队一直在做的事情：先收敛需求，再做设计，再拆任务，再审查，再提交。区别只是执行对象从人类工程师变成了 Claude Code、Cursor 或其他代码 Agent。</p>
+
+      <h2>二、核心概念解释：PRD、技术设计和 AI Spec 不是同一个东西</h2>
+      <h3>PRD 面向人，AI Spec 面向执行</h3>
+      <p>视频中先把几个容易混用的词拆开。PRD 通常回答“为什么做、为谁做、业务价值是什么”，它是给产品经理、业务方和工程团队对齐范围用的。技术设计文档回答“系统怎么建、架构边界是什么、扩展性和安全性如何处理”，主要服务工程决策。</p>
+      <p>AI Spec 的定位更窄：它是给 Agent 执行的文档。它可以包含一点 why 和 context，因为 Agent 遇到空白时仍需要判断依据；但它不是让团队辩论方向的地方，而是把已经收敛的意图变成可执行步骤。</p>
+      <h3>Spec 的核心组成</h3>
+      <p>一个有效的 AI Spec 至少包含四块：目标、约束、范围外事项、任务拆解。目标让 Agent 知道最终要交付什么；约束告诉它不能随便新增依赖、不能换掉既有模式、不能用不符合团队标准的方案；范围外事项尤其重要，因为 Agent 很容易“热心过度”；任务拆解则把大目标拆成可以 review、test、commit 的增量。</p>
+      <blockquote>
+        <p>AI Spec 的关键不是让 Agent 更自由，而是减少它需要猜的地方。</p>
+      </blockquote>
+
+      <h2>三、关键论点与实操步骤：从一句模糊需求到可审查任务</h2>
+      <h3>1. 不要直接说“加认证”，先写可执行规格</h3>
+      <p>视频用认证功能举例。模糊 prompt 可能只是“给应用加认证”，但真正实现时有大量隐藏决策：是 JWT 还是 session？是否支持密码重置？是否接 OAuth？access token 和 refresh token 的有效期是多少？用户数据存在哪里？是否允许新增依赖？如果这些都留给 Agent，它会根据训练经验拼出一个方案，而不一定符合项目实际。</p>
+      <p>规格化后的版本会明确：使用 JWT；access token 为 1 小时，refresh token 为 7 天；不做密码重置和 OAuth；用户数据走 Postgres + Prisma；不要新增依赖；token 不入库；每个接口需要怎样的错误处理和测试。这种写法把“想象空间”变成“执行边界”。</p>
+      <h3>2. 把大功能拆成可以单独验收的任务</h3>
+      <p>规格不是一次性扔给 Agent 让它生成 10,000 行代码。视频反复强调要把工作拆开：先加 user model，再做注册接口，再做登录接口，再做刷新 token，再补端到端测试。每个任务都要有 touched files、实现要求和 verification。任务完成后先 review，再 commit，然后才进入下一步。</p>
+      <p>这个节奏的实际收益很直接：每一步的 diff 小，review 成本低，错误更早暴露。如果任务 1 的数据模型就错了，你可以立刻修 spec，而不是等整个功能生成完之后在一堆跨文件变更里反推问题来源。</p>
+      <h3>3. Spec 不是瀑布文档，可以边做边修</h3>
+      <p>Lewis 特别提醒，规格不是锁死一切的瀑布设计。你可以先写到足够清晰，让 Agent 开始做第一步；review 后发现问题，再回到 spec 修改约束或任务。关键是把修改写回持久文件，让下一次 Agent session 仍能继承最新事实，而不是依赖聊天上下文。</p>
+      <h3>4. 真实演示：先让 Agent 生成 spec，再人工改掉不可靠选择</h3>
+      <p>演示项目叫 YouTube IQ，作者想新增一个“粘贴 YouTube URL 后分析视频”的功能：拉取字幕，分析开头、节奏、关键点，并给出改进建议。他先用一个 slash command 让 Agent 生成 spec，Agent 把功能拆成转写服务、分析 prompt、后端路由、UI 组件和侧栏入口等任务。</p>
+      <p>随后作者审阅 spec，发现 Agent 选择了 YouTube transcript package，但他过去遇到过限流和可靠性问题，于是把约束改成使用 SuperData API 拉字幕。这就是 spec-driven workflow 的重点：Agent 可以先给出草案，但人类工程师必须在执行前把关键决策收回来。</p>
+      <h3>5. 执行时只让 Agent 做 T1，并要求验证</h3>
+      <p>作者打开新的 Claude Code session，让 Agent 读取 spec 并只实现 T1。完成后 Agent 按要求跑了 build 或测试，作者再 review 生成代码。他注意到视频 ID 提取逻辑看起来可疑，说明即使通过验证，也还要用工程视角检查边界条件。随后他让 Claude 实际调用新服务，确认能从 YouTube URL 提取 ID、拉到 18 个 transcript segment，并转成 AI 可处理的纯文本。</p>
+
+      <h2>四、对比表格：不同工作流该怎么选</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工作方式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>主要风险</th>
+            <th>建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>直接 prompt 编码</td>
+            <td>一次性脚本、小 UI 微调、低风险修复</td>
+            <td>启动最快，交互成本低</td>
+            <td>Agent 会猜架构、猜依赖、猜范围，容易越界</td>
+            <td>仅用于可一眼 review 的小改动</td>
+          </tr>
+          <tr>
+            <td>AI 生成完整大功能</td>
+            <td>原型探索、throwaway demo</td>
+            <td>短时间看到端到端效果</td>
+            <td>diff 过大，review 困难，后期回滚成本高</td>
+            <td>不要直接进入生产代码库</td>
+          </tr>
+          <tr>
+            <td>轻量 AI Spec</td>
+            <td>认证、搜索、计费、数据管道、复杂 UI 流程</td>
+            <td>明确目标、约束和验收，便于多 session 延续</td>
+            <td>需要人类先审阅关键技术选择</td>
+            <td>视频推荐的默认方式</td>
+          </tr>
+          <tr>
+            <td>OpenSpec / Spec Kit 等框架</td>
+            <td>团队已经接受文件化流程，或需要严格追踪变更</td>
+            <td>结构完整，有 CLI 和模板辅助</td>
+            <td>可能过重，把 PRD、设计和执行混在一堆 Markdown 中</td>
+            <td>先用轻量 spec，流程复杂后再引入框架</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>五、视频中的核心判断</h2>
+      <blockquote>
+        <p>规格驱动并不是发明一种全新的工程方法；它只是把软件团队原本的需求、设计、拆任务和 review 流程，重新套到 AI Agent 身上。</p>
+      </blockquote>
+      <p>这句话可以作为整集视频的中心。很多人讨论 AI 编程时，把 Agent 当成一个可以一次性接住所有上下文的超人工程师；作者的实际建议相反：把 Agent 当作一个执行力很强、但需要明确任务边界的工程成员。你不给边界，它就会热心补全；你给了边界，它才更像团队流程中的一环。</p>
+
+      <h2>六、时间戳目录</h2>
+      <div class="timestamp-list">
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=0s"><strong>00:00</strong> 为什么 AI 编码需要 spec-driven development</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=55s"><strong>00:55</strong> 定义：先写规格，再让 Agent 执行</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=150s"><strong>02:30</strong> PRD、技术设计和 AI Spec 的区别</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=275s"><strong>04:35</strong> JWT 认证例子：把隐藏决策写清楚</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=430s"><strong>07:10</strong> Hybrid Search / PG Vector 例子</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=560s"><strong>09:20</strong> YouTube IQ 实战：生成视频分析功能 spec</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=740s"><strong>12:20</strong> 审阅并修改 Agent 生成的技术选择</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=840s"><strong>14:00</strong> 新 session 只执行 T1，并验证服务可用</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=970s"><strong>16:10</strong> 框架取舍：OpenSpec、Spec Kit 和 Kiro 是否必要</a>
+        <a class="timestamp" href="https://www.youtube.com/watch?v=RhaF4LVAVng&t=1080s"><strong>18:00</strong> 总结：小步提交比一次性大改更可靠</a>
+      </div>
+
+      <h2>七、相关推荐</h2>
+      <p>如果你想把这套方法接到实际工具里，可以继续看这些课程：Claude Code 的计划模式、CLAUDE.md 项目记忆、MCP 工具接入，以及多 Agent 并行开发，都需要类似的规格约束才能稳定工作。</p>
+      <div class="related">
+        <a href="index.html">返回全部 YouTube 技术课程</a>
+        <a href="qYqIhX9hTQk.html">Claude Code 初学者工作台配置</a>
+        <a href="uogzSxOw4LU.html">Claude Code 专业工作流：MCP、Skills、子智能体与持久记忆</a>
+        <a href="wkv2ifxPpF8.html">如何把 Claude Code 变成 AI 工程团队</a>
+      </div>
+      <a class="btn" href="index.html">返回课程列表</a>
+    </article>
+  </main>
+
+  <footer>
+    基于英文字幕整理生成 · <a href="https://www.youtube.com/watch?v=RhaF4LVAVng">原视频</a>
+  </footer>
+</body>
+</html>
