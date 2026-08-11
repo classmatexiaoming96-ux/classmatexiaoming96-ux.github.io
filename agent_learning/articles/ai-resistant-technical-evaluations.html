@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设计抗 AI 的技术评估 - Agent Learning</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+  body.article-page { background: #0a0a0f; color: #e0e0e8; font-family: 'Inter', system-ui, sans-serif; }
+  .article-nav { max-width: 980px; margin: 0 auto; padding: 28px 24px 0; }
+  .back-link { color: #63b3ed; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .article-content { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; line-height: 1.85; }
+  .article-header { border-bottom: 1px solid rgba(99,179,237,.22); padding-bottom: 26px; margin-bottom: 32px; }
+  .article-meta { display: flex; gap: 16px; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-bottom: 14px; flex-wrap: wrap; }
+  .article-title { font-size: clamp(32px, 5vw, 58px); line-height: 1.12; margin: 0 0 14px; }
+  .article-original-title { color: #999; margin: 0; font-size: 16px; }
+  .article-content section { margin: 34px 0; }
+  .article-content h2 { color: #63b3ed; margin: 30px 0 16px; font-size: 26px; }
+  .article-content h3 { color: #e0e0e8; margin: 28px 0 12px; font-size: 20px; }
+  .article-content p, .article-content li { color: #c0c0c8; }
+  .article-content ul { padding-left: 22px; }
+  .article-content li { margin: 8px 0; }
+  .translation-note { border-left: 3px solid #63b3ed; margin: 18px 0 26px; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  pre { overflow-x: auto; padding: 18px; border: 1px solid rgba(99,179,237,.18); border-radius: 8px; background: rgba(255,255,255,.04); }
+  code { font-family: 'JetBrains Mono', monospace; }
+  blockquote { border-left: 3px solid #63b3ed; margin: 20px 0; padding: 12px 18px; color: #aaa; background: rgba(255,255,255,.03); }
+  .article-footer { border-top: 1px solid rgba(99,179,237,.22); margin-top: 46px; padding-top: 24px; }
+  .article-footer a { color: #63b3ed; overflow-wrap: anywhere; }
+  </style>
+</head>
+<body class="article-page">
+  <nav class="article-nav">
+    <a href="../index.html" class="back-link">← Agent Learning 索引</a>
+  </nav>
+  <article class="article-content">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="article-date">2026-01-21</span>
+        <span class="article-author">Anthropic Engineering</span>
+      </div>
+      <h1 class="article-title">设计抗 AI 的技术评估</h1>
+      <p class="article-original-title">原文：Designing AI-resistant technical evaluations</p>
+    </header>
+    <section>
+      <h2>导读</h2>
+      <p>本文复盘 Anthropic 性能工程团队如何迭代 take-home 技术评估：当 Claude Code 不断击穿旧题，评估设计必须从“测人是否会写代码”转向“测人在 AI 协作环境中的判断、建模和工具构造能力”。</p>
+      <p class="translation-note">说明：本文按 Agent Learning 的中文阅读页格式，对原文结构与关键技术细节做逐节中文转述与解读；为避免整篇镜像转载，正文保留原文章节脉络、关键数字和术语，但不做逐字复刻。</p>
+    </section>
+    <section>
+      <h2>核心观点</h2>
+      <ul>
+        <li>AI 能力提升会让技术面试题迅速失去区分度，尤其是 take-home 这类可长时间使用工具的任务。</li>
+        <li>Anthropic 原始题目是一个模拟加速器上的性能优化任务，曾帮助筛选出多位优秀性能工程师。</li>
+        <li>Claude Opus 4 在 4 小时限制内超过多数候选人，Claude Opus 4.5 又在 2 小时版本中接近顶尖人类表现。</li>
+        <li>简单禁止 AI 不现实，也不符合实际工作方式；更有价值的问题是如何评估人类与 AI 协作时的增量能力。</li>
+        <li>越接近公开知识和常见优化模式的问题，越容易被模型经验库击穿。</li>
+        <li>新的评估更偏向异常、受限、低分布重合度的问题，以测试候选人的新问题建模能力。</li>
+        <li>评估的 realism 和 AI-resistance 存在张力：越像真实工作，越可能被强模型快速掌握。</li>
+        <li>真正稳定的信号来自工具选择、调试策略、抽象能力和面对陌生规则时的推理质量。</li>
+      </ul>
+    </section>
+    <section>
+      <h2>正文</h2>
+      <h3>原始 take-home 的目标</h3>
+      <p>Anthropic 性能工程团队在 2023 年末需要快速筛选更多候选人。标准面试流程耗费大量工程师和候选人时间，而团队又正面临 TPU、GPU、Trainium 集群扩张带来的性能工程需求。</p>
+      <p>作者设计了一个模拟加速器任务：候选人需要优化运行在一台类 TPU 机器上的 Python 程序，通过热加载的 Perfetto trace 观察每条指令。题目覆盖 scratchpad memory、VLIW、SIMD、multicore 等性能优化核心概念，但不要求深度学习背景。</p>
+      <p>这个题目一开始表现很好：大约 1,000 名候选人完成过它，帮助团队招到多位表现优秀的工程师。强候选人会构建调试工具、发现意外优化路径，甚至提交小型优化编译器。</p>
+      <h3>Claude Opus 4 击穿第一版</h3>
+      <p>到 2025 年 5 月，Claude 3.7 Sonnet 已经让相当一部分候选人“完全交给 Claude Code”更划算。预发布的 Claude Opus 4 则在 4 小时限制内给出了超过几乎所有人类候选人的方案。</p>
+      <p>作者没有简单废弃题目，而是用 Claude Opus 4 找出它开始吃力的位置，把那里改成第二版起点：更干净的 starter code、更深的机器特性、更短的开发循环，并移除已经被模型轻松解决的 multicore 部分。</p>
+      <p>时间限制也从 4 小时缩短到 2 小时。这样安排更利于候选人排期，同时让题目更强调关键优化洞察，而不是大段代码量和调试消耗。</p>
+      <h3>Claude Opus 4.5 再次击穿第二版</h3>
+      <p>预发布 Claude Opus 4.5 在 2 小时内逐步优化方案，不到 1 小时就达到通过线。它一度认为自己遇到无法突破的 memory bandwidth 瓶颈，这和多数人类的判断类似；但当作者提示可能达到的 cycle count 后，模型继续思考并找到了绕开瓶颈的 trick。</p>
+      <p>更严格的 test-time compute harness 也确认了这个结论：Claude 不仅能在 2 小时内击败多数人，还能随着时间继续提升。此时，take-home 的最佳策略已经接近“让 Claude Code 代做”。</p>
+      <h3>为什么不直接禁用 AI</h3>
+      <p>团队讨论过禁止 AI，但作者认为这不合适：执行层面难验证，工作场景中也不真实。性能工程师实际会使用 AI，因此评估更应该衡量候选人能否在有 AI 的环境中展示自己的判断力。</p>
+      <p>另一个选项是要求候选人显著超过 Claude Code 单独完成的结果，但这也有问题。模型执行太快，人类可能花一半时间理解上下文，随后只能被动追赶模型已经做过的修改。</p>
+      <p>这暴露出技术招聘的新难题：真实工作中的困难越来越多来自调试、系统设计、性能分析、正确性验证和代码简化，但这些能力很难在短时间内客观评分。</p>
+      <h3>第一次新尝试：换一个优化问题</h3>
+      <p>作者尝试设计一个来自实际工作的更难 kernel 优化题：在 2D TPU register 上做高效 data transposition，并避免 bank conflicts。Claude 很快帮他实现了新题，但 Claude Opus 4.5 又发现了一个作者没想到的优化路径：直接转置整个计算，而不是转置数据。</p>
+      <p>作者补丁移除了这条捷径后，Claude 暂时卡住；但当使用更长思考预算的 ultrathink 后，它仍然解出了关键 trick。原因并不神秘：data transposition 和 bank conflict 是许多平台上反复出现的问题，模型训练中很可能包含大量相似经验。</p>
+      <h3>第二次新尝试：更异常的问题空间</h3>
+      <p>于是作者转向更 out-of-distribution 的问题：受 Zachtronics 编程谜题启发，用一个极小、强约束的 instruction set 设计多道优化 puzzle，目标是最小化 instruction count。</p>
+      <p>这类题不再高度模拟真实加速器工作，但更能逼出候选人的新问题建模能力。题目没有提供 visualization 或 debugger，只给验证器；候选人可以自己加 print，也可以让 coding model 快速生成调试器。是否值得投资工具，本身就是评估信号。</p>
+      <p>早期结果显示，新 take-home 的分数和候选人过往工作质量相关。作者承认它牺牲了原题的 realism，但也指出：原题能工作，是因为它像真实工作；新题能工作，是因为它模拟了一种新颖工作。</p>
+      <h3>开放挑战与 benchmark 数字</h3>
+      <p>Anthropic 同时开放了原始 take-home，让外部开发者在无限时间下挑战。原文列出了若干 clock cycle 结果：Claude Opus 4 长时间 test-time compute 为 2164 cycles；Claude Opus 4.5 的普通 Claude Code session 约为 1790 cycles；2 小时 harness 为 1579 cycles；更长 harness 可到 1487 和 1363 cycles。</p>
+      <p>如果有人能低于 1487 cycles，就能超过 Claude Opus 4.5 发布时的最好表现。这个开放挑战强调了一个细节：在人类拥有足够长时间、能积累工具和洞察时，顶尖专家仍可能超过当前模型；但短时招聘评估已经被彻底改写。</p>
+    </section>
+    <section>
+      <h2>深度解读</h2>
+      <p>这篇文章真正有价值的地方，不只是“Claude 又打败了一道面试题”，而是把 AI 时代的评估困境讲得很具体。过去我们默认面试题的难点在候选人的知识、编码速度和调试熟练度；现在模型可以快速吃掉大量显性技巧，评估设计就必须寻找更深层的信号：候选人如何识别问题结构、如何判断模型输出是否走偏、如何决定何时造工具、如何在陌生规则中形成压缩表示。对工程团队来说，这也不只是招聘问题。内部 eval、agent benchmark、产品验收都会遇到类似张力：任务越真实，模型越可能从既有经验中泛化；任务越抗 AI，又越可能偏离实际价值。成熟做法不是追求永远无法被模型解决的题，而是持续更新评估，让它测出人类在当前模型边界外还能贡献什么。</p>
+    </section>
+    <section>
+      <h2>落地启示</h2>
+      <ul>
+        <li>为 coding agent 或候选人设计 eval 时，先假设强模型会读取、尝试并优化你的题目。</li>
+        <li>不要只看最终答案，保留 transcript、工具使用、调试路径和中间判断作为评估证据。</li>
+        <li>把题目按“真实工作信号”和“AI-resistance”分别打分，明确两者的取舍。</li>
+        <li>避免依赖公开常见 trick；一旦题目触及成熟知识库，模型会比人更快调用经验。</li>
+        <li>定期用最新模型重跑评估，把被击穿的题目当作 eval 维护成本，而不是偶发事故。</li>
+      </ul>
+    </section>
+    <footer class="article-footer">
+      <p><strong>原文链接：</strong><a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations" target="_blank" rel="noopener">https://www.anthropic.com/engineering/AI-resistant-technical-evaluations</a></p>
+      <p><a href="../index.html" class="back-link">← 返回 Agent Learning 索引</a></p>
+    </footer>
+  </article>
+</body>
+</html>
