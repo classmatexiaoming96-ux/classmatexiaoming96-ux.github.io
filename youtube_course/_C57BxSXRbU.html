@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 开发者 AI 工具栈实战清单 — Tech With Tim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9aa0b8;
+      --text-muted: #64677f;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.75;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .content-card, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 28px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+    .page-title {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+    .page-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+    .video-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #050508;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      margin: 24px 0 0;
+    }
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 34px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    .content-card::before {
+      content: '';
+      display: block;
+      height: 2px;
+      margin: -34px -34px 30px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 34px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h2:first-child { margin-top: 0; }
+    h3 {
+      font-size: 1.02rem;
+      font-weight: 650;
+      color: var(--text-primary);
+      margin: 24px 0 10px;
+    }
+    p { color: var(--text-secondary); margin: 0 0 15px; }
+    ul, ol { color: var(--text-secondary); margin: 0 0 16px; padding-left: 24px; }
+    li { margin: 0 0 9px; }
+    strong { color: var(--text-primary); }
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.9em;
+    }
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.07);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-secondary);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 24px;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      font-weight: 650;
+    }
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.012); }
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .time-row {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.025);
+    }
+    .time {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.86rem;
+      white-space: nowrap;
+    }
+    .recommend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .rec {
+      display: block;
+      text-decoration: none;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      background: rgba(255,255,255,0.025);
+      transition: all 0.2s ease;
+    }
+    .rec:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99,179,237,0.06);
+      transform: translateY(-2px);
+    }
+    .rec strong { display: block; margin-bottom: 5px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      text-decoration: none;
+      padding: 0.65rem 1rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+      margin-top: 6px;
+    }
+    .btn:hover { background: var(--accent-cyan); color: var(--bg-primary); }
+    footer {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 28px 0;
+    }
+    @media (max-width: 640px) {
+      body { padding: 0 16px 36px; }
+      .content-card { padding: 24px; }
+      .content-card::before { margin: -24px -24px 24px; }
+      .time-row { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 返回课程列表</a>
+    <h1 class="page-title">2026 开发者 AI 工具栈实战清单</h1>
+    <p class="subtitle">英文原题：The Best AI Tools for Developers in 2026 (That I Actually Use)</p>
+    <div class="page-meta">
+      <span class="meta-badge source">Tech With Tim</span>
+      <span class="meta-badge time">15:31</span>
+      <span class="meta-badge">约 11,826 次观看</span>
+      <span class="meta-badge">2026-08-10 发布</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/_C57BxSXRbU" title="The Best AI Tools for Developers in 2026 (That I Actually Use)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </header>
+
+  <main class="content-card">
+    <h2>一、问题引入：工具越来越多，真正困难的是分层</h2>
+    <p>这个视频的价值不在于罗列“又一个 AI 工具清单”，而在于把开发者每天会遇到的 AI 工具分成七个层级：Agent harness、模型、编辑器与 IDE、开发技术栈、生产力工具、AI 开发框架，以及更偏平台化的 AI 产品。这样的分类比简单问“哪个工具最好”更接近真实工作，因为同一个开发者会在不同任务里切换完全不同的工具。</p>
+    <p>Tech With Tim 的核心立场很务实：他没有把所有事情都交给一个聊天窗口，也没有把每个新产品都当作必装软件。相反，他把工具按任务风险、代码规模、是否需要维护、是否需要部署、是否值得自托管来分配。小任务用轻量工具快速完成；复杂开发用更强的编码 Agent 和 IDE；严肃项目仍然回到代码、测试、部署和数据库这些基本工程约束。</p>
+    <blockquote>
+      <p>这套工具栈的隐含判断是：AI 开发不是“选一个万能工具”，而是为不同风险等级的任务配置不同的执行环境。</p>
+    </blockquote>
+
+    <h2>二、核心概念解释：什么是 Agent Harness</h2>
+    <p>视频开头先讲 <strong>Agent harness</strong>。这里的 harness 可以理解为“运行模型、连接工具、保存上下文、实际执行任务的外壳”。模型本身只负责推理和生成，harness 则决定它能不能访问文件、调用 MCP、运行命令、接入连接器、记住用户偏好，并把一次提示词变成完整工作流。</p>
+    <p>作者把 Claude Code、Codex 和 Hermes Agent 放在同一层比较，是因为它们都不是单纯的模型选择，而是不同的执行系统。Claude Code 更像日常工作台，适合快速问答、文档分析、脚本草稿和小型编码；Codex 更偏复杂开发，优势在验证、测试和较完整的代码修改；Hermes Agent 则是自托管在 VPS 上的长期自动化代理，负责特定业务流程，例如财务和会计。</p>
+    <p>理解这一层很重要。很多人在 AI 工具选择上会直接比较模型输出质量，却忽略“工具是否能运行在正确上下文里”。一个模型即便很强，如果拿不到仓库、不能跑测试、没有项目规则、无法连接数据库，实际交付质量仍然会被限制。反过来，一个 harness 如果能组织上下文、工具和验证步骤，即使模型不是每次都完美，也能通过迭代把结果拉回工程可用状态。</p>
+
+    <h2>三、关键论点与实操步骤</h2>
+    <h3>1. 日常任务和复杂开发要拆开</h3>
+    <p>作者对 Claude Code 和 Codex 的使用分工很清楚：前者是每天多次打开的快速工作台，后者用于更复杂、更需要验证的开发工作。这个分工对团队也有参考意义。不是所有任务都值得启动重型 Agent，也不是所有改动都能靠聊天窗口完成。</p>
+    <p>实际落地时，可以把任务分成三类：第一类是问答、改文案、分析资料和生成脚本，这类任务以速度优先；第二类是涉及代码库、测试和部署的开发任务，这类任务要让 Agent 进入仓库并执行验证；第三类是周期性、可标准化的业务流程，这类任务适合沉淀成持久自动化，而不是每天重复手动提示。</p>
+
+    <h3>2. 模型选择不是信仰问题，而是任务路由问题</h3>
+    <p>视频中提到的模型层不是孤立存在的。作者实际会把模型放到不同 harness 里使用，而不是把“最强模型”当作唯一答案。工程上更合理的做法是按任务路由：需要严谨代码修改时用适合编码和测试的模型；需要长文档理解时优先上下文和总结能力；需要低成本批量处理时考虑更便宜、更快的模型。</p>
+    <p>这也解释了为什么 2026 年的开发者工具栈会从“一个编辑器 + 一个模型”扩展成“多个执行入口 + 多个模型 + 多套验证方式”。AI 编程的瓶颈不再只是生成代码，而是如何用正确模型、正确上下文和正确检查点把生成结果变成可维护软件。</p>
+
+    <h3>3. IDE 没有被 Agent 淘汰，反而承担质量边界</h3>
+    <p>作者谈到 Cursor 和 PyCharm 时，强调了一个很现实的点：当项目需要长期维护、仓库较大、不能随便破坏时，他仍然会使用真正的 IDE。IDE 提供的跳转、类型提示、调试、重构、测试运行和项目结构理解，是 AI harness 之外的第二道质量边界。</p>
+    <p>这对“只靠提示词写代码”的工作流是一种提醒。AI 可以加速草稿、重构和样板代码，但开发者仍然需要知道何时回到 IDE 里阅读、检查和修复。特别是 Python-heavy 项目、数据科学任务和 Web 后端，PyCharm 这类 IDE 的静态分析与调试体验仍有现实价值。</p>
+
+    <h3>4. AI 时代的技术栈倾向简单、统一、容易部署</h3>
+    <p>作者说自己构建 Web 应用时常用 Node.js 和 TypeScript，并连接 Supabase。这背后的判断不是“Node.js 永远最好”，而是当 AI 参与生成大量代码时，统一语言栈、简单部署路径和清晰后端服务会降低沟通成本。前后端都在 TypeScript 里，模型不需要频繁跨语言切换；Supabase 提供数据库、认证和 AI 友好的连接方式，也减少了基础设施样板。</p>
+    <p>这个观点值得转化成团队准则：AI 生成代码越多，技术栈越要收敛。复杂架构、多个语言、定制部署和隐式运行环境都会放大 Agent 犯错成本。相反，明确的目录结构、单一语言、成熟托管平台和可重复测试，更适合让 AI 稳定参与开发。</p>
+
+    <h3>5. 生产力工具是知识系统，不是装饰品</h3>
+    <p>视频里提到的 Obsidian、Notion 或类似工具，作用不是“记笔记好看”，而是把个人或团队的背景知识沉淀下来。对于 Agent 工作流，这些知识库可以成为提示词、项目记忆、规范文档和复盘材料的来源。没有稳定知识系统，AI 每次都像第一次认识项目；有了知识系统，AI 才能复用上下文。</p>
+    <p>实操上，可以把工具栈文档化：哪些任务用 Claude Code，哪些用 Codex，哪些必须打开 IDE，哪些数据库和部署平台是默认选择，哪些 prompt 模板和验收清单必须复用。这样的文档比“收藏二十个工具链接”更有价值。</p>
+
+    <h3>6. 写自己的 AI 软件时，框架和 API 各有边界</h3>
+    <p>作者在 AI 开发框架部分提到 LangGraph、LangChain、Pandas、Matplotlib、Streamlit，以及 OpenAI 和 Anthropic 官方 API。可以看出他会区分“构建 Agent/上下文管理”与“构建普通 AI 功能”。如果需要工具调用、状态流转、上下文管理和多步骤执行，LangGraph/LangChain 这类框架更合适；如果只是简单响应、分类、摘要或轻量功能，官方 API 可能更直接。</p>
+    <p>Streamlit 的位置也很典型：当目标是快速展示数据或内部仪表盘时，不必先搭复杂前后端。AI 时代的工程效率不是一味追求最完整架构，而是选择能在当前风险下最快验证价值的实现方式。</p>
+
+    <h3>7. 平台工具适合低摩擦验证，但不要替代工程判断</h3>
+    <p>最后一类是 AI 平台，例如用于自动化和工作流的 GenSpark、用于快速落地页的 Lovable，以及更偏企业级代码库改造的 Blitzee。作者的用法同样带有边界：Lovable 适合快速页面和轻逻辑应用，不一定适合复杂业务；企业级平台适合大规模迁移或重构，但执行周期和成本也更高。</p>
+    <p>这说明平台工具的正确位置是“缩短验证路径”，而不是让开发者放弃工程判断。你仍然需要知道什么任务适合零代码/低代码平台，什么任务需要源码仓库、测试、代码审查和长期维护。</p>
+
+    <h2>四、工具选择决策矩阵</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>层级</th>
+          <th>代表工具</th>
+          <th>适用场景</th>
+          <th>优点</th>
+          <th>风险与建议</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Agent harness</td>
+          <td>Claude Code、Codex、Hermes Agent</td>
+          <td>日常任务、复杂开发、长期自动化</td>
+          <td>能连接上下文、工具、文件和验证流程</td>
+          <td>按任务风险分配，不要把所有事情塞进同一个入口</td>
+        </tr>
+        <tr>
+          <td>模型</td>
+          <td>编码模型、长上下文模型、低成本模型</td>
+          <td>代码修改、文档分析、批处理</td>
+          <td>可以按任务成本和质量需求路由</td>
+          <td>模型能力必须和 harness、测试、上下文一起评估</td>
+        </tr>
+        <tr>
+          <td>IDE / 编辑器</td>
+          <td>Cursor、PyCharm</td>
+          <td>大型仓库、Python 项目、需要维护的产品代码</td>
+          <td>调试、跳转、类型检查和重构能力强</td>
+          <td>不要完全盲信 Agent 输出，关键改动仍要在 IDE 中审查</td>
+        </tr>
+        <tr>
+          <td>开发栈</td>
+          <td>Node.js、TypeScript、Supabase</td>
+          <td>AI 参与较多的 Web 应用</td>
+          <td>统一语言、部署简单、后端集成成本低</td>
+          <td>优先选择团队熟悉且能测试的组合，不为潮流频繁换栈</td>
+        </tr>
+        <tr>
+          <td>AI 框架</td>
+          <td>LangGraph、LangChain、官方 API</td>
+          <td>Agent 编排、工具调用、上下文管理、轻量 AI 功能</td>
+          <td>复杂流程有框架，简单功能可直接调 API</td>
+          <td>框架会增加抽象成本，先确认是否真的需要状态编排</td>
+        </tr>
+        <tr>
+          <td>AI 平台</td>
+          <td>GenSpark、Lovable、Blitzee</td>
+          <td>自动化、落地页、企业级重构</td>
+          <td>验证快，减少从零搭建成本</td>
+          <td>复杂业务仍要回到源码、数据模型和验收流程</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>五、引用块：这期视频最值得带走的判断</h2>
+    <blockquote>
+      <p>开发者的 AI 工具栈应该像工程系统一样分层：日常任务追求速度，复杂代码追求验证，长期流程追求可复用自动化。</p>
+    </blockquote>
+    <p>如果只看工具名字，这期视频很容易变成购物清单；如果看分层逻辑，它更像一份 2026 年开发者工作流设计参考。你可以不使用作者提到的每一个工具，但应该建立自己的等价分层：哪个工具负责快速探索，哪个工具负责代码生成，哪个工具负责真实项目维护，哪个工具负责自动化和部署。</p>
+    <p>真正的收益来自边界感。Claude Code、Codex、Cursor、PyCharm、Supabase、LangGraph、Lovable 都可以很好用，但只有放在正确任务里才会放大效率。工具错配时，强工具也会制造返工。</p>
+
+    <h2>六、时间戳目录</h2>
+    <div class="timeline">
+      <div class="time-row"><span class="time">00:00</span><span>开场：说明这是一份作者自己实际使用的 2026 AI 开发工具栈，而不是泛泛推荐。</span></div>
+      <div class="time-row"><span class="time">00:35</span><span>Agent harness：解释 Claude Code、Codex、Hermes Agent 分别承担的任务类型。</span></div>
+      <div class="time-row"><span class="time">03:00</span><span>模型层：把模型选择放回具体任务中，强调不同模型适合不同工作负载。</span></div>
+      <div class="time-row"><span class="time">05:00</span><span>编辑器与 IDE：讨论 Cursor、PyCharm 和 CodeRabbit，说明专业项目仍需要真实开发工具。</span></div>
+      <div class="time-row"><span class="time">07:20</span><span>开发技术栈：为什么 AI 参与开发时更倾向 Node.js、TypeScript 和 Supabase。</span></div>
+      <div class="time-row"><span class="time">10:00</span><span>生产力系统：用知识库和工作台让 AI 工具复用背景信息，而不是每次从零开始。</span></div>
+      <div class="time-row"><span class="time">12:00</span><span>AI 开发框架：LangGraph、LangChain、Pandas、Matplotlib、Streamlit 与官方 API 的使用边界。</span></div>
+      <div class="time-row"><span class="time">14:00</span><span>AI 平台：GenSpark、Lovable、Blitzee 分别适合自动化、快速页面和企业级代码项目。</span></div>
+      <div class="time-row"><span class="time">15:15</span><span>结尾：提醒观众根据自己的开发任务挑选工具，而不是照单全收。</span></div>
+    </div>
+
+    <h2>七、相关推荐</h2>
+    <p>如果你想把这期工具栈进一步落到具体工作流，可以继续看下面几篇课程页。它们分别覆盖 Claude Code 配置、专业 Agent 工作流、本地 AI 编程环境和 Cursor 实战。</p>
+    <div class="recommend-grid">
+      <a class="rec" href="index.html"><strong>返回课程列表</strong><span>查看所有 YouTube 技术课程。</span></a>
+      <a class="rec" href="qYqIhX9hTQk.html"><strong>Claude Code 初学者工作台配置</strong><span>从项目记忆、插件和上下文管理搭起基础环境。</span></a>
+      <a class="rec" href="uogzSxOw4LU.html"><strong>Claude Code 专业工作流</strong><span>把 MCP、Skills、子智能体和持久记忆串成团队流程。</span></a>
+      <a class="rec" href="rp5EwOogWEw.html"><strong>本地 AI 编程环境指南</strong><span>理解本地模型、编码 Agent 和 Claude Code Router 的取舍。</span></a>
+      <a class="rec" href="kF2WQgk1LtY.html"><strong>Cursor 编程智能体实战</strong><span>用计划、调试、测试和团队 rules 约束 Agent 输出。</span></a>
+    </div>
+    <a class="btn" href="https://www.youtube.com/watch?v=_C57BxSXRbU">打开 YouTube 原视频</a>
+  </main>
+
+  <footer>
+    基于视频字幕整理生成 · 页面仅用于技术学习与课程索引
+  </footer>
+</body>
+</html>
