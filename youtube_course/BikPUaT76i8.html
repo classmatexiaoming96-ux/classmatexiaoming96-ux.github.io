@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在云端并行运行多个 AI Agent：Warp Oz 工作流拆解 — Tech With Tim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9aa0b8;
+      --text-muted: #64677f;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.75;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px 48px;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .page-header, .content-card, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 28px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+    .back-link:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99, 179, 237, 0.08); transform: translateX(-2px); }
+    .page-title {
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-secondary); font-size: 1rem; margin-bottom: 18px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+    .meta-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 5px 12px; border-radius: 6px; font-size: 0.82rem; font-weight: 500; }
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99,179,237,0.2); background: rgba(99,179,237,0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159,122,234,0.2); background: rgba(159,122,234,0.08); }
+    .video-wrap { width: 100%; aspect-ratio: 16 / 9; background: #050508; border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; box-shadow: 0 18px 50px rgba(0,0,0,0.35); margin: 24px 0 0; }
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 34px; margin-bottom: 28px; overflow: hidden; }
+    .content-card::before { content: ''; display: block; height: 2px; margin: -34px -34px 30px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple)); }
+    h2 { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin: 34px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+    h2:first-child { margin-top: 0; }
+    h3 { font-size: 1.02rem; font-weight: 650; color: var(--text-primary); margin: 24px 0 10px; }
+    p { color: var(--text-secondary); margin: 0 0 15px; }
+    ul, ol { color: var(--text-secondary); margin: 0 0 16px; padding-left: 24px; }
+    li { margin: 0 0 9px; }
+    strong { color: var(--text-primary); }
+    code { background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); font-size: 0.9em; }
+    blockquote { margin: 20px 0; padding: 16px 18px; border-left: 3px solid var(--accent-purple); background: rgba(159,122,234,0.07); border-radius: 0 10px 10px 0; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 0.9rem; }
+    th, td { border: 1px solid var(--border-color); padding: 11px 13px; text-align: left; vertical-align: top; line-height: 1.55; }
+    th { background: rgba(255,255,255,0.04); color: var(--text-primary); font-weight: 650; }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.012); }
+    .timeline { display: grid; gap: 12px; margin: 18px 0; }
+    .time-row { display: grid; grid-template-columns: 72px 1fr; gap: 14px; padding: 12px 14px; border: 1px solid var(--border-color); border-radius: 10px; background: rgba(255,255,255,0.025); }
+    .time { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); font-size: 0.86rem; white-space: nowrap; }
+    .recommend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 18px; }
+    .rec { display: block; text-decoration: none; color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; background: rgba(255,255,255,0.025); transition: all 0.2s ease; }
+    .rec:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99,179,237,0.06); transform: translateY(-2px); }
+    .rec strong { display: block; margin-bottom: 5px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid var(--accent-cyan); color: var(--accent-cyan); text-decoration: none; padding: 0.65rem 1rem; border-radius: 6px; transition: background 0.2s, color 0.2s; margin-top: 6px; }
+    .btn:hover { background: var(--accent-cyan); color: var(--bg-primary); }
+    footer { color: var(--text-muted); font-size: 0.85rem; text-align: center; padding: 28px 0; }
+    @media (max-width: 640px) { body { padding: 0 16px 36px; } .content-card { padding: 24px; } .content-card::before { margin: -24px -24px 24px; } .time-row { grid-template-columns: 1fr; gap: 4px; } table { font-size: 0.82rem; } th, td { padding: 9px; } }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <h1 class="page-title">在云端并行运行多个 AI Agent：Warp Oz 工作流拆解</h1>
+    <p class="subtitle">How I'm Using AI Agents in 2026</p>
+    <div class="page-meta">
+      <span class="meta-badge source">Tech With Tim</span>
+      <span class="meta-badge time">22:56</span>
+      <span class="meta-badge">32,275 views</span>
+      <span class="meta-badge">Warp · Oz · Cloud Agents</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/BikPUaT76i8" title="How I'm Using AI Agents in 2026" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </header>
+
+  <main class="content-card">
+    <h2>一、问题引入：从“一个本地 Agent”到“一组云端工人”</h2>
+    <p>这支视频的核心不是介绍一个更聪明的聊天框，而是把开发者正在经历的瓶颈讲清楚：当一个任务只需要修一处代码，本地运行一个 Agent 就够了；但当任务要同时拆成前端、后端、测试、代码审查、PR 处理和外部触发时，一个 Agent 顺序跑就会变成新的排队系统。</p>
+    <p>Tech With Tim 用 Warp 的 Oz Agent 平台做演示，目标是把多个 AI Agent 放到云端并行运行。视频开头明确给出使用场景：同时启动 5、10、15 甚至 20 个 Agent，让它们在不同环境中处理复杂开发任务，或在每个 Pull Request、Slack 消息、Linear 任务触发时自动运行。</p>
+    <p>值得看的地方在于，它没有停留在“AI Agent 很强”的口号，而是把一套完整工程链条串起来：创建项目目录、连接 GitHub、准备云端环境、拆分计划文件、创建可复用 skill、并行启动 Agent、生成 PR，再让 GitHub Actions 调用 Agent 做代码审查。</p>
+
+    <h2>二、核心概念解释：这套系统真正管理的是什么</h2>
+    <h3>1. Warp 不只是终端，而是 Agentic Development Environment</h3>
+    <p>视频里对 Warp 的定位很关键：它“看起来像终端”，但更准确地说是一个围绕命令、文件、Agent 会话和云端环境组织起来的开发界面。传统 IDE 把注意力放在代码编辑器；Warp 的假设是，AI 时代的人类开发者越来越多地在终端里调度命令、运行服务、启动容器、查看日志和指挥 Agent。</p>
+    <p>因此，Warp 把自然语言和 shell 命令放在同一入口：你可以输入 <code>ls</code> 这类标准命令，也可以输入“创建一个目录并打开它”这样的自然语言任务。工具会判断这是命令还是 Agent 指令，并把结果反馈到同一个工作流里。</p>
+
+    <h3>2. Oz 是可从 UI、CLI 和第三方触发的 Agent 平台</h3>
+    <p>Oz 在视频中承担的是“Agent 运行平台”的角色。它可以在 Warp 内部打开，也可以通过 <code>oz.warp.dev</code> 的 dashboard 管理，还可以由 CLI 或外部系统触发。每次运行都有状态、环境、会话入口，甚至可以 SSH 进去接管或修正云端 Agent 的行为。</p>
+    <p>这个设计把 Agent 从“我电脑上的一次聊天”提升为“可观察、可调度、可重复运行的任务单元”。如果你希望 Agent 在你合上电脑后仍继续工作，或者希望 PR 创建后自动触发审查，这种云端运行模型才有意义。</p>
+
+    <h3>3. Environment、Skill、Integration 是三块积木</h3>
+    <p>视频反复出现三个对象：环境、技能和集成。环境决定 Agent 在哪里运行，通常包含 Docker image、初始化命令、关联仓库和依赖配置；Skill 是可重复执行的任务说明，比如“前端开发”“后端开发”“验证测试”；Integration 负责把 Agent 接到 GitHub、Slack、Linear 或 API 触发器上。</p>
+    <p>这三个概念合在一起，才构成工程上可扩展的 Agent 系统：环境保证可复现，Skill 保证任务边界，Integration 保证它能进入真实团队流程。</p>
+
+    <h2>三、关键论点 / 实操步骤</h2>
+    <h3>步骤 1：先把项目变成可被 Agent 接手的仓库</h3>
+    <p>演示从一个空目录开始。Tim 先让 Warp 创建名为 YouTube agent demo 的目录，然后在这个目录中初始化一个简单应用。这个阶段并不急着并行，而是先让本地 Agent 搭出前端、后端、基础文件和初始代码。</p>
+    <p>接着，他要求 Agent 创建 GitHub 仓库、设置远程仓库并提交现有更改。这里的工程理由很直接：云端 Agent 需要从远程仓库拉取代码，也需要通过 Pull Request 把结果交回主分支。如果代码只在本机目录里，云端并行就没有稳定的协作媒介。</p>
+
+    <h3>步骤 2：为云端 Agent 创建可复现环境</h3>
+    <p>视频在 9 分钟左右进入环境创建。环境可以通过 guided setup 创建，也可以在 UI 里指定 Docker image、setup commands、关联 GitHub repository 等参数。这里最重要的不是界面按钮，而是“把 Agent 会在哪个系统里运行”显式化。</p>
+    <p>没有环境，Agent 只能猜测依赖；有了环境，它可以在一致的容器中安装包、运行测试、启动服务并访问指定仓库。对于多 Agent 并行，环境尤其关键，因为每个 Agent 都应该在隔离但相同的基础条件下工作。</p>
+
+    <h3>步骤 3：用计划文件拆成前端、后端、测试三条任务线</h3>
+    <p>视频的中段是最像真实团队流程的部分：Tim 先让一个本地 Agent 生成总体计划，并把任务拆成三个 markdown 文件，分别描述前端、后端和测试需要完成什么。这一步避免了“直接启动三个 Agent，各做各的”导致的目标不一致。</p>
+    <p>更好的理解方式是：计划文件就是多 Agent 协作的接口。它不只是提示词，而是任务契约，明确每个 Agent 的范围、输入、验收目标和交付物。并行不是把混乱放大，而是先把依赖和边界写清楚，再让不同执行者各自推进。</p>
+
+    <h3>步骤 4：把计划封装成 Skill，再用 <code>oz agent runcloud</code> 并行启动</h3>
+    <p>随后 Tim 创建三个 Skill，对应前端、后端、测试三个计划。Skill 在这里表示可重复调用的任务能力，不必每次重新写长提示。视频中提到的 <code>oz agent runcloud</code> 是关键命令：它能指定模型、Skill、环境等参数，在云端启动 Agent。</p>
+    <p>实际意义是，开发者不再只是在聊天窗口里等待一个 Agent 完成所有事，而是把工作拆成多个独立执行单元，让它们并行生成 PR。这样做的收益来自并行度和清晰职责，不是来自某个单体 Agent 变得更聪明。</p>
+
+    <h3>步骤 5：进入云端会话观察、接管和纠偏</h3>
+    <p>视频还展示了一个容易被忽略的能力：你可以打开某个正在运行的 Agent 会话，直接查看它的状态，甚至通过 Warp 或浏览器进入 session 进行 steering。对于真实工程来说，这比“黑盒等待结果”重要得多。</p>
+    <p>Agent 一旦能改代码、推分支和创建 PR，就必须有观察与干预入口。否则失败时你只会看到一个坏结果，而不知道它卡在依赖安装、测试失败、权限不足还是需求理解偏差。</p>
+
+    <h3>步骤 6：用 GitHub Actions 把 Agent 放进代码审查链路</h3>
+    <p>最后一段演示 GitHub Action 集成。Tim 在 Oz UI 中复制预置的 GitHub Action 配置，让仓库在 Pull Request 事件上触发 Agent 做代码审查。随后他补充设置 Warp API key secret，并重新运行 action，确认 Agent 审查流程能够完成。</p>
+    <p>这部分说明 Agent 工作流不只适合“我手动叫它写代码”，也适合进入 CI/CD 与代码评审过程。它的价值在于把 Agent 变成持续运转的开发基础设施，而不是一次性的写码助手。</p>
+
+    <h2>四、对比表格 / 决策矩阵</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>模式</th>
+          <th>适用场景</th>
+          <th>优点</th>
+          <th>风险 / 决策建议</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>单个本地 Agent</td>
+          <td>小修小补、单文件改动、快速原型</td>
+          <td>上下文近、成本低、容易监督</td>
+          <td>复杂任务会串行等待；如果任务要拆成多个专业方向，容易让一个 Agent 同时承担太多角色。</td>
+        </tr>
+        <tr>
+          <td>云端单 Agent</td>
+          <td>耗时任务、需要电脑离线后继续运行的任务</td>
+          <td>不依赖本机在线，能在统一环境中运行</td>
+          <td>仍然是串行；必须设置仓库、环境和权限，否则调试成本高。</td>
+        </tr>
+        <tr>
+          <td>云端多 Agent 并行</td>
+          <td>前端、后端、测试、审查可拆开的开发任务</td>
+          <td>吞吐高，职责清晰，能通过多个 PR 汇合</td>
+          <td>前置设计更重；必须用计划文件、分支策略和验收标准减少冲突。</td>
+        </tr>
+        <tr>
+          <td>事件触发 Agent</td>
+          <td>PR 审查、Slack/Linear 派单、周期性验证</td>
+          <td>能进入团队现有流程，形成持续自动化</td>
+          <td>要认真处理 secret、权限和失败回退；建议先从只读审查类任务开始。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>五、引用块</h2>
+    <blockquote>
+      视频里最值得抽象的一点是：当开发任务变复杂，界面中心会从“写代码的编辑器”转向“调度命令、环境和 Agent 的终端”。
+    </blockquote>
+    <p>这句话不是原文逐字引用，而是对视频核心判断的转述。Tim 的论点是，AI 时代开发者仍然要理解项目结构、环境、命令、仓库和 PR 流程；变化在于，很多执行步骤可以交给多个 Agent 并行完成。</p>
+    <blockquote>
+      多 Agent 并行不是让一个提示词变长，而是把任务拆成可以独立交付、独立验证、独立合并的工程单元。
+    </blockquote>
+    <p>这也是这支视频区别于普通工具介绍的地方。它实际演示了“计划 → Skill → 云端运行 → PR → Action 审查”的完整闭环。</p>
+
+    <h2>六、时间戳目录</h2>
+    <div class="timeline">
+      <div class="time-row"><div class="time">00:00</div><div>提出问题：如何在云端同时运行多个 AI Agent，而不是只在本机跑一个助手。</div></div>
+      <div class="time-row"><div class="time">00:58</div><div>进入 Oz Agent 平台：查看运行状态、环境、会话和 SSH 接管能力。</div></div>
+      <div class="time-row"><div class="time">02:31</div><div>解释集成能力：GitHub、Slack、Linear、API 触发器，以及 PR 审查场景。</div></div>
+      <div class="time-row"><div class="time">03:42</div><div>Warp 基础界面：自然语言与命令共用同一终端入口。</div></div>
+      <div class="time-row"><div class="time">05:27</div><div>进入工程实践：先设计应用，使任务能被前端、后端、测试 Agent 分工。</div></div>
+      <div class="time-row"><div class="time">05:45</div><div>使用 Oz CLI，确认登录状态并展示 <code>oz</code> 命令入口。</div></div>
+      <div class="time-row"><div class="time">08:34</div><div>创建 GitHub 仓库、远程仓库和初始提交，为云端 Agent 提供协作媒介。</div></div>
+      <div class="time-row"><div class="time">09:01</div><div>创建 Environment：设置 Docker、初始化命令、仓库访问和运行位置。</div></div>
+      <div class="time-row"><div class="time">13:10</div><div>让本地 Agent 生成前端、后端、测试三个计划文件。</div></div>
+      <div class="time-row"><div class="time">14:24</div><div>介绍 <code>oz agent runcloud</code>，准备把计划封装为云端可运行 Skill。</div></div>
+      <div class="time-row"><div class="time">16:24</div><div>选择模型、环境与 skill，并行启动多个云端 Agent。</div></div>
+      <div class="time-row"><div class="time">18:19</div><div>设置 GitHub Action，让 PR 事件触发 Agent 做自动代码审查。</div></div>
+      <div class="time-row"><div class="time">20:30</div><div>补充 GitHub secret / Warp API key 后重新运行 Action。</div></div>
+      <div class="time-row"><div class="time">22:12</div><div>总结：适合高级开发工作流，尤其是多 Agent、云端运行和 PR 自动化。</div></div>
+    </div>
+
+    <h2>七、相关推荐</h2>
+    <p>如果你关心多 Agent 开发工作流，可以先看下面几篇，再回到课程列表按主题继续阅读。</p>
+    <div class="recommend-grid">
+      <a class="rec" href="_C57BxSXRbU.html"><strong>2026 开发者 AI 工具栈实战清单</strong><span>同为 Tech With Tim，适合理解工具选择。</span></a>
+      <a class="rec" href="qYqIhX9hTQk.html"><strong>Claude Code 2026 入门</strong><span>补齐本地 coding agent 的基础用法。</span></a>
+      <a class="rec" href="X_zVY3-mbM8.html"><strong>Claude Code 专业工作流</strong><span>理解 routines、连接器与自动化部署。</span></a>
+      <a class="rec" href="index.html"><strong>返回课程列表</strong><span>继续浏览所有 AI / Agent 技术视频。</span></a>
+    </div>
+    <a class="btn" href="index.html">← 返回课程列表</a>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 · <a href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a>
+  </footer>
+</body>
+</html>
