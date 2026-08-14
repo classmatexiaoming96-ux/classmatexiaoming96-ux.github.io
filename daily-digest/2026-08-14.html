@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-14</title>
+<meta name="description" content="今天的主线是前沿模型继续围绕编程与智能体任务降本提速，开发工具开始把云端 Agent 环境做成常驻基础设施，同时研究侧更关注可验证软件、命令通道和长程 Agent harness。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-14</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 78 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是前沿模型继续围绕编程与智能体任务降本提速，开发工具开始把云端 Agent 环境做成常驻基础设施，同时研究侧更关注可验证软件、命令通道和长程 Agent harness。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">3</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://api-docs.deepseek.com/zh-cn/updates#%E6%97%B6%E9%97%B4-2026-08-13" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻 · 12 个来源</div>
+        <h3>DeepSeek-V4-Pro 正式版上线，Agent 能力成为主卖点</h3>
+        <p>DeepSeek API 更新日志显示 V4-Pro 已在 App、网页和 API 同步上线，Agent 工具使用与终端任务基准被放到发布信息核心位置。相比普通模型版本迭代，这次更像是在争夺长链路执行与软件任务的默认工作模型。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://deepmind.google/blog/introducing-gemini-3-7-flash" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻 · 17 个来源</div>
+        <h3>Google DeepMind 推出 Gemini 3.7 Flash，重点瞄准编程和智能体任务</h3>
+        <p>Gemini 3.7 Flash 距上一代 Flash 发布仅数周，公开信息强调更强的 coding / agentic workload 表现和更低 token 价格。Flash 线继续承担“足够强且可大规模调用”的工程模型角色。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://cursor.com/blog/builds" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Cursor builds 让云智能体从预构建环境启动，官方称启动最高快 3 倍</h3>
+        <p>Cursor 新增 builds，把依赖安装和环境准备提前到后台完成，让云 Agent 从最近一次成功构建的环境副本启动。对真实团队来说，这解决的是 Agent 每次开工前浪费在 setup、install 和首 token 等待上的时间。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>23</b> 条精选信号<i></i><b>14</b> 个原始来源<i></i><b>57</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=cs.AI" target="_top">cs.AI</a>
+        <a href="topics.html?topic=%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B8%83" target="_top">模型发布</a>
+        <a href="topics.html?topic=Agent" target="_top">Agent</a>
+        <a href="topics.html?topic=cs.LG" target="_top">cs.LG</a>
+        <a href="topics.html?topic=MCP" target="_top">MCP</a>
+        <a href="topics.html?topic=%E6%9C%AC%E5%9C%B0%20AI" target="_top">本地 AI</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="deepseek-v4-pro-agent-capability-2026-08-14" href="https://api-docs.deepseek.com/zh-cn/updates#%E6%97%B6%E9%97%B4-2026-08-13" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>DeepSeek-V4-Pro 正式版上线，Agent 能力成为主卖点</h3>
+      <p>DeepSeek API 更新日志显示 V4-Pro 已在 App、网页和 API 同步上线，Agent 工具使用与终端任务基准被放到发布信息核心位置。相比普通模型版本迭代，这次更像是在争夺长链路执行与软件任务的默认工作模型。</p>
+      <div class="src">◷ <b>DeepSeek API 更新日志</b> <span class="dotsep">·</span> 今日</div>
+      <div class="item-signals"><span class="signal-badge source-count" title="DeepSeek / X、The Decoder">12 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">模型发布</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">基准评测</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="gemini-3-7-flash-deepmind-coding-agent-2026-08-14" href="https://deepmind.google/blog/introducing-gemini-3-7-flash" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Google DeepMind 推出 Gemini 3.7 Flash，重点瞄准编程和智能体任务</h4>
+          <p>Gemini 3.7 Flash 距上一代 Flash 发布仅数周，公开信息强调更强的 coding / agentic workload 表现和更低 token 价格。Flash 线继续承担“足够强且可大规模调用”的工程模型角色。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google DeepMind Blog</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="Google AI for Developers、Ars Technica">17 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Google DeepMind</span><span class="signal-badge topic">模型发布</span><span class="signal-badge topic">编程模型</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="cursor-builds-cloud-agents-start-faster-2026-08-14" href="https://cursor.com/blog/builds" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Cursor builds 让云智能体从预构建环境启动，官方称启动最高快 3 倍</h4>
+          <p>Cursor 新增 builds，把依赖安装和环境准备提前到后台完成，让云 Agent 从最近一次成功构建的环境副本启动。对真实团队来说，这解决的是 Agent 每次开工前浪费在 setup、install 和首 token 等待上的时间。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Cursor Blog</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">开发工具</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">开发工具</span><span class="signal-badge topic">云端 Agent</span><span class="signal-badge topic">环境缓存</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="google-sheets-canvas-gemini-mini-apps-2026-08-14" href="https://blog.google/products-and-platforms/products/workspace/sheets-canvas-for-google-sheets-spreadsheets" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Google Sheets canvas 用 Gemini 把表格数据变成交互式迷你应用</h4>
+          <p>Sheets canvas 允许用户用自然语言把电子表格转换成仪表盘、学习追踪器和座位表等交互应用。它说明办公套件里的 AI 正从“帮我写公式”转向“直接生成可操作界面”。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google Blog</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">产品</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Workspace</span><span class="signal-badge topic">Gemini</span><span class="signal-badge topic">No-code 应用</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="amazon-quick-microsoft-365-agentic-ai-2026-08-14" href="https://aws.amazon.com/blogs/aws/amazon-quick-for-microsoft-365-agentic-ai-where-you-work/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>AWS 推出 Amazon Quick for Microsoft 365，把 Agentic AI 放进日常办公流</h4>
+          <p>AWS 把 Amazon Quick 定位为 Microsoft 365 工作区内的 Agentic AI 能力，重点不是替代办公套件，而是在用户已有文档、邮件和协作流里嵌入可执行助手。云厂商正在围绕企业办公入口重新切分 Agent 触点。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">AWS</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">企业</span></div>
+          <div class="item-signals"><span class="signal-badge topic">企业 AI</span><span class="signal-badge topic">Microsoft 365</span><span class="signal-badge topic">Agentic 工作流</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-13558-omniscientist-omni-modal-ai-scientist" href="https://arxiv.org/abs/2608.13558v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>OmniScientist: An Omni-Modal Omni-Discipline AI Scientist</h4>
+          <p><b>为什么值得看：</b>很多 AI scientist 系统只处理文本、代码或预摘要，容易错过空间、时间和跨通道证据。OmniScientist 的新意在于让 ideation、experiment、writeup 三类 Agent 直接围绕多模态原始证据工作，更接近真实科学流程的证据链。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Bobo Li, Hao Fei, Tianjie Ju 等</b> <span class="dotsep">·</span> 2026-08-13 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cs.CL</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-13547-quotebench-command-path-failures" href="https://arxiv.org/abs/2608.13547v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>QuoteBench: How Matched Scores Can Hide Command-Path Failures</h4>
+          <p><b>为什么值得看：</b>这篇很适合做 coding agent 基建自检：同一个 Bash 回复在不同序列化、包装、再解析通道里可能完全失败。它提醒评测不能只看最终任务分，还要分清错误来自模型生成，还是来自执行传输层。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Shangao Li, Yao Zhang, Volker Tresp 等</b> <span class="dotsep">·</span> 2026-08-13 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.SE</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cs.SE</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-13522-vero-formally-verified-repositories" href="https://arxiv.org/abs/2608.13522v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Vero: Can AI Agents Build Formally Verified Software Repositories?</h4>
+          <p><b>为什么值得看：</b>它把验证式代码生成从单函数提升到真实多模块仓库：Agent 需要同时做实现和机器可检查证明。对 AI 编程可靠性来说，这比“能不能跑通测试”更硬，也更贴近未来高风险软件开发的验收标准。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Zhe Ye, Hantao Lou, Yuechun Sun 等</b> <span class="dotsep">·</span> 2026-08-13 <span class="dotsep">·</span> <span class="tag">cs.LG · cs.AI · cs.LO</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.LG</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-13524-dartree-speculative-diffusion-decoding" href="https://arxiv.org/abs/2608.13524v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>DARTree: Speculative Diffusion Decoding with Autoregressive Draft Trees</h4>
+          <p><b>为什么值得看：</b>它关注的是推理加速的结构问题：扩散 drafter 可以并行给出 token 块，但树状候选如何保留自回归条件信息并高效验证仍是难点。对低延迟 LLM 服务和 Agent 长链路调用成本都有直接意义。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Tianyi Li, Yaxin Luo, Xinyi Shang 等</b> <span class="dotsep">·</span> 2026-08-13 <span class="dotsep">·</span> <span class="tag">cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.LG</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-netlify-one-prompt-11-models-2026-08-14" href="https://www.netlify.com/blog/one-prompt-11-models-very-different-results" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>一个 prompt 跑 11 个模型：社区讨论模型选择为什么不能只看排行榜</h4>
+          <p>Netlify 的实验展示同一提示在不同模型里的结果差异，引发 HN 讨论：真实应用更关心可预测性、工具链兼容和错误模式，而不是单点 benchmark 排名。</p>
+          <div class="quote">“代表性观点：选模型像选运行时，最终要看你的约束、失败代价和调试成本。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 179 <span class="dotsep">·</span> 💬 73</div>
+          <div class="item-signals"><span class="signal-badge topic">模型选择</span><span class="signal-badge topic">工程评测</span><span class="signal-badge topic">开发体验</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-agents-lie-cheat-steal-user-trust-2026-08-14" href="https://www.economist.com/business/2026/08/12/ai-agents-lie-cheat-and-steal-that-is-putting-off-users" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>“AI agents lie, cheat and steal” 引发信任讨论</h4>
+          <p>Economist 文章在 HN 上引发近两百条评论，焦点不是夸张标题，而是用户是否愿意把高权限任务交给会隐藏动机、误用工具或越权操作的 Agent。</p>
+          <div class="quote">“社区争论的核心是：Agent 产品需要可审计行为，而不是更会解释自己的失败。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 155 <span class="dotsep">·</span> 💬 197</div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 安全</span><span class="signal-badge topic">用户信任</span><span class="signal-badge topic">产品采用</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="launch-hn-discovered-materials-ai-agents-2026-08-14" href="https://discoveredmaterials.com/research/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Launch HN：Discovered Materials 用 AI agents 发现新材料</h4>
+          <p>材料科学类 Agent 创业项目登上 HN，讨论集中在 AI 是否能真正跨过仿真、实验和产业验证之间的断层。它是 AI scientist 概念进入具体垂直行业的一个样本。</p>
+          <div class="quote">“有价值的不是“Agent 会想假设”，而是能否把假设推进到可验证实验。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 155 <span class="dotsep">·</span> 💬 35</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 科学</span><span class="signal-badge topic">材料发现</span><span class="signal-badge topic">创业</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-hax-terminal-native-c-coding-agent-2026-08-14" href="https://usehax.dev/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Hax：用 C 写的极简终端原生 coding agent 获得关注</h4>
+          <p>Hax 把 coding agent 做成轻量、terminal-native 的 C 程序，社区关注点在于 Agent harness 是否可以少依赖大型 Electron/IDE 层，而更接近 Unix 工具哲学。</p>
+          <div class="quote">“对部分开发者来说，AI 编程工具越像 shell 工具，越容易纳入现有工作流。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 110 <span class="dotsep">·</span> 💬 35</div>
+          <div class="item-signals"><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">终端工具</span><span class="signal-badge topic">C 语言</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="show-hn-mcp-memory-okf-sqlite-fts5-2026-08-14" href="https://github.com/fellowgeek/mcp-memory" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Show HN：MCP Memory 用 Google OKF 和 SQLite FTS5 做快速 Agent 记忆</h4>
+          <p>这个项目把 Agent 记忆做成 MCP 组件，结合 OKF 和 SQLite FTS5 提供可搜索记忆层。它代表了社区对“轻量、本地、可解释记忆”的持续需求。</p>
+          <div class="quote">“记忆不只是向量库；可检查、可删改、可本地运行同样重要。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Show HN</b> <span class="dotsep">·</span> ▲ 55 <span class="dotsep">·</span> 💬 35</div>
+          <div class="item-signals"><span class="signal-badge topic">MCP</span><span class="signal-badge topic">Agent 记忆</span><span class="signal-badge topic">SQLite</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="deepseek-harness-v0-1-developer-preview-2026-08-14" href="https://x.com/deepseek_ai/status/2087887408440164663" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">DH</span>
+          <h4>DeepSeek Harness v0.1</h4>
+        </div>
+        <p class="tagline">DeepSeek 开发者预览版 Agent 框架，强调“一切皆插件”。</p>
+        <p>它把模型、工具、技能、会话、沙箱、文件系统、循环、编排和 UI 做成可替换组件。值得关注的是 DeepSeek 不只发布模型，也在补齐承载模型长程执行的 harness 层。</p>
+        <div><span class="tag">Agent 框架</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Harness</span><span class="signal-badge topic">插件架构</span><span class="signal-badge topic">开发框架</span></div>
+      </a>
+      <a class="card" data-event-key="markleft-claude-markdown-plan-review-2026-08-14" href="https://blog.lysk.tech/markleft-ai-markdown-review/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">ML</span>
+          <h4>Markleft</h4>
+        </div>
+        <p class="tagline">一种审查 Claude Markdown plans 的轻量方法。</p>
+        <p>Show HN 里的 Markleft 关注的是 Agent 产物治理：在让 Claude 写计划之后，怎样用更小成本检查、批注和演进这些 Markdown 决策记录。</p>
+        <div><span class="tag">计划审查</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Claude</span><span class="signal-badge topic">计划审查</span><span class="signal-badge topic">Markdown</span></div>
+      </a>
+      <a class="card" data-event-key="graph2agent-mermaid-diagrams-explained-for-agents-2026-08-14" href="https://graph2agent.github.io/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">G2A</span>
+          <h4>Graph2agent</h4>
+        </div>
+        <p class="tagline">把 Mermaid 图转换成更适合 Agent 理解的解释材料。</p>
+        <p>它说明社区正在反向优化“给 Agent 的输入格式”：不是只让人看懂图，而是让 Agent 能把图里的节点、边和约束转成可执行上下文。</p>
+        <div><span class="tag">Agent 输入</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Diagram</span><span class="signal-badge topic">Agent 输入</span><span class="signal-badge topic">Mermaid</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-holaboss-ai-holaos-2026-08-14" href="https://github.com/holaboss-ai/holaOS" target="_blank" rel="noopener">
+      <div>
+        <div class="name">holaboss-ai / <b>holaOS</b></div>
+        <div class="desc">开源 All-in-one AI agent workspace，面向 Claude Code、Codex、浏览器、文件和 100+ 集成提供共享记忆。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Workspace</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Workspace</span><span class="signal-badge topic">MCP</span><span class="signal-badge topic">共享记忆</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 6,662</div>
+        <div class="today">▲ 241 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-altic-dev-fluidvoice-2026-08-14" href="https://github.com/altic-dev/FluidVoice" target="_blank" rel="noopener">
+      <div>
+        <div class="name">altic-dev / <b>FluidVoice</b></div>
+        <div class="desc">macOS 本地 dictation 应用，结合 on-device STT 和自训练 AI enhancement model，是本地语音到工作流入口的热门项目。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#F05138"></span>Swift</span> <span class="dotsep">·</span> <span class="tag">Voice</span></div>
+        <div class="item-signals"><span class="signal-badge topic">语音输入</span><span class="signal-badge topic">本地 AI</span><span class="signal-badge topic">macOS</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 9,895</div>
+        <div class="today">▲ 76 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-unslothai-unsloth-2026-08-14" href="https://github.com/unslothai/unsloth" target="_blank" rel="noopener">
+      <div>
+        <div class="name">unslothai / <b>unsloth</b></div>
+        <div class="desc">本地运行与训练 LLM / diffusion model 的 UI，覆盖 Qwen、Kimi、MiniMax、Gemma、DeepSeek、FLUX 等模型生态。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Training</span></div>
+        <div class="item-signals"><span class="signal-badge topic">本地模型</span><span class="signal-badge topic">训练</span><span class="signal-badge topic">LLM UI</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 71,094</div>
+        <div class="today">▲ 328 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-kepano-obsidian-skills-2026-08-14" href="https://github.com/kepano/obsidian-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">kepano / <b>obsidian-skills</b></div>
+        <div class="desc">面向 Obsidian 的 Agent skills，教代理使用 Obsidian CLI、Markdown、Bases 和 JSON Canvas 等开放格式。</div>
+        <div class="repo-meta"><span class="tag">Skills</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Skills</span><span class="signal-badge topic">Obsidian</span><span class="signal-badge topic">知识库</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 45,848</div>
+        <div class="today">▲ 292 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-infiniflow-ragflow-2026-08-14" href="https://github.com/infiniflow/ragflow" target="_blank" rel="noopener">
+      <div>
+        <div class="name">infiniflow / <b>ragflow</b></div>
+        <div class="desc">开源 RAG 引擎继续保持热度，结合 Agent capabilities 构建面向 LLM 应用的上下文层。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">RAG</span></div>
+        <div class="item-signals"><span class="signal-badge topic">RAG</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">Context Layer</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 88,065</div>
+        <div class="today">▲ 465 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-lightningpixel-modly-2026-08-14" href="https://github.com/lightningpixel/modly" target="_blank" rel="noopener">
+      <div>
+        <div class="name">lightningpixel / <b>modly</b></div>
+        <div class="desc">桌面端从图片生成 3D 模型，完全使用本地 GPU 运行，代表图像到 3D 工具链向桌面工作台下沉。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">3D</span></div>
+        <div class="item-signals"><span class="signal-badge topic">3D 生成</span><span class="signal-badge topic">本地 AI</span><span class="signal-badge topic">桌面应用</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 5,469</div>
+        <div class="today">▲ 118 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-14 10:43 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
