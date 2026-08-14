@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 子智能体实战：把一个主会话扩展成可调度的专家队列</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9a9ab2;
+      --text-muted: #65657a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    main, header, footer { position: relative; z-index: 1; }
+
+    .page-header { padding: 40px 0 28px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: rgba(22, 22, 31, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0;
+      margin-bottom: 14px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #050509;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .content-card {
+      background: rgba(22, 22, 31, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0.72;
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 4px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 24px 0 10px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); font-weight: 600; }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.075);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.58;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.015); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--accent-green);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86em;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .step .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(99, 179, 237, 0.12);
+      border: 1px solid rgba(99, 179, 237, 0.25);
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    .timestamp-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .timecode {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .recommendations a, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 44px;
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.62rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .recommendations a:hover, .btn:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+    }
+
+    footer {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 30px 0 46px;
+    }
+
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+
+    @media (max-width: 760px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.62rem; }
+      .hero, .content-card { padding: 22px; }
+      .steps, .recommendations { grid-template-columns: 1fr; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="eyebrow">Claude Code · Subagents · Agent Workflow</div>
+      <h1 class="page-title">Claude Code 子智能体实战：把一个主会话扩展成可调度的专家队列</h1>
+      <p class="subtitle">How to Build Claude Subagents Better Than 99% of People</p>
+      <div class="page-meta">
+        <span class="meta-badge source">Nate Herk | AI Automation</span>
+        <span class="meta-badge time">26:42</span>
+        <span class="meta-badge">约 70,595 次观看</span>
+        <span class="meta-badge">字幕整理：2026-08-14</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/e18sdZLwP7o" title="How to Build Claude Subagents Better Than 99% of People" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么要把工作交给子智能体</h2>
+      <p>这个视频不是在讲“让 AI 更像人”的概念，而是在讲一个非常工程化的问题：当 Claude Code 的主会话已经承担需求澄清、代码阅读、命令执行和用户沟通时，哪些工作应该被拆出去，让另一个干净上下文里的 Agent 独立完成？开场演示里，作者让主会话一次派出五个不同视角的评审者：初学者、软件工程师、业务负责人、出版人和企业高管。它们并行阅读同一份内容，然后把各自报告交回主会话汇总。</p>
+      <p>这件事的价值在于，主会话不需要吞下所有材料，也不需要在同一个上下文里不断切换角色。主会话像调度器，决定“谁去看什么、要带回什么结果”；子智能体像一次性专家工作线程，读取指定文件、做研究、找漏洞或给出审稿意见。最终用户仍然只跟主会话沟通，这让界面保持简单，也让上下文污染更少。</p>
+      <blockquote>
+        <p>子智能体的核心不是“更多聊天窗口”，而是让主会话把可独立完成的认知工作委派出去，再收回结构化报告。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：subagent、skill 与主会话的边界</h2>
+      <h3>主会话是 orchestrator，不是所有事实的仓库</h3>
+      <p>作者反复强调，Claude Code 的主会话负责跟用户对话、理解当前目标、拆分任务和汇总结果。它可以命令子智能体“去读这些文件”“去做这项研究”“去修这个 bug”，但子智能体完成后通常只返回报告，而不是继续跟用户来回确认。这个设计让主会话拥有更稳定的任务视角，同时避免每一次深入阅读都把上下文窗口撑满。</p>
+
+      <h3>子智能体不是技能文件，但可以调用技能</h3>
+      <p>视频中区分了 Claude Code 里的两个概念：<strong>skill</strong> 更像可复用流程说明、脚本和资源包；<strong>subagent</strong> 则是带有角色、触发描述、工具权限和执行说明的独立代理。二者可以组合：一个 skill 里可以要求系统派出多个子智能体，一个子智能体执行时也可以再调用合适的 skill。工程上要避免把所有材料都塞进一个文件，而是利用 front matter 做渐进式加载。</p>
+
+      <h3>YAML front matter 是触发器，也是安全边界</h3>
+      <p>自定义子智能体通常以 Markdown 文件存在，顶部是 YAML front matter。作者点名最关键的字段包括 name、description、model、tools、disallowed tools、memory 与 color。尤其是 description，它不是普通说明文，而是 Claude Code 判断“这个 prompt 是否应该触发该子智能体”的触发条件。描述太泛会误触发，描述太窄会漏触发，因此需要像调试路由规则一样反复迭代。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>先定义它该接什么任务</h3>
+          <p>不要先写一长段角色扮演文本。更稳的做法是先写一句非常具体的 description：它在什么请求下应该被调用、什么请求下不该被调用、输出应该是什么格式。比如“当用户要求 adversarial critique、roast my plan 或 review my plan 时使用”。</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>再决定它能碰哪些工具</h3>
+          <p>如果子智能体只是审查计划或阅读资料，就应考虑只读工具；如果它要修 bug，才给编辑和命令执行权限。作者提到可以在 front matter 中限制工具、禁用工具或指定 MCP server，这一点是把子智能体用于真实项目时的安全阀。</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>用 body 写工作方法</h3>
+          <p>front matter 负责“何时调用”，正文负责“怎么工作”。这里可以写审查维度、输出结构、要先读哪些文件、必须引用哪些证据、发现不确定性时如何处理。它不需要包含所有背景材料，只需要给子智能体一套稳定行为。</p>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <h3>用真实失败调触发描述</h3>
+          <p>演示中作者创建了一个 plan roaster，但第一次没有按预期触发。他没有把这视为玄学，而是让 Claude Code 读 agent 文件的 description，再对照原 prompt 分析为什么没有命中。这是最值得保留的实践：把误触发和漏触发当成路由规则调试。</p>
+        </div>
+      </div>
+
+      <h3>一次子智能体文件可以长这样</h3>
+      <p>视频没有要求观众记住完整语法，但给出的方向足够明确。一个可用的子智能体至少要回答三类问题：它叫什么、什么时候应该启动、启动后按什么流程交付结果。</p>
+      <pre><code>---
+name: plan-roaster
+description: Use this agent when the user asks for adversarial critique of a plan.
+tools: Read, Grep
+model: sonnet
+---
+
+You are a skeptical plan reviewer.
+Evaluate feasibility, missing assumptions, operational risks, and next checks.
+Return concise findings first, then questions, then recommended revisions.</code></pre>
+
+      <p>这里最关键的是不要把 description 写成“help with plans”这种弱触发。它应该包含用户可能真的会说的话，以及不应该启动的边界。对于团队项目，还可以把这个文件放在项目级 <code>.claude/agents/</code> 目录；对于个人长期使用的代理，则可以放在用户级目录，让不同项目共享。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、决策矩阵：什么时候用 subagent，什么时候不要用</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>任务类型</th>
+            <th>是否适合子智能体</th>
+            <th>优点</th>
+            <th>主要风险</th>
+            <th>建议做法</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>大量文件阅读、源码扫描、资料检索</td>
+            <td>适合</td>
+            <td>把噪声留在子上下文，主会话只接收结论和证据。</td>
+            <td>如果没有要求引用证据，报告可能过度概括。</td>
+            <td>要求返回文件路径、关键行号、确认过和未确认的信息。</td>
+          </tr>
+          <tr>
+            <td>多个独立章节、多个 persona 评审、多个候选方案比较</td>
+            <td>非常适合</td>
+            <td>可以并行，且每个代理从干净视角出发。</td>
+            <td>各代理不能互相协调，结论可能重复或冲突。</td>
+            <td>让主会话统一汇总，并显式要求去重与冲突处理。</td>
+          </tr>
+          <tr>
+            <td>需要反对意见、风险审查、计划质疑</td>
+            <td>适合</td>
+            <td>子智能体可以摆脱主会话的顺从倾向，给出更尖锐的检查。</td>
+            <td>过度批判会牺牲可执行性。</td>
+            <td>把输出限定为“问题、证据、改法”，避免只做情绪化否定。</td>
+          </tr>
+          <tr>
+            <td>严格串行的编码步骤：1 完成后才能做 2</td>
+            <td>通常不适合</td>
+            <td>主会话直接推进更容易维护状态。</td>
+            <td>并行拆分会引入状态冲突和重复修改。</td>
+            <td>保留在主会话，必要时只派子智能体做局部阅读或审查。</td>
+          </tr>
+          <tr>
+            <td>需要持续向用户追问的探索任务</td>
+            <td>不适合</td>
+            <td>子智能体不是交互窗口，追问链路会断。</td>
+            <td>它可能猜测用户意图并给出错误方向。</td>
+            <td>由主会话澄清需求，再把清晰子任务委派出去。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、可转述的关键观点</h2>
+      <blockquote>
+        <p>如果一项工作需要读大量材料、输出很长报告、可以独立并行，或者你只想要一个干净视角，就应该考虑交给子智能体。</p>
+      </blockquote>
+      <blockquote>
+        <p>如果步骤强依赖、代理之间必须互相对话，或者需要用户持续回答问题，那就不要把它拆成普通 subagent。</p>
+      </blockquote>
+      <p>这两个判断比“会不会用 subagent”更重要。很多人会把子智能体当成炫技功能，结果每个小任务都拆出去，反而增加编排成本。视频真正有用的地方在于，它把 subagent 放回了工程判断：它是一种上下文隔离、并行阅读和专门审查工具，不是默认的万能执行单位。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <ul class="timestamp-list">
+        <li><span class="timecode">00:00</span><span>演示主会话同时派出五个不同 persona 的子智能体，并查看每个 session 的实际 prompt。</span></li>
+        <li><span class="timecode">02:00</span><span>解释子智能体如何保持主上下文干净，避免研究、阅读和长输出把主会话撑满。</span></li>
+        <li><span class="timecode">04:00</span><span>区分临时 general-purpose agent 和真正落在 Markdown 文件里的自定义 subagent。</span></li>
+        <li><span class="timecode">06:00</span><span>讲解 YAML front matter：Claude Code 先读名称和描述，再决定是否加载完整代理说明。</span></li>
+        <li><span class="timecode">08:00</span><span>讨论如何写强 description，以及为什么 description 决定了自动触发的准确率。</span></li>
+        <li><span class="timecode">10:00</span><span>说明项目级与用户级 agent/skill 的位置差异：局部工作流与全局复用要分开管理。</span></li>
+        <li><span class="timecode">12:00</span><span>现场创建一个 plan roaster，使用“roast my plan / review my plan”等短语作为触发线索。</span></li>
+        <li><span class="timecode">14:00</span><span>查看生成出来的 front matter，包括 tools、model、memory、name 等配置字段。</span></li>
+        <li><span class="timecode">16:00</span><span>调试一次未按预期触发的案例，并修正 front matter 写法问题。</span></li>
+        <li><span class="timecode">18:00</span><span>总结 subagent 的使用心法：它像组织里的专业岗位，而不是单个万能助手。</span></li>
+        <li><span class="timecode">20:00</span><span>补充显式调用、自动触发、频繁触发与工具权限控制的不同写法。</span></li>
+        <li><span class="timecode">22:00</span><span>给出使用判断：大量文件、长报告、重复工作、并行任务、无偏审查都适合拆出去。</span></li>
+        <li><span class="timecode">24:00</span><span>把 subagent 和动态 workflow 区分开：后者通常会一次性派出更多代理完成大项目。</span></li>
+        <li><span class="timecode">26:00</span><span>收尾强调 Claude Code 所在环境都可以使用这些原则，关键是位置、触发和 front matter。</span></li>
+      </ul>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <p>如果你想把这节课落到真实工作流里，建议按“入门配置 → 专业工作流 → 并行代理”的顺序继续看，而不是直接堆很多 agent 文件。</p>
+      <div class="recommendations">
+        <a href="qYqIhX9hTQk.html">Claude Code 初学者工作台配置</a>
+        <a href="uogzSxOw4LU.html">MCP、Skills 与子智能体</a>
+        <a href="BikPUaT76i8.html">云端并行运行多个 AI Agent</a>
+      </div>
+      <p style="margin-top: 18px;"><a class="btn" href="index.html">返回全部 YouTube 技术课程</a></p>
+    </section>
+  </main>
+
+  <footer>
+    基于英文字幕整理为中文课程笔记 · <a href="https://www.youtube.com/watch?v=e18sdZLwP7o">观看原视频</a>
+  </footer>
+</body>
+</html>
