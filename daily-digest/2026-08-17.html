@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-17</title>
+<meta name="description" content="今天的主线从模型发布转向协作系统和真实使用成本：多智能体研究开始进入工程讨论，Qwen 3.8 暴露默认推理强度的取舍，模型分发、信用转售、内容平台和开发工具都在重估 AI 的边界。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-17</span>
+      <span class="sep">·</span>
+      <span>星期一</span>
+      <span class="edition">第 79 期</span>
+    </div>
+    <p class="mh-intro">今天的主线从模型发布转向协作系统和真实使用成本：多智能体研究开始进入工程讨论，Qwen 3.8 暴露默认推理强度的取舍，模型分发、信用转售、内容平台和开发工具都在重估 AI 的边界。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://www.anthropic.com/research/multiagent-systems" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻 · 2 个来源</div>
+        <h3>Anthropic 复盘新兴多智能体系统：协作能放大能力，也会放大系统性风险</h3>
+        <p>Anthropic 研究把重点放在智能体之间的真实交互：协调式智能体群在大规模 token 运行中发现更多漏洞，但也显示出分工、通信和失控耦合带来的新问题。对工程团队来说，这比单个 Agent 能力榜更值得看，因为风险开始来自“群体行为”。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://simonwillison.net/2026/Aug/16/qwen-38-27b" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Qwen 3.8 27B 复盘：开源多模态能力提升，但默认推理强度容易过度思考</h3>
+        <p>Simon Willison 的试用笔记把 Qwen 3.8 27B 的亮点和摩擦都摆在一起：Apache 2.0、视觉能力和长上下文很有吸引力，但默认推理强度过高会让普通任务变慢变贵。它提醒开发者，开源模型不仅要看榜单，还要看默认推理策略是否适合产品调用。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://www.bloomberg.com/news/articles/2026-08-16/stripe-nears-deal-to-buy-ai-firm-openrouter-for-over-7-billion" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Bloomberg 称 Stripe 接近以 70 亿美元以上收购 OpenRouter</h3>
+        <p>Hacker News 热议 Bloomberg 报道的 Stripe / OpenRouter 交易传闻。若交易落地，模型路由、统一计费和 API 分发会从开发者基础设施进一步靠近支付与商业化入口。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>24</b> 条精选信号<i></i><b>12</b> 个原始来源<i></i><b>55</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=cs.AI" target="_top">cs.AI</a>
+        <a href="topics.html?topic=Coding%20Agent" target="_top">Coding Agent</a>
+        <a href="topics.html?topic=%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93" target="_top">多智能体</a>
+        <a href="topics.html?topic=Agent" target="_top">Agent</a>
+        <a href="topics.html?topic=%E5%AE%89%E5%85%A8%E8%AF%84%E6%B5%8B" target="_top">安全评测</a>
+        <a href="topics.html?topic=%E5%BC%80%E6%BA%90%E6%A8%A1%E5%9E%8B" target="_top">开源模型</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="anthropic-multiagent-systems-266-vulnerabilities-2026-08" href="https://www.anthropic.com/research/multiagent-systems" target="_blank" rel="noopener">
+      <span class="tag">研究</span>
+      <h3>Anthropic 复盘新兴多智能体系统：协作能放大能力，也会放大系统性风险</h3>
+      <p>Anthropic 研究把重点放在智能体之间的真实交互：协调式智能体群在大规模 token 运行中发现更多漏洞，但也显示出分工、通信和失控耦合带来的新问题。对工程团队来说，这比单个 Agent 能力榜更值得看，因为风险开始来自“群体行为”。</p>
+      <div class="src">◷ <b>Anthropic Research</b> <span class="dotsep">·</span> 昨日</div>
+      <div class="item-signals"><span class="signal-badge source-count" title="Hacker News discussion">2 个来源</span><span class="signal-badge topic">多智能体</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">安全评测</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="qwen-3-8-27b-overthinking-simon-willison-2026-08-16" href="https://simonwillison.net/2026/Aug/16/qwen-38-27b" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Qwen 3.8 27B 复盘：开源多模态能力提升，但默认推理强度容易过度思考</h4>
+          <p>Simon Willison 的试用笔记把 Qwen 3.8 27B 的亮点和摩擦都摆在一起：Apache 2.0、视觉能力和长上下文很有吸引力，但默认推理强度过高会让普通任务变慢变贵。它提醒开发者，开源模型不仅要看榜单，还要看默认推理策略是否适合产品调用。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Simon Willison</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge topic">开源模型</span><span class="signal-badge topic">推理强度</span><span class="signal-badge topic">多模态</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="stripe-openrouter-seven-billion-deal-2026-08-16" href="https://www.bloomberg.com/news/articles/2026-08-16/stripe-nears-deal-to-buy-ai-firm-openrouter-for-over-7-billion" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Bloomberg 称 Stripe 接近以 70 亿美元以上收购 OpenRouter</h4>
+          <p>Hacker News 热议 Bloomberg 报道的 Stripe / OpenRouter 交易传闻。若交易落地，模型路由、统一计费和 API 分发会从开发者基础设施进一步靠近支付与商业化入口。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Bloomberg via Hacker News</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">资本</span></div>
+          <div class="item-signals"><span class="signal-badge topic">模型路由</span><span class="signal-badge topic">AI 基础设施</span><span class="signal-badge topic">并购</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="ai-generated-books-amazon-author-income-2026-08-15" href="https://the-decoder.com/ai-generated-books-are-flooding-amazon-and-tanking-sales-for-human-authors" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AI 生成书籍继续涌入 Amazon，自出版市场开始被数量竞争稀释</h4>
+          <p>The Decoder 引述一项对 14,419 本自出版电子书的分析：AI 生成书籍以数量挤占市场，未检测到 AI 文本的书籍也出现单书收入下滑。这个案例比“AI 写作质量”更现实，核心是平台供给激增后如何重新分配注意力和收入。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">The Decoder</b> <span class="dotsep">·</span> 周末 <span class="dotsep">·</span> <span class="tag">平台</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 内容</span><span class="signal-badge topic">平台治理</span><span class="signal-badge topic">创作者经济</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="openai-anthropic-price-war-chinese-rivals-2026-08" href="https://arstechnica.com/ai/2026/08/openai-and-anthropic-in-price-war-as-chinese-ai-rivals-gain-ground" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Ars Technica 关注 OpenAI 与 Anthropic 降价压力，中国模型继续改变价格锚点</h4>
+          <p>Ars Technica 将近期模型降价放到中国开源和低价 API 竞争中解释。今天值得关注的不是单次价格表，而是前沿模型的利润空间、推理成本和开发者默认选型正在被持续重估。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Ars Technica</b> <span class="dotsep">·</span> 近 3 天 <span class="dotsep">·</span> <span class="tag">市场</span></div>
+          <div class="item-signals"><span class="signal-badge topic">模型价格</span><span class="signal-badge topic">产业竞争</span><span class="signal-badge topic">中国模型</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-14528-handover-icl-state" href="https://arxiv.org/abs/2608.14528v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Handover of In-Context Learning State Across Session Boundaries</h4>
+          <p><b>为什么值得看：</b>它把跨 session 交接从经验问题形式化成“任务相关 ICL 状态”转移问题，适合正在做长期 Agent、handoff、context compaction 的团队阅读。价值不在于给出一个新 prompt 技巧，而是提供了判断“哪些信息必须带走”的理论语言。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Masahiro Kato, Taka Kato</b> <span class="dotsep">·</span> 2026-08-14 <span class="dotsep">·</span> <span class="tag">cs.AI · stat.ML</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">stat.ML</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-14509-split-labor-evidence-aggregation" href="https://arxiv.org/abs/2608.14509v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Split the Labor: Separating Evidence Interpretation from Decision Aggregation</h4>
+          <p><b>为什么值得看：</b>它直接击中 RAG 和多来源 Agent 的常见坏味道：把证据解释和最终投票塞进同一个 prompt。四字段 evidence tuple 与 count-scale drift 的分析，能帮助工程师设计更可审计的多源决策管线。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Zhelun Wu</b> <span class="dotsep">·</span> 2026-08-14 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cs.CL</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-14498-rollplex-vlm-rl-runtime" href="https://arxiv.org/abs/2608.14498v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Rollplex: Cross-Phase GPU Spatial Sharing for Vision Language Model Post-Training</h4>
+          <p><b>为什么值得看：</b>VLM 后训练越来越受限于 rollout、reference scoring 和 actor training 的串行浪费。Rollplex 把前缀计算挪进 rollout decode 窗口，适合关注多模态 Agent RL 训练成本的读者。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hanfeng Lu, Tianyu Feng, Suyi Li 等</b> <span class="dotsep">·</span> 2026-08-14 <span class="dotsep">·</span> <span class="tag">cs.LG · cs.DC</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.LG</span><span class="signal-badge topic">cs.DC</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-14530-marionette-world-model" href="https://arxiv.org/abs/2608.14530v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Marionette: Predicting World States, Rendering Geometry, Painting Appearance</h4>
+          <p><b>为什么值得看：</b>它把交互式游戏 world model 拆成显式状态预测、零参数几何渲染和神经外观合成三层，给多模态 Agent 的长期一致性提供了一个可解释架构。相比纯像素自回归，它更强调控制性和误差隔离。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Zian Meng, Zhen Li, Chuanhao Li 等</b> <span class="dotsep">·</span> 2026-08-14 <span class="dotsep">·</span> <span class="tag">cs.CV · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.CV</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-ai-outremembering-mathematicians-2026-08-17" href="https://davidepiffer.com/p/ai-isnt-outthinking-mathematicians" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>AI isn’t outthinking mathematicians, it’s out-remembering them</h4>
+          <p>讨论焦点从“模型是否会推理”转向“巨大记忆和检索式联想是否已经改变数学工作”。这类争论有助于区分创造性证明、模式记忆和工具辅助三件事。</p>
+          <div class="quote">“社区最关心的不是模型是否像人一样想，而是它靠记忆优势能替代多少搜索过程。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 597 <span class="dotsep">·</span> 💬 489</div>
+          <div class="item-signals"><span class="signal-badge topic">数学 AI</span><span class="signal-badge topic">知识回忆</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-working-with-ai-feels-like-leadership-2026-08-17" href="https://allen.bargi.org/notes/working-with-ai-feels-like-leadership/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Working with AI feels more like leadership than coding</h4>
+          <p>高赞讨论把 AI 编程从“写代码”改写成“设目标、分任务、审结果”。这与今天 agent teams 话题互相呼应：开发者越来越像技术负责人，而不是单纯操作者。</p>
+          <div class="quote">“和 AI 协作的难点正在从语法细节转向判断力、授权和验收。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 322 <span class="dotsep">·</span> 💬 200</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 编程</span><span class="signal-badge topic">团队管理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-models-getting-dumber-on-purpose-2026-08-17" href="https://w4g1.dev/blog/models-are-getting-dumber-on-purpose" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Models Are Getting Dumber on Purpose</h4>
+          <p>社区围绕“产品默认行为是否被成本、安全和延迟调低”展开争论。它提醒团队不要只看模型名，真实体验由路由、预算、系统提示和默认推理强度共同决定。</p>
+          <div class="quote">“用户感知到的变笨，可能来自产品层的策略，而不只是底层模型能力退化。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 278 <span class="dotsep">·</span> 💬 155</div>
+          <div class="item-signals"><span class="signal-badge topic">模型体验</span><span class="signal-badge topic">产品策略</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-llm-fifth-grade-curriculum-2026-08-17" href="https://littlelearner-ll.github.io/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>What happens when an LLM never sees material beyond fifth grade?</h4>
+          <p>这个实验把训练语料的上限设成五年级材料，社区讨论模型能否从受限知识中泛化出更高阶能力。它适合用来反思 benchmark 背后的数据分布和教育式训练假设。</p>
+          <div class="quote">“限制知识天花板后，模型表现会暴露“学会能力”和“见过答案”的差别。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 237 <span class="dotsep">·</span> 💬 205</div>
+          <div class="item-signals"><span class="signal-badge topic">训练数据</span><span class="signal-badge topic">教育实验</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-credit-resale-economy-2026-08-17" href="https://vectoral.com/blog/who-are-the-token-brokers" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>The AI Credit Resale Economy</h4>
+          <p>讨论追踪 AI credits、套利和转售市场如何围绕模型 API 生长。对开发者而言，这不是灰产八卦，而是模型价格、风控和账户体系会如何影响真实调用成本。</p>
+          <div class="quote">“当 token 成为可交易额度，模型访问就不再只是技术接口，也是一套金融化资源。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 235 <span class="dotsep">·</span> 💬 92</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 经济</span><span class="signal-badge topic">API 成本</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="show-hn-thoughtdag-editable-context-graph-2026-08-17" href="https://chenxiachan.github.io/thoughtdag/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">TG</span>
+          <h4>ThoughtDAG</h4>
+        </div>
+        <p class="tagline">可编辑的 LLM 对话上下文图</p>
+        <p>它把线性聊天历史改成可编辑 DAG，让用户显式组织分支、依赖和上下文选择。这个方向适合长任务和研究型对话，因为核心问题不再是保存所有消息，而是控制哪些状态应该进入下一轮。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">上下文工程</span><span class="signal-badge topic">LLM 会话</span><span class="signal-badge topic">可视化</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-wildstatic-public-shared-ai-memory-2026-08-17" href="https://wildstatic.com/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">WM</span>
+          <h4>Wildstatic</h4>
+        </div>
+        <p class="tagline">一个所有用户共享记忆的公共 AI</p>
+        <p>Wildstatic 把“记忆”从个人助手能力改成公共状态，社区讨论也集中在污染、治理和可恢复性。它适合放在今天的多智能体主线下看：当记忆跨用户共享，产品价值和安全问题会同时放大。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 记忆</span><span class="signal-badge topic">公共智能体</span><span class="signal-badge topic">协作</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-waku-rust-gpui-coding-agent-app-2026-08-17" href="https://waku.sh" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">WK</span>
+          <h4>Waku</h4>
+        </div>
+        <p class="tagline">用 Rust 和 GPUI 构建的 coding agent 原生应用</p>
+        <p>Waku 代表 coding agent 前端从 Web/IDE 插件走向原生桌面体验的尝试。它值得关注的点不是模型能力，而是 agent 工作台如何组织本地文件、任务状态和长期交互。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">原生应用</span><span class="signal-badge topic">Rust</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-deltix-ai-driven-testing-2026-08-17" href="https://app.deltix.ai" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">QA</span>
+          <h4>Deltix</h4>
+        </div>
+        <p class="tagline">AI driven testing</p>
+        <p>Deltix 把 AI 放到测试流程，而不是只放到代码生成流程。结合今天 agent team 里的 QA teammate 讨论，它代表了一个明确趋势：AI 开发工具的下一步竞争会落在独立验收和回归验证上。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">测试</span><span class="signal-badge topic">QA Agent</span><span class="signal-badge topic">开发工具</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-cordiverse-cordis-2026-08-17" href="https://github.com/cordiverse/cordis" target="_blank" rel="noopener">
+      <div>
+        <div class="name">cordiverse / <b>cordis</b></div>
+        <div class="desc">DeepSeek Harness 相关的时空组合性元框架，强调插件化和可组合运行时。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Agent Framework</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 框架</span><span class="signal-badge topic">组合性</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 4,882</div>
+        <div class="today">▲ 720 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-tooljet-tooljet-ai-2026-08-17" href="https://github.com/ToolJet/ToolJet" target="_blank" rel="noopener">
+      <div>
+        <div class="name">ToolJet / <b>ToolJet</b></div>
+        <div class="desc">企业内部工具、dashboard、workflow 和 AI agent 应用生成平台的开源基础。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span> <span class="dotsep">·</span> <span class="tag">App Builder</span></div>
+        <div class="item-signals"><span class="signal-badge topic">低代码</span><span class="signal-badge topic">企业应用</span><span class="signal-badge topic">AI Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 40,103</div>
+        <div class="today">▲ 452 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-cactus-compute-needle-2026-08-17" href="https://github.com/cactus-compute/needle" target="_blank" rel="noopener">
+      <div>
+        <div class="name">cactus-compute / <b>needle</b></div>
+        <div class="desc">14MB foundation model，面向手机、可穿戴、智能家居和机器人等 tiny device。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Tiny Model</span></div>
+        <div class="item-signals"><span class="signal-badge topic">边缘模型</span><span class="signal-badge topic">小模型</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 6,656</div>
+        <div class="today">▲ 443 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-nanonets-graft-2026-08-17" href="https://github.com/NanoNets/Graft" target="_blank" rel="noopener">
+      <div>
+        <div class="name">NanoNets / <b>Graft</b></div>
+        <div class="desc">为 Claude Code、Cursor、Codex 和 Gemini 等 coding agent 提供项目上下文与 token 优化 hooks。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">Coding Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">上下文索引</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 3,102</div>
+        <div class="today">▲ 39 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-lajosdeme-mole-2026-08-17" href="https://github.com/lajosdeme/mole" target="_blank" rel="noopener">
+      <div>
+        <div class="name">lajosdeme / <b>mole</b></div>
+        <div class="desc">带预算上限、引用校验和本地隐私边界的终端 deep-research agent。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Research Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Research Agent</span><span class="signal-badge topic">终端</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 216</div>
+        <div class="today">▲ 100 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-betocmn-widen-2026-08-17" href="https://github.com/betocmn/widen" target="_blank" rel="noopener">
+      <div>
+        <div class="name">betocmn / <b>widen</b></div>
+        <div class="desc">原生 macOS Postgres GUI，使用 Apple on-device Foundation Model 做 text-to-SQL。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#F05138"></span>Swift</span> <span class="dotsep">·</span> <span class="tag">Database AI</span></div>
+        <div class="item-signals"><span class="signal-badge topic">数据库工具</span><span class="signal-badge topic">本地 LLM</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 22</div>
+        <div class="today">▲ 9 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-17 10:45 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
