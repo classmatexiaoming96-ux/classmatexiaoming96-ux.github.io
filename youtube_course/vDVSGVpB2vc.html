@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Agent Teams 实战：让多个 AI 队友并行协作</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9a9ab2;
+      --text-muted: #65657a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.72;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    main, header, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 28px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: rgba(22, 22, 31, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0;
+      margin-bottom: 14px;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #050509;
+      margin-bottom: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    }
+
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .content-card {
+      background: rgba(22, 22, 31, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      opacity: 0.72;
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 4px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 24px 0 10px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); font-weight: 600; }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.075);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    blockquote p:last-child { margin-bottom: 0; }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.58;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.015); }
+
+    code {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--accent-green);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86em;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .step {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .step .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: rgba(99, 179, 237, 0.12);
+      border: 1px solid rgba(99, 179, 237, 0.25);
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    .timestamp-list {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .timecode {
+      color: var(--accent-cyan);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84rem;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .recommendations a, .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 44px;
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      padding: 0.62rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .recommendations a:hover, .btn:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+    }
+
+    footer {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 30px 0 46px;
+    }
+
+    footer a { color: var(--accent-cyan); text-decoration: none; }
+
+    @media (max-width: 760px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.62rem; }
+      .hero, .content-card { padding: 22px; }
+      .steps, .recommendations { grid-template-columns: 1fr; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="eyebrow">Claude Code · Agent Teams · Multi-Agent Workflow</div>
+      <h1 class="page-title">Claude Agent Teams 实战：让多个 AI 队友并行协作</h1>
+      <p class="subtitle">How to Build Claude Agent Teams Better Than 99% of People</p>
+      <div class="page-meta">
+        <span class="meta-badge source">Nate Herk | AI Automation</span>
+        <span class="meta-badge time">16:29</span>
+        <span class="meta-badge">约 285,366 次观看</span>
+        <span class="meta-badge">字幕整理：2026-08-17</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/vDVSGVpB2vc" title="How to Build Claude Agent Teams Better Than 99% of People" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么“多个 Agent”不是简单多开几个窗口</h2>
+      <p>这个视频把 Claude Code 里的 agent teams 当成一个协作系统来讲，而不是把它包装成“更聪明的聊天机器人”。开场演示很直接：作者只要求 Claude 为一个虚构 AI 初创公司 Neuroflow 搭建落地页，主会话创建了三个 teammate，分别承担前端、后端和 QA。前端与后端完成实现后，把结果交给 QA；QA 找出三个关键问题，主会话再把问题派回两个实现者修复，第二轮 QA 才给出通过结论。</p>
+      <p>这个例子真正有价值的地方，不是页面“一次生成得很漂亮”，而是它展示了一个团队式闭环：主会话负责调度，多个 teammate 并行做自己负责的产物，QA 独立审查，发现问题后再回流给实现者。相比普通 subagent，agent team 更像一个有共享任务列表、直接消息和生命周期管理的小型项目组。它适合拆解大型目标，但只有在任务可以被分工、并且每个队友有清晰交付物时才值得开启。</p>
+      <blockquote>
+        <p>Agent team 的核心价值不是“多几个模型同时说话”，而是让主会话组织角色分工、交付物流转、审查与返工。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：orchestrator、teammate、共享任务与直接通信</h2>
+      <h3>主会话是 orchestrator，负责目标和秩序</h3>
+      <p>视频里反复出现的角色是主会话，也就是用户正在对话的 Claude Code session。它不是要亲自完成所有实现，而是把目标翻译成团队配置、角色说明和任务分配。与一次性 subagent 不同，agent team 的 teammate 可以持续存在一段时间，围绕同一个目标持续更新状态、接收新指令、互相传递结果。</p>
+      <p>这意味着提示词必须先建立“团队为什么存在”。作者在示例 prompt 里先写目标：构建一个带 REST API、React 前端、用户与帖子功能、可在 localhost 运行的 full-stack app，并且最终要有 QA test report。这个目标会被主会话传递给 teammate，否则刚启动的 teammate 只知道自己的角色，却不知道为什么要和别人协作。</p>
+
+      <h3>Teammate 不是普通角色扮演，而是有交付边界的工作者</h3>
+      <p>一个有效 teammate 需要知道三件事：它负责什么文件或模块、它应该产出什么、它需要向谁发送什么信息。视频中的前端、后端、QA 分工非常典型：前端负责 UI 与交互，后端负责 API 和数据层，QA 负责独立验证并生成问题清单。每个 teammate 都可以调用可用工具，也会继承主会话的权限设置，所以工具权限和计划审批不能事后才想。</p>
+
+      <h3>直接消息让团队减少“主会话中转”</h3>
+      <p>作者展示了 researcher、strategist、critic 三个 teammate 的文档分析场景。Researcher 完成结构化 inventory 后，需要分别发送给 strategist 和 critic；主会话发现它可能只发给了其中一个，就追问是否已经发送给两边。这个细节说明 agent team 的协作不是所有信息都回到主会话再转发，teammate 可以彼此发送消息，但主会话仍然要监督交付链有没有断。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>先让 Claude 建立本地参考文档</h3>
+          <p>作者建议把 agent teams 官方文档链接交给 Claude，让它在项目的 docs 目录里生成 master reference guide。这样后续创建队伍、解释 display mode、hooks、task management 或 plan approval 时，主会话不必每次重新联网查资料，项目里也留下了可复用的团队协作规范。</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>用自然语言定义团队形状</h3>
+          <p>最小可用 prompt 通常是：“Create a team of X agents using X model”，然后逐个列出 teammate 的角色、职责、交付物、能否和谁通信、完成后应该把什么发给谁。重点不是写华丽的人设，而是把角色依赖关系讲清楚。</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>给每个 teammate 明确文件所有权</h3>
+          <p>视频提醒，如果团队输出不够整体，常见原因是多个 teammate 在覆盖彼此工作。解决方式是预先指定 ownership：谁负责前端目录，谁负责 API，谁只能写测试报告。它们可以互相发消息，但不应该随意编辑同一份核心产物。</p>
+        </div>
+        <div class="step">
+          <span class="num">04</span>
+          <h3>用 QA 或 critic 形成闭环</h3>
+          <p>Agent team 最适合的不只是并行开发，也包括并行审查。视频里的 QA teammate 找出三个 critical issues 后，主会话把这些问题返还给前后端 teammate；第二轮才通过。这比“主会话自己看一眼”更接近真实工程团队的质量门禁。</p>
+        </div>
+        <div class="step">
+          <span class="num">05</span>
+          <h3>计划先审批，再执行</h3>
+          <p>作者提到 plan approval mode：可以要求 teammate 先提交计划，由主会话或指定 reviewer 批准后再执行。对于多文件改动、权限敏感命令或昂贵模型调用，这一步能显著减少失控执行和重复返工。</p>
+        </div>
+        <div class="step">
+          <span class="num">06</span>
+          <h3>结束前要清理团队生命周期</h3>
+          <p>视频结尾特别强调不要粗暴 kill team。主会话应向 teammate 发送 shutdown 或 finalize 消息，让它们确认工作已保存、报告已发送、没有“don't shut me down yet”的未完成状态。这个习惯能避免产物散落或上下文状态没收尾。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>四、决策矩阵：什么时候用 agent team，什么时候不要用</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>任务场景</th>
+            <th>适配度</th>
+            <th>主要收益</th>
+            <th>风险</th>
+            <th>建议配置</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>全栈功能开发</td>
+            <td>高</td>
+            <td>前端、后端、QA 可并行推进，缺陷能回流修复。</td>
+            <td>多人编辑同一文件会互相覆盖。</td>
+            <td>指定目录 ownership，QA 只读或只写测试报告。</td>
+          </tr>
+          <tr>
+            <td>大型文档/资料分析</td>
+            <td>高</td>
+            <td>Researcher、strategist、critic 可从不同角度提炼结论。</td>
+            <td>如果没有共享结构，输出会碎片化。</td>
+            <td>要求 researcher 产出 inventory，并发送给所有下游角色。</td>
+          </tr>
+          <tr>
+            <td>小型单文件修改</td>
+            <td>低</td>
+            <td>几乎没有并行收益。</td>
+            <td>额外成本和等待时间高于收益。</td>
+            <td>用主会话或普通 subagent 即可。</td>
+          </tr>
+          <tr>
+            <td>架构方案评审</td>
+            <td>中高</td>
+            <td>可让 builder、security reviewer、product reviewer 同时给意见。</td>
+            <td>如果没有最终裁决者，建议会互相冲突。</td>
+            <td>设置一个 lead 或主会话负责合并取舍。</td>
+          </tr>
+          <tr>
+            <td>高风险命令执行</td>
+            <td>谨慎</td>
+            <td>可用 planner/reviewer 先审计划。</td>
+            <td>权限会从主会话继承，误配置会放大风险。</td>
+            <td>开启 plan approval，预批准命令要窄，避免全权限。</td>
+          </tr>
+        </tbody>
+      </table>
+      <blockquote>
+        <p>判断标准很简单：如果任务不能拆出清晰角色、交付物和依赖关系，就不要为了“看起来像团队”而开启团队。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>五、常见失败模式：团队失控通常不是模型问题</h2>
+      <h3>权限频繁打断</h3>
+      <p>如果 teammate 每隔几秒就停下来请求权限，团队会失去并行优势。作者建议在项目或本地设置中预批准必要工具，但这不等于无限放权。更稳的方式是按角色给权限：研究员读文件和搜索，开发者写指定目录，QA 运行测试和读日志。</p>
+
+      <h3>产物被覆盖</h3>
+      <p>当两个 teammate 同时修改同一块代码时，最终产物可能显得不完整或前后矛盾。视频里的建议是指定 file owner，并要求 teammate 通过直接消息提出修改建议，而不是越权改别人的文件。这一点对前端/后端/QA 三角色尤其重要。</p>
+
+      <h3>某个 teammate 空转</h3>
+      <p>如果一个 teammate 只是等待，说明 prompt 没有给它明确 dependency 或独立任务。可以把团队计划写得更像项目分解：谁先产出 schema，谁基于 schema 写 API，谁等前两者完成后验收。没有依赖关系的角色会闲置，有太多交叉依赖的角色会互相阻塞。</p>
+
+      <h3>成本和延迟过高</h3>
+      <p>作者明确提醒 agent teams 更贵、更慢。只有当它能换来更高质量、更完整审查或真正并行时才值得。对低风险小任务，用一个主会话加计划模式通常更快；对复杂任务，可以让 team 先只做计划和风险评估，再决定是否执行。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <ul class="timestamp-list">
+        <li><span class="timecode">00:00</span><span>Neuroflow demo：前端、后端、QA 三个 teammate 并行完成落地页。</span></li>
+        <li><span class="timecode">01:20</span><span>agent teams 与普通 subagents 的区别：共享任务、直接通信和 team lead。</span></li>
+        <li><span class="timecode">03:00</span><span>先把官方文档转成本地 reference guide，让 Claude 后续构建团队时有稳定资料。</span></li>
+        <li><span class="timecode">05:05</span><span>自然语言创建团队：定义模型、角色、职责、交付物和消息流。</span></li>
+        <li><span class="timecode">07:40</span><span>Researcher、strategist、critic 示例：teammate 之间发送结构化 inventory。</span></li>
+        <li><span class="timecode">10:10</span><span>透明度与终端视图：不同界面能看到的 team 内部状态不同。</span></li>
+        <li><span class="timecode">11:20</span><span>三个使用原则：文件所有权、直接消息、真正并行。</span></li>
+        <li><span class="timecode">12:35</span><span>权限继承、计划审批与 reviewer 角色的安全边界。</span></li>
+        <li><span class="timecode">14:00</span><span>常见坑：权限打断、产物覆盖、队友空转、成本过高。</span></li>
+        <li><span class="timecode">15:35</span><span>关闭团队前先让 teammate 保存工作并确认可以 shutdown。</span></li>
+      </ul>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <p>这节课适合接在 Claude Code subagent 和多 Agent 工作流之后看：先理解单个专家代理怎么工作，再理解多个代理如何带着交付物互相协作。继续学习时，建议优先比较“团队”与“子智能体”的边界，而不是把每个复杂任务都升级成 team。</p>
+      <div class="recommendations">
+        <a href="index.html">返回课程列表</a>
+        <a href="e18sdZLwP7o.html">Claude Code 子智能体实战</a>
+        <a href="BikPUaT76i8.html">Warp Oz 多 Agent 云端工作流</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    基于英文自动字幕整理生成 · <a href="https://www.youtube.com/watch?v=vDVSGVpB2vc">原视频</a>
+  </footer>
+</body>
+</html>
