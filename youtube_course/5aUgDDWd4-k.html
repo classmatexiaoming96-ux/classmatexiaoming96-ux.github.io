@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>把 Claude 用到专业级：从记忆、项目到 Co-work 和 Code</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header { padding: 40px 0 32px; position: relative; z-index: 1; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover {
+      color: var(--accent-cyan);
+      border-color: var(--border-hover);
+      background: rgba(99, 179, 237, 0.08);
+      transform: translateX(-2px);
+    }
+
+    .page-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.98rem;
+      margin-bottom: 20px;
+    }
+
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      margin: 4px 0 28px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    .video-wrap iframe { width: 100%; height: 100%; display: block; }
+
+    .content-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+    }
+
+    .section { margin: 36px 0; }
+
+    .section-title {
+      font-size: 1.16rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      background: rgba(99, 179, 237, 0.1);
+      border: 1px solid rgba(99, 179, 237, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.78; }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 24px 0 12px;
+    }
+
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin: 0 0 8px; line-height: 1.72; }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+
+    .timestamp-list {
+      list-style: none;
+      padding-left: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .timecode {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.82rem;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .rec-card {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 14px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      transition: all 0.2s ease;
+    }
+
+    .rec-card strong { display: block; color: var(--text-primary); margin-bottom: 4px; }
+    .rec-card:hover { color: var(--accent-cyan); border-color: var(--border-hover); background: rgba(99, 179, 237, 0.08); transform: translateY(-2px); }
+
+    @media (max-width: 720px) {
+      body { padding: 0 16px; }
+      .page-title { font-size: 1.45rem; }
+      .content-card { padding: 22px; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 9px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 返回课程列表</a>
+    <h1 class="page-title">把 Claude 用到专业级：从记忆、项目到 Co-work 和 Code</h1>
+    <p class="page-subtitle">英文原题：Use Claude Better Than 99% of People (Beginner to Pro)</p>
+    <div class="page-meta">
+      <span class="meta-badge source">Futurepedia</span>
+      <span class="meta-badge time">16 分 15 秒</span>
+      <span class="meta-badge">约 17,725 次观看</span>
+      <span class="meta-badge">Claude · Projects · Skills · Co-work · Code</span>
+    </div>
+  </header>
+
+  <div class="video-wrap">
+    <iframe
+      src="https://www.youtube.com/embed/5aUgDDWd4-k"
+      title="Use Claude Better Than 99% of People (Beginner to Pro)"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <main class="content-card">
+    <section class="section">
+      <h2 class="section-title"><span class="num">01</span>问题引入：Claude 不是一个更会聊天的搜索框</h2>
+      <p>这支视频解决的是一个很常见的问题：很多人买了 Claude，却仍然只把它当成“问一句、答一句”的聊天工具。这样当然能得到摘要、邮件草稿和临时建议，但远没有碰到 Claude 的真正上限。视频作者的主线很明确：Claude 的价值不只在模型回答质量，而在你能不能把记忆、项目、知识库、技能、连接器、Co-work 和 Code 组织成一个稳定的工作系统。</p>
+      <p>因此，这不是一支单纯的按钮介绍视频。它更像一份从个人使用到 Agentic 工作流的迁移路线图：先把上下文带进 Claude，再把任务放进 Projects，再把常用流程沉淀成 Skills，最后把长任务交给 Co-work，把开发任务交给 Claude Code。对已经熟悉 ChatGPT、Gemini 或其他 LLM 的用户来说，最值得看的地方在于“如何把旧有上下文迁移过来，并持续让 Claude 记住你真正的工作方式”。</p>
+      <blockquote>核心判断可以概括为：不要把 Claude 当成一次性问答框，而要把它训练成理解你、能复用上下文、能接入工具、能承担长期任务的工作台。</blockquote>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">02</span>核心概念：从模型选择到上下文资产</h2>
+      <h3>先把“记忆”当成迁移成本来管理</h3>
+      <p>视频一开始提到一个容易被忽视的点：用户不愿切换 AI 工具，往往不是因为新工具差，而是旧工具已经积累了很多关于自己的偏好、项目和表达方式。Claude 的记忆导入功能就是为了解决这个切换成本。作者建议在设置里找到 capabilities，把从 ChatGPT、Gemini 等工具导出的记忆内容粘贴回来，然后开启“搜索和引用历史聊天”以及“从聊天历史生成记忆”。</p>
+      <p>工程上可以把这件事理解成“初始化个人上下文层”。如果没有这层，Claude 每次都像第一次认识你；有了这层，它会慢慢知道你做什么项目、喜欢什么输出格式、常见约束是什么。注意这里不是让模型无限制地记住一切，而是把长期稳定的偏好和背景变成可复用资产。</p>
+
+      <h3>模型和 effort level 是成本控制旋钮</h3>
+      <p>作者强调模型下拉菜单不是装饰。Haiku 更快但能力较弱，Sonnet 在速度和质量之间更均衡，Opus 更适合复杂推理。另一个关键项是 effort level：简单改写、格式整理、短问答不需要最高努力级别；需要规划、分析、代码和策略判断时，才值得付出更多 token 与等待时间。</p>
+      <p>这条建议对日常使用很实际。很多人觉得 AI “贵”或“额度不够”，其实是把所有任务都交给最重模型和最高思考强度。更稳的做法是按任务风险分层：低风险任务用快模型，中等任务用 Sonnet，关键判断或复杂构建再切到更强配置。</p>
+
+      <h3>Projects、Knowledge 和 Skills 是三个不同层次</h3>
+      <p>Projects 解决的是“把相关聊天和资料放在同一个工作区”；Knowledge 解决的是“把文件、指南、品牌资料、产品说明放进上下文”；Skills 解决的是“把一套可重复执行的流程打包起来”。它们看起来都在提供上下文，但用途不同：Project 是容器，Knowledge 是资料库，Skill 是操作手册。</p>
+      <p>视频中用“周末特价菜内容包”的例子解释 Skills：上传菜单、设定输出风格，让 Claude 每次都按固定流程产出网站文案、社交帖、图片提示词和邮件内容。这个例子说明，Skill 不只是提示词收藏，而是把“我每周都会做的一组动作”变成可复用工作流。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">03</span>关键论点与实操步骤</h2>
+      <h3>第一步：把旧上下文迁移进 Claude</h3>
+      <p>如果你已经长期使用另一个 LLM，先不要急着重新训练 Claude。视频建议先从设置里导入其他 AI 提供商的记忆：复制 Claude 给出的提示词，到原工具中生成一份个人上下文摘要，再粘回 Claude 并加入记忆。这个过程虽然简单，但意义很大，因为它能让 Claude 一开始就知道你的工作背景、语气偏好和常见任务。</p>
+      <p>导入之后，还要开启历史聊天引用和自动生成记忆。否则你只是做了一次静态导入，后续不会持续沉淀。更好的习惯是定期审查记忆内容，把过期偏好删掉，把长期规则保留。</p>
+
+      <h3>第二步：按任务复杂度选择模型与努力级别</h3>
+      <p>作者不建议把 Haiku 当主力，因为 Sonnet 的回答质量提升明显，同时仍然足够快。对于普通办公、研究、写作和轻量分析，Sonnet 往往是默认选择；当任务需要多步骤推理、复杂代码或高风险判断时，再切到更强模型和更高 effort level。反过来，简单改写和短任务用高配模型就是浪费。</p>
+      <p>这一步的关键不是记住哪个模型最好，而是建立选择规则。你可以把 Claude 看成一组不同成本的计算资源：低风险低成本，高风险高配置。这样既节省额度，也能避免把复杂任务交给不合适的设置。</p>
+
+      <h3>第三步：用 Projects 固定工作场景</h3>
+      <p>作者说自己大约 90% 的聊天都从 Projects 开始，因为 Project 能让上下文保持在一个边界内。比如你有一个客户项目，就把会议纪要、品牌语气、历史方案、报价模板和待办事项都放进去；以后任何新聊天都不用重新解释背景。</p>
+      <p>Project 的价值在于减少重复说明，也减少模型误解。它让 Claude 不再面对孤立问题，而是在一个清晰的工作空间里响应。对团队或长期项目来说，这比单次聊天稳定得多。</p>
+
+      <h3>第四步：把重复流程做成 Skills</h3>
+      <p>Skills 适合那些“每次输入不同，但流程稳定”的工作，例如每周内容包、销售邮件、研究摘要、竞品分析、项目复盘。视频里的例子是餐厅周末特价菜：Claude 先读取菜单，再按既定要求生成网页文案、社交媒体内容、图片提示词和邮件文案。下次只需要换菜单，流程本身不用重写。</p>
+      <p>这和普通 prompt 的区别在于，Skill 可以包含更完整的步骤、规则和产出格式。它更接近一份内部 SOP。对于专业用户来说，真正提高效率的不是“会写一个好 prompt”，而是把高频工作做成可重复、可审查、可持续改进的技能。</p>
+
+      <h3>第五步：通过 Connectors 接入真实资料和工具</h3>
+      <p>连接器让 Claude 读取或操作外部服务，例如 Gmail、Calendar、Google Drive、会议记录工具或图像/视频生成服务。作者强调连接器不只是“多一个插件”，而是让 Claude 快速获得真实上下文：邮件里有客户沟通方式，日历里有日程，Drive 里有文件，会议记录里有决策。</p>
+      <p>但连接器也意味着权限边界。实操上应该只连接当前任务需要的服务，并尽量让 Claude 先分析、草拟和建议，再由人确认关键操作。把连接器看成上下文入口和工具入口，而不是放弃审查的理由。</p>
+
+      <h3>第六步：用 Co-work 和 Claude Code 分流任务</h3>
+      <p>视频后半段把 Co-work 和 Code 做了清晰区分：Co-work 像助手，适合仪表盘、项目规划、内容流水线、定时任务和长期工作；Claude Code 像工程师，适合写应用、网站、自动化脚本、Chrome 扩展和生产力工具。二者都属于更强的 Agentic 用法，但承担的任务类型不同。</p>
+      <p>作者还提到 Co-work 的 scheduled tasks：你可以让某个 Skill 每周五早上自动运行，醒来时内容包已经准备好。Claude Code 则更适合在本地桌面使用，直接指定文件夹，让它在真实项目目录中创建、编辑和组织文件。这里的重点是，不要把所有事都塞进聊天框；不同任务应该进入不同运行环境。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">04</span>决策矩阵：该用 Claude 的哪一层能力？</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>能力层</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>普通聊天</td>
+            <td>临时问答、短摘要、改写、轻量脑暴</td>
+            <td>启动成本最低，适合一次性任务</td>
+            <td>上下文容易断，结果难复用</td>
+            <td>只在任务很小、低风险、无需长期记忆时使用</td>
+          </tr>
+          <tr>
+            <td>Memory</td>
+            <td>个人偏好、长期背景、工作方式迁移</td>
+            <td>减少重复解释，让 Claude 更像“认识你”</td>
+            <td>过期记忆会污染判断</td>
+            <td>导入后定期审查，保留稳定规则，删除临时偏好</td>
+          </tr>
+          <tr>
+            <td>Projects + Knowledge</td>
+            <td>客户项目、产品文档、品牌资料、持续研究</td>
+            <td>让资料和聊天保持在同一个工作边界内</td>
+            <td>文件太杂会降低检索质量</td>
+            <td>按项目拆分，不要把所有资料塞进一个万能项目</td>
+          </tr>
+          <tr>
+            <td>Skills</td>
+            <td>每周内容包、固定分析模板、重复办公流程</td>
+            <td>把流程固化为 SOP，可复用、可改进</td>
+            <td>流程写得太宽会变成另一个模糊 prompt</td>
+            <td>先从一个高频、边界清楚的任务开始做 Skill</td>
+          </tr>
+          <tr>
+            <td>Connectors</td>
+            <td>邮件、日历、文件、会议记录、生成工具接入</td>
+            <td>把真实业务上下文带进 Claude</td>
+            <td>涉及权限、隐私和误操作</td>
+            <td>最小权限连接，关键动作保留人工确认</td>
+          </tr>
+          <tr>
+            <td>Co-work</td>
+            <td>长任务、内容流水线、定时任务、项目助理</td>
+            <td>可以被指派任务并持续工作</td>
+            <td>任务定义不清会浪费运行时间</td>
+            <td>适合明确目标、明确输入输出、能验收的任务</td>
+          </tr>
+          <tr>
+            <td>Claude Code</td>
+            <td>网站、应用、脚本、自动化、工程目录内修改</td>
+            <td>能直接在文件系统中创建和编辑代码</td>
+            <td>需要版本控制、测试和人工审查</td>
+            <td>用于真实工程前，先准备仓库、规则文件和验收标准</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">05</span>引用块：这期最值得记住的工作方式</h2>
+      <blockquote>第一次回答通常不是终点。把 Claude 当成协作者，不断追问漏洞、改进点、遗漏和反例，输出质量会明显提高。</blockquote>
+      <p>视频里有一个很实用的态度转变：不要默认 Claude 第一次就对，也不要只把它当成听话的执行器。更好的用法是让它暴露自己的不确定性，要求它找出你的思路漏洞，也要求它找出自己回答里的薄弱环节。这种“推回去再迭代”的习惯，比背 prompt 模板更重要。</p>
+      <blockquote>Co-work 更像助手，Claude Code 更像工程师。前者适合持续工作流，后者适合真实代码和文件系统。</blockquote>
+      <p>这句话能帮助你避免工具错配。内容排期、资料整理、定时任务和项目仪表盘可以交给 Co-work；真正要写应用、改文件、搭自动化，应该进入 Claude Code，并配合 Git、测试和审查流程。</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">06</span>时间戳目录</h2>
+      <ul class="timestamp-list">
+        <li><span class="timecode">00:00</span><span>开场：多数人只用了 Claude 能力的一小部分，目标是从初学者到能派发真实工作。</span></li>
+        <li><span class="timecode">00:30</span><span>从其他 AI 工具迁移记忆，并开启历史聊天引用和自动生成记忆。</span></li>
+        <li><span class="timecode">01:40</span><span>免费版与付费版界面差异：Co-work、Code 和更高用量通常需要付费计划。</span></li>
+        <li><span class="timecode">02:20</span><span>模型与 effort level 选择：不要把所有任务都交给最高成本配置。</span></li>
+        <li><span class="timecode">04:00</span><span>Projects 的价值：把长期任务和资料放进固定工作区，减少重复解释。</span></li>
+        <li><span class="timecode">05:20</span><span>Knowledge 与文件上下文：用文档、菜单、品牌资料支撑更稳定的输出。</span></li>
+        <li><span class="timecode">06:40</span><span>Skills 示例：把周末特价菜内容包做成可复用流程。</span></li>
+        <li><span class="timecode">08:30</span><span>迭代与反问：要求 Claude 找漏洞、补缺口，而不是接受第一次答案。</span></li>
+        <li><span class="timecode">09:20</span><span>Connectors：连接 Gmail、Calendar、Drive、会议记录和生成工具，快速带入真实上下文。</span></li>
+        <li><span class="timecode">11:00</span><span>Co-work：把长任务、内容流水线和定时任务交给 Claude 执行。</span></li>
+        <li><span class="timecode">13:20</span><span>桌面版 Co-work 与云端版差异：本地文件夹与云端 Drive 工作流的选择。</span></li>
+        <li><span class="timecode">14:00</span><span>Claude Code：把自然语言需求变成真实应用、脚本和自动化工具。</span></li>
+        <li><span class="timecode">15:20</span><span>收束：根据任务类型选择聊天、项目、技能、Co-work 或 Code，而不是只用一个入口。</span></li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">07</span>相关推荐</h2>
+      <p>如果你想继续把 Claude 从“聊天工具”推进到“可审查的工作系统”，可以顺着下面几期看：先理解 Claude Code 的工作台配置，再看 Skills、MCP、子智能体和 Agent Teams 的边界。</p>
+      <div class="recommendations">
+        <a class="rec-card" href="index.html">
+          <strong>返回课程列表</strong>
+          浏览全部 Claude、Agent 与 AI 工程课程。
+        </a>
+        <a class="rec-card" href="qYqIhX9hTQk.html">
+          <strong>Claude Code 初学者工作台配置</strong>
+          从 CLAUDE.md、MCP 和上下文管理开始搭基础。
+        </a>
+        <a class="rec-card" href="pvxNcQTcIy4.html">
+          <strong>Agent Skills 会取代 MCP 吗？</strong>
+          区分 Skills、MCP、CLI 和云端 Agent 服务的职责。
+        </a>
+        <a class="rec-card" href="vDVSGVpB2vc.html">
+          <strong>Claude Agent Teams 实战</strong>
+          继续看多 Agent 队友如何并行协作。
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
