@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-18</title>
+<meta name="description" content="今天的主线是 AI 从模型能力继续下沉到基础设施、代码托管、安全治理和证据可追溯：OpenAI 的算力工厂开始绑定能源，Cursor 试图把代码托管纳入 Agent 工作流，安全与内容平台则在补上 AI 使用后的审计缺口。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-18</span>
+      <span class="sep">·</span>
+      <span>星期二</span>
+      <span class="edition">第 80 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是 AI 从模型能力继续下沉到基础设施、代码托管、安全治理和证据可追溯：OpenAI 的算力工厂开始绑定能源，Cursor 试图把代码托管纳入 Agent 工作流，安全与内容平台则在补上 AI 使用后的审计缺口。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">3</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://blogs.nvidia.com/blog/securing-the-infrastructure-of-intelligence" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻 · 6 个来源</div>
+        <h3>NVIDIA 与 SB Energy 锁定俄亥俄州电力容量，OpenAI 将入驻 AI 工厂</h3>
+        <p>NVIDIA 称其与 SB Energy 在俄亥俄州 PORTS-Pike 园区合作，为 OpenAI 的 AI 工厂 확보电力容量。这条消息的价值不在单点数据中心，而在显示前沿模型竞争正越来越依赖能源、园区和供应链级别的基础设施协调。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://cursor.com/changelog/origin-code-hosting" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻 · 2 个来源</div>
+        <h3>Cursor 推出 Origin 代码托管服务，试图替代 GitHub 在 Agent 工作流中的一部分角色</h3>
+        <p>Cursor 的 Origin 把代码托管、开发环境和 AI 编程入口放得更近。它值得关注，因为 AI IDE 正从“编辑器插件”向“代码协作基础设施”扩张。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://openai.com/index/the-defenders-window" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>OpenAI 发布 The Defender&#x27;s Window，讨论如何用前沿智能加固自身防御</h3>
+        <p>OpenAI 将安全防御描述为一个短暂但关键的窗口：防守方如果能把模型用于检测、响应和自动化修复，就可能在攻击自动化全面铺开前建立优势。对企业安全团队来说，这比单纯模型评测更接近落地路径。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>23</b> 条精选信号<i></i><b>12</b> 个原始来源<i></i><b>62</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=Agent" target="_top">Agent</a>
+        <a href="topics.html?topic=OpenAI" target="_top">OpenAI</a>
+        <a href="topics.html?topic=AI%20%E5%AE%89%E5%85%A8" target="_top">AI 安全</a>
+        <a href="topics.html?topic=AI%20%E7%BC%96%E7%A8%8B" target="_top">AI 编程</a>
+        <a href="topics.html?topic=Claude%20Code" target="_top">Claude Code</a>
+        <a href="topics.html?topic=CLI" target="_top">CLI</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="nvidia-sb-energy-openai-ai-factory-ports-pike-2026-08-17" href="https://blogs.nvidia.com/blog/securing-the-infrastructure-of-intelligence" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>NVIDIA 与 SB Energy 锁定俄亥俄州电力容量，OpenAI 将入驻 AI 工厂</h3>
+      <p>NVIDIA 称其与 SB Energy 在俄亥俄州 PORTS-Pike 园区合作，为 OpenAI 的 AI 工厂 확보电力容量。这条消息的价值不在单点数据中心，而在显示前沿模型竞争正越来越依赖能源、园区和供应链级别的基础设施协调。</p>
+      <div class="src">◷ <b>NVIDIA Blog</b> <span class="dotsep">·</span> 昨日</div>
+      <div class="item-signals"><span class="signal-badge source-count" title="OpenAI 官网动态、Jensen Huang on X">6 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 基础设施</span><span class="signal-badge topic">算力能源</span><span class="signal-badge topic">OpenAI</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="cursor-origin-code-hosting-github-alternative-2026-08-17" href="https://cursor.com/changelog/origin-code-hosting" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Cursor 推出 Origin 代码托管服务，试图替代 GitHub 在 Agent 工作流中的一部分角色</h4>
+          <p>Cursor 的 Origin 把代码托管、开发环境和 AI 编程入口放得更近。它值得关注，因为 AI IDE 正从“编辑器插件”向“代码协作基础设施”扩张。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Cursor Changelog</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">开发工具</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="Hacker News 热门">2 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">开发工具</span><span class="signal-badge topic">代码托管</span><span class="signal-badge topic">Agent 工作流</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="openai-defenders-window-frontier-intelligence-defense-2026-08-17" href="https://openai.com/index/the-defenders-window" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>OpenAI 发布 The Defender&#x27;s Window，讨论如何用前沿智能加固自身防御</h4>
+          <p>OpenAI 将安全防御描述为一个短暂但关键的窗口：防守方如果能把模型用于检测、响应和自动化修复，就可能在攻击自动化全面铺开前建立优势。对企业安全团队来说，这比单纯模型评测更接近落地路径。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">OpenAI</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">安全</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">安全运营</span><span class="signal-badge topic">OpenAI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="google-adk-zero-trust-ai-agents-2026-08-17" href="https://developers.googleblog.com/build-zero-trust-ai-agents-with-googles-agent-development-kit" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Google Developers 介绍用 Agent Development Kit 构建零信任 AI 智能体</h4>
+          <p>这篇开发者文章把 Agent 的身份、工具访问和策略控制放到零信任语境里讨论。它的重要性在于，企业 Agent 不只需要更会调用工具，也需要可审计、可约束的运行边界。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google Developers Blog</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">工程实践</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent</span><span class="signal-badge topic">零信任</span><span class="signal-badge topic">Google ADK</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="california-ai-detection-tools-compliance-check-2026-08-18" href="https://news.google.com/rss/articles/CBMivgFBVV95cUxNWnNSSFNYU2s1bU9Id3lueVU5b3ItNWZsSm9RcElvQzZ2ODZ3bFo0YXN2RXpRYkNtZUJrVnlGUkRmakl2aUtNMG9zMjlTNWoyUDBQVlVTMDA3T0todzk1TnhzSmhaRzBVR08tV2dHbC1FM0JhMW92Y2Fzem9Ib2NWZm00aE50TDFKZks3amJVemoyOW1RVlZwdjhRUDEzTmpockhkMktCUm5UYlZqTWdkRTFNci1CWndLV1VyNEV3?oc=5" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>加州要求 AI 公司发布检测工具，媒体开始追踪是否真正合规</h4>
+          <p>KQED 报道关注的是法规落地后的执行问题：企业是否真的发布可用检测工具，以及检测能力是否足以支撑公众和平台判断。它提醒内容水印、检测和披露正在从原则讨论进入问责阶段。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">KQED</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">监管</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 监管</span><span class="signal-badge topic">内容检测</span><span class="signal-badge topic">合规</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-16889-baton-long-horizon-robot-memory" href="https://arxiv.org/abs/2608.16889v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Don&#x27;t Drop the BATON: Long-Horizon Robot Manipulation via Agentic Subtask Exploration and Transition-aware Memory</h4>
+          <p><b>为什么值得看：</b>新意在于把长程机器人任务失败拆到“子任务探索”和“阶段转换记忆”两个层面，而不是只让 VLA 端到端硬做。对做具身 Agent 的团队，它提供了一个降低长链任务指数级试错成本的工程视角。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Bingxin Xu, Yuzhang Shang, Emilio Ferrara</b> <span class="dotsep">·</span> 2026-08-17 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.RO</span></div>
+          <div class="item-signals"><span class="signal-badge topic">机器人</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">记忆</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-16776-grip-rag-query-dominance" href="https://arxiv.org/abs/2608.16776v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>GRIP: Grounded Reasoning via Information-Restricted Premises</h4>
+          <p><b>为什么值得看：</b>它把 RAG 的一个常见失败命名为 query dominance：模型看似引用证据，实际主要被 query 本身支配。论文用信息瓶颈迫使证据通道只携带 query 缺失的残差信息，对降低幻觉和做可验证 RAG 很有参考价值。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Lirui Teng</b> <span class="dotsep">·</span> 2026-08-17 <span class="dotsep">·</span> <span class="tag">cs.CL · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">RAG</span><span class="signal-badge topic">可信生成</span><span class="signal-badge topic">证据约束</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-16801-multi-agent-ai-coding-coordination" href="https://arxiv.org/abs/2608.16801v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>When Agents Coordinate: Measuring Coordination in Multi-Agent AI Coding</h4>
+          <p><b>为什么值得看：</b>今天很多多 Agent 编程系统只报告成功率和成本，这篇论文把消息、文件读写和成本建成时间网络来度量协作本身。它有助于判断“多几个 Agent”到底是在协作，还是在制造沟通开销。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Giuseppe Destefanis, Tomaso Aste</b> <span class="dotsep">·</span> 2026-08-17 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">多 Agent</span><span class="signal-badge topic">AI 编程</span><span class="signal-badge topic">评测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-16742-tdd-agent-test-driven-code-generation" href="https://arxiv.org/abs/2608.16742v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>TDD-Agent: Test-Driven Reasoning for Code Generation</h4>
+          <p><b>为什么值得看：</b>论文把测试前置从提示技巧提升成一个双轨迭代框架：代码和测试都根据执行反馈被修正。对 repo-level 代码生成来说，这比事后用生成测试做验证更接近真实工程闭环。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hongyue Yu, Kefan Li, Jiakun Li 等</b> <span class="dotsep">·</span> 2026-08-17 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">代码生成</span><span class="signal-badge topic">测试驱动</span><span class="signal-badge topic">Agent</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-aidr-ai-didnt-read-2026-08-18" href="https://www.rickmanelius.com/p/aidr-ai-didnt-read" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>AI;DR：当所有内容都被 AI 摘要后，人还在读什么？</h4>
+          <p>HN 讨论集中在摘要是否会把理解变成“只看结论”，以及读者如何辨别自己到底有没有吸收材料。它不是工具发布，而是对 AI 阅读习惯的高热度反思。</p>
+          <div class="quote">“社区分歧点在于：AI 摘要提高吞吐量，但也可能让人失去和原文摩擦的过程。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 627 <span class="dotsep">·</span> 💬 390</div>
+          <div class="item-signals"><span class="signal-badge topic">信息消费</span><span class="signal-badge topic">AI 阅读</span><span class="signal-badge topic">社区反思</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-copilot-autofix-snowflake-jira-compromise-2026-08-18" href="https://www.wiz.io/blog/red-agent-snowflake-copilot-cicd-bug" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>AI 生成的 GitHub Copilot Autofix 被指导致 Snowflake Jira 妥协路径</h4>
+          <p>这条讨论把 AI 自动修复从“提效功能”拉回安全责任：修复建议如果没有审查，可能把漏洞从代码层带入 CI/CD 和业务系统。</p>
+          <div class="quote">“热门观点是：自动修复必须进入同等严格的安全审查，而不是因为来自 AI 就被默认采纳。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 320 <span class="dotsep">·</span> 💬 126</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">Copilot</span><span class="signal-badge topic">供应链</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-disable-intrusive-ai-guide-2026-08-18" href="https://www.librarian.net/notoai" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>如何禁用或避免侵入式 AI：一份覆盖主流系统和浏览器的清单</h4>
+          <p>讨论热度说明，用户并不只关心更强 AI，也关心如何把默认启用的 AI 功能关掉。对产品团队来说，这是一个关于默认权限和可逆性的信号。</p>
+          <div class="quote">“社区关注点不是“反 AI”，而是用户是否能清楚知道功能在哪里、数据如何被用、怎样关闭。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 260 <span class="dotsep">·</span> 💬 159</div>
+          <div class="item-signals"><span class="signal-badge topic">用户控制</span><span class="signal-badge topic">AI 产品</span><span class="signal-badge topic">隐私</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-coding-without-vibes-2026-08-18" href="https://peterbloem.nl/blog/craft-coding" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>AI Coding Without the Vibes：把 AI 编程重新拉回工程纪律</h4>
+          <p>这篇讨论反对把 AI 编程等同于不加验证的 vibe coding，强调规格、测试、读代码和小步提交。它和今天的 TDD-Agent 论文形成了应用侧与研究侧的呼应。</p>
+          <div class="quote">“有代表性的观点是：AI 可以写得很快，但工程师仍要负责定义正确性和维护边界。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 96 <span class="dotsep">·</span> 💬 55</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 编程</span><span class="signal-badge topic">工程质量</span><span class="signal-badge topic">开发流程</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-judge-ai-order-judicial-immunity-2026-08-18" href="https://reason.com/volokh/2026/08/17/judges-allegedly-relying-wholly-on-ai-in-order-is-covered-by-judicial-immunity-court-rules/" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>法院称法官完全依赖 AI 作出命令仍受司法豁免，引发问责讨论</h4>
+          <p>这条讨论凸显 AI 进入高权力决策后的责任空白：即使人类角色仍在链条上，AI 生成内容出错时谁来承担后果并不清晰。</p>
+          <div class="quote">“社区争议集中在：AI 只是工具时，现有豁免和责任框架是否足以覆盖错误决策。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 55 <span class="dotsep">·</span> 💬 48</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 法律</span><span class="signal-badge topic">司法</span><span class="signal-badge topic">问责</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="openrouter-activity-dashboard-analytics-api-2026-08-17" href="https://openrouter.ai/blog/announcements/activity-dashboard" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">OR</span>
+          <h4>OpenRouter Activity 仪表盘与 Analytics API</h4>
+        </div>
+        <p class="tagline">按智能体、模型和请求追踪 AI 使用成本。</p>
+        <p>OpenRouter 把模型调用账单、请求轨迹和 Agent 维度分析做成产品入口。对多模型应用来说，这类成本可观测性会变成基础设施，而不是财务月末才看的报表。</p>
+        <div><span class="tag">产品</span></div>
+        <div class="item-signals"><span class="signal-badge topic">模型成本</span><span class="signal-badge topic">可观测性</span><span class="signal-badge topic">Agent 运维</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-sokoban-ai-solver-2026-08-18" href="https://mkornreich.me/projects/sokoban/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">SK</span>
+          <h4>Sokoban AI Solver</h4>
+        </div>
+        <p class="tagline">用可视化方式展示 AI 搜索解推箱子谜题。</p>
+        <p>这个 Show HN 项目规模不大，但讨论点清晰：它让 AI 搜索过程可观察，适合用来解释状态空间、启发式和规划失败。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 解题</span><span class="signal-badge topic">小游戏</span><span class="signal-badge topic">搜索</span></div>
+      </a>
+      <a class="card" data-event-key="claude-code-status-lines-community-library-2026-08-18" href="https://statuslin.es" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">SL</span>
+          <h4>Claude Code status lines 社区库</h4>
+        </div>
+        <p class="tagline">把 Claude Code 会话状态做成可复用状态栏组件。</p>
+        <p>它代表一种细小但真实的趋势：当编码 Agent 进入日常工作，用户开始围绕 token、模型、分支、任务状态构建自己的操作界面。</p>
+        <div><span class="tag">工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Claude Code</span><span class="signal-badge topic">开发者体验</span><span class="signal-badge topic">CLI</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-harry0703-moneyprinterturbo-2026-08-18" href="https://github.com/harry0703/MoneyPrinterTurbo" target="_blank" rel="noopener">
+      <div>
+        <div class="name">harry0703 / <b>MoneyPrinterTurbo</b></div>
+        <div class="desc">利用大模型和自动化工作流，根据主题或关键词一键生成高清短视频。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">视频生成</span></div>
+        <div class="item-signals"><span class="signal-badge topic">内容自动化</span><span class="signal-badge topic">视频生成</span><span class="signal-badge topic">AI Workflow</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 106,307</div>
+        <div class="today">▲ 1,189 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-usestrix-strix-2026-08-18" href="https://github.com/usestrix/strix" target="_blank" rel="noopener">
+      <div>
+        <div class="name">usestrix / <b>strix</b></div>
+        <div class="desc">开源 AI 渗透测试工具，用于发现并修复应用漏洞。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">AI 安全</span></div>
+        <div class="item-signals"><span class="signal-badge topic">安全</span><span class="signal-badge topic">渗透测试</span><span class="signal-badge topic">AI Agent</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 54,299</div>
+        <div class="today">▲ 598 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-akitaonrails-ai-memory-2026-08-18" href="https://github.com/akitaonrails/ai-memory" target="_blank" rel="noopener">
+      <div>
+        <div class="name">akitaonrails / <b>ai-memory</b></div>
+        <div class="desc">面向 agent coding CLI 的长期记忆与跨厂商交接方案。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#dea584"></span>Rust</span> <span class="dotsep">·</span> <span class="tag">记忆</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Memory</span><span class="signal-badge topic">编码 Agent</span><span class="signal-badge topic">交接</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 2,166</div>
+        <div class="today">▲ 207 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-mukul975-anthropic-cybersecurity-skills-2026-08-18" href="https://github.com/mukul975/Anthropic-Cybersecurity-Skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">mukul975 / <b>Anthropic-Cybersecurity-Skills</b></div>
+        <div class="desc">817 个结构化网络安全 skills，映射 MITRE ATT&amp;CK、NIST、D3FEND 等框架。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Skills</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Skills</span><span class="signal-badge topic">网络安全</span><span class="signal-badge topic">Claude Code</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 28,501</div>
+        <div class="today">▲ 198 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-alexsjones-llmfit-2026-08-18" href="https://github.com/AlexsJones/llmfit" target="_blank" rel="noopener">
+      <div>
+        <div class="name">AlexsJones / <b>llmfit</b></div>
+        <div class="desc">用一个命令在数百个模型和提供商中找到适合本机硬件运行的模型。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#dea584"></span>Rust</span> <span class="dotsep">·</span> <span class="tag">模型选择</span></div>
+        <div class="item-signals"><span class="signal-badge topic">本地模型</span><span class="signal-badge topic">硬件适配</span><span class="signal-badge topic">CLI</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 32,351</div>
+        <div class="today">▲ 198 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-santifer-career-ops-2026-08-18" href="https://github.com/santifer/career-ops" target="_blank" rel="noopener">
+      <div>
+        <div class="name">santifer / <b>career-ops</b></div>
+        <div class="desc">本地运行的开源 AI 求职系统：扫描职位、评分、定制 CV 并跟踪申请。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span> <span class="dotsep">·</span> <span class="tag">求职 Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">求职自动化</span><span class="signal-badge topic">AI CLI</span><span class="signal-badge topic">本地工作流</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 64,787</div>
+        <div class="today">▲ 218 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-18 10:45 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
