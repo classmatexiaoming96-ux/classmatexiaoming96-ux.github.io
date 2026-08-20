@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harness Engineering：把 AI 编程助手变成可进化系统 — Cole Medin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a8b0c3;
+      --text-muted: #737b91;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --card-hover: rgba(255,255,255,0.08);
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      background-image:
+        radial-gradient(circle at 18% 12%, rgba(99, 179, 237, 0.12), transparent 32%),
+        radial-gradient(circle at 86% 18%, rgba(159, 122, 234, 0.10), transparent 28%),
+        linear-gradient(135deg, #12121c 0%, #0a0a0f 56%, #0d1018 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.76;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      width: min(960px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-link, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.2s, border-color 0.2s;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .back-link:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin: 28px 0 2rem;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4.1rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+      max-width: 860px;
+      margin-bottom: 18px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.06rem;
+      max-width: 780px;
+      margin-bottom: 22px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta-pill {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 0.84rem;
+      font-weight: 650;
+    }
+
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #050508;
+      margin: 24px 0 0;
+    }
+
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .content-card:hover {
+      border-color: rgba(99, 179, 237, 0.26);
+      background: var(--card-hover);
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      line-height: 1.28;
+      margin: 6px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    h3 {
+      color: var(--text-primary);
+      font-size: 1.05rem;
+      margin: 24px 0 10px;
+    }
+
+    p { color: var(--text-secondary); margin-bottom: 14px; }
+    strong { color: var(--text-primary); }
+    a { color: var(--accent); }
+    a:hover { color: var(--accent-hover); }
+
+    .lead-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0 4px;
+    }
+
+    .mini {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .mini b {
+      display: block;
+      color: var(--accent);
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.08);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border: 1px solid var(--card-border);
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: rgba(99, 179, 237, 0.08);
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+
+    ul, ol { color: var(--text-secondary); padding-left: 24px; margin-bottom: 14px; }
+    li { margin-bottom: 8px; }
+
+    .timestamp-list {
+      display: grid;
+      gap: 10px;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 8px;
+    }
+
+    .timecode {
+      color: var(--accent-green);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .rec-card {
+      display: block;
+      min-height: 118px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 14px;
+      text-decoration: none;
+      color: var(--text-secondary);
+    }
+
+    .rec-card b {
+      display: block;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .rec-card:hover {
+      border-color: var(--accent);
+      background: rgba(99, 179, 237, 0.08);
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 28px, 960px); padding-top: 22px; }
+      .hero, .content-card { padding: 1.1rem; }
+      .lead-grid, .rec-grid { grid-template-columns: 1fr; }
+      .timestamp-list li { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <section class="hero">
+      <div class="eyebrow">AI Coding Course · Harness Engineering</div>
+      <h1>Harness Engineering：把 AI 编程助手变成可进化系统</h1>
+      <p class="subtitle">英文原题：Harness Engineering: What Separates Top Agentic Engineers Right Now。本课解释为什么真正拉开差距的不是“换一个更强模型”，而是你能否为模型搭好上下文、工具、流程和反馈闭环。</p>
+      <div class="meta-row">
+        <span class="meta-pill">频道：Cole Medin</span>
+        <span class="meta-pill">时长：17:08</span>
+        <span class="meta-pill">播放量：77,268</span>
+        <span class="meta-pill">上传：2026-05-28</span>
+      </div>
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/ulNsa0sD8N0" title="Harness Engineering: What Separates Top Agentic Engineers Right Now" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么“会提示词”已经不够了</h2>
+      <p>这支视频抓住了 2026 年 AI 编程工作流里一个很实际的变化：很多工程师已经不再只问“Claude Code、Codex、Cursor 哪个更聪明”，而是开始问“我能不能把这些工具组织成一个可靠的工程系统”。Cole Medin 把这个方向称为 <strong>harness engineering</strong>，也就是围绕模型搭建可控的外层工程装置。</p>
+      <p>视频最有价值的地方不在于发明一个新名词，而是把“模型失败”重新解释成“系统可改进的信号”。当 agent 忘记团队约定、乱跑危险命令、丢失上下文、无法收敛到可验证结果时，常见反应是等待下一代模型。但 harness engineering 的视角会要求你把这些失败沉淀成规则、技能、hook、评审流程和多会话编排，让下一轮工作天然少踩同一个坑。</p>
+      <div class="lead-grid">
+        <div class="mini"><b>核心问题</b><p>模型本身不会访问文件系统、运行 Git、执行测试或理解团队流程；这些能力来自外层 harness。</p></div>
+        <div class="mini"><b>关键转变</b><p>从一次性提示词转向可复用 AI layer：rules、skills、MCP、hooks、sub-agents 和知识检索。</p></div>
+        <div class="mini"><b>最终目标</b><p>把大型任务拆给多个聚焦会话，使用交接文档、自动验证和反馈闭环持续推进。</p></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念：模型、工具 harness 与你自己的 AI layer</h2>
+      <p>视频先把一个 agent 拆成三层。最里面是大语言模型，例如 GPT 或 Claude，它提供推理能力，但单独存在时没有项目文件、终端命令、版本控制或测试环境。中间层是你选择的 AI 编程助手本身，例如 Claude Code、Codex 或其他 coding agent，它们给模型接上文件系统、命令执行、编辑器能力和默认系统提示。最外层才是你真正可以持续建设的部分：你的 AI layer。</p>
+      <p>AI layer 包含全局规则、项目约定、技能、MCP 服务器、代码搜索、LSP、知识图谱、hooks 和 sub-agents。它们共同决定 agent 在你的代码库里“知道什么、能做什么、什么时候必须停下来验证、失败后如何修正”。所以 harness engineering 不是简单地给模型塞更多上下文，而是把上下文、动作、控制和反馈设计成一个可进化的系统。</p>
+      <blockquote>
+        <p>可以把每一次 agent 的失误都当作 harness 的改进机会：不知道约定就写入规则，危险操作就用 hook 阻断，验证不足就把测试门禁变成自动流程。</p>
+      </blockquote>
+      <h3>1. 与 context engineering 的关系</h3>
+      <p>视频承认，单会话内的很多 harness 工作确实延续了 context engineering：把正确的文档、约定、工具说明、代码入口和历史决策提供给模型。但它进一步强调“控制”这件事，包括如何阻止危险命令、如何在完成声明后强制跑测试、如何把任务拆成多个会话而不是让一个上下文窗口吞掉全部需求。</p>
+      <h3>2. 为什么工具选择只是第一层</h3>
+      <p>选择 Claude Code、Codex 或其他工具，本质是在选择厂商替你工程化的一层 harness。不同工具在文件访问、命令执行、补丁策略、上下文窗口和默认行为上各有取舍。但真正决定长期效率的是你能否在这些工具之上，建立团队自己的规则、脚本、验证和交接机制。</p>
+      <h3>3. “技能问题”的重新定义</h3>
+      <p>视频引用的核心判断是：agent 做蠢事时，问题通常是可读的。它不知道某个 convention，就把 convention 写入 `AGENTS.md`；它尝试危险命令，就写 pre-tool hook；它完成后没有验证，就写 stop-validation hook。这种心态把“模型不够强”改写成“系统还没有学会”。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤</h2>
+      <h3>步骤一：先列出你的 AI layer 资产</h3>
+      <p>不要急着上来写复杂 orchestrator。先盘点团队已经有哪些稳定资产：全局规则、项目 README、架构文档、常用调试命令、测试命令、发布命令、代码搜索方式、禁用目录、代码审查标准。把这些资产以 agent 能读懂、能执行的方式组织起来，才有资格谈后续自动化。</p>
+      <ul>
+        <li><strong>Rules：</strong>编码风格、目录边界、命名约定、禁止操作、提交策略。</li>
+        <li><strong>Skills：</strong>计划、实现、验证、发布、回滚等可复用工作流。</li>
+        <li><strong>MCP/Tools：</strong>数据库、浏览器、文档、Figma、GitHub、内部系统等外部能力。</li>
+        <li><strong>Code intelligence：</strong>LSP、ripgrep、CodeGraph、知识图谱和跨仓库索引。</li>
+        <li><strong>Hooks：</strong>工具调用前安全检查、文件编辑后 lint、完成前测试门禁。</li>
+      </ul>
+
+      <h3>步骤二：把计划、实现、验证拆成不同会话</h3>
+      <p>Cole 特别强调，长任务不应该一次性塞给同一个 agent 会话。更稳的做法是让 planning session 只负责探索和输出计划，让 implementation session 只处理清晰范围内的补丁，让 validation session 或 review agents 分别检查正确性、安全性和简洁性。每一步都产出可交接的 markdown 或结构化结果。</p>
+      <p>这个建议背后的工程理由很朴素：上下文越大，模型越容易把要求混在一起；职责越含糊，agent 越容易把“看起来完成了”当成真正完成。把任务分段后，每个会话都更聚焦，也更容易设置确定性验收条件。</p>
+
+      <h3>步骤三：用 hooks 把安全和验证前移</h3>
+      <p>视频提到两个很实用的 hook 场景。第一个是 pre-tool-use hook，在 agent 写文件、读敏感路径或执行命令前拦截风险，例如阻止读取 `.env`、阻止破坏性删除、限制未批准的网络动作。第二个是 stop-validation hook，在 agent 宣称完成时自动运行测试、lint、typecheck 或质量门禁；如果失败，就把错误送回 agent 继续修。</p>
+      <p>这一步看似“不智能”，但正是 harness engineering 的价值所在：把必须可靠的部分交给确定性脚本，而不是依赖模型自觉记住。</p>
+
+      <h3>步骤四：让每次失败反馈到规则库</h3>
+      <p>如果某次 agent 误改了历史页面，就把“只允许 append，不允许重写旧页面”写进 skill；如果某次漏了线上验证，就把 curl 检查做成完成门禁；如果某次总结里夸大了状态，就把“失败命令类别必须明说”写入自动化要求。harness 的成熟度来自这种小步沉淀，而不是一次性设计完美。</p>
+
+      <h3>步骤五：进一步构建多会话 Ralph loop</h3>
+      <p>视频后半段用 Ralph loop 说明更高阶的 harness：一个外层脚本接收大需求，拆成多个迭代项，逐个启动 coding agent 会话，读取交接文件，运行验证，直到出现明确的 `done.txt` 或等价完成信号。它的关键不是“让一个 agent 无限工作”，而是让多个聚焦会话按流程协作。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格：不同 harness 层级怎么选</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>层级</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>单次提示词</td>
+            <td>小改动、一次性解释、低风险脚本</td>
+            <td>启动成本最低，适合探索想法</td>
+            <td>经验无法沉淀，失败容易重复出现</td>
+            <td>只用于临时任务；出现第二次同类问题就沉淀规则</td>
+          </tr>
+          <tr>
+            <td>项目规则与技能</td>
+            <td>重复开发流程、固定验证步骤、团队约定明显的仓库</td>
+            <td>最容易落地，能立刻降低 agent 漏步骤概率</td>
+            <td>规则过长会稀释重点，过时规则会误导执行</td>
+            <td>把规则写短、写可执行，并定期删除无效内容</td>
+          </tr>
+          <tr>
+            <td>MCP 与工具层</td>
+            <td>需要访问 GitHub、文档、浏览器、设计稿、数据库或内部系统</td>
+            <td>让模型从“写文本”变成“操作真实系统”</td>
+            <td>权限边界、凭据泄露、工具错误都会放大影响</td>
+            <td>给工具加最小权限，并用 hook 限制敏感动作</td>
+          </tr>
+          <tr>
+            <td>Hooks 与质量门禁</td>
+            <td>安全敏感、发布链路、自动化任务、多人协作仓库</td>
+            <td>用确定性检查补足模型不稳定性</td>
+            <td>门禁过粗会误杀，过松会变成摆设</td>
+            <td>先覆盖最常见失败：测试、lint、diff 范围、线上 HTTP 200</td>
+          </tr>
+          <tr>
+            <td>多会话编排</td>
+            <td>大型 PRD、跨模块改造、需要评审与返工循环的任务</td>
+            <td>每个 agent 上下文更小，职责更清晰，可并行评审</td>
+            <td>外层 orchestrator 复杂，交接文档质量决定成败</td>
+            <td>从 plan → implement → review → fix 的最小闭环开始</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：这支视频真正想让你记住什么</h2>
+      <blockquote>
+        <p>Harness engineering 的重点不是追逐 buzzword，而是承认 agent 的表现由模型、工具和你设计的 AI layer 共同决定。</p>
+      </blockquote>
+      <blockquote>
+        <p>当任务变大时，不要把整个 PRD 塞进一个会话；把计划、实现和评审拆开，让每个会话只承担清晰职责。</p>
+      </blockquote>
+      <p>这两句话合起来，就是今天最实用的 takeaway：优秀的 agentic engineer 不只是“更会问模型”，而是会把模型放进一个可观察、可限制、可验证、可迭代的工作流里。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <ol class="timestamp-list">
+        <li><span class="timecode">00:00</span><span>提出 harness engineering：它是 context engineering 之后更完整的系统视角。</span></li>
+        <li><span class="timecode">01:05</span><span>拆解 agent 的三层结构：模型、工具 harness、用户可建设的 AI layer。</span></li>
+        <li><span class="timecode">02:20</span><span>解释 AI layer 的组成：rules、skills、MCP、code search、hooks、sub-agents。</span></li>
+        <li><span class="timecode">04:05</span><span>与 context engineering 对比：大部分仍是上下文工程，但 control 是新的重点。</span></li>
+        <li><span class="timecode">05:30</span><span>技能问题重构：不要只怪模型，把失败转成规则、hook 或流程改进。</span></li>
+        <li><span class="timecode">07:20</span><span>展示 Google Agent SDK / agency CLI 场景：用 agent 辅助构建和部署 agent。</span></li>
+        <li><span class="timecode">09:15</span><span>介绍 companion repo：把规则、技能和开发流程作为可复用 AI layer。</span></li>
+        <li><span class="timecode">10:30</span><span>强调 plan、implement、validate 应拆成独立会话，并用 artifact 交接。</span></li>
+        <li><span class="timecode">12:10</span><span>hooks 的三个典型用途：安全拦截、完成前验证、编辑后快速 lint。</span></li>
+        <li><span class="timecode">13:40</span><span>进入多会话编排：用多个 coding agent session 承接大型任务。</span></li>
+        <li><span class="timecode">15:00</span><span>Ralph loop 示例：外层脚本拆任务、循环运行 agent、等待完成信号。</span></li>
+        <li><span class="timecode">16:25</span><span>总结：未来的 agentic engineering 会更依赖可定制 harness，而不是单点提示词技巧。</span></li>
+      </ol>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <p>如果你想把这支视频的观点落到实践，可以继续看这些课程页：它们分别覆盖工具选择、MCP、子智能体和多 agent 编排。</p>
+      <div class="rec-grid">
+        <a class="rec-card" href="cGuyrANVi4A.html"><b>How Model Context Protocol (MCP) actually works</b><span>理解 MCP 为什么是 AI layer 的重要工具入口。</span></a>
+        <a class="rec-card" href="vDVSGVpB2vc.html"><b>How to Build Claude Agent Teams Better Than 99% of People</b><span>继续学习多 agent 团队与职责拆分。</span></a>
+        <a class="rec-card" href="e18sdZLwP7o.html"><b>How to Build Claude Subagents Better Than 99% of People</b><span>把 sub-agent 当成可复用专家角色，而不是简单分身。</span></a>
+      </div>
+      <p style="margin-top:18px"><a class="btn" href="index.html">返回全部课程</a></p>
+    </section>
+  </main>
+</body>
+</html>
