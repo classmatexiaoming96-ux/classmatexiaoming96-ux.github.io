@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 子智能体实战：让主线程保持干净 — Web Dev Cody</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a8b3c7;
+      --text-muted: #758195;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-green: #68d391;
+      --accent-purple: #b794f4;
+      --accent-amber: #f6ad55;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --code-bg: rgba(10,10,15,0.7);
+    }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 56px 56px;
+      pointer-events: none;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .page {
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 64px;
+      position: relative;
+      z-index: 1;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--text-secondary);
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+    .back-link:hover {
+      border-color: rgba(99,179,237,0.42);
+      background: rgba(99,179,237,0.09);
+      transform: translateX(-2px);
+    }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1.12;
+      margin-bottom: 16px;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 820px;
+      margin-bottom: 20px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .pill {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.045);
+      color: var(--text-secondary);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 0.86rem;
+    }
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      margin: 28px 0 4px;
+      background: #000;
+    }
+    iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    .content-card + .content-card { margin-top: 22px; }
+    h2 {
+      font-size: 1.35rem;
+      margin: 8px 0 14px;
+      color: var(--text-primary);
+    }
+    h3 {
+      font-size: 1.04rem;
+      margin: 22px 0 10px;
+      color: var(--text-primary);
+    }
+    p { color: var(--text-secondary); margin-bottom: 14px; }
+    ul, ol { color: var(--text-secondary); padding-left: 24px; margin: 12px 0 14px; }
+    li { margin-bottom: 8px; }
+    strong { color: var(--text-primary); }
+    code {
+      font-family: "JetBrains Mono", monospace;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #dbeafe;
+      font-size: 0.92em;
+    }
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(183,148,244,0.08);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.92rem;
+    }
+    th, td {
+      border: 1px solid var(--card-border);
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: rgba(99,179,237,0.09);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    td { color: var(--text-secondary); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.025); }
+    .timestamp-list {
+      display: grid;
+      gap: 10px;
+      padding: 0;
+      list-style: none;
+    }
+    .timestamp-list li {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.035);
+      border-radius: 8px;
+      padding: 11px 13px;
+    }
+    .time {
+      color: var(--accent-green);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .related-card {
+      display: block;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      padding: 14px;
+      min-height: 112px;
+    }
+    .related-card span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      margin-bottom: 8px;
+    }
+    .related-card strong { display: block; line-height: 1.45; }
+    .note {
+      border: 1px solid rgba(246,173,85,0.22);
+      background: rgba(246,173,85,0.07);
+      border-radius: 8px;
+      padding: 14px;
+      color: var(--text-secondary);
+      margin: 16px 0;
+    }
+    @media (max-width: 640px) {
+      .page { width: min(100% - 22px, 980px); padding-top: 22px; }
+      .hero, .content-card { padding: 1.1rem; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">Claude Code · Subagents · Context Engineering</div>
+      <h1>Claude Code 子智能体实战：让主线程保持干净</h1>
+      <p class="subtitle">英文原题：Claude Code Subagents are Absolutely Insane。Web Dev Cody 用一个认证与安全审查的代码库示例，演示如何用多个 Claude Code subagents 并行做研究、审计和实现，同时避免主聊天上下文被大量文件与中间结论塞满。</p>
+      <div class="meta">
+        <span class="pill">频道：Web Dev Cody</span>
+        <span class="pill">时长：8:39</span>
+        <span class="pill">播放量：约 80,900</span>
+        <span class="pill">主题：Claude Code 子智能体</span>
+      </div>
+      <div class="video-frame">
+        <iframe src="https://www.youtube.com/embed/sNI18nzwgn8" title="Claude Code Subagents are Absolutely Insane" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </header>
+
+    <section class="content-card">
+      <h2>一、问题引入：不是“能不能让 AI 找文件”，而是主线程能不能继续清醒</h2>
+      <p>这个视频的出发点很具体：在 Claude Code 里问“这个项目哪里在做 authentication 或 authorization”，主线程当然可以自己去扫文件、读实现、整理摘要。问题是，这类探索会把大量路径、片段、候选判断和中间失败都塞进同一个上下文窗口。Cody 在演示里先让主线程独立找认证相关代码，然后继续要求它从安全角度审查这些文件。上下文占用从约 9% 增长到约 30%，而后续如果还要修复漏洞，主线程已经带着不少并非每个修复都需要的历史信息。</p>
+      <p>视频真正想讲的是一种工程化分工：把“探索”“审计”“实现”拆给不同的专用 subagent，让它们在各自独立的上下文里完成有限任务，最后只把压缩后的结论交回主线程。主线程不再承担所有浏览、比较和试错，它更像调度器和决策层。对于需要在大型代码库里反复定位、审查和修改的场景，这比单线程聊天更接近一个可管理的工作流。</p>
+      <blockquote>
+        <p>核心判断可以转述为：如果一个子任务只需要局部上下文，就不要让它污染主线程；主线程越短，后续改代码的输出通常越稳定。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：subagent 是“独立上下文的专用工位”</h2>
+      <p>Claude Code 的 subagent 不只是一个提示词模板。它更像一个带角色、模型选择、工具权限和独立上下文窗口的小型工作单元。视频里 Cody 通过 <code>/agents</code> 菜单创建个人 agent，让 Claude Code 先根据自然语言描述生成 agent prompt，再由用户选择可用工具、模型和颜色标识。这样做的实际收益，是把“该怎么搜、该怎么审、该怎么写”的行为约束提前固化，调用时只需要说明目标。</p>
+      <h3>1. 文件查找 agent：快速、轻量、适合广撒网</h3>
+      <p>第一个 agent 是 file finder。它的任务不是改代码，而是围绕一个研究目标找出相关文件，并返回简明路径列表。Cody 给它选择 Haiku，是因为这类任务追求速度和成本：它不需要深度设计能力，只需要能快速遍历、筛选、归纳。对大型项目来说，用多个 file finder 并发扫描不同区域，比让主线程串行读完所有候选文件更容易保持响应速度。</p>
+      <h3>2. 安全审查 agent：用更强模型做判断</h3>
+      <p>第二类 agent 用来审查潜在安全问题。它需要读文件、理解认证逻辑和返回可修复清单，因此 Cody 倾向选择 Opus 这类更强模型。这里的关键不是“越强越好”，而是任务匹配：文件定位可以快，安全判断要稳，修复实现要更注重代码质量。把这些职责分开后，每个 agent 的提示词和模型都能更贴近它要完成的事情。</p>
+      <h3>3. 实现 agent：把修复任务拆成多个局部改动</h3>
+      <p>视频里还创建了一个 clean code architect agent，用于实现安全修复，并强调可维护、可复用、DRY 和工程质量。Cody 的示例是让多个实现 agent 同时处理安全清单中的不同项。每个实现 agent 理论上只需要知道自己负责的漏洞和相关文件，而不必继承前面所有搜索与审计过程。这就是 subagent 在 coding 场景里的主要价值：并行不是唯一收益，局部化上下文才是更大的收益。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤：从一个主线程任务拆成三段流水线</h2>
+      <p>如果把视频里的演示抽象成可复用流程，它不是“多开几个 agent 让它们忙起来”，而是一条有顺序的流水线：先定位范围，再审查风险，最后分派修复。每一步的输出都应该足够短，足够结构化，能让下一步继续工作。</p>
+      <h3>步骤一：先用主线程提出研究目标</h3>
+      <p>示例目标是“列出项目里所有认证或授权相关位置”。这个目标适合拆给 file finder agent，因为它有明确边界：只返回文件和简短说明，不做安全判断，不改代码。一个好的目标描述应该包含范围、输出格式和禁止事项。例如“只要 concise list of files”，能减少 agent 把大段源码或推测塞回主线程的概率。</p>
+      <h3>步骤二：并发启动多个查找 agent</h3>
+      <p>Cody 让 Claude Code 启动五个 file finder agents。它们各自拥有独立上下文，可以同时遍历代码库。视频中他也提醒，更多 agent 往往能更彻底，但并非越多越好。合理做法是按代码库规模、任务风险和模型成本设一个上限。小项目两三个就够，大型 monorepo 可以按模块或边界分派。</p>
+      <h3>步骤三：把查找结果交给审查 agent</h3>
+      <p>拿到认证相关文件后，再让 security vulnerability scanner agents 审查这些文件，并返回可修复清单。这样审查 agent 不需要重新从整个项目开始找，它可以专注于已经定位出的范围。视频里 Cody 对比了主线程审查后的上下文增长：单线程方式到 30%，而多 agent 审查结束后主线程约 16%。这个数字不是普适基准，但说明了一个方向：主线程只接收总结，避免继承所有审查过程。</p>
+      <h3>步骤四：再把修复清单交给实现 agent</h3>
+      <p>最后，clean code architect agents 可以针对不同漏洞并行实现。这里要注意权限和冲突：如果多个 agent 同时改同一文件，合并成本会升高；如果每个任务都能限定到独立文件或独立模块，并行收益会更明显。实践中可以先让 agent 产出修复计划，再由主线程决定哪些可以并行执行，哪些必须串行。</p>
+      <div class="note">工程提醒：subagent 不会自动消除判断责任。它能压缩上下文、提升并行度、提高覆盖率，但主线程仍应负责验收输出、运行测试、处理冲突和控制变更范围。</div>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格：什么时候用主线程，什么时候派 subagent</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>任务类型</th>
+            <th>更适合的执行方式</th>
+            <th>优点</th>
+            <th>主要风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>快速问答、少量文件解释</td>
+            <td>主线程</td>
+            <td>交互成本低，反馈快，不需要额外调度</td>
+            <td>如果问题扩展成多文件探索，上下文会快速变胖</td>
+            <td>保持在主线程内完成，超过 3-5 个文件后再考虑拆分</td>
+          </tr>
+          <tr>
+            <td>代码库范围定位，例如查认证、支付、缓存入口</td>
+            <td>多个 file finder subagents</td>
+            <td>并发覆盖多个区域，主线程只拿压缩后的路径清单</td>
+            <td>agent 之间可能重复搜索，结果需要去重和合并</td>
+            <td>给出明确输出格式：文件路径、理由、置信度，不要源码长摘录</td>
+          </tr>
+          <tr>
+            <td>安全审查、架构风险审查</td>
+            <td>审查型 subagent，通常用更强模型</td>
+            <td>独立上下文能承载更深入推理，主线程少背中间过程</td>
+            <td>可能给出误报或忽略业务约束</td>
+            <td>要求输出“证据 + 风险 + 修复建议”，最后由主线程复核</td>
+          </tr>
+          <tr>
+            <td>多个独立修复项</td>
+            <td>实现型 subagents 分派</td>
+            <td>并行处理，局部上下文更干净，每个 agent 只看相关文件</td>
+            <td>同文件冲突、风格不一致、测试遗漏</td>
+            <td>先按文件边界拆任务，提交前统一 diff、测试和代码审查</td>
+          </tr>
+          <tr>
+            <td>跨模块大重构</td>
+            <td>主线程规划 + 少量 subagent 调研</td>
+            <td>保持统一设计判断，同时利用 subagent 补充事实</td>
+            <td>如果过早并行实现，容易出现不兼容方案</td>
+            <td>先用 subagent 做影响面分析，不急着让它们直接改代码</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：视频里最值得记住的一句话</h2>
+      <blockquote>
+        <p>“这些 agents 使用的是完全独立的上下文窗口，所以它们做的事情不会影响主线程。”</p>
+      </blockquote>
+      <p>这句话是整段演示的中心。很多人理解多 agent 时只盯着“并发更快”，但在 coding agent 场景里，速度只是表层收益。更重要的是上下文隔离：探索文件时产生的大量噪声，不需要跟着进入安全修复；安全审查时的所有候选推理，也不需要污染最终实现。主线程只保留被压缩过的事实、决策和待办项，后续让模型改代码时，它面对的是更小、更相关的输入。</p>
+      <p>这也解释了为什么 Cody 会反复提到 context window。上下文不是越大越好。长上下文能容纳更多材料，但模型对开头和结尾的信息往往更敏感，中间信息容易被弱化。把所有东西都塞进主线程，看似信息充分，实际可能让最重要的修复目标被大量探索痕迹淹没。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <ol class="timestamp-list">
+        <li><span class="time">00:00</span><span>介绍 Claude Code CLI 里的 subagents：用于研究主题、实现变更，并让主上下文保持短而清晰。</span></li>
+        <li><span class="time">00:35</span><span>用主线程查询项目中认证与授权相关位置，说明普通方式会逐步填充上下文窗口。</span></li>
+        <li><span class="time">01:25</span><span>继续让主线程审查安全问题，上下文占用增长到约 30%，引出为什么后续实现会受影响。</span></li>
+        <li><span class="time">02:10</span><span>打开 <code>/agents</code> 菜单，创建第一个用于代码研究和文件查找的个人 agent。</span></li>
+        <li><span class="time">03:05</span><span>配置 file finder agent 的工具权限、模型和标识色，并说明轻量任务可以使用更快模型。</span></li>
+        <li><span class="time">03:45</span><span>创建 clean code architect agent，用于后续实现高质量、可维护的代码修复。</span></li>
+        <li><span class="time">04:45</span><span>要求 Claude Code 启动五个 file finder agents 并行查找认证相关文件。</span></li>
+        <li><span class="time">05:35</span><span>观察多个查找 agent 的输出，说明更多 agent 可能提升覆盖率，但仍需要合并结果。</span></li>
+        <li><span class="time">06:05</span><span>创建 security vulnerability scanner agent，用更强模型审查已定位文件。</span></li>
+        <li><span class="time">06:55</span><span>启动十个安全审查 agents，比较主线程上下文占用明显低于单线程审查方式。</span></li>
+        <li><span class="time">07:45</span><span>把安全清单交给 clean code architect agents，演示把实现任务继续拆分给专用 agent。</span></li>
+        <li><span class="time">08:15</span><span>总结：subagents 适合并行推进工作，也适合保护主线程上下文质量。</span></li>
+      </ol>
+    </section>
+
+    <section class="content-card">
+      <h2>七、落地建议：给工程团队的一套用法</h2>
+      <p>把这个视频用在真实团队里，建议先从“只读 subagent”开始。也就是先创建 file finder、risk reviewer、test mapper 这类只研究不改代码的 agent。它们的输出格式固定为短清单，主线程负责判断是否进入实现阶段。这样即使 agent 漏掉一部分内容，也不会直接制造代码风险。</p>
+      <p>第二步再引入实现型 agent。实现型 agent 应该被约束在非常具体的目标上，例如“只修改登录 token 过期校验”“只补某个 API route 的权限检查”“只为某个 service 增加单元测试”。不要让十个实现 agent 同时对同一批文件自由发挥。并行越强，越需要边界、验收和冲突处理。</p>
+      <p>第三步是建立固定验收流程：主线程在每轮 agent 输出后都要检查 diff、运行测试、确认没有无关修改。视频展示的是能力入口，不是完整软件交付流程。真正可复用的模式应该是：subagent 搜集事实，主线程做决策；subagent 执行局部任务，主线程做集成；subagent 提供候选修复，主线程用测试和 review 收口。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>八、相关推荐</h2>
+      <p>如果你想把这节课放进更完整的 Agent 工程路线里，可以继续看下面几篇课程页：</p>
+      <div class="related-grid">
+        <a class="related-card" href="index.html">
+          <span>课程列表</span>
+          <strong>返回 YouTube 技术课程首页</strong>
+        </a>
+        <a class="related-card" href="mWvtOHlZM-I.html">
+          <span>Agent 架构</span>
+          <strong>工具、技能还是子智能体？拆解一个过度膨胀的 Agent</strong>
+        </a>
+        <a class="related-card" href="cGuyrANVi4A.html">
+          <span>MCP 协议</span>
+          <strong>MCP 到底如何工作：给 AI 应用开发者的协议拆解</strong>
+        </a>
+        <a class="related-card" href="vDVSGVpB2vc.html">
+          <span>Claude Agent Teams</span>
+          <strong>如何组建 Claude Agent Teams</strong>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
