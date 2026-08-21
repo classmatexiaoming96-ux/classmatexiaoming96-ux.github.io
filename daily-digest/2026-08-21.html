@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-21</title>
+<meta name="description" content="今天的主线是智能体从演示继续走向平台化和可审计工程：Claude Platform 补齐 Computer Use、Skills 和 Files API，Mistral 把检索做成多步 agentic search，Qwen-UI-Agent 指向真实屏幕操作，论文则集中讨论工具使用、任务模型、模型">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-21</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 83 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是智能体从演示继续走向平台化和可审计工程：Claude Platform 补齐 Computer Use、Skills 和 Files API，Mistral 把检索做成多步 agentic search，Qwen-UI-Agent 指向真实屏幕操作，论文则集中讨论工具使用、任务模型、模型路由与技能迁移。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">5</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">6</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">3</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://claude.com/blog/computer-use-skills-api-files-api" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Claude Platform 上线 Computer Use、Skills API 与 Files API</h3>
+        <p>Anthropic 将 Computer Use、Skills API 和 Files API 推到 Claude Platform，并新增浏览器操作工具。重点不只是多几个 API，而是把“能操作软件、能调用团队技能、能产出文件”的 agent 工作流合到同一平台层。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://mistral.ai/news/agentic-search" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Mistral 推出 Agentic Search，用多步工具循环处理复杂文档查询</h3>
+        <p>Mistral 的 Agentic Search 让模型围绕 search、open、navigate、read、grep 等工具循环检索、定位和核验信息。它把 RAG 从一次性召回推进到可追踪的多步检索流程，更适合合同、政策、知识库等长文档场景。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://www.ithome.com/0/992/239.htm" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>阿里发布 Qwen-UI-Agent，瞄准真实屏幕操作</h3>
+        <p>Qwen-UI-Agent 被定位为 GUI 智能体基座模型，覆盖移动端、电脑端、网页端和 DeepSearch 环境。相比只理解截图的模型，它更强调跨屏幕、跨应用的操作链路，是 computer-use agent 竞争里的重要国产信号。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>25</b> 条精选信号<i></i><b>9</b> 个原始来源<i></i><b>54</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=cs.AI" target="_top">cs.AI</a>
+        <a href="topics.html?topic=cs.CL" target="_top">cs.CL</a>
+        <a href="topics.html?topic=RAG" target="_top">RAG</a>
+        <a href="topics.html?topic=AI%20Coding" target="_top">AI Coding</a>
+        <a href="topics.html?topic=%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7" target="_top">开发工具</a>
+        <a href="topics.html?topic=Agent%20%E5%B9%B3%E5%8F%B0" target="_top">Agent 平台</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="anthropic-claude-platform-computer-use-skills-files-api-2026-08-20" href="https://claude.com/blog/computer-use-skills-api-files-api" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>Claude Platform 上线 Computer Use、Skills API 与 Files API</h3>
+      <p>Anthropic 将 Computer Use、Skills API 和 Files API 推到 Claude Platform，并新增浏览器操作工具。重点不只是多几个 API，而是把“能操作软件、能调用团队技能、能产出文件”的 agent 工作流合到同一平台层。</p>
+      <div class="src">◷ <b>Claude Blog</b> <span class="dotsep">·</span> 8 月 20 日</div>
+      <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Agent 平台</span><span class="signal-badge topic">工具调用</span><span class="signal-badge topic">Claude</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="mistral-agentic-search-multistep-document-query-2026-08-20" href="https://mistral.ai/news/agentic-search" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Mistral 推出 Agentic Search，用多步工具循环处理复杂文档查询</h4>
+          <p>Mistral 的 Agentic Search 让模型围绕 search、open、navigate、read、grep 等工具循环检索、定位和核验信息。它把 RAG 从一次性召回推进到可追踪的多步检索流程，更适合合同、政策、知识库等长文档场景。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Mistral AI</b> <span class="dotsep">·</span> 8 月 20 日 <span class="dotsep">·</span> <span class="tag">检索</span></div>
+          <div class="item-signals"><span class="signal-badge topic">RAG</span><span class="signal-badge topic">Agentic Search</span><span class="signal-badge topic">企业检索</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="qwen-ui-agent-real-world-gui-foundation-2026-08-20" href="https://www.ithome.com/0/992/239.htm" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>阿里发布 Qwen-UI-Agent，瞄准真实屏幕操作</h4>
+          <p>Qwen-UI-Agent 被定位为 GUI 智能体基座模型，覆盖移动端、电脑端、网页端和 DeepSearch 环境。相比只理解截图的模型，它更强调跨屏幕、跨应用的操作链路，是 computer-use agent 竞争里的重要国产信号。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">IT之家</b> <span class="dotsep">·</span> 8 月 20 日 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">GUI Agent</span><span class="signal-badge topic">Qwen</span><span class="signal-badge topic">多端操作</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="google-alloydb-scann-four-level-tree-10b-vectors-2026-08-20" href="https://cloud.google.com/blog/products/databases/alloydb-scann-index-four-level-tree-improves-vector-search" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AlloyDB ScaNN 用四层树把向量搜索扩到 100 亿向量</h4>
+          <p>Google Cloud 介绍 AlloyDB ScaNN 的四层树预览架构，将大规模向量搜索复杂度从 O(N^1/2) 降到 O(N^1/4)。对企业 RAG 来说，这类数据库内向量检索比单独向量库更容易和事务数据、权限与运维体系结合。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google Cloud</b> <span class="dotsep">·</span> 8 月 20 日 <span class="dotsep">·</span> <span class="tag">基础设施</span></div>
+          <div class="item-signals"><span class="signal-badge topic">向量数据库</span><span class="signal-badge topic">RAG 基础设施</span><span class="signal-badge topic">Google Cloud</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="aws-agentic-ai-enterprise-patterns-no-vendor-lockin-2026-08-21" href="https://aws.amazon.com/blogs/machine-learning/scaling-agentic-ai-enterprise-patterns-without-vendor-lock-in/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>AWS 总结无厂商锁定的企业级 Agentic AI 模式</h4>
+          <p>AWS 文章聚焦企业如何扩展 agentic AI：把工具、检索、权限、监控与模型选择拆成可替换组件。今天多家平台都在推 agent 能力，这类架构模式的价值在于提醒团队先设计边界，而不是把业务流程锁死在单一供应商里。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Amazon Web Services</b> <span class="dotsep">·</span> 8 月 21 日 <span class="dotsep">·</span> <span class="tag">企业</span></div>
+          <div class="item-signals"><span class="signal-badge topic">企业 Agent</span><span class="signal-badge topic">云架构</span><span class="signal-badge topic">治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-20319-task-models-computer-use-traces" href="https://arxiv.org/abs/2608.20319v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Inducing Task Models from Computer-Use Traces</h4>
+          <p><b>为什么值得看：</b>这篇把 computer-use agent 的“操作轨迹”转成可审计、可复用的任务模型，解决的是企业真正落地时最缺的流程抽象问题。它比简单总结截图/点击更进一步，尝试从交错的真实工作流里分离潜在任务。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yucheng Jiang, Zora Zhiruo Wang, Ruishi Chen 等</b> <span class="dotsep">·</span> 2026-08-20 <span class="dotsep">·</span> <span class="tag">cs.CL · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.CL</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-20314-midtool-agentic-tool-use-midtraining" href="https://arxiv.org/abs/2608.20314v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>MidTool: Mid-training Data Synthesis for Agentic Tool Use</h4>
+          <p><b>为什么值得看：</b>MidTool 把工具 API、MCP skills 和文档工作流合成进 mid-training 数据，直指通用工具使用能力而不是单一软件工程 benchmark。对做小模型 agent 或企业私有模型的团队，数据构造方法比单个分数更值得看。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Fengqing Jiang, Yite Wang, Boyi Liu 等</b> <span class="dotsep">·</span> 2026-08-20 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-20318-ai4ai-bench-algorithmic-design-rsi" href="https://arxiv.org/abs/2608.20318v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AI4AI-Bench: Benchmarking LLM Agents in Algorithmic Design for Recursive Self-Improvement</h4>
+          <p><b>为什么值得看：</b>它把“AI 能否改进训练算法”从口号变成可运行的 benchmark：agent 必须在固定代码库里改训练算法，再从头重跑验证。对评估递归自我改进风险和能力边界，比只看论文问答更有操作性。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yizhe Chi, Wenyi Li, Deyao Hong 等</b> <span class="dotsep">·</span> 2026-08-20 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cs.CL</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-20316-pandora-ai-model-routing-costly-value-estimation" href="https://arxiv.org/abs/2608.20316v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Pandora&#x27;s AI Model Routing Box: Efficient Allocation with Costly Value Estimation</h4>
+          <p><b>为什么值得看：</b>模型路由常被简化成“便宜模型先试、贵模型兜底”，但这篇把估计每个模型价值本身的成本也纳入决策。对多模型 agent、推理预算控制和企业网关很实用。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Adam Fisch, Shubhendu Trivedi, Fantine Huot 等</b> <span class="dotsep">·</span> 2026-08-20 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-20274-cross-task-skill-transfer-llm-agents" href="https://arxiv.org/abs/2608.20274v1" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Break It Down, Pass It On: Cross-Task Skill Transfer in LLM Agents</h4>
+          <p><b>为什么值得看：</b>这篇直接回应 agent memory/skills 的核心问题：学到的技能什么时候会迁移，什么时候反而拖累性能。结论强调子任务级技能和文本技能更稳，能指导团队设计可复用 skill 库。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yiyang Feng, Biddut Sarker Bijoy, Niranjan Balasubramanian 等</b> <span class="dotsep">·</span> 2026-08-20 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cs.CL</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-ai-increased-junior-engineer-value-2026-08-21" href="https://franciscotrindade.me/blog/the-kids-are-really-alright/" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>AI 没有抹掉初级工程师价值，反而改变了价值位置</h4>
+          <p>这篇文章的讨论焦点是：AI 让初级工程师少做机械实现，但也放大了读代码、提问题、验证输出和理解业务的价值。社区分歧在于公司是否愿意继续培养这些能力。</p>
+          <div class="quote">“代表性观点：AI 可以替代部分打字，但替代不了把模糊需求变成正确软件的学习过程。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 79 <span class="dotsep">·</span> 💬 137</div>
+          <div class="item-signals"><span class="signal-badge topic">软件团队</span><span class="signal-badge topic">职业发展</span><span class="signal-badge topic">AI Coding</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-huzzah-ai-coding-approach-2026-08-21" href="https://www.danielvaughn.dev/posts/huzzah/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Huzzah：一种新的 AI 编码工作方式引发讨论</h4>
+          <p>Huzzah 的文章在 Show HN 和 HN 主站都引发高讨论，核心不是又一个编辑器，而是开发者如何把 AI 生成、人工判断和可维护代码放进同一流程。</p>
+          <div class="quote">“代表性观点：好的 AI 编码流程不该只追求生成速度，还要让人能理解每一步。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 227 <span class="dotsep">·</span> 💬 134</div>
+          <div class="item-signals"><span class="signal-badge topic">AI Coding</span><span class="signal-badge topic">开发流程</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-vomit-clean-claude-token-output-2026-08-21" href="https://github.com/zachahn/vomit" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Vomit：用另一个 LLM 清理 Claude 输出引发吐槽与共鸣</h4>
+          <p>这个项目用一个额外 LLM 清理 Claude 的 token 输出，名字很戏谑，但讨论点严肃：模型输出后处理已经成为工具链的一部分，尤其在长输出和 coding 场景里。</p>
+          <div class="quote">“代表性观点：当模型输出越来越像中间产物，清理和压缩层也会变成基础设施。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 195 <span class="dotsep">·</span> 💬 209</div>
+          <div class="item-signals"><span class="signal-badge topic">LLM 输出治理</span><span class="signal-badge topic">开发工具</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-every-model-cheats-cyber-benchmark-2026-08-21" href="https://dreadnode.io/research/every-model-cheats-prompt-level-mitigation-of-cheating-on-offensive-cyber-tasks/" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Every Model Cheats：攻防评测里的模型作弊问题</h4>
+          <p>Dreadnode 文章讨论 offensive cyber tasks 中的 prompt-level cheating 缓解。它提醒评测不只是出题，还要防止模型利用提示、环境或评分机制的漏洞拿到虚假高分。</p>
+          <div class="quote">“代表性观点：如果 benchmark 环境能被钻空子，分数提升未必代表真实能力提升。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 81 <span class="dotsep">·</span> 💬 64</div>
+          <div class="item-signals"><span class="signal-badge topic">评测</span><span class="signal-badge topic">安全</span><span class="signal-badge topic">模型行为</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-copyright-ai-generated-content-eu-2026-08-21" href="https://mathstodon.xyz/@maxpool/117128107757895678" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>欧盟语境下 AI 生成内容的版权保护边界引发讨论</h4>
+          <p>讨论围绕“AI 生成内容是否受版权保护”展开，焦点不是单个司法结论，而是创作者、平台和企业在使用生成内容时如何证明人类创造性贡献。</p>
+          <div class="quote">“代表性观点：AI 内容的法律风险不只在训练数据，也在最终作品能否证明有人类作者性。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 134 <span class="dotsep">·</span> 💬 112</div>
+          <div class="item-signals"><span class="signal-badge topic">版权</span><span class="signal-badge topic">AI 法规</span><span class="signal-badge topic">内容产业</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-anti-ai-fonts-useless-harmful-2026-08-21" href="https://blog.yaros.ae/anti-ai-fonts-are-useless-and-harmful/" target="_blank" rel="noopener">
+        <div class="idx">06</div>
+        <div class="body">
+          <h4>Anti-AI fonts 被批无用且有害</h4>
+          <p>文章反驳用特殊字体阻止 AI 抓取或识别的做法，认为这类方案容易伤害无障碍访问和真实用户，却很难真正挡住模型管线。</p>
+          <div class="quote">“代表性观点：把内容做坏来对抗 AI，通常先惩罚的是人类读者。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 119 <span class="dotsep">·</span> 💬 82</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 检测</span><span class="signal-badge topic">内容治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="product-anthropic-claude-academy-ai-fluency-2026-08-20" href="https://claude.com/blog/anthropics-approach-to-teaching-and-learning-ai" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎓</span>
+          <h4>Claude Academy / AI Fluency</h4>
+        </div>
+        <p class="tagline">把内部 AI 使用训练方法产品化给更广泛用户。</p>
+        <p>Anthropic 强调 4D AI Fluency Framework 和持续学习，不教固定按钮，而是训练用户围绕问题、协作、验证和责任使用 AI。</p>
+        <div><span class="tag">教育</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 教育</span><span class="signal-badge topic">Claude Academy</span><span class="signal-badge topic">组织培训</span></div>
+      </a>
+      <a class="card" data-event-key="product-grok-build-everyone-web-mobile-2026-08-19" href="https://x.ai/news/grok-build-for-everyone" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧪</span>
+          <h4>Grok Build 全面开放</h4>
+        </div>
+        <p class="tagline">网页与移动端所有套餐可用，生成应用后可发布分享。</p>
+        <p>用户描述应用、游戏或网站后，Grok 可在聊天中生成可运行版本，并支持发布链接、自定义域名和导出到 GitHub。</p>
+        <div><span class="tag">应用生成</span></div>
+        <div class="item-signals"><span class="signal-badge topic">应用生成</span><span class="signal-badge topic">xAI</span><span class="signal-badge topic">低代码</span></div>
+      </a>
+      <a class="card" data-event-key="product-on-device-125m-midi-autocomplete-2026-08-20" href="https://simedw.com/2026/08/20/midi-autocomplete/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🎹</span>
+          <h4>125M on-device MIDI autocomplete</h4>
+        </div>
+        <p class="tagline">一个在本地设备上补全钢琴 MIDI 的小模型实验。</p>
+        <p>它不是大模型竞赛，而是展示小参数模型在端侧创作工具里的可用性：低延迟、隐私友好，也更容易嵌入具体创作软件。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">端侧模型</span><span class="signal-badge topic">音乐生成</span><span class="signal-badge topic">Show HN</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-modular-modular-2026-08-21" href="https://github.com/modular/modular" target="_blank" rel="noopener">
+      <div>
+        <div class="name">modular / <b>modular</b></div>
+        <div class="desc">MAX 与 Mojo 所在的 Modular 平台仓库，Mojo 开源后继续在 AI 编译器和高性能推理基础设施方向吸引关注。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#ff4c1f"></span>Mojo</span> <span class="dotsep">·</span> <span class="tag">AI Infra</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Mojo</span><span class="signal-badge topic">AI 编译器</span><span class="signal-badge topic">基础设施</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 28,020</div>
+        <div class="today">▲ 268 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-cursor-plugins-2026-08-21" href="https://github.com/cursor/plugins" target="_blank" rel="noopener">
+      <div>
+        <div class="name">cursor / <b>plugins</b></div>
+        <div class="desc">Cursor 插件规范与官方插件仓库，值得关注其是否会把 AI IDE 的能力扩展开放成稳定生态接口。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">AI IDE</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Cursor</span><span class="signal-badge topic">插件系统</span><span class="signal-badge topic">开发工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 4,115</div>
+        <div class="today">▲ 449 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-agent-substrate-substrate-2026-08-21" href="https://github.com/agent-substrate/substrate" target="_blank" rel="noopener">
+      <div>
+        <div class="name">agent-substrate / <b>substrate</b></div>
+        <div class="desc">Agent Substrate 的核心系统仓库，定位为 agent 运行底座，适合跟踪 agent runtime 如何抽象任务、状态和工具边界。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Agent Runtime</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Runtime</span><span class="signal-badge topic">系统底座</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 1,422</div>
+        <div class="today">▲ 22 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-posthog-posthog-ai-observability-2026-08-21" href="https://github.com/PostHog/posthog" target="_blank" rel="noopener">
+      <div>
+        <div class="name">PostHog / <b>posthog</b></div>
+        <div class="desc">PostHog 将 AI observability、analytics、session replay、flags、logs 等上下文打包给 agent 用于诊断和发版。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Observability</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI Observability</span><span class="signal-badge topic">产品分析</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 38,025</div>
+        <div class="today">▲ 60 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-tencent-ai-infra-guard-2026-08-21" href="https://github.com/Tencent/AI-Infra-Guard" target="_blank" rel="noopener">
+      <div>
+        <div class="name">Tencent / <b>AI-Infra-Guard</b></div>
+        <div class="desc">面向 AI 生态的全栈红队平台，覆盖 Agent Scan、Skills Scan、MCP Scan、AI Infra Scan 与 jailbreak 评估。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">AI Security</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">Red Team</span><span class="signal-badge topic">MCP 扫描</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 5,017</div>
+        <div class="today">▲ 50 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-ryancodrai-turbovec-2026-08-21" href="https://github.com/RyanCodrai/turbovec" target="_blank" rel="noopener">
+      <div>
+        <div class="name">RyanCodrai / <b>turbovec</b></div>
+        <div class="desc">基于 TurboQuant 的 Rust 向量索引，并提供 Python bindings，可作为轻量 RAG/检索系统的底层组件观察。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#dea584"></span>Rust</span> <span class="dotsep">·</span> <span class="tag">Vector</span></div>
+        <div class="item-signals"><span class="signal-badge topic">向量索引</span><span class="signal-badge topic">Rust</span><span class="signal-badge topic">RAG</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 15,970</div>
+        <div class="today">▲ 230 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-21 10:46 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
