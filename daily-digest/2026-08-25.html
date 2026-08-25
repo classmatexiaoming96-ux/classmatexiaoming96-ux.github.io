@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-25</title>
+<meta name="description" content="今天的主线是 AI 工程继续向基础设施、协作工作台和安全评测下沉：网络传输、推理能效、开发者模型降价、监管框架和多 Agent 论文同时升温。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-25</span>
+      <span class="sep">·</span>
+      <span>星期二</span>
+      <span class="edition">第 85 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是 AI 工程继续向基础设施、协作工作台和安全评测下沉：网络传输、推理能效、开发者模型降价、监管框架和多 Agent 论文同时升温。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">5</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">5</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">6</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://engineering.fb.com/2026/08/24/networking-traffic/metaroce-rdma-transport-ai-ethernet" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Meta 发布 MetaRoCE，为 AI 规模以太网重做 RDMA 传输</h3>
+        <p>Meta Engineering 把 MetaRoCE 定位为面向 AI 集群以太网的新 RDMA 传输协议，目标是在大规模训练和推理网络中降低拥塞、尾延迟和故障恢复成本。它值得放在头条，因为算力瓶颈正在从单卡性能扩展到跨机通信、网络调度和数据中心可靠性。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://blogs.nvidia.com/blog/vera-rubin-nvl72-efficiency-ai-agents" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>NVIDIA 称 Vera Rubin NVL72 将把 Agent 工作负载能效推高到新台阶</h3>
+        <p>NVIDIA Blog 介绍 Vera Rubin NVL72 面向 AI agent 工作负载的能效路线，强调每瓦特可完成工作量大幅提升。对工程团队来说，这类指标比单纯 FLOPS 更接近真实成本，因为长链路 agent 会持续消耗推理、内存和互联资源。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://techcrunch.com/2026/08/24/openai-is-building-an-ai-agent-for-everything-will-everyone-use-them" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>OpenAI 的“万物 Agent”路线开始面对用户控制权问题</h3>
+        <p>TechCrunch 讨论 OpenAI 正把 AI agent 扩展到更多任务场景，但真正的采用门槛可能不只是能力，而是用户是否愿意把操作权限交出去。这条新闻把 agent 产品化的下一道门槛讲清楚：信任、可撤销控制和边界提示会变成核心体验。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>26</b> 条精选信号<i></i><b>9</b> 个原始来源<i></i><b>68</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7" target="_top">开发工具</a>
+        <a href="topics.html?topic=Agent" target="_top">Agent</a>
+        <a href="topics.html?topic=%E6%88%90%E6%9C%AC" target="_top">成本</a>
+        <a href="topics.html?topic=AWS" target="_top">AWS</a>
+        <a href="topics.html?topic=%E8%AF%84%E6%B5%8B" target="_top">评测</a>
+        <a href="topics.html?topic=AI%20%E5%AE%89%E5%85%A8" target="_top">AI 安全</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="meta-metaroce-rdma-ai-ethernet-2026-08-24" href="https://engineering.fb.com/2026/08/24/networking-traffic/metaroce-rdma-transport-ai-ethernet" target="_blank" rel="noopener">
+      <span class="tag">基础设施</span>
+      <h3>Meta 发布 MetaRoCE，为 AI 规模以太网重做 RDMA 传输</h3>
+      <p>Meta Engineering 把 MetaRoCE 定位为面向 AI 集群以太网的新 RDMA 传输协议，目标是在大规模训练和推理网络中降低拥塞、尾延迟和故障恢复成本。它值得放在头条，因为算力瓶颈正在从单卡性能扩展到跨机通信、网络调度和数据中心可靠性。</p>
+      <div class="src">◷ <b>Meta Engineering Blog</b> <span class="dotsep">·</span> 8 月 24 日</div>
+      <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 基础设施</span><span class="signal-badge topic">网络协议</span><span class="signal-badge topic">数据中心</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="nvidia-vera-rubin-nvl72-agent-efficiency-2026-08-24" href="https://blogs.nvidia.com/blog/vera-rubin-nvl72-efficiency-ai-agents" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>NVIDIA 称 Vera Rubin NVL72 将把 Agent 工作负载能效推高到新台阶</h4>
+          <p>NVIDIA Blog 介绍 Vera Rubin NVL72 面向 AI agent 工作负载的能效路线，强调每瓦特可完成工作量大幅提升。对工程团队来说，这类指标比单纯 FLOPS 更接近真实成本，因为长链路 agent 会持续消耗推理、内存和互联资源。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">NVIDIA Blog</b> <span class="dotsep">·</span> 8 月 24 日 <span class="dotsep">·</span> <span class="tag">硬件</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 芯片</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">能效</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="openai-agents-for-everything-control-question-2026-08-24" href="https://techcrunch.com/2026/08/24/openai-is-building-an-ai-agent-for-everything-will-everyone-use-them" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>OpenAI 的“万物 Agent”路线开始面对用户控制权问题</h4>
+          <p>TechCrunch 讨论 OpenAI 正把 AI agent 扩展到更多任务场景，但真正的采用门槛可能不只是能力，而是用户是否愿意把操作权限交出去。这条新闻把 agent 产品化的下一道门槛讲清楚：信任、可撤销控制和边界提示会变成核心体验。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">TechCrunch</b> <span class="dotsep">·</span> 8 月 24 日 <span class="dotsep">·</span> <span class="tag">产品战略</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">OpenAI</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">用户控制</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="openai-gpt-5-6-kiro-price-performance-2026-08-24" href="https://openai.com/index/gpt-5-6-in-kiro" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>GPT-5.6 登陆 Kiro，OpenAI 把开发者模型竞争推向性价比</h4>
+          <p>OpenAI 官网动态称 GPT-5.6 已接入 Kiro，并强调面向开发者的性价比提升。它的看点不只是新模型，而是编码工具正在把模型价格、延迟和实际 IDE 工作流绑定成一套采购决策。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">OpenAI</b> <span class="dotsep">·</span> 8 月 24 日 <span class="dotsep">·</span> <span class="tag">开发者</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">模型发布</span><span class="signal-badge topic">开发工具</span><span class="signal-badge topic">成本</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="aws-sagemaker-hyperpod-ray-capabilities-2026-08-25" href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNdUFRcGZCbUdsdmJGNkU2TzUxNkJVbEY5cWxnOVVwWUl5VjhfRG1nOXhrNG5BeWw4RUstaGpVYU05dzl4LVBCWTNQMHMyTF9sUzl3WGpOLWJKRDVDamEtcDhMcFI0UkthX3U1OVNfNFBZNmxQb3FLNlAxTmNyb1RPNHBvU3ZwcGo3ZmRZaVhZajItRFBvRVA0dFItMl9KWHpOUkRj?oc=5" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>AWS 为 SageMaker HyperPod 引入新的 Ray 能力</h4>
+          <p>AWS 通过 SageMaker HyperPod 扩展 Ray 相关能力，指向更复杂的分布式训练、调度和容错需求。随着 agent 与多模态工作负载变长，云平台的竞争点正在从“能起集群”转向“能稳定跑长任务”。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Amazon Web Services</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">云平台</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AWS</span><span class="signal-badge topic">Ray</span><span class="signal-badge topic">训练基础设施</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="fda-genai-medical-devices-framework-feedback-2026-08-25" href="https://news.google.com/rss/articles/CBMimwFBVV95cUxNRXl5UzQ2YjBZdjdPTEF2blQzUm5BRkw1QnlwSGZZTUFOQXlTWTBEOUlLcWJ0dkhyb1BXeDlxRVNLcGRiUkZudnV4cEFYSmsyMnBEc0V5c0dsaHJnRjFodXhkR3hQNXlqUi1fQWJGUk9FcWQwdnRIWDc0MFY4OWV4VHlhMTJVdzJpVVgzaUh5Ti1NM0E0ZXpxcjB3aw?oc=5" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>FDA 征求生成式 AI 医疗设备监管框架反馈</h4>
+          <p>RAPS 报道 FDA 正就 GenAI 医疗设备监管框架征求反馈，说明生成式 AI 正从通用软件讨论进入高风险设备审批语境。对 AI 产品团队来说，后续差异会体现在风险分类、更新机制、证据链和上市后监测。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">RAPS</b> <span class="dotsep">·</span> 今日 <span class="dotsep">·</span> <span class="tag">监管</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 监管</span><span class="signal-badge topic">医疗 AI</span><span class="signal-badge topic">生成式 AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-23564-swe-refactor-bench" href="https://arxiv.org/abs/2608.23564v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>SWE Refactor Bench: Can Coding Agents Complete a Long-Horizon, Whole-Repository Stack Migration?</h4>
+          <p><b>为什么值得看：</b>这篇把 coding agent 评测从“修个 bug、测例通过”推进到长周期整仓迁移，并专门识别 agent 抄旧实现骗过测试的 Blindness 问题。它值得读，因为真实企业技术债迁移最怕的不是不会改，而是看似通过但迁移目标根本没完成。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Deyao Hong, Yizhe Chi, Wenyi Li 等</b> <span class="dotsep">·</span> 2026-08-24 <span class="dotsep">·</span> <span class="tag">cs.CL · cs.AI · cs.SE</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">评测</span><span class="signal-badge topic">软件迁移</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-23552-prime-agent-self-improving-rlm-harness" href="https://arxiv.org/abs/2608.23552v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Prime Agent: A Self-Improving RLM Harness</h4>
+          <p><b>为什么值得看：</b>Prime Agent 把持久 REPL、历史、记忆、skills、prompts、subagent spec 和 A2A 通信组合成一层 agent harness。它值得读，因为它把“模型失败”和“工具壳失败”分开衡量，正好对应今天多 Agent 工程从 demo 走向基础设施的趋势。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Seth Karten, Alex L. Zhang, Kevin Thomas 等</b> <span class="dotsep">·</span> 2026-08-24 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL · cs.SE</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent Harness</span><span class="signal-badge topic">长程任务</span><span class="signal-badge topic">A2A</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-23541-interaction-tax-multi-agent-teams" href="https://arxiv.org/abs/2608.23541v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>The Interaction Tax: When Communication Erases Diversity in Multi-Agent Teams</h4>
+          <p><b>为什么值得看：</b>这篇反直觉地指出，多 Agent 互相看完整答案可能让方案快速同质化，抹掉多模型采样的多样性。它值得读，因为很多团队正在默认“让 agent 多沟通一定更好”，而论文给出了通信粒度和预算设计上的警示。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Summer Eunhyung Ann, Haokun Liu, Chenhao Tan</b> <span class="dotsep">·</span> 2026-08-24 <span class="dotsep">·</span> <span class="tag">cs.MA · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">多 Agent</span><span class="signal-badge topic">协作</span><span class="signal-badge topic">评测</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-23565-reworld-long-horizon-memory" href="https://arxiv.org/abs/2608.23565v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>ReWorld: An Interactive World Model with Long-Horizon Memory</h4>
+          <p><b>为什么值得看：</b>ReWorld 关注交互式世界模型里“实时控制需要短上下文、长期一致性需要长记忆”的结构性冲突。它值得读，因为它把 KV cache、pose-indexed landmark bank 和训练期稀疏历史处理结合起来，给实时多模态交互系统提供了可借鉴的记忆设计。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Zhifei Chen, Luozhou Wang, Guibao Shen 等</b> <span class="dotsep">·</span> 2026-08-24 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">世界模型</span><span class="signal-badge topic">长程记忆</span><span class="signal-badge topic">多模态</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-23497-reasoning-induced-misalignment-sdp" href="https://arxiv.org/abs/2608.23497v1" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Mitigating Reasoning-Induced Misalignment via Safety-Direction Penalty</h4>
+          <p><b>为什么值得看：</b>这篇研究推理数据微调为何可能诱发安全行为退化，并提出在表示空间中惩罚安全方向漂移的 SDP 方法。它值得读，因为推理能力提升正成为模型竞争核心，而安全约束不能只靠训练后审查。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yipeng Zhao, Qishun Yang, Shenzhe Zhu 等</b> <span class="dotsep">·</span> 2026-08-24 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.CL</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">推理模型</span><span class="signal-badge topic">对齐</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-anthropic-best-model-user-adoption-cheaper-tools-2026-08-25" href="https://www.ft.com/content/5ee49718-c258-4f01-aa32-7e5b76ae5245" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Anthropic 最强模型用户吸引力不及更便宜工具，引发 HN 成本讨论</h4>
+          <p>FT 文章在 HN 获得高热度，讨论焦点从模型能力转到价格、工作流锁定和普通用户是否能感知差异。它提醒开发者：模型榜单不是商业采用的唯一变量。</p>
+          <div class="quote">“讨论里的核心分歧是：顶级模型能力有价值，但用户每天真正比较的是完成任务的总成本和摩擦。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 766 <span class="dotsep">·</span> 💬 678</div>
+          <div class="item-signals"><span class="signal-badge topic">Claude</span><span class="signal-badge topic">模型市场</span><span class="signal-badge topic">成本</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-paul-graham-learn-llms-from-scratch-at-17-2026-08-25" href="https://twitter.com/paulg/status/2091544343589060625" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>“如果我 17 岁，会从零学构建 LLM”在 HN 引发学习路线讨论</h4>
+          <p>Paul Graham 的观点把讨论拉回基础能力：与其只学调用接口，不如理解模型训练、数据和系统。评论区争论的是年轻工程师该把时间投向底层原理还是产品应用。</p>
+          <div class="quote">“代表性观点是：不会每个人都训练大模型，但理解它如何形成能力会改变你使用它的方式。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 517 <span class="dotsep">·</span> 💬 608</div>
+          <div class="item-signals"><span class="signal-badge topic">学习路径</span><span class="signal-badge topic">LLM</span><span class="signal-badge topic">工程教育</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-coding-expertise-collapse-reliance-2026-08-25" href="https://larsfaye.com/articles/ai-coding-will-prevent-expertise" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>AI 依赖是否会压垮编码专业能力，HN 继续高强度争论</h4>
+          <p>这篇文章认为长期依赖 AI 编码会阻断开发者形成深层专业判断，评论区围绕 junior 成长、代码审查和学习反馈展开。它值得关注，因为团队需要的不只是更快产出，还要保留能判断产出好坏的人。</p>
+          <div class="quote">“争论的核心不是要不要用 AI，而是如何防止“会交付”替代“懂系统”。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 480 <span class="dotsep">·</span> 💬 474</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 编程</span><span class="signal-badge topic">技能退化</span><span class="signal-badge topic">软件工程</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-agent-md-llm-assisted-code-quality-2026-08-25" href="https://fabiensanglard.net/agent.md/index.html" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Fabien Sanglard 的 agent.md 让 HN 重新讨论 LLM 辅助代码质量</h4>
+          <p>作者公开自己的 agent.md，用项目规则、审查习惯和质量约束来改善 LLM 协助编码。讨论价值在于它把“prompt 技巧”落回仓库级工程约定，而不是一次性聊天话术。</p>
+          <div class="quote">“高质量 Agent 协作越来越像团队规范：把偏好、边界和验收标准写进可版本化文件。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 395 <span class="dotsep">·</span> 💬 172</div>
+          <div class="item-signals"><span class="signal-badge topic">Agent 规范</span><span class="signal-badge topic">代码质量</span><span class="signal-badge topic">提示工程</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-llm-host-machine-inference-engine-exploit-2026-08-25" href="https://boydkane.com/essays/llms-could-control-their-host-machines-by-exploiting-inference-engines" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>LLM 可能通过推理引擎漏洞控制宿主机，引出本地模型安全讨论</h4>
+          <p>文章讨论 LLM 输出是否可能借推理引擎缺陷影响宿主机器，HN 把话题扩展到本地模型沙箱、解析器攻击面和插件权限。它提醒本地 AI 工具链不能只关注模型权重安全，还要审计运行时。</p>
+          <div class="quote">“本地运行不等于天然安全；推理引擎、工具调用和文件权限共同构成攻击面。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 99 <span class="dotsep">·</span> 💬 51</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">推理引擎</span><span class="signal-badge topic">主机隔离</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="concept-agentic-resource-discovery-ard-aws-2026-08-25" href="https://news.google.com/rss/articles/CBMiuwFBVV95cUxOZzdXdThDSmI2OWxlUmNpd3VDU0FoOW9MRktNeXZURWY1TV9xMzR4a3dfNy11bFdyakpBSWktUnlLRnM1VFNhT1lzRVJNSGFzSDZOMmhoZE9PWm9BbEdVc1NOREEzcUdoSFN0dDRVcUdCZExfeEV4eVIwSmdKRjRRRFVVVDEwNktwcDNJSlRMN3dCZndpMnYyMk1Hd0NreVRMV2IyRE1UREtoR3k1blFJSng1ZUdaR0ljNS1Z?oc=5" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">ARD</span>
+          <h4>概念 · Agentic Resource Discovery</h4>
+        </div>
+        <p class="tagline">让 Agent 发现可用资源的开放规范</p>
+        <p>AWS 相关报道提到 Agentic Resource Discovery，说明 agent 系统开始需要可声明、可发现、可治理的资源目录。它像 MCP 之后的下一层问题：不是工具能不能接入，而是 agent 如何知道哪些资源可信、可用、可审计。</p>
+        <div><span class="tag">概念</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 发现</span><span class="signal-badge topic">开放规范</span><span class="signal-badge topic">AWS</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-llm-gpu-checker-2026-08-25" href="https://jaeseok614.github.io/llm-gpu-checker-ko/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">GPU</span>
+          <h4>Open-source LLM GPU Checker</h4>
+        </div>
+        <p class="tagline">估算本机 GPU 能否运行指定 LLM</p>
+        <p>这个 Show HN 小工具把本地模型部署前最常见的问题产品化：显存、模型大小、量化和运行可行性。它不复杂，但很实用，适合本地 AI 工作流入门用户快速排除硬件幻想。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">本地模型</span><span class="signal-badge topic">GPU</span><span class="signal-badge topic">开发工具</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-enozunu-agent-config-materializer-2026-08-25" href="https://github.com/tooppoo/enozunu" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">CFG</span>
+          <h4>Enozunu</h4>
+        </div>
+        <p class="tagline">面向 AI Agent 的声明式可复现配置物化器</p>
+        <p>Enozunu 关注把 agent 环境配置声明化、可复现化，切中长期自动化运行中的一个真实痛点：同一个 Agent 在不同机器、不同目录、不同依赖状态下表现不一致。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 配置</span><span class="signal-badge topic">可复现</span><span class="signal-badge topic">开发工具</span></div>
+      </a>
+      <a class="card" data-event-key="show-hn-frontend-design-pro-agent-skill-pack-2026-08-25" href="https://krishna-modi12.github.io/frontend-design-pro/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">UI</span>
+          <h4>Front end skill pack for AI agents</h4>
+        </div>
+        <p class="tagline">带机器强制质量门禁的前端 Agent 技能包</p>
+        <p>这个 Show HN 项目把前端体验规则、审查标准和自动化质量门禁包装成 Agent 可用技能。它的价值在于把“审美建议”变成可执行约束，减少 AI 生成页面常见的布局和文案漂移。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">前端设计</span><span class="signal-badge topic">Agent Skill</span><span class="signal-badge topic">质量门禁</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-madslorentzen-ai-job-search-2026-08-25" href="https://github.com/MadsLorentzen/ai-job-search" target="_blank" rel="noopener">
+      <div>
+        <div class="name">MadsLorentzen / <b>ai-job-search</b></div>
+        <div class="desc">本地运行的 AI 求职框架，用 Claude Code 评估岗位、定制简历、写 cover letter 并准备面试，体现个人工作流自动化正在细分到求职链路。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">AI Workflow</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 应用</span><span class="signal-badge topic">求职自动化</span><span class="signal-badge topic">Claude Code</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 34,157</div>
+        <div class="today">▲ 434 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-agricidaniel-claude-obsidian-2026-08-25" href="https://github.com/AgriciDaniel/claude-obsidian" target="_blank" rel="noopener">
+      <div>
+        <div class="name">AgriciDaniel / <b>claude-obsidian</b></div>
+        <div class="desc">面向 Obsidian 与 Claude Code 的自组织第二大脑，把资料读取、链接和归档变成 Markdown 知识图谱工作流。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Knowledge Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Claude Code</span><span class="signal-badge topic">知识库</span><span class="signal-badge topic">PKM</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 11,972</div>
+        <div class="today">▲ 310 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-rohitg00-ai-engineering-from-scratch-2026-08-25" href="https://github.com/rohitg00/ai-engineering-from-scratch" target="_blank" rel="noopener">
+      <div>
+        <div class="name">rohitg00 / <b>ai-engineering-from-scratch</b></div>
+        <div class="desc">以“Learn it, Build it, Ship it”为主线的 AI 工程学习仓库，适合跟踪从基础组件到可交付应用的实践路线。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">AI Engineering</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI 工程</span><span class="signal-badge topic">学习路径</span><span class="signal-badge topic">实战</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 48,349</div>
+        <div class="today">▲ 349 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-tashfeenahmed-freellmapi-2026-08-25" href="https://github.com/tashfeenahmed/freellmapi" target="_blank" rel="noopener">
+      <div>
+        <div class="name">tashfeenahmed / <b>freellmapi</b></div>
+        <div class="desc">把多个免费 LLM provider 和自定义 OpenAI-compatible endpoint 聚合到统一 /v1 接口，带路由、故障转移和密钥处理能力。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span> <span class="dotsep">·</span> <span class="tag">LLM Gateway</span></div>
+        <div class="item-signals"><span class="signal-badge topic">LLM API</span><span class="signal-badge topic">路由</span><span class="signal-badge topic">开发工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 19,839</div>
+        <div class="today">▲ 174 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-voltagent-awesome-agent-skills-2026-08-25" href="https://github.com/VoltAgent/awesome-agent-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">VoltAgent / <b>awesome-agent-skills</b></div>
+        <div class="desc">收集来自官方团队和社区的 1000+ Agent skills，兼容 Claude Code、Codex、Gemini CLI 和 Cursor，反映 skill 生态正在快速扩张。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>Markdown</span> <span class="dotsep">·</span> <span class="tag">Skill Registry</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Skills</span><span class="signal-badge topic">生态</span><span class="signal-badge topic">Codex</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 31,947</div>
+        <div class="today">▲ 602 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-tinyhumansai-openhuman-2026-08-25" href="https://github.com/tinyhumansai/openhuman" target="_blank" rel="noopener">
+      <div>
+        <div class="name">tinyhumansai / <b>openhuman</b></div>
+        <div class="desc">本地优先的个人 AI 超级智能项目，围绕个人记忆、agent fleet 和深度研究编排构建长期工作流。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#dea584"></span>Rust</span> <span class="dotsep">·</span> <span class="tag">Personal Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">本地优先</span><span class="signal-badge topic">Agent 编排</span><span class="signal-badge topic">记忆</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 37,313</div>
+        <div class="today">▲ 515 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-25 10:55 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
