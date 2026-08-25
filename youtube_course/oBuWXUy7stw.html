@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code + Codex 协同工作台：把多个编程 Agent 放进同一个项目上下文</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #9aa0b8;
+      --text-muted: #6a6f85;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --accent-green: #68d391;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.75;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header, main, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 28px; }
+
+    .back-link, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid rgba(99, 179, 237, 0.35);
+      border-radius: 6px;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .back-link { margin-bottom: 24px; color: var(--text-secondary); border-color: var(--border-color); background: rgba(255,255,255,0.04); }
+    .back-link:hover, .btn:hover {
+      background: var(--accent-cyan);
+      color: var(--bg-primary);
+      border-color: var(--accent-cyan);
+      transform: translateX(-2px);
+    }
+
+    .hero {
+      background: rgba(22, 22, 31, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.28);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      color: var(--accent-green);
+      border: 1px solid rgba(104, 211, 145, 0.25);
+      background: rgba(104, 211, 145, 0.08);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(1.85rem, 4vw, 3rem);
+      line-height: 1.18;
+      margin-bottom: 14px;
+      letter-spacing: 0;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 18px;
+    }
+
+    .meta-row, .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .meta-badge, .pill {
+      display: inline-flex;
+      align-items: center;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .pill { color: var(--accent-purple); border-color: rgba(159,122,234,0.25); background: rgba(159,122,234,0.08); }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #000;
+      margin: 0 0 28px;
+      box-shadow: 0 18px 48px rgba(0,0,0,0.32);
+    }
+
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .content-card {
+      background: rgba(22, 22, 31, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    h2 {
+      font-size: 1.28rem;
+      line-height: 1.35;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 {
+      font-size: 1.02rem;
+      color: var(--text-primary);
+      margin: 24px 0 10px;
+    }
+
+    p { color: var(--text-secondary); margin-bottom: 14px; }
+
+    strong { color: var(--text-primary); }
+
+    ul, ol { margin: 12px 0 18px 22px; color: var(--text-secondary); }
+    li { margin-bottom: 8px; }
+
+    blockquote {
+      margin: 20px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.08);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 8px;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    th {
+      color: var(--text-primary);
+      background: rgba(99, 179, 237, 0.08);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .time-item {
+      display: grid;
+      grid-template-columns: 84px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 13px 14px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+    }
+
+    .time-code {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-cyan);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .rec {
+      display: block;
+      min-height: 122px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.035);
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .rec:hover { border-color: var(--border-hover); background: rgba(99,179,237,0.08); transform: translateY(-2px); }
+    .rec strong { display: block; margin-bottom: 8px; color: var(--accent-cyan); }
+
+    footer {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+      text-align: center;
+      padding-top: 20px;
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 0 16px 40px; }
+      .hero, .content-card { padding: 22px; }
+      .time-item { grid-template-columns: 1fr; gap: 6px; }
+      th, td { display: block; width: 100%; }
+      tr { display: block; border-bottom: 1px solid var(--border-color); }
+      tr:last-child { border-bottom: 0; }
+      td { border-bottom: 0; padding-top: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+    <section class="hero">
+      <div class="eyebrow">多 Agent 编程工作流</div>
+      <h1>Claude Code + Codex 协同工作台：把多个编程 Agent 放进同一个项目上下文</h1>
+      <p class="subtitle">英文原题：Claude Code + Codex = AI GOD MODE! (Open source + Free)</p>
+      <div class="meta-row">
+        <span class="meta-badge">频道：WorldofAI</span>
+        <span class="meta-badge">时长：18 分 14 秒</span>
+        <span class="meta-badge">播放量：约 15,369</span>
+        <span class="meta-badge">上传：2026-08-23</span>
+      </div>
+      <div class="pill-row">
+        <span class="pill">Claude Code</span>
+        <span class="pill">Codex</span>
+        <span class="pill">Tracer</span>
+        <span class="pill">A2A 协作</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/oBuWXUy7stw" title="Claude Code + Codex = AI GOD MODE! (Open source + Free)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入：不是再多开一个聊天框，而是减少“人肉搬运上下文”</h2>
+      <p>这支视频展示的核心并不是“Claude Code 和 Codex 谁更强”，而是一个更现实的工程问题：当你已经在使用多个编码 Agent 时，如何让它们围绕同一个项目协作，而不是让人反复复制 prompt、同步文件、解释当前进度、转述另一个 Agent 的反馈。</p>
+      <p>视频里的示例是一个现代化产品落地页和一个市场情报仪表盘。作者把 Claude Code 设定为偏前端与产品体验的执行者，把 Codex 设定为偏市场研究、新闻流和智能分析的执行者，再通过 Tracer 这类桌面工作台把两者放进同一项目空间。这样一来，Agent 之间可以直接传递任务、互相 review、修复重叠区域的问题，并把过程沉淀在共享历史里。</p>
+      <p>如果你平时的 Agent 工作流已经进入“多窗口、多工具、多模型”的阶段，这个视频值得看，因为它把一个常见痛点讲得很具体：多 Agent 的难点不只是模型能力，而是上下文、权限、文件、任务拆分和反馈闭环能不能被统一管理。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：Tracer 在这里扮演的是协调层</h2>
+      <h3>1. Bring your own agent：不是替换现有工具</h3>
+      <p>作者反复强调，Tracer 的定位不是把 Claude Code、Codex、Cursor 或 OpenCode 替换掉，而是把你已经有订阅或本地配置的 coding agent 接进一个桌面 workspace。这个思路接近“控制台”而不是“新模型”：模型和 Agent 仍然各自负责擅长的任务，工作台负责让它们共享项目上下文、文件树、历史和产物。</p>
+      <p>这种方式的价值在于降低迁移成本。你不用放弃原来熟悉的 Claude Code，也不用把 Codex 只当成另一个孤立的 CLI 会话；真正改变的是协作拓扑，从“人负责转述”变成“工作台负责路由和记录”。</p>
+
+      <h3>2. Shared context：多 Agent 协作的基础不是 prompt，而是项目目录</h3>
+      <p>视频开头作者先创建了一个专门的 home directory，用来管理 Claude Code 和 Codex 的协同任务。这一点比看上去重要：没有稳定项目目录，多 Agent 会把文件散落在不同路径，历史也无法复用；有了共享目录，两个 Agent 才能围绕同一批文件、同一套 artifacts 和同一段任务历史工作。</p>
+      <p>对工程团队来说，这意味着你应该先约定项目边界，再分配 Agent 角色。否则每个 Agent 都会根据自己的上下文重建一套“项目事实”，协作越多，偏差越大。</p>
+
+      <h3>3. A2A：Agent-to-Agent 不是炫技，而是减少同步损耗</h3>
+      <p>视频里的“walkie-talkie”比喻说的是 Agent-to-Agent 通信。Claude Code 可以把某个前端计划交给 Codex 做第二意见，Codex 可以检查实际产物后把反馈发回 Claude Code，Claude Code 再立刻修复。这不是让模型随便聊天，而是把跨 Agent 的 review、分派和状态同步变成工作流的一部分。</p>
+      <p>关键边界是：A2A 适合传递明确任务、验收反馈和上下文摘要，不适合让多个 Agent 在没有责任划分的情况下同时改同一块代码。视频中比较合理的做法是让 Claude 负责核心产品和前端体验，让 Codex 负责市场情报与研究功能，重叠处再通过消息协商。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤：从安装到一次双 Agent 构建</h2>
+      <h3>第一步：安装工作台并接入已有 Agent</h3>
+      <p>视频演示从 Tracer 的 GitHub 仓库或下载页安装桌面应用，支持 Mac、Windows 和 Linux。安装完成后，作者看到 Claude Code 与 Codex 配置已经能在工作台里被识别，也可以在 settings 中继续添加别的 Agent。这里真正要检查的不是界面能不能打开，而是工作台是否能读取你的项目目录、启动对应 Agent、显示文件树和 artifacts。</p>
+      <p>更稳妥的做法是先用一个小项目验证：让一个 Agent 生成计划，让另一个 Agent 做 review，不要一上来就把生产仓库交给多 Agent 并行修改。视频虽然展示的是很顺滑的 demo，但工程上仍然需要先建立权限和回滚边界。</p>
+
+      <h3>第二步：为项目创建单独目录</h3>
+      <p>作者明确建议为当前多 Agent 任务创建一个文件夹，并在 Tracer 里选中它。这个动作相当于给工作流设定根目录：后续 artifacts、文件修改、历史记录和 Agent 间共享上下文都落在这个范围里。</p>
+      <p>如果你的项目本身就是 Git 仓库，那么这个目录还承担代码审查边界。每次 Agent 改动后，你可以用 Git diff 检查它到底碰了哪些文件，再决定是否继续让另一个 Agent review 或修复。</p>
+
+      <h3>第三步：在 prompt 中明确角色分工</h3>
+      <p>视频示例中，作者没有完全交给工作台“自动猜谁做什么”，而是在 prompt 里写清：Claude Code 主要负责产品核心、前端体验、投资组合视图、交互图表和视觉 polish；Codex 主要负责市场情报、研究 Agent、金融新闻流和相关组件。这个分工让多 Agent 协作从一开始就有边界。</p>
+      <p>这里的经验可以迁移到真实开发：把任务拆成“UI/交互”“数据/智能”“测试/审查”“文档/发布”等责任域，再让不同 Agent 接手。不要只写“请两个 Agent 一起完成”，那样很容易出现重复劳动或互相覆盖。</p>
+
+      <h3>第四步：观察阶段拆解和 artifacts</h3>
+      <p>工作台把任务拆成多个 phase：例如 foundation 阶段处理 UI、mock market data 和 tokens，然后再发布契约并派生 Codex intelligence agent。artifacts 则用来可视化计划、阶段产物和应用预览。作者在视频中不断切换 pane、tabs 和 split view，查看两个 Agent 如何推进同一个市场仪表盘。</p>
+      <p>这类 artifacts 的意义不是“好看”，而是把 Agent 的中间状态暴露出来。你能看见它是否先做了 foundation，是否真的把研究功能交给 Codex，是否在发现通知问题后回到 Claude Code 让它修复。没有这些可观察性，多 Agent 很容易变成黑箱并行。</p>
+
+      <h3>第五步：让 review 和修复闭环在 Agent 间发生</h3>
+      <p>视频中有一个小而重要的片段：Codex 发现通知功能不符合预期，随后向 Claude Code 实例发消息请求修复，Claude Code 修完后再告诉 Codex 已经处理。这说明协作工作台的价值不只是“并行生成更多代码”，而是让 review 反馈能回到真正负责那块实现的 Agent。</p>
+      <p>在生产项目里，这个闭环应当配合测试、lint、截图或日志证据使用。Agent 之间可以传递发现和请求，但最终仍要落到可验证结果：测试通过、UI 截图正确、线上页面可访问、Git diff 范围合理。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格：什么时候需要多 Agent 工作台</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工作方式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>单 Agent 单会话</td>
+            <td>小修小补、明确 bug、单文件解释、一次性脚本</td>
+            <td>上下文集中，成本低，审查简单</td>
+            <td>复杂任务容易把主会话塞满，探索和实现混在一起</td>
+            <td>优先用于低风险任务；不要为简单需求强行上多 Agent</td>
+          </tr>
+          <tr>
+            <td>多窗口手动协作</td>
+            <td>你同时使用 Claude Code、Codex、Cursor 等工具，但任务边界还比较松</td>
+            <td>模型能力互补，人工可控</td>
+            <td>复制 prompt、同步文件、转述反馈会消耗大量时间</td>
+            <td>适合试验阶段；一旦重复转述变多，就该考虑工作台</td>
+          </tr>
+          <tr>
+            <td>Tracer 式共享工作台</td>
+            <td>中大型功能、前后端并行、研究与实现分离、需要 artifacts 观察</td>
+            <td>共享目录、历史和产物，Agent 可直接互发任务与 review</td>
+            <td>如果角色不清晰，多个 Agent 可能争抢同一文件或制造冲突</td>
+            <td>先定义责任域和验收标准，再允许 Agent-to-Agent 协作</td>
+          </tr>
+          <tr>
+            <td>团队级 Agent 流水线</td>
+            <td>持续交付、PR 审查、测试修复、定时内容生产或数据任务</td>
+            <td>流程可复用，状态可追踪，可接入 CI/CD</td>
+            <td>权限、凭据、回滚和质量门禁必须严密，否则失败会被自动放大</td>
+            <td>只有在已有 Git、测试、审查和发布规范时再自动化</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：视频中最值得带走的判断</h2>
+      <blockquote>
+        <p>真正的变化不是又多一个 AI 编程助手，而是让你已有的助手共享上下文、互相反馈，并围绕同一个项目持续协作。</p>
+      </blockquote>
+      <p>这个判断对当下的 Agent 工程尤其重要。模型能力继续提升后，瓶颈会越来越多地转向“如何组织它们工作”：谁负责需求澄清，谁负责实现，谁负责审查，谁负责发布，谁能访问哪些文件和凭据，失败时如何回滚。视频中的 Tracer 只是一个具体工具，但它代表的协调层会成为多 Agent 工作流里的核心基础设施。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录：按视频脉络快速回看</h2>
+      <div class="timeline">
+        <div class="time-item">
+          <span class="time-code">00:00</span>
+          <p>展示 Claude Code 与 Codex 协同生成现代产品落地页，说明不是手动复制 prompt，而是通过开源协调工作流共享上下文。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">01:10</span>
+          <p>介绍 Tracer 的定位：一个可接入 Claude Code、Codex、Cursor、OpenCode 等工具的桌面 workspace，而不是替代现有 Agent。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">02:30</span>
+          <p>进入 Tracer 主界面，说明可以管理项目文件、artifacts、历史、资源使用和已有 Agent 配置。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">04:10</span>
+          <p>创建专门目录并打开多面板视图，让 Claude Code 和 Codex 围绕同一项目协作，避免文件和上下文散落。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">06:20</span>
+          <p>用市场情报仪表盘作为实战任务，明确 Claude Code 负责前端与产品体验，Codex 负责研究、新闻流和智能分析。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">08:10</span>
+          <p>工作台自动拆解阶段任务：foundation、UI、mock data、tokens、再派生 Codex intelligence agent 处理后续部分。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">10:30</span>
+          <p>展示 Agent-to-Agent 通信：Codex 从 Claude Code 的上下文接手市场情报模块，并在同一 workspace 内继续推进。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">12:20</span>
+          <p>查看第一版市场仪表盘：投资组合、观察列表、新闻、研究 Agent、告警和交互式市场概览开始成型。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">14:10</span>
+          <p>Codex 发现通知功能问题并反馈给 Claude Code 修复，展示 review、修复和验证可以在 Agent 之间闭环。</p>
+        </div>
+        <div class="time-item">
+          <span class="time-code">16:00</span>
+          <p>总结 Tracer 的价值：它不是替换 Agent，而是在多个高能力 coding harness 之间建立协作工作台。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐：继续补齐多 Agent 工程视角</h2>
+      <p>如果你已经理解这支视频的核心，可以继续看下面几篇，它们分别从团队分工、子智能体、harness engineering 和协议接入角度补齐同一张地图。</p>
+      <div class="recommendations">
+        <a class="rec" href="index.html">
+          <strong>返回课程列表</strong>
+          <span>浏览全部 AI / Claude / Agent 工程中文整理课程。</span>
+        </a>
+        <a class="rec" href="vDVSGVpB2vc.html">
+          <strong>Claude Agent Teams 实战</strong>
+          <span>看多个 AI 队友如何分工、直接消息和管理文件所有权。</span>
+        </a>
+        <a class="rec" href="sNI18nzwgn8.html">
+          <strong>Claude Code 子智能体实战</strong>
+          <span>学习如何把探索、审计和实现拆进独立上下文。</span>
+        </a>
+        <a class="rec" href="ulNsa0sD8N0.html">
+          <strong>Harness Engineering</strong>
+          <span>从 rules、skills、MCP、hooks 理解可验证的 Agent 工作系统。</span>
+        </a>
+        <a class="rec" href="cGuyrANVi4A.html">
+          <strong>MCP 到底如何工作</strong>
+          <span>理解 tools、resources、prompts 和 context 的协议边界。</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    字幕来源：YouTube 自动英文字幕；本页为中文学习整理，不替代原视频。
+  </footer>
+</body>
+</html>
