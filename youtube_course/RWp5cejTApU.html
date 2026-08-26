@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Harness 开发者预览：把 Coding Agent 拆成可替换插件系统</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --code-bg: rgba(8, 13, 25, 0.9);
+      --success: #68d391;
+      --warning: #f6ad55;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--accent);
+      border: 1px solid rgba(99, 179, 237, 0.35);
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: transparent;
+    }
+
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    button:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow {
+      color: var(--success);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 1.14;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.08rem;
+      margin: 16px 0 0;
+      max-width: 820px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: 999px;
+      padding: 5px 12px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: #000;
+      margin-bottom: 2rem;
+    }
+
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 8px;
+      font-size: 1.05rem;
+      color: #f7fafc;
+    }
+
+    p { margin: 0 0 14px; color: var(--text-secondary); }
+    strong { color: var(--text-primary); }
+
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      background: rgba(99, 179, 237, 0.08);
+      color: var(--text-primary);
+      border-radius: 0 10px 10px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(99, 179, 237, 0.12);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--text-secondary); }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .toc-item {
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .time {
+      display: inline-block;
+      min-width: 54px;
+      color: var(--warning);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+    }
+
+    code {
+      background: var(--code-bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #bee3f8;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .rec {
+      border: 1px solid rgba(99, 179, 237, 0.22);
+      border-radius: 10px;
+      padding: 14px;
+      background: rgba(99, 179, 237, 0.06);
+    }
+
+    .rec span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 720px) {
+      .page { width: min(100% - 20px, 1120px); padding-top: 18px; }
+      .hero, .content-card { padding: 1rem; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <section class="hero">
+      <p class="eyebrow">Coding Agent · Harness · Plugin System</p>
+      <h1>DeepSeek Harness 开发者预览：把 Coding Agent 拆成可替换插件系统</h1>
+      <p class="subtitle">英文原题：NEW DeepSeek Harness Is The Claude Code &amp; Codex Killer? (Open Source)。这期视频不是单纯展示一个新 IDE，而是在讨论「模型之外的工程壳」为什么正在成为 Coding Agent 竞争的核心。</p>
+      <div class="meta">
+        <span class="pill">频道：WorldofAI</span>
+        <span class="pill">时长：12:39</span>
+        <span class="pill">播放量：26,674</span>
+        <span class="pill">上传日期：2026-08-24</span>
+      </div>
+    </section>
+
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/RWp5cejTApU" title="NEW DeepSeek Harness Is The Claude Code & Codex Killer? (Open Source)" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么大家突然开始谈 Harness</h2>
+      <p>过去一年，AI 编程工具的讨论经常停留在模型本身：哪一个模型更会写代码、哪一个上下文更长、哪一个 benchmark 更高。但视频里的关键判断是，模型只是一半的智能，另一半来自围绕模型搭建的 <strong>harness</strong>：它负责组织工具、文件系统、终端、记忆、沙箱、子任务、UI 和可观察性。</p>
+      <p>DeepSeek Harness 的看点就在这里。它不是又一个聊天窗口，而是一个把 Coding Agent 拆成插件化零件的开发者预览版。视频中反复强调「everything is a plugin」：模型、工具、技能、会话、沙箱、文件系统、Agent loop、编排层，甚至 UI 都可以被替换或扩展。这个方向与 Claude Code、OpenAI Codex、OpenCode、Cursor Agent 的竞争点非常接近，但它把可替换性放到了产品结构的中心。</p>
+      <p>因此，这期视频值得看的不是「它是不是某个工具的杀手」这种标题式判断，而是它提供了一个工程视角：如果你要让 Coding Agent 进入真实项目，必须关心的不只是回答质量，还包括运行轨迹能否追踪、工具调用能否审计、插件能否隔离、上下文能否复用，以及失败后能否从中间状态恢复。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：Harness 不是模型，而是模型的工作系统</h2>
+      <h3>1. Harness 的职责</h3>
+      <p>在视频语境里，Harness 可以理解为「把模型变成开发同事的运行时」。裸模型只能输入文本、输出文本；Harness 则把它接到真实工作环境：读取文件、运行命令、调用工具、保存状态、拆分子任务、查看历史、继续或回放一次执行过程。对于编程 Agent 来说，这些外部能力决定了它能不能处理多文件修改、调试循环和长任务。</p>
+
+      <h3>2. 插件化为什么重要</h3>
+      <p>传统 IDE 插件通常增强的是人的编辑器体验；DeepSeek Harness 这类系统里的插件增强的是 Agent 的行动能力。视频提到模型、工具、技能、沙箱、记忆都可插拔，意味着团队可以选择不同模型供应商、替换工具权限、按项目放入专属技能，也可以为安全审查或代码评审做专门插件。</p>
+
+      <h3>3. Trajectory 是可调试性的关键</h3>
+      <p>视频中最值得工程团队注意的是 trajectory view。它不只显示最终聊天消息，而是记录 Agent 在任务中做过什么：用户输入、上下文、助手响应、工具调用、终端结果、子 Agent、补充上下文。这样一次执行就不再是黑盒，你可以搜索、恢复、fork 到早期节点，或者复盘为什么某个工具调用把任务带偏。</p>
+
+      <blockquote>视频中的核心判断可以转述为：模型本身只是智能的一半，真正把模型能力释放出来的是围绕它的 Harness。</blockquote>
+
+      <h3>4. 早期预览版应该怎样看</h3>
+      <p>视频把它称为 developer preview，并展示了 NPX 启动、模型选择、工作区选择、插件安装、轨迹检查等功能。这里最合理的态度是：把它当成可以学习架构方向和实验流程的早期工具，而不是直接替换成熟生产环境。越是强调插件生态，越要先看权限、来源、执行边界和审计能力。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤</h2>
+      <h3>步骤 1：用 NPX 快速启动，而不是先配置复杂工程</h3>
+      <p>视频首先演示的是低门槛启动：准备 Node.js，然后在一个干净项目目录中执行 NPX 命令。它的设计目标是让开发者不用先克隆大量样板代码，也不用理解内部框架，就能进入一个可运行的 Harness UI。对新工具评估来说，这很重要，因为你应该先用隔离目录试跑，再决定是否把它接入真实仓库。</p>
+
+      <h3>步骤 2：选择模型与 provider，把「智能」和「壳」分开评估</h3>
+      <p>视频提到可以在 Harness 中选择不同模型和 provider，例如把 DeepSeek 新模型接进来，也可以调整 reasoning 强度。这里的工程含义是：不要把模型能力和 Harness 能力混在一起比较。一个任务成功，可能来自模型更强；一个任务失败，也可能是工具权限、上下文组织或执行循环不够稳。拆开看，才知道该换模型还是该改工作流。</p>
+
+      <h3>步骤 3：用工作区隔离任务范围</h3>
+      <p>演示里会选择一个 workspace，然后描述要构建的东西，例如 3D mechanical clock simulation、gear、escapement、pendulum、clock hands 等。对 Agent 工程来说，工作区边界就是安全边界和上下文边界。你给它一个空目录，它会像脚手架生成器；你给它一个真实仓库，它就可能修改现有代码。两种模式应该分开测试。</p>
+
+      <h3>步骤 4：观察工具调用，而不是只看最终页面</h3>
+      <p>视频展示 Agent 在 canvas 中思考、调用工具、运行命令、执行任务。这里不要只被 demo 的视觉效果吸引。真正需要记录的是：它是否先理解目标、是否分解任务、是否能在失败后读取错误、是否会重复执行无意义命令、是否留下可审计轨迹。这些比一次 demo 是否生成酷炫 3D 效果更能说明工具成熟度。</p>
+
+      <h3>步骤 5：进入 trajectory 复盘上下文和工具结果</h3>
+      <p>Trajectory view 的价值在长任务中会放大。视频说可以看到 user input、context、assistant response、tools used，以及每一步发生了什么。对团队使用来说，这相当于 Agent 的执行日志和审计链。代码 review 时，你不只 review diff，还要 review Agent 是通过什么资料、什么命令、什么假设得到这个 diff 的。</p>
+
+      <h3>步骤 6：谨慎安装第三方插件</h3>
+      <p>视频后半段提到插件市场、设计插件、Webline Access 这类把本地 UI 暴露到网络中的扩展，同时提醒插件未必都经过验证。这里必须把安全放在前面：任何能读取仓库、访问终端、暴露本地服务或转发网络请求的插件，都应视作高权限代码。先看源代码、权限说明、维护者和更新频率，再决定是否安装。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>选择项</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险与决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DeepSeek Harness 开发者预览</td>
+            <td>想研究插件化 Coding Agent、可观察执行轨迹、可替换模型和工具链的开发者。</td>
+            <td>结构开放，强调模型、工具、技能、沙箱、UI 都可替换；适合做实验性工作台。</td>
+            <td>预览版成熟度、插件来源和生态质量需要验证。建议先在隔离项目中试用，不要直接接管生产仓库。</td>
+          </tr>
+          <tr>
+            <td>Claude Code / Codex 类成熟 Agent</td>
+            <td>需要稳定完成真实仓库修改、测试、review 和自动化开发任务。</td>
+            <td>已有较完整的上下文管理、命令执行、差异审查和协作流程；团队上手成本更可控。</td>
+            <td>可替换性通常不如开放 harness。适合生产任务，插件化实验可另开环境。</td>
+          </tr>
+          <tr>
+            <td>本地 OpenCode / 自建 Agent 壳</td>
+            <td>隐私要求高、模型想本地运行、愿意自己维护配置和执行权限的团队。</td>
+            <td>可控性高，可绑定本地模型和内部工具；数据边界更清晰。</td>
+            <td>需要自己承担模型质量、工具稳定性、日志、回滚和权限治理。适合有工程维护能力的团队。</td>
+          </tr>
+          <tr>
+            <td>插件市场扩展</td>
+            <td>希望快速接入设计、远程控制、代码审查、语音等额外能力。</td>
+            <td>能快速扩大 Agent 的动作空间，减少重复开发。</td>
+            <td>也是最大的安全面。涉及文件、终端、网络、浏览器或凭据的插件必须先审计来源和权限。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：这期视频真正有价值的判断</h2>
+      <blockquote>如果把 Coding Agent 当成系统来设计，模型只是推理核心；文件、工具、会话、沙箱、轨迹和插件，才决定它能不能进入真实工程流程。</blockquote>
+      <p>这句话可以作为评估所有 AI 编程工具的底层问题。一个工具再会生成代码，如果不能解释自己做了什么、不能限制权限、不能恢复执行轨迹、不能让团队复用规则，就很难从个人 demo 进入工程制度。DeepSeek Harness 的早期意义不是证明谁会替代谁，而是把「Harness Engineering」这个方向又往前推了一步。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <div class="toc">
+        <div class="toc-item"><span class="time">00:00</span> 开场：DeepSeek Harness 发布，定位为开源、模块化 Coding Agent framework。</div>
+        <div class="toc-item"><span class="time">01:10</span> 核心理念：模型、工具、技能、会话、沙箱、文件系统和 UI 都是插件。</div>
+        <div class="toc-item"><span class="time">02:15</span> 快速安装：用 Node.js 和 NPX 命令在本地启动 Harness。</div>
+        <div class="toc-item"><span class="time">03:10</span> 工作区与模型选择：选择 workspace，配置 provider、reasoning、agent 参数。</div>
+        <div class="toc-item"><span class="time">04:20</span> 实时演示：要求 Agent 构建 3D mechanical clock simulation，并观察工具执行。</div>
+        <div class="toc-item"><span class="time">06:00</span> Trajectory view：检查 prompt、上下文、工具调用、终端结果和子 Agent 历史。</div>
+        <div class="toc-item"><span class="time">08:05</span> 插件系统：用插件扩展设计、review、语音或远程访问能力。</div>
+        <div class="toc-item"><span class="time">10:20</span> 安全提醒：第三方插件未必经过验证，安装前要检查权限和来源。</div>
+        <div class="toc-item"><span class="time">12:00</span> 总结：Harness 还有改进空间，但开放生态值得持续关注。</div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <div class="recommendations">
+        <a class="rec" href="index.html">返回课程列表<span>查看全部 AI / Claude / Agent 工程课程</span></a>
+        <a class="rec" href="oBuWXUy7stw.html">Claude Code + Codex 协同工作台<span>同一频道，关注多 Agent 协作与共享上下文</span></a>
+        <a class="rec" href="ulNsa0sD8N0.html">Harness Engineering<span>从 rules、skills、MCP、hooks 理解可进化 Agent 系统</span></a>
+        <a class="rec" href="tBKLFCHOsIQ.html">OpenCode + Ollama 本地 AI 编码工作台<span>对比本地模型和开放式编码工具链</span></a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
