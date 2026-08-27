@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-27</title>
+<meta name="description" content="今天的主线是浏览器 Agent、语音模型、开源 MoE、算力采购和 AI 安全边界同时推进：模型能力继续外溢，真正的竞争点转向可治理的工作系统。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-27</span>
+      <span class="sep">·</span>
+      <span>星期四</span>
+      <span class="edition">第 87 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是浏览器 Agent、语音模型、开源 MoE、算力采购和 AI 安全边界同时推进：模型能力继续外溢，真正的竞争点转向可治理的工作系统。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">5</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">5</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">4</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">4</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">5</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://claude.com/blog/claude-in-chrome-generally-available" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Claude in Chrome 全面上线，浏览器 Agent 进入付费用户日常工作流</h3>
+        <p>Anthropic 宣布 Claude in Chrome 面向付费 Claude 套餐全面开放，用户可让 Claude 在浏览器中自主执行操作。相比普通网页助手，这次值得关注的是安全分类器和提示注入防护被放进产品说明中心，说明浏览器 Agent 的瓶颈已经从“能不能点网页”转向“能否可控地替用户行动”。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://techcrunch.com/2026/08/26/amazon-just-tripled-its-order-of-nvidia-chips-over-surging-demand" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻 · 2 个来源</div>
+        <h3>AWS 将向 NVIDIA 追加约 200 万颗 GPU，云端训练与推理军备继续升级</h3>
+        <p>TechCrunch 与 IT之家均报道，Amazon 与 NVIDIA 扩大合作，计划在 2027 至 2028 年为 AWS 数据中心新增约 200 万颗 GPU。它不是单纯财报数字，而是提示大模型、Agent 和多模态推理的供给侧竞争仍由稀缺算力决定。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://deepmind.google/blog/intelligent-transcription-with-gemini-3-5-transcribe" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻 · 8 个来源</div>
+        <h3>Gemini 3.5 Transcribe 发布，实时语音转文本成为多模态入口</h3>
+        <p>Google DeepMind 推出 Gemini 3.5 Transcribe，支持流式和非流式语音转文本，覆盖 85 种以上语言，并提供自定义词汇和说话人识别。对产品团队来说，这类模型会直接影响客服、会议、语音 Agent 和端到端多模态交互的底层体验。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>23</b> 条精选信号<i></i><b>14</b> 个原始来源<i></i><b>54</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=%E5%AE%89%E5%85%A8" target="_top">安全</a>
+        <a href="topics.html?topic=cs.AI" target="_top">cs.AI</a>
+        <a href="topics.html?topic=Qwen" target="_top">Qwen</a>
+        <a href="topics.html?topic=%E5%BC%80%E6%BA%90%E6%A8%A1%E5%9E%8B" target="_top">开源模型</a>
+        <a href="topics.html?topic=cs.LG" target="_top">cs.LG</a>
+        <a href="topics.html?topic=cs.CL" target="_top">cs.CL</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="claude-in-chrome-ga-browser-agent-2026-08-26" href="https://claude.com/blog/claude-in-chrome-generally-available" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>Claude in Chrome 全面上线，浏览器 Agent 进入付费用户日常工作流</h3>
+      <p>Anthropic 宣布 Claude in Chrome 面向付费 Claude 套餐全面开放，用户可让 Claude 在浏览器中自主执行操作。相比普通网页助手，这次值得关注的是安全分类器和提示注入防护被放进产品说明中心，说明浏览器 Agent 的瓶颈已经从“能不能点网页”转向“能否可控地替用户行动”。</p>
+      <div class="src">◷ <b>Claude Blog</b> <span class="dotsep">·</span> 8 月 26 日</div>
+      <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Claude</span><span class="signal-badge topic">浏览器 Agent</span><span class="signal-badge topic">安全</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="aws-nvidia-additional-two-million-gpus-2027-2028-2026-08-26" href="https://techcrunch.com/2026/08/26/amazon-just-tripled-its-order-of-nvidia-chips-over-surging-demand" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>AWS 将向 NVIDIA 追加约 200 万颗 GPU，云端训练与推理军备继续升级</h4>
+          <p>TechCrunch 与 IT之家均报道，Amazon 与 NVIDIA 扩大合作，计划在 2027 至 2028 年为 AWS 数据中心新增约 200 万颗 GPU。它不是单纯财报数字，而是提示大模型、Agent 和多模态推理的供给侧竞争仍由稀缺算力决定。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">TechCrunch</b> <span class="dotsep">·</span> 8 月 26 日 <span class="dotsep">·</span> <span class="tag">算力</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="IT之家">2 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 基础设施</span><span class="signal-badge topic">GPU</span><span class="signal-badge topic">云计算</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="gemini-3-5-transcribe-streaming-speech-model-2026-08-26" href="https://deepmind.google/blog/intelligent-transcription-with-gemini-3-5-transcribe" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Gemini 3.5 Transcribe 发布，实时语音转文本成为多模态入口</h4>
+          <p>Google DeepMind 推出 Gemini 3.5 Transcribe，支持流式和非流式语音转文本，覆盖 85 种以上语言，并提供自定义词汇和说话人识别。对产品团队来说，这类模型会直接影响客服、会议、语音 Agent 和端到端多模态交互的底层体验。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google DeepMind Blog</b> <span class="dotsep">·</span> 8 月 26 日 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="The Verge">8 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Gemini</span><span class="signal-badge topic">语音识别</span><span class="signal-badge topic">实时交互</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="qwen-3-8-flash-next-open-weights-qwen4-preview-2026-08-26" href="https://qwen.ai/blog?id=qwen3.8-flash-next" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>Qwen3.8-Flash-Next 开放权重，提前展示 Qwen4 架构方向</h4>
+          <p>Qwen 发布 Qwen3.8-Flash-Next，定位为 Qwen4 架构早期预览，采用多模态 MoE 与混合注意力设计，总参数 125B、每 token 激活约 6B。它的阅读价值在于看清“低激活参数 + 长上下文 + 多模态”正在成为国产开源模型的主路线。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Qwen Blog</b> <span class="dotsep">·</span> 8 月 26 日 <span class="dotsep">·</span> <span class="tag">开源模型</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="通义千问 / X">8 个来源</span><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">Qwen</span><span class="signal-badge topic">开源模型</span><span class="signal-badge topic">MoE</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="anthropic-independent-research-claude-usage-data-pilot-2026-08-26" href="https://www.anthropic.com/research/enabling-independent-research" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Anthropic 开放 Claude 真实使用数据给外部研究，公布首批试点</h4>
+          <p>Anthropic 通过隐私保护工具向斯坦福、牛津和 METR 等机构开放约 25 万段 Claude.ai 或 Claude Code 对话数据用于独立研究。它的重要性不在数据量本身，而在于模型公司开始把外部审计、用户行为研究和隐私保护做成可重复机制。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Anthropic Research</b> <span class="dotsep">·</span> 8 月 26 日 <span class="dotsep">·</span> <span class="tag">研究</span></div>
+          <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">AI 治理</span><span class="signal-badge topic">研究开放</span><span class="signal-badge topic">隐私</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-26093-agentic-autoresearch-power-control" href="https://arxiv.org/abs/2608.26093v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Agentic Autoresearch for Cell-Edge Power Control: Radically Redefining the Researcher&#x27;s Role</h4>
+          <p><b>为什么值得看：</b>这篇把 AI coding agent 放进固定预算实验循环，让它直接修改训练脚本、运行实验并按不可变指标接受或回滚结果。值得读的点是它把“自动研究”从口号落到可审计协议，适合关注 AutoML、科研 Agent 和实验治理的人。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Ahmad Khan, Akram Bin Sediq, Sara Azadegi Naeini 等</b> <span class="dotsep">·</span> 2026-08-26 <span class="dotsep">·</span> <span class="tag">cs.LG · cs.IT · eess.SY</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.LG</span><span class="signal-badge topic">cs.IT</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-26091-plansightrag-visual-first-multimodal-rag" href="https://arxiv.org/abs/2608.26091v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>PlanSightRAG: A Visual-First Multimodal RAG for Automating Question Answering and Compliance Checking for Civil Standard Plans</h4>
+          <p><b>为什么值得看：</b>它没有把工程图纸先 OCR 成文本，而是直接围绕图像、布局、检索热力图和 Planner-Retriever-Auditor-Synthesizer Agent 做证据链。对 RAG 工程师的价值是展示了视觉优先场景里“可追溯检索”如何比文本抽取更重要。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Nabaraj Subedi, Shuvo Dip Datta, Ahmed Abdelaty 等</b> <span class="dotsep">·</span> 2026-08-26 <span class="dotsep">·</span> <span class="tag">cs.IR · cs.CL · cs.CV</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.IR</span><span class="signal-badge topic">cs.CL</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-26086-traceml-human-agent-planning" href="https://arxiv.org/abs/2608.26086v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>TraceML: An Empirical Analysis of Human-Agent Planning in Machine Learning Development</h4>
+          <p><b>为什么值得看：</b>TraceML 把人类 Kaggle 开发轨迹和 Agent 开发轨迹放到同一 version-level schema 下比较，不只看最终分数。它适合用来理解为什么 Agent 做 ML 工程时经常输在规划、迭代和错误利用上，而不是只输在代码生成能力。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Jiarui Yan, Weiwei Sun, Sijie Li 等</b> <span class="dotsep">·</span> 2026-08-26 <span class="dotsep">·</span> <span class="tag">cs.LG · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.LG</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-26081-swarmworld-stigmergic-agent-societies" href="https://arxiv.org/abs/2608.26081v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>SwarmWorld: Stigmergic technological evolution in societies of language-model agents</h4>
+          <p><b>为什么值得看：</b>这篇把多智能体协作从“预设角色聊天”换成共享环境里的间接协调，让 Agent 通过持久 artifact 和可执行 controller 形成技术演化。它值得读，因为它提供了评估多 Agent 是否真的产生集体智能的一种实验框架。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Subhadeep Pal, Fiona Y. Wang, Markus J. Buehler</b> <span class="dotsep">·</span> 2026-08-26 <span class="dotsep">·</span> <span class="tag">cs.AI · cond-mat.mtrl-sci · cs.CL</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cond-mat.mtrl-sci</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-26070-prefix-sliding-test-time-scaling" href="https://arxiv.org/abs/2608.26070v1" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>Prefix Sliding for efficient test-time scaling</h4>
+          <p><b>为什么值得看：</b>它针对长推理成本提出一个很工程化的问题：中间思考 token 是否都值得保留在注意力里。Prefix Sliding 用固定前缀加最近窗口削减推理记忆，对长链推理、Agent 工具循环和推理成本控制都有直接参考价值。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Niklas Muennighoff, Zhengyang Wang, Zeyi Chen 等</b> <span class="dotsep">·</span> 2026-08-26 <span class="dotsep">·</span> <span class="tag">cs.CL · cs.AI · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.CL</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-zai-ox-alpha-glm-weights-release-discussion-2026-08-26" href="https://www.bloomberg.com/news/articles/2026-08-26/china-s-z-ai-made-ox-alpha-stealth-model-that-rivals-deepseek" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Z.ai 确认 Ox Alpha 属于 GLM 系列并将开放权重，HN 讨论中国开源模型节奏</h4>
+          <p>这条讨论的价值不只是模型本身，而是社区在比较 stealth model、开源权重、DeepSeek 之后的国内模型竞争路径。</p>
+          <div class="quote">“真正的分歧不在“是不是又一个大模型”，而在开放权重能否持续压低实验门槛。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 419 <span class="dotsep">·</span> 💬 142</div>
+          <div class="item-signals"><span class="signal-badge topic">开源模型</span><span class="signal-badge topic">GLM</span><span class="signal-badge topic">模型竞争</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-vms-wont-contain-cyber-capable-agents-2026-08-26" href="https://blog.trailofbits.com/2026/08/26/vms-wont-contain-cyber-capable-agents/" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Trail of Bits 称 VM 不足以约束网络攻击型 Agent，HN 重新讨论隔离边界</h4>
+          <p>文章认为能主动探索漏洞和网络环境的 Agent 会突破传统虚拟机威胁模型。对开发者而言，这和今天的浏览器 Agent、OpenAI 事件一起构成同一条安全主线。</p>
+          <div class="quote">“如果 Agent 的能力包括发现未知路径，隔离策略就不能只假设它会按剧本行动。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 146 <span class="dotsep">·</span> 💬 116</div>
+          <div class="item-signals"><span class="signal-badge topic">安全</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">沙箱</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-ai-suggested-ideas-ownership-motivation-2026-08-26" href="https://www.ssp.sh/brain/using-obsidian-with-ai/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>“完成一个不是自己的 AI 建议想法很难”引发创作者共鸣</h4>
+          <p>这条讨论从 Obsidian 与 AI 笔记实践出发，但真正击中的是人和模型之间的所有权问题：AI 能提供点子，却不一定能提供持续完成它的动机。</p>
+          <div class="quote">“AI 可以降低开始的摩擦，但不一定能替代你对问题的承诺。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 184 <span class="dotsep">·</span> 💬 100</div>
+          <div class="item-signals"><span class="signal-badge topic">AI 写作</span><span class="signal-badge topic">创造力</span><span class="signal-badge topic">开发者工作流</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-android-c2pa-camera-signature-root-attack-2026-08-26" href="https://www.da.vidbuchanan.co.uk/blog/android-c2pa.html" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Android C2PA 相机签名可被 root 攻击伪造，社区重新审视内容凭证</h4>
+          <p>安全研究指出，攻击者可借助 Android root 权限和 StrongBox 硬件签名任意数据，伪造 C2PA 签名图像或视频。讨论焦点是：AI 时代需要内容来源证明，但硬件和系统边界一旦破裂，签名本身也会成为新的信任假象。</p>
+          <div class="quote">“内容凭证不能只证明“这台设备签过”，还要说明设备当时是否仍可信。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 120 <span class="dotsep">·</span> 💬 35</div>
+          <div class="item-signals"><span class="signal-badge topic">内容凭证</span><span class="signal-badge topic">安全</span><span class="signal-badge topic">移动端</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="amazon-bedrock-agentcore-evaluations-2026-08-26" href="https://aws.amazon.com/blogs/machine-learning/evaluate-any-agent-framework-with-amazon-bedrock-agentcore-evaluations/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🧪</span>
+          <h4>Amazon Bedrock AgentCore Evaluations</h4>
+        </div>
+        <p class="tagline">面向 Agent framework 的评测入口</p>
+        <p>AWS 发布用 AgentCore Evaluations 评估任意 Agent framework 的指南，重点从结果评分扩展到工具调用、任务轨迹和企业约束。它适合放进产品栏，因为 Agent 评测正在从 demo 评分转向工程质量门禁。</p>
+        <div><span class="tag">评测</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 评测</span><span class="signal-badge topic">AWS</span><span class="signal-badge topic">企业 AI</span></div>
+      </a>
+      <a class="card" data-event-key="google-research-glucofm-cgm-foundation-model-2026-08-26" href="https://research.google/blog/glucofm-foundation-model-for-continuous-glucose-monitoring" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🩺</span>
+          <h4>GlucoFM</h4>
+        </div>
+        <p class="tagline">连续血糖监测基础模型</p>
+        <p>Google Research 推出面向 CGM 的轻量级自监督基础模型，用双流设计建模长期趋势和短期波动。它代表基础模型继续进入高频生理时间序列场景，而不只是文本、图像和语音。</p>
+        <div><span class="tag">研究产品</span></div>
+        <div class="item-signals"><span class="signal-badge topic">医疗 AI</span><span class="signal-badge topic">基础模型</span><span class="signal-badge topic">时间序列</span></div>
+      </a>
+      <a class="card" data-event-key="sentence-transformers-v6-multivectorencoder-2026-08-26" href="https://huggingface.co/blog/train-multi-vector-encoder" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">🔎</span>
+          <h4>Sentence Transformers MultiVectorEncoder</h4>
+        </div>
+        <p class="tagline">ColBERT 风格后交互检索进入主流训练栈</p>
+        <p>Hugging Face 介绍 Sentence Transformers v6.0 的 MultiVectorEncoder，支持多向量后交互检索和完整训练流程。对 RAG 工程来说，它把更细粒度但更重的检索范式变成可复用模块。</p>
+        <div><span class="tag">工具</span></div>
+        <div class="item-signals"><span class="signal-badge topic">RAG</span><span class="signal-badge topic">Embedding</span><span class="signal-badge topic">检索</span></div>
+      </a>
+      <a class="card" data-event-key="acceptmarkdown-serve-markdown-to-ai-agents-2026-08-26" href="https://acceptmarkdown.com/" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">📄</span>
+          <h4>AcceptMarkdown</h4>
+        </div>
+        <p class="tagline">用 Accept Header 给 Agent 返回 Markdown</p>
+        <p>AcceptMarkdown 在 HN 引发讨论：同一个 URL 根据请求头给人类返回 HTML、给 Agent 返回 Markdown。这个小工具背后的概念更重要，即网站开始显式为 AI Agent 提供低噪声、可引用的内容格式。</p>
+        <div><span class="tag">概念</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent 工具</span><span class="signal-badge topic">Web 协议</span><span class="signal-badge topic">内容分发</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-tt-a1i-archify-2026-08-27" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener">
+      <div>
+        <div class="name">tt-a1i / <b>archify</b></div>
+        <div class="desc">用于生成可验证架构图、工作流图和时序图的 Agent skill，强调自包含 HTML、动效和导出。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>HTML</span> <span class="dotsep">·</span> <span class="tag">Skill</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Skills</span><span class="signal-badge topic">可视化</span><span class="signal-badge topic">架构图</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 18,254</div>
+        <div class="today">▲ 1,035 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-conardli-garden-skills-2026-08-27" href="https://github.com/ConardLi/garden-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">ConardLi / <b>garden-skills</b></div>
+        <div class="desc">开源 Skills 集合，覆盖网页设计、知识检索和图像生成等常见 Agent 能力模块。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#8b949e"></span>CSS</span> <span class="dotsep">·</span> <span class="tag">Skills</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Skills</span><span class="signal-badge topic">知识检索</span><span class="signal-badge topic">设计</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 10,972</div>
+        <div class="today">▲ 113 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-k-dense-ai-scientific-agent-skills-2026-08-27" href="https://github.com/K-Dense-AI/scientific-agent-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">K-Dense-AI / <b>scientific-agent-skills</b></div>
+        <div class="desc">面向 AI Scientist 的技能库，包含生物、化学、医学和药物发现相关数据库与工作流。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Science</span></div>
+        <div class="item-signals"><span class="signal-badge topic">科学 Agent</span><span class="signal-badge topic">Skills</span><span class="signal-badge topic">科研工具</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 34,785</div>
+        <div class="today">▲ 138 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-thinkoffapp-carwatch-2026-08-27" href="https://github.com/ThinkOffApp/CarWatch" target="_blank" rel="noopener">
+      <div>
+        <div class="name">ThinkOffApp / <b>CarWatch</b></div>
+        <div class="desc">Show HN 热门项目，用 Raspberry Pi 和 Qwen 构建本地车载 AI，适合观察小型硬件 Agent 化。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Local AI</span></div>
+        <div class="item-signals"><span class="signal-badge topic">本地 Agent</span><span class="signal-badge topic">Qwen</span><span class="signal-badge topic">硬件</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ HN 144 points</div>
+        <div class="today">▲ 55 comments today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-browser-use-browser-use-2026-08-27" href="https://github.com/browser-use/browser-use" target="_blank" rel="noopener">
+      <div>
+        <div class="name">browser-use / <b>browser-use</b></div>
+        <div class="desc">让网站可被 AI Agent 自动操作的浏览器自动化框架，今天仍在 GitHub AI 热门榜上保持增长。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Browser Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">浏览器自动化</span><span class="signal-badge topic">Agent</span><span class="signal-badge topic">Web</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 111,060</div>
+        <div class="today">▲ 149 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-27 10:59 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>
