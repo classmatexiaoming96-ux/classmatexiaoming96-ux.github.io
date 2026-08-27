@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Sub-Agents 实战：把一个聊天窗口拆成可协作的专家团队</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #a0aec0;
+      --text-muted: #718096;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --code-bg: rgba(8, 13, 25, 0.9);
+      --success: #68d391;
+      --warning: #f6ad55;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--accent);
+      border: 1px solid rgba(99, 179, 237, 0.35);
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: transparent;
+    }
+
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    button:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow {
+      color: var(--success);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.55rem);
+      line-height: 1.14;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.08rem;
+      margin: 16px 0 0;
+      max-width: 860px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: 999px;
+      padding: 5px 12px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      background: #000;
+      margin-bottom: 2rem;
+    }
+
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 1.45rem;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 24px 0 8px;
+      font-size: 1.05rem;
+      color: #f7fafc;
+    }
+
+    p { margin: 0 0 14px; color: var(--text-secondary); }
+    strong { color: var(--text-primary); }
+
+    blockquote {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border-left: 4px solid var(--accent);
+      background: rgba(99, 179, 237, 0.08);
+      color: var(--text-primary);
+      border-radius: 0 10px 10px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+    }
+
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(99, 179, 237, 0.12);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--text-secondary); }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .toc-item {
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 12px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .time {
+      display: inline-block;
+      min-width: 54px;
+      color: var(--warning);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+    }
+
+    code {
+      background: var(--code-bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #bee3f8;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    .recommendations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .rec {
+      border: 1px solid rgba(99, 179, 237, 0.22);
+      border-radius: 10px;
+      padding: 14px;
+      background: rgba(99, 179, 237, 0.06);
+    }
+
+    .rec span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.84rem;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 720px) {
+      .page { width: min(100% - 20px, 1120px); padding-top: 18px; }
+      .hero, .content-card { padding: 1rem; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <section class="hero">
+      <p class="eyebrow">Claude Code · Sub-Agents · Agent Memory</p>
+      <h1>Claude Code Sub-Agents 实战：把一个聊天窗口拆成可协作的专家团队</h1>
+      <p class="subtitle">英文原题：How To Use Claude Code Sub-Agents Better Than 99% of People。这期视频适合已经会用 Claude Code、但还在把研究、写作、测试和整理全部塞进同一段对话的人。</p>
+      <div class="meta">
+        <span class="pill">频道：Michele Torti</span>
+        <span class="pill">时长：18:45</span>
+        <span class="pill">播放量：27,243</span>
+        <span class="pill">上传日期：2026-04-01</span>
+      </div>
+    </section>
+
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/6mG6tS6WG00" title="How To Use Claude Code Sub-Agents Better Than 99% of People" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么一个 Agent 不该包办所有事</h2>
+      <p>视频开头提出的场景很具体：如果你不用一个 Claude Code 对话处理所有事情，而是让不同的子 Agent 分别写客户邮件、研究内容、准备会议、检查输出，并且这些角色还能随着使用积累偏好，工作流会发生什么变化？这不是把提示词拆得更花哨，而是把原本混在同一段上下文里的职责拆开。</p>
+      <p>在真实项目里，「一个聊天窗口解决一切」很快会遇到三个问题。第一，任务范围越大，模型越容易在研究、写作、执行和复盘之间来回跳。第二，权限太宽时，一个简单写作任务也可能意外读取或修改无关文件。第三，偏好和规则没有稳定落点，每次新会话都要重新解释。Sub-agent 的价值，就是把这些不稳定因素变成可命名、可审计、可复用的角色。</p>
+      <p>这期视频值得看的地方在于它不是只展示界面，而是同时讲了两条路线：一种是在 Claude Code 里用 <code>/agents</code> 自动生成；另一种是手动创建 <code>.claude/agents</code>、<code>.claude/agent-memory</code> 和对应 Markdown 文件。前者适合快速上手，后者才是真正理解 sub-agent 工作方式的入口。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：Sub-agent 本质上是有边界的专家提示词</h2>
+      <h3>1. 主 Agent 像业务负责人，子 Agent 像不同员工</h3>
+      <p>视频把 Claude Code 比作业务负责人：你提出任务，它判断该交给哪个角色处理；子 Agent 则像研究助理、文案、QA 或运营人员。每个子 Agent 有自己的职责说明、工具权限、模型选择和记忆范围，完成后把清晰结果交回主 Agent，再由主 Agent 回到你面前。</p>
+
+      <h3>2. Sub-agent 不是神秘程序，核心是 Markdown 指令</h3>
+      <p>视频反复强调，子 Agent 本质上就是一个提示词文件。它通常包含 name、description、tools、model 和 instructions。这里最关键的是 <strong>description</strong>，因为主 Agent 会根据描述判断什么时候调用它；如果描述模糊，多个角色职责相似时就容易误触发。</p>
+
+      <h3>3. tools 字段就是权限边界</h3>
+      <p>视频把 tools 解释为权限：只读 Agent 可以读取和搜索，但不能修改；平衡 Agent 可以读、写、运行命令，但应避免危险动作；全权限 Agent 则适合高度结构化且你充分信任的任务。把 tools 想成团队成员的系统权限，比把它想成「功能列表」更准确。</p>
+
+      <blockquote>视频中的核心判断可以转述为：不要让一个 Claude 对话永远扮演所有员工；把职责拆给不同子 Agent，主 Agent 才更像协调者。</blockquote>
+
+      <h3>4. memory 让角色跨会话变得稳定</h3>
+      <p>默认情况下，新会话里的子 Agent 没有上一轮对话记忆。视频演示了给子 Agent 增加 project 级 memory，让它把语气偏好、反馈和任务规则写入 agent-memory 目录。这样你不必每次重复解释「邮件要兴奋一点」「客户 John 是谁」「输出要放进 outputs 文件夹」。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤</h2>
+      <h3>步骤 1：用 <code>/agents</code> 快速创建第一个角色</h3>
+      <p>视频的第一条路径是进入 Claude Code，在终端启动 Claude 后输入 <code>/agents</code>，选择创建新 agent，再选择 project 或 personal 作用域。project 更适合团队项目，因为角色定义会跟随项目存在；personal 更适合你自己的通用习惯。演示中选择 project，是为了让文件直接落在当前项目结构里。</p>
+
+      <h3>步骤 2：先让 Claude 生成，再阅读它生成了什么</h3>
+      <p>自动生成时，作者给了一个简单用例：根据 YouTube 视频想法生成 10 个选题和 hook。Claude 会询问工具、模型、颜色和 memory 作用域，然后创建对应的 agent 文件。这个过程很适合上手，但真正重要的是回头打开文件，看它到底写了哪些指令、工具和模型配置。</p>
+
+      <h3>步骤 3：手动建立目录，理解真实文件结构</h3>
+      <p>视频第二条路径是手动创建目录：先建立 <code>.claude</code>，再建立 <code>agents</code> 和 <code>agent-memory</code>，然后在 agents 里创建例如 <code>email-writer.md</code> 的文件。这个步骤解释了为什么 sub-agent 可以被版本控制、复制、审查和复用：它们不是只存在于 UI 里的配置，而是项目里的明文规则。</p>
+
+      <h3>步骤 4：写清楚 description，因为它决定路由</h3>
+      <p>示例 email writer 的 description 是「根据上下文写专业客户邮件」。作者说明，主 Agent 会读这个描述来判断是否应该调用该角色。工程上可以把 description 当作路由条件：它要足够具体，包含适用任务、输入条件和不适用范围，否则多个 agent 之间会出现职责重叠。</p>
+
+      <h3>步骤 5：按任务成本选择模型</h3>
+      <p>视频把模型选择分成三类：Haiku 快且便宜，适合读取文件、搜索代码、快速查找；Sonnet 平衡，适合大多数写作、代码 review 和日常任务；Opus 最强但更贵，适合困难调试、复杂推理和大型全栈任务。子 Agent 的好处是你不必给所有角色都配最贵模型，而是按职责分配算力。</p>
+
+      <h3>步骤 6：用自然语言、显式提名或会话级默认来触发</h3>
+      <p>视频列出三种触发方式。第一是自然语言，让 Claude 自己判断该用哪个 agent；第二是显式提到具体 agent，例如用 @ 或名字指定 email writer；第三是 session-wide，把某个 agent 设为整个会话默认。作者建议先从自然语言开始，再在角色变多时改用显式提名，因为后者最不容易误触发。</p>
+
+      <h3>步骤 7：把输出和记忆分开放</h3>
+      <p>作者演示生成客户邮件后，把产物移到普通 outputs 文件夹，而不是放在 <code>.claude</code> 内部。这是一个很实用的组织原则：<code>.claude</code> 里放角色定义、记忆、命令和技能；业务产物放在项目自己的 outputs、docs 或 src 目录里。这样规则和结果不会混在一起。</p>
+
+      <h3>步骤 8：把反馈写入 memory，让角色逐步贴合你的业务</h3>
+      <p>视频后半段演示让 email writer 在生成邮件的同时保存语气偏好。随后新会话再次调用该角色时，它会读取 memory 和 tone matching 文件，把之前的反馈带入新输出。对团队来说，这相当于把「隐性偏好」沉淀成可维护文档，而不是留在某一次聊天记录里。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>做法</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险与建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>单一 Claude Code 对话</td>
+            <td>短任务、一次性探索、需求还不清楚的早期讨论。</td>
+            <td>启动最快，没有角色管理成本，适合快速试错。</td>
+            <td>任务一长就容易上下文混乱。进入重复流程后，应抽出固定子 Agent。</td>
+          </tr>
+          <tr>
+            <td>自动生成 sub-agent</td>
+            <td>第一次搭建角色，或想让 Claude 帮你生成初版提示词。</td>
+            <td>路径简单，会引导你选择作用域、工具、模型和 memory。</td>
+            <td>生成结果未必符合团队标准。保存后必须人工检查 description、tools 和 instructions。</td>
+          </tr>
+          <tr>
+            <td>手写 Markdown agent</td>
+            <td>有明确工作流、需要版本控制、需要团队共同维护的角色。</td>
+            <td>结构透明，可 review、可复制、可逐步演进，适合长期使用。</td>
+            <td>初期需要理解字段语义。建议从一个低风险角色开始，比如研究总结或只读代码审查。</td>
+          </tr>
+          <tr>
+            <td>read-only agent</td>
+            <td>资料检索、代码理解、会议准备、风险排查。</td>
+            <td>可以读取和搜索上下文，但不会改动文件，安全边界清晰。</td>
+            <td>不能直接落地修改。适合作为执行前的分析角色。</td>
+          </tr>
+          <tr>
+            <td>balanced / full access agent</td>
+            <td>代码生成、批量整理、自动化执行、结构化重复任务。</td>
+            <td>能把分析直接变成产物，效率高。</td>
+            <td>权限越大风险越高。full access 只用于你能清楚描述步骤且容易回滚的任务。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：从提示词到团队制度</h2>
+      <blockquote>Sub-agent 最有价值的地方，不是让 Claude 看起来有更多人格，而是把职责、权限、模型和记忆从一次聊天里抽出来，变成项目可以维护的制度。</blockquote>
+      <p>如果你只把 sub-agent 当作「更长的 prompt」，它很容易变成又一层复杂度。真正值得采用的场景，是那些反复发生、输入输出相对稳定、权限边界能定义清楚的工作：客户邮件、代码 review、研究摘要、QA checklist、会议准备、项目复盘。每个角色都应该回答三个问题：什么时候该用我、我能做什么、我绝不能做什么。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <div class="toc">
+        <div class="toc-item"><span class="time">00:00</span> 开场：把 Claude Code 从单人助手变成一组后台协作的专家角色。</div>
+        <div class="toc-item"><span class="time">00:45</span> 概念解释：主 Agent 负责委派，子 Agent 像研究助理、文案和 QA。</div>
+        <div class="toc-item"><span class="time">02:00</span> 第一种创建方式：在 Claude Code 终端里使用 <code>/agents</code>。</div>
+        <div class="toc-item"><span class="time">03:10</span> 自动生成角色：填写任务描述、选择 project 作用域、配置工具和模型。</div>
+        <div class="toc-item"><span class="time">05:00</span> 角色文件结构：name、description、model、color、memory 和 instructions。</div>
+        <div class="toc-item"><span class="time">06:25</span> 手动创建方式：建立 <code>.claude/agents</code> 与 <code>.claude/agent-memory</code>。</div>
+        <div class="toc-item"><span class="time">08:10</span> 字段拆解：description 负责触发判断，tools 负责权限边界，model 负责成本与能力。</div>
+        <div class="toc-item"><span class="time">10:20</span> 触发方式：自然语言、显式 @ 指定、或把某个 agent 设为会话默认。</div>
+        <div class="toc-item"><span class="time">12:35</span> 权限设计：read-only、balanced、full access 的安全取舍。</div>
+        <div class="toc-item"><span class="time">15:00</span> 记忆机制：用 project memory 保存语气、偏好和反馈，让角色跨会话改进。</div>
+        <div class="toc-item"><span class="time">17:35</span> 结尾：给出销售、营销、运营、财务等业务子 Agent 的后续资源。</div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <div class="recommendations">
+        <a class="rec" href="index.html">返回课程列表<span>查看全部 AI / Claude / Agent 工程课程</span></a>
+        <a class="rec" href="e18sdZLwP7o.html">Claude Subagents 入门<span>同样围绕 Claude 子 Agent 的搭建与管理</span></a>
+        <a class="rec" href="vDVSGVpB2vc.html">Claude Agent Teams<span>从团队协作角度理解多 Agent 分工</span></a>
+        <a class="rec" href="uogzSxOw4LU.html">Claude Code、MCP 与 Skills<span>把 sub-agent 放进更完整的 Claude Code 工作流里</span></a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
