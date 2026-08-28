@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 开发者速成课 - Traversy Media</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --warning: #f6ad55;
+      --success: #68d391;
+    }
+    * { box-sizing: border-box; }
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.72;
+      margin: 0;
+      padding: 0 22px 56px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    .top-link { display: inline-flex; margin: 24px 0; color: var(--accent); }
+    button, .btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    button:hover, .btn:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 6vw, 4.2rem); line-height: 1.08; }
+    .hero .subtitle { color: var(--text-secondary); font-size: 1.08rem; margin: 0 0 18px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; color: var(--text-secondary); }
+    .pill { border: 1px solid var(--card-border); border-radius: 999px; padding: 5px 10px; background: rgba(255,255,255,0.035); }
+    .video-frame { margin: 0 0 2rem; border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); background: #000; }
+    .video-frame iframe { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { margin: 0 0 1rem; font-size: 1.55rem; }
+    h3 { margin: 1.2rem 0 .35rem; font-size: 1.12rem; color: #f8fafc; }
+    p { margin: .72rem 0; }
+    ul, ol { padding-left: 1.25rem; }
+    li { margin: .35rem 0; }
+    blockquote {
+      border-left: 3px solid var(--accent);
+      margin: 1.1rem 0;
+      padding: .4rem 0 .4rem 1rem;
+      color: #dbeafe;
+      background: rgba(99,179,237,.07);
+      border-radius: 0 8px 8px 0;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; overflow: hidden; border-radius: 8px; }
+    th, td { border: 1px solid var(--card-border); padding: .82rem; text-align: left; vertical-align: top; }
+    th { color: #f8fafc; background: rgba(99,179,237,.12); }
+    td { color: #cbd5e1; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .mini { border: 1px solid var(--card-border); background: rgba(255,255,255,.035); border-radius: 10px; padding: 1rem; }
+    .stamp { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--success); }
+    .note { color: var(--text-secondary); }
+    @media (max-width: 720px) {
+      body { padding: 0 14px 40px; }
+      .hero, .content-card { padding: 1.1rem; }
+      table { font-size: .9rem; }
+      th, td { padding: .62rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="top-link" href="index.html">← 返回课程列表</a>
+
+    <section class="hero">
+      <h1>Claude Code 开发者速成课</h1>
+      <p class="subtitle">Claude Code Crash Course For Developers</p>
+      <div class="meta">
+        <span class="pill">Traversy Media</span>
+        <span class="pill">1:03:23</span>
+        <span class="pill">约 180,514 次观看</span>
+        <span class="pill">主题：AI 编程工作流 / Claude Code / MCP / Subagents</span>
+      </div>
+    </section>
+
+    <div class="video-frame">
+      <iframe src="https://www.youtube.com/embed/C2GpeepcmYs" title="Claude Code Crash Course For Developers" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <section class="content-card">
+      <h2>一、问题引入 / 背景</h2>
+      <p>这支视频不是“把一句需求丢给 AI，然后等它自动变出项目”的演示，而是一门面向开发者的 Claude Code 使用速成课。Traversy Media 的讲法比较务实：先解释 Claude Code 是什么，再把它放回开发者每天真正会遇到的场景里，包括 VS Code 集成、终端操作、权限确认、代码 diff、重构、Git、MCP、技能和子代理。</p>
+      <p>值得看的地方在于，它把 agentic coding 从“会不会提示词”拉回到工程动作本身。你会看到 Claude Code 如何读项目、运行命令、拆模块、生成 CLAUDE.md、配置权限，并在已有仓库里做功能增强。对于已经会写代码、但还没形成 AI 辅助开发流程的人，这比单纯的工具介绍更有价值。</p>
+      <blockquote>核心判断：Claude Code 的价值不只是聊天式生成代码，而是让模型进入真实项目上下文，围绕文件、命令、测试、Git 和工具协议完成可审计的开发循环。</blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释</h2>
+      <div class="grid">
+        <div class="mini">
+          <h3>Claude Code</h3>
+          <p>Anthropic 面向开发者的 agentic coding 工具。它可以在终端或编辑器里读取文件、运行命令、修改代码、展示 diff，并根据项目上下文继续推理。</p>
+        </div>
+        <div class="mini">
+          <h3>上下文与 token</h3>
+          <p>模型能看到多少项目材料、历史对话和运行结果，直接影响输出质量与成本。视频专门提醒开发者关注 token 用量、模型选择和 effort 设置。</p>
+        </div>
+        <div class="mini">
+          <h3>权限模式</h3>
+          <p>Claude Code 会对敏感动作发起确认，例如写文件、运行命令、推送 Git。项目级 settings 可以把常用允许项和禁止项沉淀下来。</p>
+        </div>
+        <div class="mini">
+          <h3>MCP</h3>
+          <p>Model Context Protocol 用来接入外部服务，例如文档、数据库、浏览器测试。它让 coding agent 不局限于本地文件系统。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点 / 实操步骤</h2>
+      <h3>1. 先建立可观察的工作台</h3>
+      <p>视频先从 CLI 开始，再切到 VS Code。这个顺序有意义：终端让你理解 Claude Code 的基本模型和命令，VS Code 扩展则让 diff、文件上下文、提示输入区、模式切换更容易观察。作者强调自己更偏好扩展，因为它能把 Claude 正在做什么展示得更清楚。</p>
+
+      <h3>2. 不要忽略模型、token 与 effort</h3>
+      <p>Claude Code 可以查看使用统计、选择模型，并调整 effort。更高 effort 往往意味着更多推理和更多 token，对于复杂重构有帮助，但在简单任务上可能浪费预算。视频给出的实际建议是：订阅额度有限时，把 effort 调到 high 或 medium 更稳妥。</p>
+
+      <h3>3. 从小脚本观察内部工具调用</h3>
+      <p>作者让 Claude 写一个 Node 脚本，调用 CoinGecko API 拉取前五个加密货币价格并打印表格。这个例子不复杂，但能展示 Claude Code 的关键动作：读写文件、运行 bash、检查输出、解释修改。初学者应该先看这个过程，而不是急着让它搭完整应用。</p>
+
+      <h3>4. 用重构任务验证工程质量</h3>
+      <p>随后作者要求 Claude 把单文件脚本拆成 focused ES modules：API 模块负责抓取，format 模块负责价格和涨跌幅格式化，table 模块负责打印。这一步体现了 coding agent 的真实价值：不是生成一次性代码，而是在保持输出一致的前提下改善结构。</p>
+
+      <h3>5. 用 Git 和项目文档沉淀上下文</h3>
+      <p>视频展示了让 Claude clone 一个已有项目、安装依赖、理解 Vite/React 结构，并通过 <code>/init</code> 生成 CLAUDE.md。这个文件会在后续会话中自动加载，相当于把项目约定、脚本、组件组织方式写入长期上下文，避免每次都从零解释。</p>
+
+      <h3>6. 把能力扩展到技能、MCP 与子代理</h3>
+      <p>后半段讨论 skills、MCP 和 sub-agents。skills 适合把重复流程变成可复用规范；MCP 适合接入最新文档、数据库和浏览器自动化；sub-agents 适合把任务拆给更专门的角色。重点不是“多开几个代理”，而是给每个能力明确边界和上下文。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>使用方式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险 / 注意点</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>终端 CLI</td>
+            <td>快速生成脚本、执行命令、检查工具链、在轻量项目中试错。</td>
+            <td>直接、透明，能清楚看到 bash、文件读写、测试命令等工具调用。</td>
+            <td>长会话里上下文和 diff 不如编辑器可视化；初学者容易忽略实际改了哪些文件。</td>
+            <td>作为入门和调试入口保留，但复杂重构建议切到编辑器。</td>
+          </tr>
+          <tr>
+            <td>VS Code 扩展</td>
+            <td>日常开发、重构、审查 diff、跨文件修改、添加功能。</td>
+            <td>提示区、上下文附件、模式切换和文件变更都更容易管理。</td>
+            <td>看起来更顺手并不代表可以跳过代码审查；仍要检查 diff 和运行测试。</td>
+            <td>视频推荐的主工作流，尤其适合已经使用 VS Code 的开发者。</td>
+          </tr>
+          <tr>
+            <td>CLAUDE.md / skills</td>
+            <td>团队规范、重复工作流、固定代码风格、项目启动说明。</td>
+            <td>把隐性约定转成模型每次都会读取的上下文，减少重复解释。</td>
+            <td>过期文档会持续污染输出；需要随项目变化维护。</td>
+            <td>对任何中长期项目都值得建立，但要纳入 review。</td>
+          </tr>
+          <tr>
+            <td>MCP</td>
+            <td>需要最新文档、数据库查询、浏览器测试、外部 SaaS 操作。</td>
+            <td>让 agent 能调用专业工具，而不是凭训练记忆猜测。</td>
+            <td>权限和数据边界必须清楚，避免把敏感服务开放给过宽的自动化。</td>
+            <td>先接入低风险的文档和 Playwright，再逐步接数据库等高权限服务。</td>
+          </tr>
+          <tr>
+            <td>Sub-agents</td>
+            <td>大型任务拆分、测试审查、安全检查、源码探索、文档生成。</td>
+            <td>可以把角色、上下文和验收标准分开，提高并行处理能力。</td>
+            <td>拆分不清会制造重复工作和冲突修改；需要主线程做整合。</td>
+            <td>只在任务边界清晰时使用，并明确每个子代理的输入/输出。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块</h2>
+      <blockquote>视频开头反复强调：AI 编程流程仍然很主观，每个开发者都会形成自己的方法；重要的是理解工具基础，再把它接入可验证的工程流程。</blockquote>
+      <p>这句话背后的工程含义是：Claude Code 不能替代需求澄清、测试边界和代码审查。它更像一个可以读项目、执行命令、持续修改的协作者。你越能给它清楚的上下文、约束和验收方式，它越能在真实开发里产出稳定价值。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <ol>
+        <li><span class="stamp">00:00</span> 课程定位：面向开发者的 Claude Code 总览，不是单纯 vibe coding 演示。</li>
+        <li><span class="stamp">03:30</span> Claude Code 是什么：终端里的 agentic coding 工具，以及为什么要关心上下文和工具调用。</li>
+        <li><span class="stamp">08:00</span> 安装、登录和模型选择：从基础配置进入真实开发环境。</li>
+        <li><span class="stamp">13:00</span> Token、使用统计和 effort：如何在推理质量与成本之间取舍。</li>
+        <li><span class="stamp">18:00</span> VS Code 工作流：终端、扩展、提示输入区、上下文附件和模式切换。</li>
+        <li><span class="stamp">24:00</span> 第一个脚本任务：调用 CoinGecko API，观察 Claude 的 bash、文件写入和运行反馈。</li>
+        <li><span class="stamp">31:00</span> 重构示例：把单文件 Node 脚本拆成 API、format、table 等 ES 模块。</li>
+        <li><span class="stamp">38:00</span> 权限与 settings：允许 git push、拒绝 rm -rf 等项目级安全规则。</li>
+        <li><span class="stamp">43:00</span> 克隆已有项目：让 Claude 进入真实仓库，安装依赖并理解 React/Vite 项目。</li>
+        <li><span class="stamp">49:00</span> CLAUDE.md 与 /init：把项目说明、脚本和结构沉淀为可复用上下文。</li>
+        <li><span class="stamp">54:00</span> Skills：把重复任务抽象成固定工作流，例如组件规范或文档校验。</li>
+        <li><span class="stamp">58:00</span> MCP 与 Playwright：接入外部文档、数据库和浏览器自动化，让 Claude 能看见并验证应用。</li>
+        <li><span class="stamp">61:00</span> Sub-agents 和收尾建议：什么时候拆分角色，什么时候保持单线程控制。</li>
+      </ol>
+      <p class="note">时间点依据字幕内容整理为学习目录，用于快速定位主题；实际章节边界可能随 YouTube 播放器显示略有偏移。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <p>如果你想继续补齐 AI 编程工作流，可以从课程列表里的 Claude Code、Codex、MCP 和 sub-agent 相关页面继续读：</p>
+      <ul>
+        <li><a href="index.html">返回 YouTube 技术分享课程列表</a></li>
+        <li><a href="6mG6tS6WG00.html">How To Use Claude Code Sub-Agents Better Than 99% of People</a></li>
+        <li><a href="RWp5cejTApU.html">NEW DeepSeek Harness Is The Claude Code &amp; Codex Killer?</a></li>
+        <li><a href="vDVSGVpB2vc.html">How to Build Claude Agent Teams Better Than 99% of People</a></li>
+        <li><a href="cGuyrANVi4A.html">How Model Context Protocol (MCP) actually works</a></li>
+      </ul>
+      <a class="btn" href="https://www.youtube.com/watch?v=C2GpeepcmYs" target="_blank" rel="noopener">在 YouTube 打开原视频</a>
+    </section>
+  </main>
+</body>
+</html>
