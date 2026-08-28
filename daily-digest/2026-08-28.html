@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 每日速递 · 2026-08-28</title>
+<meta name="description" content="今天的主线是生成式媒体控制、编码代理工程化、模型安全诉讼和端侧压缩同时推进：AI 能力继续扩展，但可审计、可治理、可本地化的实现方式更受关注。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/digest.css?v=20260717">
+</head>
+<body>
+<main class="wrap">
+
+  <!-- ===== MASTHEAD ===== -->
+  <header class="masthead">
+    <div class="mh-kicker">
+      <span class="live"><span class="pulse"></span>DAILY DIGEST</span>
+      <span class="sep">/</span>
+      <span>AI 情报 · 每日一刊</span>
+    </div>
+    <h1 class="mh-title">AI 每日速递<span class="en">Artificial Intelligence · Daily Digest</span></h1>
+    <div class="mh-meta">
+      <span class="date">2026-08-28</span>
+      <span class="sep">·</span>
+      <span>星期五</span>
+      <span class="edition">第 88 期</span>
+    </div>
+    <p class="mh-intro">今天的主线是生成式媒体控制、编码代理工程化、模型安全诉讼和端侧压缩同时推进：AI 能力继续扩展，但可审计、可治理、可本地化的实现方式更受关注。</p>
+    <div class="stats">
+      <div class="stat stat-headlines"><div class="n">6</div><div class="l">今日要闻</div></div>
+      <div class="stat stat-papers"><div class="n">4</div><div class="l">AI 论文</div></div>
+      <div class="stat stat-community"><div class="n">4</div><div class="l">社区热议</div></div>
+      <div class="stat stat-products"><div class="n">5</div><div class="l">产品 / 概念</div></div>
+      <div class="stat stat-repos"><div class="n">5</div><div class="l">开源热门</div></div>
+    </div>
+  </header>
+
+  <section class="briefing" aria-labelledby="briefing-title">
+    <div class="briefing-head"><div><span class="eyebrow">EDITOR PICK</span><h2 id="briefing-title">今日三条重点</h2></div><a class="briefing-more" href="feed.html" target="_top">查看全部动态</a></div>
+    <div class="briefing-grid">
+      <a class="brief-item brief-item-1" href="https://updates.midjourney.com/edit-model-for-v8" target="_blank" rel="noopener">
+        <div class="brief-rank">01</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Midjourney 开放 V8.2 图像编辑模型测试</h3>
+        <p>Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-2" href="https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control" target="_blank" rel="noopener">
+        <div class="brief-rank">02</div>
+        <div class="brief-section">今日要闻 · 7 个来源</div>
+        <h3>Gemini Omni 1.1 Flash 强化生成式视频控制</h3>
+        <p>Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="brief-item brief-item-3" href="https://platform.claude.com/docs/en/release-notes/overview#august-27-2026" target="_blank" rel="noopener">
+        <div class="brief-rank">03</div>
+        <div class="brief-section">今日要闻</div>
+        <h3>Claude Console 新增个人密钥与服务账号密钥</h3>
+        <p>Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。</p>
+        <span class="brief-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="coverage-bar">
+      <div class="coverage-copy"><span>本期覆盖</span><b>24</b> 条精选信号<i></i><b>11</b> 个原始来源<i></i><b>50</b> 个主题</div>
+      <nav class="topic-rail" aria-label="本期主题">
+        <a href="topics.html?topic=cs.AI" target="_top">cs.AI</a>
+        <a href="topics.html?topic=%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90" target="_top">视频生成</a>
+        <a href="topics.html?topic=%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7" target="_top">开发工具</a>
+        <a href="topics.html?topic=cs.SE" target="_top">cs.SE</a>
+        <a href="topics.html?topic=Claude%20Code" target="_top">Claude Code</a>
+        <a href="topics.html?topic=Agent%20Memory" target="_top">Agent Memory</a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--gold);--accent-soft:rgba(245,181,68,.12)">
+    <div class="sec-head"><span class="sec-no">01</span><h2>今日要闻</h2><span class="sec-meta">Google News · Official · AI HOT</span></div>
+    <a class="lead" data-event-key="midjourney-v8-2-edit-model-beta-2026-08-27" href="https://updates.midjourney.com/edit-model-for-v8" target="_blank" rel="noopener">
+      <span class="tag">头条</span>
+      <h3>Midjourney 开放 V8.2 图像编辑模型测试</h3>
+      <p>Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。</p>
+      <div class="src">◷ <b>Midjourney Updates</b> <span class="dotsep">·</span> 昨日</div>
+      <div class="item-signals"><span class="signal-badge attribution">经 AI HOT 聚合发现</span><span class="signal-badge topic">生成式媒体</span><span class="signal-badge topic">图像编辑</span><span class="signal-badge topic">创作工具</span></div>
+    </a>
+    <div class="rows">
+      <a class="row" data-event-key="gemini-omni-1-1-flash-video-control-2026-08-27" href="https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>Gemini Omni 1.1 Flash 强化生成式视频控制</h4>
+          <p>Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Google DeepMind Blog</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">模型</span></div>
+          <div class="item-signals"><span class="signal-badge source-count" title="AI HOT topic cluster">7 个来源</span><span class="signal-badge topic">视频生成</span><span class="signal-badge topic">多模态</span><span class="signal-badge topic">开发者 API</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="claude-console-personal-service-account-keys-2026-08-27" href="https://platform.claude.com/docs/en/release-notes/overview#august-27-2026" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Claude Console 新增个人密钥与服务账号密钥</h4>
+          <p>Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Claude Platform Release Notes</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">平台</span></div>
+          <div class="item-signals"><span class="signal-badge topic">开发者平台</span><span class="signal-badge topic">API 密钥</span><span class="signal-badge topic">治理</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="xai-grok-csam-training-lawsuit-2026-08-27" href="https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>诉讼指控 xAI 使用 CSAM 材料训练 Grok</h4>
+          <p>Ars Technica 报道称，一项诉讼指控 xAI 使用儿童性虐待材料及其 AI 衍生图像训练 Grok。无论案件最终结果如何，它都把训练数据来源、模型输出再训练和有害内容销毁义务推到了更高风险的法律前线。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Ars Technica</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">诉讼</span></div>
+          <div class="item-signals"><span class="signal-badge topic">AI 安全</span><span class="signal-badge topic">法律风险</span><span class="signal-badge topic">训练数据</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="warp-claude-self-improving-agents-skills-2026-08-27" href="https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Warp 公开基于 Claude 的自我改进 Agent 技术路线</h4>
+          <p>Warp 介绍了如何用基础技能和改进技能构建自我改进循环，把人类反馈转成 agent 可复用的行为更新。它的价值在于把“提示词调优”落成文件化、可审查、可迭代的技能资产。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Claude Blog</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">实践</span></div>
+          <div class="item-signals"><span class="signal-badge topic">Agent Skills</span><span class="signal-badge topic">开发工具</span><span class="signal-badge topic">反馈闭环</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="tencent-hunyuan-hymt2-edge-translation-2026-08-27" href="https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ%3D%3D&amp;mid=2247498367&amp;idx=1&amp;sn=f1a5cf87eb06015cbe995bd5ef8b5d0a" target="_blank" rel="noopener">
+        <div class="idx">05</div>
+        <div class="body">
+          <h4>腾讯混元将端侧翻译模型压缩至 440MB</h4>
+          <p>腾讯混元把 Hy-MT2-1.8B 通过低比特量化压到 440MB，并落地到哔哩哔哩直播弹幕翻译。相比云端大模型新闻，这类端侧压缩说明 AI 产品正在追求更低延迟、更低成本和更强隐私边界。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">腾讯混元</b> <span class="dotsep">·</span> 昨日 <span class="dotsep">·</span> <span class="tag">落地</span></div>
+          <div class="item-signals"><span class="signal-badge topic">端侧模型</span><span class="signal-badge topic">模型压缩</span><span class="signal-badge topic">实时翻译</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:#ff8fa3;--accent-soft:rgba(255,143,163,.12)">
+    <div class="sec-head"><span class="sec-no">02</span><h2>AI 论文</h2><span class="sec-meta">arXiv · Research Papers</span></div>
+    <div class="rows">
+      <a class="row paper-row" data-event-key="arxiv-2608-27454-wikiskill" href="https://arxiv.org/abs/2608.27454v1" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution</h4>
+          <p><b>为什么值得看：</b>这篇论文把 agent 经验沉淀成持久知识库，用于后续技能演化，正好回应了近期 Claude Skills、Codex skills 和团队工作流中的核心问题：经验如何从一次会话迁移到下一次任务。值得读的是它把“记忆”从聊天历史拉到可编译、可复用的技能资产。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Liyan Tang, Cyrus Rashtchian, Chun-Sung Ferng 等</b> <span class="dotsep">·</span> 2026-08-27 <span class="dotsep">·</span> <span class="tag">cs.AI · cs.LG</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span><span class="signal-badge topic">cs.LG</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-27449-swe-prime" href="https://arxiv.org/abs/2608.27449v1" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>SWE-Prime: Fewer Trajectories, Better Performance</h4>
+          <p><b>为什么值得看：</b>软件工程 agent 的成本瓶颈常在多轨迹采样和反复尝试，这篇论文主张用更少轨迹拿到更好表现。对做编码 agent 的工程师来说，它比单纯刷榜更有阅读价值，因为它直接指向推理预算、任务选择和采样效率。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Dewu Zheng, Ruizhe Ye, Yanlin Wang 等</b> <span class="dotsep">·</span> 2026-08-27 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.SE</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-27442-mcr-bench" href="https://arxiv.org/abs/2608.27442v1" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench</h4>
+          <p><b>为什么值得看：</b>代码评审比补全更接近真实团队协作：它需要理解上下文、历史修改和动态讨论。MCR-Bench 值得关注，因为它把 code review 评测从静态片段推向真实世界过程，更贴近 coding agent 的生产使用。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Dewu Zheng, Yanlin Wang, Xiwen Wang 等</b> <span class="dotsep">·</span> 2026-08-27 <span class="dotsep">·</span> <span class="tag">cs.SE · cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.SE</span><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row paper-row" data-event-key="arxiv-2608-27427-persona-execution-separation" href="https://arxiv.org/abs/2608.27427v1" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Persona-Execution Separation: An Architecture Pattern for Evolving LLM Agents under Execution Audit</h4>
+          <p><b>为什么值得看：</b>这篇论文把 agent 的“人格/策略层”和“执行/审计层”拆开讨论，切中了企业落地时最现实的问题：如何允许 agent 演化，同时让执行链可追踪、可约束。它适合和当前浏览器 agent、skills、权限系统一起阅读。</p>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Yisen Xi</b> <span class="dotsep">·</span> 2026-08-27 <span class="dotsep">·</span> <span class="tag">cs.AI</span></div>
+          <div class="item-signals"><span class="signal-badge topic">cs.AI</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--cyan);--accent-soft:rgba(79,209,197,.12)">
+    <div class="sec-head"><span class="sec-no">03</span><h2>社区热议</h2><span class="sec-meta">Hacker News · Reddit · X</span></div>
+    <div class="rows">
+      <a class="row" data-event-key="hn-openexecutive-ai-ceo-2026-08-27" href="https://github.com/SenteLabsAI/OpenExecutive" target="_blank" rel="noopener">
+        <div class="idx">01</div>
+        <div class="body">
+          <h4>CEO 裁开发者给 AI 腾位置，开发者做了开源 AI CEO</h4>
+          <p>OpenExecutive 在 HN 引发高热讨论，表面是反讽项目，实际讨论的是管理层把 AI 当替代品时，软件团队如何反击这种叙事。它说明社区对“AI 替代开发者”的抵触不只是情绪，而是对组织决策质量的质疑。</p>
+          <div class="quote">“最有讨论价值的点不是这个项目能不能当 CEO，而是它把管理层的自动化幻觉照了回来。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 941 <span class="dotsep">·</span> 💬 649</div>
+          <div class="item-signals"><span class="signal-badge topic">开源讽刺</span><span class="signal-badge topic">AI 管理</span><span class="signal-badge topic">组织文化</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-small-models-have-arrived-2026-08-27" href="https://calv.info/small-models-have-arrived" target="_blank" rel="noopener">
+        <div class="idx">02</div>
+        <div class="body">
+          <h4>Small Models Have Arrived</h4>
+          <p>小模型话题继续升温，HN 讨论集中在本地部署、低延迟、隐私和任务专用模型是否已经足以替代一部分大模型调用。它与今天端侧翻译模型压缩形成呼应。</p>
+          <div class="quote">“当任务边界足够清楚时，小模型不再只是便宜替代，而可能是更好产品形态。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 487 <span class="dotsep">·</span> 💬 219</div>
+          <div class="item-signals"><span class="signal-badge topic">小模型</span><span class="signal-badge topic">本地推理</span><span class="signal-badge topic">成本效率</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="hn-load-bearing-vocabulary-of-claude-2026-08-27" href="https://louisabraham.github.io/load-bearing/" target="_blank" rel="noopener">
+        <div class="idx">03</div>
+        <div class="body">
+          <h4>The load-bearing vocabulary of Claude</h4>
+          <p>这篇文章在 Show HN/HN 圈层引发讨论，核心是 Claude 对某些词汇和表达方式的反应会显著改变协作质量。它提醒开发者，提示词不是魔法，而是人机协议的一部分。</p>
+          <div class="quote">“更稳定的协作来自可复用的词汇契约，而不是每次重新发明提示词。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Hacker News</b> <span class="dotsep">·</span> ▲ 372 <span class="dotsep">·</span> 💬 178</div>
+          <div class="item-signals"><span class="signal-badge topic">Claude</span><span class="signal-badge topic">提示词</span><span class="signal-badge topic">人机协作</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+      <a class="row" data-event-key="show-hn-tare-claude-quota-tool-2026-08-27" href="https://github.com/kelviq/tare" target="_blank" rel="noopener">
+        <div class="idx">04</div>
+        <div class="body">
+          <h4>Claude quota ran out in 10 minutes, so I made a tool to find out why</h4>
+          <p>开发者做了一个分析 Claude 配额消耗的工具，引发关于 coding agent 成本透明度的讨论。随着 agent 工作流变长，token 和配额观测会从“账单问题”变成工程生产力问题。</p>
+          <div class="quote">“如果团队看不见 agent 花掉了什么上下文，就很难优化它的工作方式。”</div>
+          <div class="meta-line"><b style="color:var(--ink-dim)">Show HN</b> <span class="dotsep">·</span> ▲ 67 <span class="dotsep">·</span> 💬 53</div>
+          <div class="item-signals"><span class="signal-badge topic">Claude Code</span><span class="signal-badge topic">成本观测</span><span class="signal-badge topic">开发工具</span></div>
+        </div>
+        <div class="arrow">↗</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--violet);--accent-soft:rgba(169,139,255,.12)">
+    <div class="sec-head"><span class="sec-no">04</span><h2>产品 · 概念</h2><span class="sec-meta">Official Sources · AI HOT</span></div>
+    <div class="cards">
+      <a class="card" data-event-key="product-experiential-open-openrouter" href="https://github.com/experientiallabs/experiential" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">OR</span>
+          <h4>Experiential Open OpenRouter</h4>
+        </div>
+        <p class="tagline">把使用数据反哺模型路由</p>
+        <p>社区项目尝试用真实调用反馈改进模型选择，适合观察模型路由平台如何从静态排行榜走向动态使用信号。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">路由平台</span><span class="signal-badge topic">模型选择</span></div>
+      </a>
+      <a class="card" data-event-key="product-devx-android-termux-agent-2026-08-27" href="https://github.com/apvcode/Termux-Dev" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">DX</span>
+          <h4>Devx</h4>
+        </div>
+        <p class="tagline">运行在 Android Termux 和桌面的自主 coding agent</p>
+        <p>把 AI coding agent 带到移动终端与桌面双环境，适合观察低资源、本地化开发代理的可行性。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Coding Agent</span><span class="signal-badge topic">Android</span><span class="signal-badge topic">本地自动化</span></div>
+      </a>
+      <a class="card" data-event-key="product-polign-edge-agent-memory-2026-08-27" href="https://polign.com/blog-edge-agent-memory" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">EM</span>
+          <h4>Edge Agent Memory</h4>
+        </div>
+        <p class="tagline">轻量无状态的 agent memory 数据库</p>
+        <p>Polign 展示了一个面向边缘场景的轻量记忆层，关注低依赖、可迁移和 agent 会话状态管理。</p>
+        <div><span class="tag">概念</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Memory</span><span class="signal-badge topic">边缘计算</span></div>
+      </a>
+      <a class="card" data-event-key="product-derive-ai-artifacts-workflows-2026-08-27" href="https://github.com/derive-to/derive" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">DR</span>
+          <h4>Derive</h4>
+        </div>
+        <p class="tagline">AI artifacts 和 workflows 的开放主页</p>
+        <p>Derive 把 artifacts 与工作流作为可发布、可复用对象来组织，反映 AI 产物正在从一次性输出转向可管理资产。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI Artifacts</span><span class="signal-badge topic">工作流</span></div>
+      </a>
+      <a class="card" data-event-key="product-concord-agent-bridge-2026-08-27" href="https://github.com/Get-Concord-AI/concord-mcp" target="_blank" rel="noopener">
+        <div class="ct">
+          <span class="ico">CN</span>
+          <h4>Concord</h4>
+        </div>
+        <p class="tagline">让 Claude Code、Codex 和 Cursor 互相通信</p>
+        <p>Concord MCP 试图在多种 coding agent 之间建立通信桥，适合关注跨工具协作和任务交接的人继续跟踪。</p>
+        <div><span class="tag">Show HN</span></div>
+        <div class="item-signals"><span class="signal-badge topic">MCP</span><span class="signal-badge topic">多 Agent 协作</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec reveal" style="--accent:var(--green);--accent-soft:rgba(93,217,113,.12)">
+    <div class="sec-head"><span class="sec-no">05</span><h2>开源热门</h2><span class="sec-meta">GitHub Trending</span></div>
+    <a class="repo" data-event-key="github-jetbrains-go-modern-guidelines-2026-08-28" href="https://github.com/JetBrains/go-modern-guidelines" target="_blank" rel="noopener">
+      <div>
+        <div class="name">JetBrains / <b>go-modern-guidelines</b></div>
+        <div class="desc">帮助 AI coding agents 编写现代 Go 的指南，适合作为团队级代码风格上下文。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#00ADD8"></span>Go</span> <span class="dotsep">·</span> <span class="tag">Coding Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">AI Coding</span><span class="signal-badge topic">Go</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 2,168</div>
+        <div class="today">▲ 300 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-anthropics-claude-plugins-official-2026-08-28" href="https://github.com/anthropics/claude-plugins-official" target="_blank" rel="noopener">
+      <div>
+        <div class="name">anthropics / <b>claude-plugins-official</b></div>
+        <div class="desc">Anthropic 官方维护的 Claude Code Plugins 目录。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Plugin</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Claude Code</span><span class="signal-badge topic">插件</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 34,716</div>
+        <div class="today">▲ 292 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-calesthio-openmontage-2026-08-28" href="https://github.com/calesthio/OpenMontage" target="_blank" rel="noopener">
+      <div>
+        <div class="name">calesthio / <b>OpenMontage</b></div>
+        <div class="desc">开源 agentic video production system，包含生产 pipeline、工具和技能知识文件。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Video Agent</span></div>
+        <div class="item-signals"><span class="signal-badge topic">视频生成</span><span class="signal-badge topic">Agent Workflow</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 52,456</div>
+        <div class="today">▲ 1,292 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-thedotmack-claude-mem-2026-08-28" href="https://github.com/thedotmack/claude-mem" target="_blank" rel="noopener">
+      <div>
+        <div class="name">thedotmack / <b>claude-mem</b></div>
+        <div class="desc">跨会话持久上下文工具，压缩 agent 会话并在后续任务中注入相关记忆。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span> <span class="dotsep">·</span> <span class="tag">Memory</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Agent Memory</span><span class="signal-badge topic">上下文</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 92,308</div>
+        <div class="today">▲ 143 today</div>
+      </div>
+    </a>
+    <a class="repo" data-event-key="github-composiohq-awesome-claude-skills-2026-08-28" href="https://github.com/ComposioHQ/awesome-claude-skills" target="_blank" rel="noopener">
+      <div>
+        <div class="name">ComposioHQ / <b>awesome-claude-skills</b></div>
+        <div class="desc">Claude Skills 资源与工具集合，适合快速观察技能生态的分类和用法。</div>
+        <div class="repo-meta"><span><span class="lang-dot" style="background:#3572A5"></span>Python</span> <span class="dotsep">·</span> <span class="tag">Skills</span></div>
+        <div class="item-signals"><span class="signal-badge topic">Claude Skills</span><span class="signal-badge topic">资源集合</span></div>
+      </div>
+      <div class="stars">
+        <div class="total">★ 73,633</div>
+        <div class="today">▲ 130 today</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="foot">
+    <div class="foot-top">
+      <nav class="foot-nav" aria-label="日报导航">
+        <a class="back" href="index.html" target="_top">← 返回日报</a>
+        <a class="back" href="feed.html" target="_top">动态流</a>
+        <a class="back" href="topics.html" target="_top">主题雷达</a>
+      </nav>
+      <span class="made">生成于 2026-08-28 10:48 · daily-digest skill</span>
+    </div>
+    <p class="disclaimer">
+      本刊由 daily-digest skill 汇编：核心来源包括 Google News、arXiv、Hacker News、Reddit、X 与 GitHub Trending；
+      AI HOT 仅作为补充候选与多源热度信号，并保留其署名。编辑会合并同一事件并回链原始信源，重要事实请以原文为准。
+    </p>
+  </footer>
+
+</main>
+<script>
+/* reveal on scroll */
+(function () {
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+}());
+</script>
+</body>
+</html>

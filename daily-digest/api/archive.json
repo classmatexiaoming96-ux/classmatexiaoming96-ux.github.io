@@ -1,7 +1,992 @@
 {
   "version": 1,
-  "generated_at": "2026-08-27T10:59",
+  "generated_at": "2026-08-28T10:48",
   "digests": [
+    {
+      "date": "2026-08-28",
+      "weekday": "星期五",
+      "edition": 88,
+      "title": "生成式媒体、代理工程化与模型安全同日推进",
+      "intro": "今天的主线是生成式媒体控制、编码代理工程化、模型安全诉讼和端侧压缩同时推进：AI 能力继续扩展，但可审计、可治理、可本地化的实现方式更受关注。",
+      "counts": {
+        "headlines": 6,
+        "papers": 4,
+        "community": 4,
+        "products": 5,
+        "repos": 5
+      },
+      "highlights": [
+        {
+          "event_key": "midjourney-v8-2-edit-model-beta-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Midjourney 开放 V8.2 图像编辑模型测试",
+          "summary": "Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。",
+          "url": "https://updates.midjourney.com/edit-model-for-v8",
+          "source": "Midjourney Updates",
+          "time": "昨日",
+          "topics": [
+            "生成式媒体",
+            "图像编辑",
+            "创作工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://updates.midjourney.com/edit-model-for-v8"
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "gemini-omni-1-1-flash-video-control-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Gemini Omni 1.1 Flash 强化生成式视频控制",
+          "summary": "Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。",
+          "url": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control",
+          "source": "Google DeepMind Blog",
+          "time": "昨日",
+          "topics": [
+            "视频生成",
+            "多模态",
+            "开发者 API"
+          ],
+          "source_count": 7,
+          "related_sources": [
+            "AI HOT topic cluster"
+          ],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "claude-console-personal-service-account-keys-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Claude Console 新增个人密钥与服务账号密钥",
+          "summary": "Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。",
+          "url": "https://platform.claude.com/docs/en/release-notes/overview#august-27-2026",
+          "source": "Claude Platform Release Notes",
+          "time": "昨日",
+          "topics": [
+            "开发者平台",
+            "API 密钥",
+            "治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        }
+      ],
+      "items": [
+        {
+          "event_key": "midjourney-v8-2-edit-model-beta-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Midjourney 开放 V8.2 图像编辑模型测试",
+          "summary": "Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。",
+          "url": "https://updates.midjourney.com/edit-model-for-v8",
+          "source": "Midjourney Updates",
+          "time": "昨日",
+          "topics": [
+            "生成式媒体",
+            "图像编辑",
+            "创作工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "AI HOT",
+            "canonical": "https://updates.midjourney.com/edit-model-for-v8"
+          },
+          "featured_rank": 1,
+          "is_lead": true,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "gemini-omni-1-1-flash-video-control-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Gemini Omni 1.1 Flash 强化生成式视频控制",
+          "summary": "Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。",
+          "url": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control",
+          "source": "Google DeepMind Blog",
+          "time": "昨日",
+          "topics": [
+            "视频生成",
+            "多模态",
+            "开发者 API"
+          ],
+          "source_count": 7,
+          "related_sources": [
+            "AI HOT topic cluster"
+          ],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 2,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "claude-console-personal-service-account-keys-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Claude Console 新增个人密钥与服务账号密钥",
+          "summary": "Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。",
+          "url": "https://platform.claude.com/docs/en/release-notes/overview#august-27-2026",
+          "source": "Claude Platform Release Notes",
+          "time": "昨日",
+          "topics": [
+            "开发者平台",
+            "API 密钥",
+            "治理"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": 3,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "xai-grok-csam-training-lawsuit-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "诉讼指控 xAI 使用 CSAM 材料训练 Grok",
+          "summary": "Ars Technica 报道称，一项诉讼指控 xAI 使用儿童性虐待材料及其 AI 衍生图像训练 Grok。无论案件最终结果如何，它都把训练数据来源、模型输出再训练和有害内容销毁义务推到了更高风险的法律前线。",
+          "url": "https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says",
+          "source": "Ars Technica",
+          "time": "昨日",
+          "topics": [
+            "AI 安全",
+            "法律风险",
+            "训练数据"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "warp-claude-self-improving-agents-skills-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "Warp 公开基于 Claude 的自我改进 Agent 技术路线",
+          "summary": "Warp 介绍了如何用基础技能和改进技能构建自我改进循环，把人类反馈转成 agent 可复用的行为更新。它的价值在于把“提示词调优”落成文件化、可审查、可迭代的技能资产。",
+          "url": "https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude",
+          "source": "Claude Blog",
+          "time": "昨日",
+          "topics": [
+            "Agent Skills",
+            "开发工具",
+            "反馈闭环"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "tencent-hunyuan-hymt2-edge-translation-2026-08-27",
+          "section": "headlines",
+          "section_label": "今日要闻",
+          "title": "腾讯混元将端侧翻译模型压缩至 440MB",
+          "summary": "腾讯混元把 Hy-MT2-1.8B 通过低比特量化压到 440MB，并落地到哔哩哔哩直播弹幕翻译。相比云端大模型新闻，这类端侧压缩说明 AI 产品正在追求更低延迟、更低成本和更强隐私边界。",
+          "url": "https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ%3D%3D&mid=2247498367&idx=1&sn=f1a5cf87eb06015cbe995bd5ef8b5d0a",
+          "source": "腾讯混元",
+          "time": "昨日",
+          "topics": [
+            "端侧模型",
+            "模型压缩",
+            "实时翻译"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-27454-wikiskill",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution",
+          "summary": "这篇论文把 agent 经验沉淀成持久知识库，用于后续技能演化，正好回应了近期 Claude Skills、Codex skills 和团队工作流中的核心问题：经验如何从一次会话迁移到下一次任务。值得读的是它把“记忆”从聊天历史拉到可编译、可复用的技能资产。",
+          "url": "https://arxiv.org/abs/2608.27454v1",
+          "source": "arXiv",
+          "time": "2026-08-27T17:59:11Z",
+          "topics": [
+            "cs.AI",
+            "cs.LG"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-27449-swe-prime",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "SWE-Prime: Fewer Trajectories, Better Performance",
+          "summary": "软件工程 agent 的成本瓶颈常在多轨迹采样和反复尝试，这篇论文主张用更少轨迹拿到更好表现。对做编码 agent 的工程师来说，它比单纯刷榜更有阅读价值，因为它直接指向推理预算、任务选择和采样效率。",
+          "url": "https://arxiv.org/abs/2608.27449v1",
+          "source": "arXiv",
+          "time": "2026-08-27T17:58:10Z",
+          "topics": [
+            "cs.SE",
+            "cs.AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-27442-mcr-bench",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench",
+          "summary": "代码评审比补全更接近真实团队协作：它需要理解上下文、历史修改和动态讨论。MCR-Bench 值得关注，因为它把 code review 评测从静态片段推向真实世界过程，更贴近 coding agent 的生产使用。",
+          "url": "https://arxiv.org/abs/2608.27442v1",
+          "source": "arXiv",
+          "time": "2026-08-27T17:56:24Z",
+          "topics": [
+            "cs.SE",
+            "cs.AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "arxiv-2608-27427-persona-execution-separation",
+          "section": "papers",
+          "section_label": "AI 论文",
+          "title": "Persona-Execution Separation: An Architecture Pattern for Evolving LLM Agents under Execution Audit",
+          "summary": "这篇论文把 agent 的“人格/策略层”和“执行/审计层”拆开讨论，切中了企业落地时最现实的问题：如何允许 agent 演化，同时让执行链可追踪、可约束。它适合和当前浏览器 agent、skills、权限系统一起阅读。",
+          "url": "https://arxiv.org/abs/2608.27427v1",
+          "source": "arXiv",
+          "time": "2026-08-27T17:50:07Z",
+          "topics": [
+            "cs.AI"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-openexecutive-ai-ceo-2026-08-27",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "CEO 裁开发者给 AI 腾位置，开发者做了开源 AI CEO",
+          "summary": "OpenExecutive 在 HN 引发高热讨论，表面是反讽项目，实际讨论的是管理层把 AI 当替代品时，软件团队如何反击这种叙事。它说明社区对“AI 替代开发者”的抵触不只是情绪，而是对组织决策质量的质疑。",
+          "url": "https://github.com/SenteLabsAI/OpenExecutive",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "开源讽刺",
+            "AI 管理",
+            "组织文化"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 941,
+          "comments": 649,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-small-models-have-arrived-2026-08-27",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Small Models Have Arrived",
+          "summary": "小模型话题继续升温，HN 讨论集中在本地部署、低延迟、隐私和任务专用模型是否已经足以替代一部分大模型调用。它与今天端侧翻译模型压缩形成呼应。",
+          "url": "https://calv.info/small-models-have-arrived",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "小模型",
+            "本地推理",
+            "成本效率"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 487,
+          "comments": 219,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "hn-load-bearing-vocabulary-of-claude-2026-08-27",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "The load-bearing vocabulary of Claude",
+          "summary": "这篇文章在 Show HN/HN 圈层引发讨论，核心是 Claude 对某些词汇和表达方式的反应会显著改变协作质量。它提醒开发者，提示词不是魔法，而是人机协议的一部分。",
+          "url": "https://louisabraham.github.io/load-bearing/",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "Claude",
+            "提示词",
+            "人机协作"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 372,
+          "comments": 178,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "show-hn-tare-claude-quota-tool-2026-08-27",
+          "section": "community",
+          "section_label": "社区热议",
+          "title": "Claude quota ran out in 10 minutes, so I made a tool to find out why",
+          "summary": "开发者做了一个分析 Claude 配额消耗的工具，引发关于 coding agent 成本透明度的讨论。随着 agent 工作流变长，token 和配额观测会从“账单问题”变成工程生产力问题。",
+          "url": "https://github.com/kelviq/tare",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "Claude Code",
+            "成本观测",
+            "开发工具"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": 67,
+          "comments": 53,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-experiential-open-openrouter",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Experiential Open OpenRouter",
+          "summary": "社区项目尝试用真实调用反馈改进模型选择，适合观察模型路由平台如何从静态排行榜走向动态使用信号。",
+          "url": "https://github.com/experientiallabs/experiential",
+          "source": "Hacker News",
+          "time": "",
+          "topics": [
+            "路由平台",
+            "模型选择"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-devx-android-termux-agent-2026-08-27",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Devx",
+          "summary": "把 AI coding agent 带到移动终端与桌面双环境，适合观察低资源、本地化开发代理的可行性。",
+          "url": "https://github.com/apvcode/Termux-Dev",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "Coding Agent",
+            "Android",
+            "本地自动化"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-polign-edge-agent-memory-2026-08-27",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Edge Agent Memory",
+          "summary": "Polign 展示了一个面向边缘场景的轻量记忆层，关注低依赖、可迁移和 agent 会话状态管理。",
+          "url": "https://polign.com/blog-edge-agent-memory",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "Agent Memory",
+            "边缘计算"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-derive-ai-artifacts-workflows-2026-08-27",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Derive",
+          "summary": "Derive 把 artifacts 与工作流作为可发布、可复用对象来组织，反映 AI 产物正在从一次性输出转向可管理资产。",
+          "url": "https://github.com/derive-to/derive",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "AI Artifacts",
+            "工作流"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "product-concord-agent-bridge-2026-08-27",
+          "section": "products",
+          "section_label": "产品 / 概念",
+          "title": "Concord",
+          "summary": "Concord MCP 试图在多种 coding agent 之间建立通信桥，适合关注跨工具协作和任务交接的人继续跟踪。",
+          "url": "https://github.com/Get-Concord-AI/concord-mcp",
+          "source": "Show HN",
+          "time": "",
+          "topics": [
+            "MCP",
+            "多 Agent 协作"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "",
+          "stars_today": ""
+        },
+        {
+          "event_key": "github-jetbrains-go-modern-guidelines-2026-08-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "JetBrains/go-modern-guidelines",
+          "summary": "帮助 AI coding agents 编写现代 Go 的指南，适合作为团队级代码风格上下文。",
+          "url": "https://github.com/JetBrains/go-modern-guidelines",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "AI Coding",
+            "Go"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "2,168",
+          "stars_today": "300"
+        },
+        {
+          "event_key": "github-anthropics-claude-plugins-official-2026-08-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "anthropics/claude-plugins-official",
+          "summary": "Anthropic 官方维护的 Claude Code Plugins 目录。",
+          "url": "https://github.com/anthropics/claude-plugins-official",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Claude Code",
+            "插件"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "34,716",
+          "stars_today": "292"
+        },
+        {
+          "event_key": "github-calesthio-openmontage-2026-08-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "calesthio/OpenMontage",
+          "summary": "开源 agentic video production system，包含生产 pipeline、工具和技能知识文件。",
+          "url": "https://github.com/calesthio/OpenMontage",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "视频生成",
+            "Agent Workflow"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "52,456",
+          "stars_today": "1,292"
+        },
+        {
+          "event_key": "github-thedotmack-claude-mem-2026-08-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "thedotmack/claude-mem",
+          "summary": "跨会话持久上下文工具，压缩 agent 会话并在后续任务中注入相关记忆。",
+          "url": "https://github.com/thedotmack/claude-mem",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Agent Memory",
+            "上下文"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "92,308",
+          "stars_today": "143"
+        },
+        {
+          "event_key": "github-composiohq-awesome-claude-skills-2026-08-28",
+          "section": "repos",
+          "section_label": "开源热门",
+          "title": "ComposioHQ/awesome-claude-skills",
+          "summary": "Claude Skills 资源与工具集合，适合快速观察技能生态的分类和用法。",
+          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+          "source": "GitHub",
+          "time": "",
+          "topics": [
+            "Claude Skills",
+            "资源集合"
+          ],
+          "source_count": 1,
+          "related_sources": [],
+          "attribution": {
+            "source": "",
+            "canonical": ""
+          },
+          "featured_rank": null,
+          "is_lead": false,
+          "points": null,
+          "comments": null,
+          "stars": "73,633",
+          "stars_today": "130"
+        }
+      ],
+      "topics": [
+        {
+          "name": "cs.AI",
+          "count": 4
+        },
+        {
+          "name": "视频生成",
+          "count": 2
+        },
+        {
+          "name": "开发工具",
+          "count": 2
+        },
+        {
+          "name": "cs.SE",
+          "count": 2
+        },
+        {
+          "name": "Claude Code",
+          "count": 2
+        },
+        {
+          "name": "Agent Memory",
+          "count": 2
+        },
+        {
+          "name": "生成式媒体",
+          "count": 1
+        },
+        {
+          "name": "图像编辑",
+          "count": 1
+        },
+        {
+          "name": "创作工具",
+          "count": 1
+        },
+        {
+          "name": "多模态",
+          "count": 1
+        },
+        {
+          "name": "开发者 API",
+          "count": 1
+        },
+        {
+          "name": "开发者平台",
+          "count": 1
+        },
+        {
+          "name": "API 密钥",
+          "count": 1
+        },
+        {
+          "name": "治理",
+          "count": 1
+        },
+        {
+          "name": "AI 安全",
+          "count": 1
+        },
+        {
+          "name": "法律风险",
+          "count": 1
+        },
+        {
+          "name": "训练数据",
+          "count": 1
+        },
+        {
+          "name": "Agent Skills",
+          "count": 1
+        },
+        {
+          "name": "反馈闭环",
+          "count": 1
+        },
+        {
+          "name": "端侧模型",
+          "count": 1
+        },
+        {
+          "name": "模型压缩",
+          "count": 1
+        },
+        {
+          "name": "实时翻译",
+          "count": 1
+        },
+        {
+          "name": "cs.LG",
+          "count": 1
+        },
+        {
+          "name": "开源讽刺",
+          "count": 1
+        },
+        {
+          "name": "AI 管理",
+          "count": 1
+        },
+        {
+          "name": "组织文化",
+          "count": 1
+        },
+        {
+          "name": "小模型",
+          "count": 1
+        },
+        {
+          "name": "本地推理",
+          "count": 1
+        },
+        {
+          "name": "成本效率",
+          "count": 1
+        },
+        {
+          "name": "Claude",
+          "count": 1
+        },
+        {
+          "name": "提示词",
+          "count": 1
+        },
+        {
+          "name": "人机协作",
+          "count": 1
+        },
+        {
+          "name": "成本观测",
+          "count": 1
+        },
+        {
+          "name": "路由平台",
+          "count": 1
+        },
+        {
+          "name": "模型选择",
+          "count": 1
+        },
+        {
+          "name": "Coding Agent",
+          "count": 1
+        },
+        {
+          "name": "Android",
+          "count": 1
+        },
+        {
+          "name": "本地自动化",
+          "count": 1
+        },
+        {
+          "name": "边缘计算",
+          "count": 1
+        },
+        {
+          "name": "AI Artifacts",
+          "count": 1
+        },
+        {
+          "name": "工作流",
+          "count": 1
+        },
+        {
+          "name": "MCP",
+          "count": 1
+        },
+        {
+          "name": "多 Agent 协作",
+          "count": 1
+        },
+        {
+          "name": "AI Coding",
+          "count": 1
+        },
+        {
+          "name": "Go",
+          "count": 1
+        },
+        {
+          "name": "插件",
+          "count": 1
+        },
+        {
+          "name": "Agent Workflow",
+          "count": 1
+        },
+        {
+          "name": "上下文",
+          "count": 1
+        },
+        {
+          "name": "Claude Skills",
+          "count": 1
+        },
+        {
+          "name": "资源集合",
+          "count": 1
+        }
+      ],
+      "sources": [
+        {
+          "name": "Show HN",
+          "count": 5
+        },
+        {
+          "name": "GitHub",
+          "count": 5
+        },
+        {
+          "name": "arXiv",
+          "count": 4
+        },
+        {
+          "name": "Hacker News",
+          "count": 4
+        },
+        {
+          "name": "Midjourney Updates",
+          "count": 1
+        },
+        {
+          "name": "Google DeepMind Blog",
+          "count": 1
+        },
+        {
+          "name": "AI HOT topic cluster",
+          "count": 1
+        },
+        {
+          "name": "Claude Platform Release Notes",
+          "count": 1
+        },
+        {
+          "name": "Ars Technica",
+          "count": 1
+        },
+        {
+          "name": "Claude Blog",
+          "count": 1
+        },
+        {
+          "name": "腾讯混元",
+          "count": 1
+        }
+      ]
+    },
     {
       "date": "2026-08-27",
       "weekday": "星期四",
@@ -33236,8 +34221,9 @@
   "topics": [
     {
       "name": "cs.AI",
-      "count": 41,
+      "count": 45,
       "dates": [
+        "2026-08-28",
         "2026-08-27",
         "2026-08-21",
         "2026-08-17",
@@ -33253,10 +34239,46 @@
       "sections": [
         {
           "name": "AI 论文",
-          "count": 41
+          "count": 45
         }
       ],
       "items": [
+        {
+          "date": "2026-08-28",
+          "title": "WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution",
+          "summary": "这篇论文把 agent 经验沉淀成持久知识库，用于后续技能演化，正好回应了近期 Claude Skills、Codex skills 和团队工作流中的核心问题：经验如何从一次会话迁移到下一次任务。值得读的是它把“记忆”从聊天历史拉到可编译、可复用的技能资产。",
+          "url": "https://arxiv.org/abs/2608.27454v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "SWE-Prime: Fewer Trajectories, Better Performance",
+          "summary": "软件工程 agent 的成本瓶颈常在多轨迹采样和反复尝试，这篇论文主张用更少轨迹拿到更好表现。对做编码 agent 的工程师来说，它比单纯刷榜更有阅读价值，因为它直接指向推理预算、任务选择和采样效率。",
+          "url": "https://arxiv.org/abs/2608.27449v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench",
+          "summary": "代码评审比补全更接近真实团队协作：它需要理解上下文、历史修改和动态讨论。MCR-Bench 值得关注，因为它把 code review 评测从静态片段推向真实世界过程，更贴近 coding agent 的生产使用。",
+          "url": "https://arxiv.org/abs/2608.27442v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "Persona-Execution Separation: An Architecture Pattern for Evolving LLM Agents under Execution Audit",
+          "summary": "这篇论文把 agent 的“人格/策略层”和“执行/审计层”拆开讨论，切中了企业落地时最现实的问题：如何允许 agent 演化，同时让执行链可追踪、可约束。它适合和当前浏览器 agent、skills、权限系统一起阅读。",
+          "url": "https://arxiv.org/abs/2608.27427v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
         {
           "date": "2026-08-27",
           "title": "TraceML: An Empirical Analysis of Human-Agent Planning in Machine Learning Development",
@@ -33436,42 +34458,269 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "开发工具",
+      "count": 34,
+      "dates": [
+        "2026-08-28",
+        "2026-08-26",
+        "2026-08-25",
+        "2026-08-24",
+        "2026-08-21",
+        "2026-08-20",
+        "2026-08-19",
+        "2026-08-18",
+        "2026-08-17",
+        "2026-08-14",
+        "2026-08-10",
+        "2026-08-07",
+        "2026-08-06",
+        "2026-08-04",
+        "2026-08-03",
+        "2026-07-30",
+        "2026-07-29",
+        "2026-07-27",
+        "2026-07-23",
+        "2026-07-22",
+        "2026-07-21"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 12
+        },
+        {
+          "name": "今日要闻",
+          "count": 10
+        },
+        {
+          "name": "开源热门",
+          "count": 9
+        },
+        {
+          "name": "社区热议",
+          "count": 3
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Warp 公开基于 Claude 的自我改进 Agent 技术路线",
+          "summary": "Warp 介绍了如何用基础技能和改进技能构建自我改进循环，把人类反馈转成 agent 可复用的行为更新。它的价值在于把“提示词调优”落成文件化、可审查、可迭代的技能资产。",
+          "url": "https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "Claude quota ran out in 10 minutes, so I made a tool to find out why",
+          "summary": "开发者做了一个分析 Claude 配额消耗的工具，引发关于 coding agent 成本透明度的讨论。随着 agent 工作流变长，token 和配额观测会从“账单问题”变成工程生产力问题。",
+          "url": "https://github.com/kelviq/tare",
+          "source": "Show HN",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-26",
+          "title": "OpenRouter 编辑器内模型选择教程",
+          "summary": "OpenRouter 发布代码优先教程，说明如何在编辑器里实时挑选更合适的 AI 模型。它代表一种趋势：模型路由不再只是后端网关配置，而会进入开发者每天的工具界面。",
+          "url": "https://openrouter.ai/blog/tutorials/choose-best-ai-model",
+          "source": "OpenRouter",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-25",
+          "title": "GPT-5.6 登陆 Kiro，OpenAI 把开发者模型竞争推向性价比",
+          "summary": "OpenAI 官网动态称 GPT-5.6 已接入 Kiro，并强调面向开发者的性价比提升。它的看点不只是新模型，而是编码工具正在把模型价格、延迟和实际 IDE 工作流绑定成一套采购决策。",
+          "url": "https://openai.com/index/gpt-5-6-in-kiro",
+          "source": "OpenAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-25",
+          "title": "Open-source LLM GPU Checker",
+          "summary": "这个 Show HN 小工具把本地模型部署前最常见的问题产品化：显存、模型大小、量化和运行可行性。它不复杂，但很实用，适合本地 AI 工作流入门用户快速排除硬件幻想。",
+          "url": "https://jaeseok614.github.io/llm-gpu-checker-ko/",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-25",
+          "title": "Enozunu",
+          "summary": "Enozunu 关注把 agent 环境配置声明化、可复现化，切中长期自动化运行中的一个真实痛点：同一个 Agent 在不同机器、不同目录、不同依赖状态下表现不一致。",
+          "url": "https://github.com/tooppoo/enozunu",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-25",
+          "title": "tashfeenahmed/freellmapi",
+          "summary": "把多个免费 LLM provider 和自定义 OpenAI-compatible endpoint 聚合到统一 /v1 接口，带路由、故障转移和密钥处理能力。",
+          "url": "https://github.com/tashfeenahmed/freellmapi",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-24",
+          "title": "Proliferate",
+          "summary": "Proliferate 把“为任意 coding agent 提供自托管 Codex”作为定位，适合想把 agent 执行环境、权限和代码上下文掌握在自己基础设施里的团队观察。",
+          "url": "https://github.com/proliferate-ai/proliferate",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "Vomit：用另一个 LLM 清理 Claude 输出引发吐槽与共鸣",
+          "summary": "这个项目用一个额外 LLM 清理 Claude 的 token 输出，名字很戏谑，但讨论点严肃：模型输出后处理已经成为工具链的一部分，尤其在长输出和 coding 场景里。",
+          "url": "https://github.com/zachahn/vomit",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "cursor/plugins",
+          "summary": "Cursor 插件规范与官方插件仓库，值得关注其是否会把 AI IDE 的能力扩展开放成稳定生态接口。",
+          "url": "https://github.com/cursor/plugins",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-20",
+          "title": "ModelMap",
+          "summary": "ModelMap 把模型结构从静态 README 变成可浏览的架构图，适合快速理解 transformer 变体、层级和模块连接。对工程师来说，它能减少读陌生模型代码前的认知成本。",
+          "url": "https://modelmap.cc",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-20",
+          "title": "Shoehorn",
+          "summary": "Shoehorn 的价值在于把量化体验做成开发者可试的工具，而不是只停留在论文或框架参数。它适合用来评估小机器上模型质量、延迟和成本之间的实际折中。",
+          "url": "https://notactuallytreyanastasio.github.io/shoehorn/",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-20",
+          "title": "vm0-ai/vm0",
+          "summary": "定位为可信赖 AI teammate 的开发工具，主题覆盖 agentic workflow、AI runtime 与 sandbox，值得关注其安全运行边界设计。",
+          "url": "https://github.com/vm0-ai/vm0",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-19",
+          "title": "chaitanyagiri/munder-difflin",
+          "summary": "local multi-agent harness，适合观察轻量多智能体编排如何在本地开发环境落地。",
+          "url": "https://github.com/chaitanyagiri/munder-difflin",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-18",
+          "title": "Cursor 推出 Origin 代码托管服务，试图替代 GitHub 在 Agent 工作流中的一部分角色",
+          "summary": "Cursor 的 Origin 把代码托管、开发环境和 AI 编程入口放得更近。它值得关注，因为 AI IDE 正从“编辑器插件”向“代码协作基础设施”扩张。",
+          "url": "https://cursor.com/changelog/origin-code-hosting",
+          "source": "Cursor Changelog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-17",
+          "title": "Deltix",
+          "summary": "Deltix 把 AI 放到测试流程，而不是只放到代码生成流程。结合今天 agent team 里的 QA teammate 讨论，它代表了一个明确趋势：AI 开发工具的下一步竞争会落在独立验收和回归验证上。",
+          "url": "https://app.deltix.ai",
+          "source": "Deltix",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-14",
+          "title": "Cursor builds 让云智能体从预构建环境启动，官方称启动最高快 3 倍",
+          "summary": "Cursor 新增 builds，把依赖安装和环境准备提前到后台完成，让云 Agent 从最近一次成功构建的环境副本启动。对真实团队来说，这解决的是 Agent 每次开工前浪费在 setup、install 和首 token 等待上的时间。",
+          "url": "https://cursor.com/blog/builds",
+          "source": "Cursor Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-10",
+          "title": "pranshuparmar/witr",
+          "summary": "追踪进程、端口、容器或文件由什么启动的 CLI/TUI 工具，适合调试 agent 或本地自动化留下的后台进程。",
+          "url": "https://github.com/pranshuparmar/witr",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-10",
+          "title": "pingdotgg/t3code",
+          "summary": "TypeScript 生态里热度上升的 AI coding / developer tooling 项目，适合继续观察其实现边界。",
+          "url": "https://github.com/pingdotgg/t3code",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-07",
+          "title": "GitHub Copilot App Slash Commands",
+          "summary": "斜杠命令把规划、质疑方案和自动执行拆成可触发动作，有助于把 AI 编程从闲聊变成可重复工作流。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/a-guide-to-slash-commands-in-the-github-copilot-app",
+          "source": "GitHub Blog",
+          "section": "products",
+          "section_label": "产品 / 概念"
         },
         {
           "date": "2026-08-06",
-          "title": "ABSeeker: Training Long-Horizon Search Agents via Answer-Backtracked Credit Assignment",
-          "summary": "它关注的是搜索 Agent 训练里最痛的稀疏奖励问题：哪些检索、验证、整合动作真的帮到最终答案。对做 RAG Agent、浏览器 Agent 和多步证据链训练的人，价值高于普通 benchmark 刷分论文。",
-          "url": "https://arxiv.org/abs/2608.05102v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "title": "Warp Agent CLI 发布，终端工具继续向 Agent 化演进",
+          "summary": "Warp 的切入点不是再做一个聊天框，而是把 agent 放回开发者本来工作的终端上下文里。社区关注点集中在权限、可解释命令和长任务恢复。",
+          "url": "https://www.warp.dev/blog/introducing-the-warp-agent-cli-coding-agent",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         },
         {
-          "date": "2026-08-06",
-          "title": "Chained Recursive Language Models for Multi-Iteration Reasoning",
-          "summary": "它把复杂推理拆成多个 fresh reasoning roots，试图避免单条长 CoT 里早期错误一路传播。对做长上下文问答、审计型推理和多轮验证系统的人，提供了一个不改权重的推理时架构选择。",
-          "url": "https://arxiv.org/abs/2608.05124v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-08-04",
+          "title": "Sprocket",
+          "summary": "Sprocket 的亮点在于把 Agent 目标扩展到硬件与软件协同开发场景，适合观察工具调用如何覆盖 CAD、固件、物料和测试这类非纯代码工作。",
+          "url": "https://sprocket-demo.spikonado.com",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
         },
         {
-          "date": "2026-08-05",
-          "title": "Risky Business: Measuring The Faithfulness-Safety Tension",
-          "summary": "这篇把 CoT 可监控性和安全拒答之间的张力具体化：模型若过度忠实于不安全推理链会出问题，但若推理链不忠实又难以审计。HazMart 与 Targeted Reasoning Replacement 给安全评测提供了更可操作的干预方法。",
-          "url": "https://arxiv.org/abs/2608.03745v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-08-04",
+          "title": "Alishahryar1/free-claude-code",
+          "summary": "Terminal, app and IDE wrapper for using Claude Code, Codex and Pi-style workflows, including voice-supported OpenClaw-like interaction.",
+          "url": "https://github.com/Alishahryar1/free-claude-code",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         },
         {
-          "date": "2026-08-05",
-          "title": "MDLMPE: Distribution Aware Positional Encoding for Masked Diffusion Language Models",
-          "summary": "Masked diffusion LM 的上下文不是自回归模型的连续前缀，这篇专门为动态 revealed/masked token 分布设计位置编码。它提醒工程师：把 AR 模型的 RoPE 经验直接搬到扩散语言模型上可能低估结构差异。",
-          "url": "https://arxiv.org/abs/2608.03769v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
+          "date": "2026-08-03",
+          "title": "smevals",
+          "summary": "smevals 的价值不在规模，而在提醒团队用小而稳定的样例持续测模型、提示词和 eval 框架本身。它适合被当作轻量回归测试的起点。",
+          "url": "https://simonwillison.net/2026/Jul/31/smevals",
+          "source": "Simon Willison",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -33743,271 +34992,10 @@
       ]
     },
     {
-      "name": "开发工具",
-      "count": 32,
-      "dates": [
-        "2026-08-26",
-        "2026-08-25",
-        "2026-08-24",
-        "2026-08-21",
-        "2026-08-20",
-        "2026-08-19",
-        "2026-08-18",
-        "2026-08-17",
-        "2026-08-14",
-        "2026-08-10",
-        "2026-08-07",
-        "2026-08-06",
-        "2026-08-04",
-        "2026-08-03",
-        "2026-07-30",
-        "2026-07-29",
-        "2026-07-27",
-        "2026-07-23",
-        "2026-07-22",
-        "2026-07-21"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 12
-        },
-        {
-          "name": "今日要闻",
-          "count": 9
-        },
-        {
-          "name": "开源热门",
-          "count": 9
-        },
-        {
-          "name": "社区热议",
-          "count": 2
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-26",
-          "title": "OpenRouter 编辑器内模型选择教程",
-          "summary": "OpenRouter 发布代码优先教程，说明如何在编辑器里实时挑选更合适的 AI 模型。它代表一种趋势：模型路由不再只是后端网关配置，而会进入开发者每天的工具界面。",
-          "url": "https://openrouter.ai/blog/tutorials/choose-best-ai-model",
-          "source": "OpenRouter",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-25",
-          "title": "GPT-5.6 登陆 Kiro，OpenAI 把开发者模型竞争推向性价比",
-          "summary": "OpenAI 官网动态称 GPT-5.6 已接入 Kiro，并强调面向开发者的性价比提升。它的看点不只是新模型，而是编码工具正在把模型价格、延迟和实际 IDE 工作流绑定成一套采购决策。",
-          "url": "https://openai.com/index/gpt-5-6-in-kiro",
-          "source": "OpenAI",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-25",
-          "title": "Open-source LLM GPU Checker",
-          "summary": "这个 Show HN 小工具把本地模型部署前最常见的问题产品化：显存、模型大小、量化和运行可行性。它不复杂，但很实用，适合本地 AI 工作流入门用户快速排除硬件幻想。",
-          "url": "https://jaeseok614.github.io/llm-gpu-checker-ko/",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-25",
-          "title": "Enozunu",
-          "summary": "Enozunu 关注把 agent 环境配置声明化、可复现化，切中长期自动化运行中的一个真实痛点：同一个 Agent 在不同机器、不同目录、不同依赖状态下表现不一致。",
-          "url": "https://github.com/tooppoo/enozunu",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-25",
-          "title": "tashfeenahmed/freellmapi",
-          "summary": "把多个免费 LLM provider 和自定义 OpenAI-compatible endpoint 聚合到统一 /v1 接口，带路由、故障转移和密钥处理能力。",
-          "url": "https://github.com/tashfeenahmed/freellmapi",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-24",
-          "title": "Proliferate",
-          "summary": "Proliferate 把“为任意 coding agent 提供自托管 Codex”作为定位，适合想把 agent 执行环境、权限和代码上下文掌握在自己基础设施里的团队观察。",
-          "url": "https://github.com/proliferate-ai/proliferate",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-21",
-          "title": "Vomit：用另一个 LLM 清理 Claude 输出引发吐槽与共鸣",
-          "summary": "这个项目用一个额外 LLM 清理 Claude 的 token 输出，名字很戏谑，但讨论点严肃：模型输出后处理已经成为工具链的一部分，尤其在长输出和 coding 场景里。",
-          "url": "https://github.com/zachahn/vomit",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-21",
-          "title": "cursor/plugins",
-          "summary": "Cursor 插件规范与官方插件仓库，值得关注其是否会把 AI IDE 的能力扩展开放成稳定生态接口。",
-          "url": "https://github.com/cursor/plugins",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-20",
-          "title": "ModelMap",
-          "summary": "ModelMap 把模型结构从静态 README 变成可浏览的架构图，适合快速理解 transformer 变体、层级和模块连接。对工程师来说，它能减少读陌生模型代码前的认知成本。",
-          "url": "https://modelmap.cc",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-20",
-          "title": "Shoehorn",
-          "summary": "Shoehorn 的价值在于把量化体验做成开发者可试的工具，而不是只停留在论文或框架参数。它适合用来评估小机器上模型质量、延迟和成本之间的实际折中。",
-          "url": "https://notactuallytreyanastasio.github.io/shoehorn/",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-20",
-          "title": "vm0-ai/vm0",
-          "summary": "定位为可信赖 AI teammate 的开发工具，主题覆盖 agentic workflow、AI runtime 与 sandbox，值得关注其安全运行边界设计。",
-          "url": "https://github.com/vm0-ai/vm0",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-19",
-          "title": "chaitanyagiri/munder-difflin",
-          "summary": "local multi-agent harness，适合观察轻量多智能体编排如何在本地开发环境落地。",
-          "url": "https://github.com/chaitanyagiri/munder-difflin",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-18",
-          "title": "Cursor 推出 Origin 代码托管服务，试图替代 GitHub 在 Agent 工作流中的一部分角色",
-          "summary": "Cursor 的 Origin 把代码托管、开发环境和 AI 编程入口放得更近。它值得关注，因为 AI IDE 正从“编辑器插件”向“代码协作基础设施”扩张。",
-          "url": "https://cursor.com/changelog/origin-code-hosting",
-          "source": "Cursor Changelog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-17",
-          "title": "Deltix",
-          "summary": "Deltix 把 AI 放到测试流程，而不是只放到代码生成流程。结合今天 agent team 里的 QA teammate 讨论，它代表了一个明确趋势：AI 开发工具的下一步竞争会落在独立验收和回归验证上。",
-          "url": "https://app.deltix.ai",
-          "source": "Deltix",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-14",
-          "title": "Cursor builds 让云智能体从预构建环境启动，官方称启动最高快 3 倍",
-          "summary": "Cursor 新增 builds，把依赖安装和环境准备提前到后台完成，让云 Agent 从最近一次成功构建的环境副本启动。对真实团队来说，这解决的是 Agent 每次开工前浪费在 setup、install 和首 token 等待上的时间。",
-          "url": "https://cursor.com/blog/builds",
-          "source": "Cursor Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-10",
-          "title": "pranshuparmar/witr",
-          "summary": "追踪进程、端口、容器或文件由什么启动的 CLI/TUI 工具，适合调试 agent 或本地自动化留下的后台进程。",
-          "url": "https://github.com/pranshuparmar/witr",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-10",
-          "title": "pingdotgg/t3code",
-          "summary": "TypeScript 生态里热度上升的 AI coding / developer tooling 项目，适合继续观察其实现边界。",
-          "url": "https://github.com/pingdotgg/t3code",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-07",
-          "title": "GitHub Copilot App Slash Commands",
-          "summary": "斜杠命令把规划、质疑方案和自动执行拆成可触发动作，有助于把 AI 编程从闲聊变成可重复工作流。",
-          "url": "https://github.blog/ai-and-ml/github-copilot/a-guide-to-slash-commands-in-the-github-copilot-app",
-          "source": "GitHub Blog",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-06",
-          "title": "Warp Agent CLI 发布，终端工具继续向 Agent 化演进",
-          "summary": "Warp 的切入点不是再做一个聊天框，而是把 agent 放回开发者本来工作的终端上下文里。社区关注点集中在权限、可解释命令和长任务恢复。",
-          "url": "https://www.warp.dev/blog/introducing-the-warp-agent-cli-coding-agent",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-04",
-          "title": "Sprocket",
-          "summary": "Sprocket 的亮点在于把 Agent 目标扩展到硬件与软件协同开发场景，适合观察工具调用如何覆盖 CAD、固件、物料和测试这类非纯代码工作。",
-          "url": "https://sprocket-demo.spikonado.com",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-04",
-          "title": "Alishahryar1/free-claude-code",
-          "summary": "Terminal, app and IDE wrapper for using Claude Code, Codex and Pi-style workflows, including voice-supported OpenClaw-like interaction.",
-          "url": "https://github.com/Alishahryar1/free-claude-code",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "smevals",
-          "summary": "smevals 的价值不在规模，而在提醒团队用小而稳定的样例持续测模型、提示词和 eval 框架本身。它适合被当作轻量回归测试的起点。",
-          "url": "https://simonwillison.net/2026/Jul/31/smevals",
-          "source": "Simon Willison",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "CostPerPrompt",
-          "summary": "CostPerPrompt 把模型价格表和实际输入输出 token 场景结合起来，适合在 Agent 产品设计早期快速估算边际成本，避免上线后才发现一次任务太贵。",
-          "url": "https://costperprompt.com/",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "Replit Design",
-          "summary": "Replit 把 AI 编码入口向设计阶段前移，目标是减少“想法到屏幕”的距离。值得观察的是它是否能和 Replit 的开发、部署链路形成闭环，而不是停在原型生成。",
-          "url": "https://replit.com/blog/introducing-replit-design",
-          "source": "Replit",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
       "name": "AI 安全",
-      "count": 26,
+      "count": 27,
       "dates": [
+        "2026-08-28",
         "2026-08-25",
         "2026-08-24",
         "2026-08-21",
@@ -34032,7 +35020,7 @@
       "sections": [
         {
           "name": "今日要闻",
-          "count": 14
+          "count": 15
         },
         {
           "name": "社区热议",
@@ -34048,6 +35036,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-08-28",
+          "title": "诉讼指控 xAI 使用 CSAM 材料训练 Grok",
+          "summary": "Ars Technica 报道称，一项诉讼指控 xAI 使用儿童性虐待材料及其 AI 衍生图像训练 Grok。无论案件最终结果如何，它都把训练数据来源、模型输出再训练和有害内容销毁义务推到了更高风险的法律前线。",
+          "url": "https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says",
+          "source": "Ars Technica",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
         {
           "date": "2026-08-25",
           "title": "Mitigating Reasoning-Induced Misalignment via Safety-Direction Penalty",
@@ -34254,22 +35251,14 @@
           "source": "The Decoder",
           "section": "headlines",
           "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "OpenAI 总结长时运行模型安全实践：Agent 评估要覆盖新型故障模式",
-          "summary": "OpenAI 把长时运行模型的对齐问题放到更接近 Agent 的场景中讨论，重点不只是回答是否安全，而是模型在多步任务、工具使用和延迟反馈下会出现哪些新故障。",
-          "url": "https://openai.com/index/safety-alignment-long-horizon-models",
-          "source": "OpenAI",
-          "section": "headlines",
-          "section_label": "今日要闻"
         }
       ]
     },
     {
       "name": "Coding Agent",
-      "count": 25,
+      "count": 26,
       "dates": [
+        "2026-08-28",
         "2026-08-25",
         "2026-08-24",
         "2026-08-20",
@@ -34293,7 +35282,7 @@
         },
         {
           "name": "产品 / 概念",
-          "count": 8
+          "count": 9
         },
         {
           "name": "社区热议",
@@ -34309,6 +35298,15 @@
         }
       ],
       "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Devx",
+          "summary": "把 AI coding agent 带到移动终端与桌面双环境，适合观察低资源、本地化开发代理的可行性。",
+          "url": "https://github.com/apvcode/Termux-Dev",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
         {
           "date": "2026-08-25",
           "title": "SWE Refactor Bench: Can Coding Agents Complete a Long-Horizon, Whole-Repository Stack Migration?",
@@ -34515,15 +35513,6 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "Early Adoption of Agentic Coding Tools by GitHub Projects",
-          "summary": "这篇从 GitHub 项目层面观察 agentic coding tools 的早期采用，而不是只看单个 PR 成败。它能帮助团队理解 AI 生成贡献如何改变维护流程、权限治理和项目协作模式。",
-          "url": "https://arxiv.org/abs/2607.14037v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
         }
       ]
     },
@@ -34763,6 +35752,231 @@
       ]
     },
     {
+      "name": "多模态",
+      "count": 20,
+      "dates": [
+        "2026-08-28",
+        "2026-08-25",
+        "2026-08-17",
+        "2026-08-12",
+        "2026-08-11",
+        "2026-08-07",
+        "2026-08-06",
+        "2026-08-05",
+        "2026-08-03",
+        "2026-07-31",
+        "2026-07-30",
+        "2026-07-24",
+        "2026-07-21",
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 9
+        },
+        {
+          "name": "AI 论文",
+          "count": 4
+        },
+        {
+          "name": "开源热门",
+          "count": 3
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 3
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Gemini Omni 1.1 Flash 强化生成式视频控制",
+          "summary": "Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。",
+          "url": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control",
+          "source": "Google DeepMind Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-25",
+          "title": "ReWorld: An Interactive World Model with Long-Horizon Memory",
+          "summary": "ReWorld 关注交互式世界模型里“实时控制需要短上下文、长期一致性需要长记忆”的结构性冲突。它值得读，因为它把 KV cache、pose-indexed landmark bank 和训练期稀疏历史处理结合起来，给实时多模态交互系统提供了可借鉴的记忆设计。",
+          "url": "https://arxiv.org/abs/2608.23565v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-17",
+          "title": "Qwen 3.8 27B 复盘：开源多模态能力提升，但默认推理强度容易过度思考",
+          "summary": "Simon Willison 的试用笔记把 Qwen 3.8 27B 的亮点和摩擦都摆在一起：Apache 2.0、视觉能力和长上下文很有吸引力，但默认推理强度过高会让普通任务变慢变贵。它提醒开发者，开源模型不仅要看榜单，还要看默认推理策略是否适合产品调用。",
+          "url": "https://simonwillison.net/2026/Aug/16/qwen-38-27b",
+          "source": "Simon Willison",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "Google AMIE 展示实时临床视频问诊能力",
+          "summary": "Google Research 与 DeepMind 把 AMIE 扩展到视频问诊场景，系统基于 Gemini 和 Project Astra，可解读视觉、听觉线索并引导虚拟体格检查。它的意义在于医疗 AI 不再只处理文本病史，而开始进入实时多模态交互和临床流程设计。",
+          "url": "https://blog.google/innovation-and-ai/models-and-research/google-research/amie-video-consultations",
+          "source": "Google Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "MultiModal Code-Switching: Interleaving Visual Objects into Language for Explicit Object-Level Alignment",
+          "summary": "它把多模态预训练从整图-文本配对推进到对象级显式对齐，适合关注 MLLM grounding 与数据合成的人阅读。对象级监督能减少 referential ambiguity，这正是视觉 Agent 和文档理解常见痛点。",
+          "url": "https://arxiv.org/abs/2608.11167v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "huggingface/transformers",
+          "summary": "覆盖文本、视觉、音频和多模态模型的主流模型定义与训练/推理框架。",
+          "url": "https://github.com/huggingface/transformers",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-11",
+          "title": "Meta 发布 Muse Glimmer：30B 开放权重模型瞄准本地常驻 Agent",
+          "summary": "Meta / Scale AI 相关发布把 Muse Glimmer 定位为可在消费级硬件上运行的 30B 多模态 Agent 模型，SGLang 同步给出 Day-0 推理支持。它的看点不是单纯参数规模，而是把长上下文、本地执行和 Agent 工作流作为模型设计目标。",
+          "url": "https://x.com/AIatMeta/status/2086757844544811485",
+          "source": "AI at Meta",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-11",
+          "title": "Hallucination-Free GUI Grounding via Regression-Free Layout-Aware Matching",
+          "summary": "纯视觉 GUI Agent 的核心瓶颈是坐标幻觉。该方法让冻结 MLLM 负责语义解析，再交给布局感知模型精确定位，给“看截图操作电脑”的 Agent 提供了更稳的技术分工。",
+          "url": "https://arxiv.org/abs/2608.09654v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-07",
+          "title": "The Illusion of Visual Tool-Use: A Causal Audit of Thinking with Images",
+          "summary": "这篇论文直接审计“边看图边调用 crop/zoom 工具”是否真的带来推理增益，结论指向一个很实用的问题：多模态 Agent 的工具调用可能只是增加 token 成本，而非改善因果决策。适合做视觉 Agent 评测和产品成本控制的人读。",
+          "url": "https://arxiv.org/abs/2608.06270v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-06",
+          "title": "NVIDIA Alpamayo 2 Super",
+          "summary": "重点在于开源和商用许可：自动驾驶模型从封闭 demo 走向可复现研究与产业验证，长尾场景处理会成为主要观察点。",
+          "url": "https://www.marktechpost.com/2026/08/05/nvidia-alpamayo-2-super-open-vla-model-autonomous-driving",
+          "source": "MarkTechPost / NVIDIA",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-05",
+          "title": "browser-use/video-use",
+          "summary": "面向 coding agent 的视频编辑项目，把视频处理任务暴露为可自动化的开发工作流。",
+          "url": "https://github.com/browser-use/video-use",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "MiniMax H3 发布，强调全能多模态与 2K 原生立体声视频",
+          "summary": "MiniMax H3 主打视频、音频和多模态生成能力，尤其强调 2K 原生立体声视频。多模态竞争已经从“能生成短片”转向分辨率、声音同步、可控性和开放生态的组合战。",
+          "url": "https://www.minimax.io/blog/minimax-h3",
+          "source": "MiniMax Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "Grok 视频分析",
+          "summary": "Elon Musk 称 Grok 已可分析任意视频。短期看是产品功能更新，长期看则是通用助手把视频作为一等输入后的交互变化。",
+          "url": "https://x.com/elonmusk/status/2083800942927839307",
+          "source": "xAI / Elon Musk",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-31",
+          "title": "Google DeepMind 发布 Gemini Robotics ER 2，强调视频理解、任务编排与多机器人协作",
+          "summary": "Gemini Robotics ER 2 把机器人能力从单机感知推进到任务编排和多机器人协作，值得关注的是它把视频理解作为物理场景中的通用输入，而不是只展示单点机械臂 demo。",
+          "url": "https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration",
+          "source": "Google DeepMind Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "microsoft/VibeVoice",
+          "summary": "Microsoft 开源的 Frontier Voice AI 项目，继续推高语音生成与实时交互在开源侧的热度。",
+          "url": "https://github.com/microsoft/VibeVoice",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "Miora",
+          "summary": "Miora 面向品牌设计、影视创意等场景开放，支持自定义多模态模型、Agent 推理深度、Skill 市场和记忆系统。它说明设计类 Agent 正从单次生成图像走向可配置工作台。",
+          "url": "https://mp.weixin.qq.com/s/qQhq9nxoeCD68iMwQoEVFQ",
+          "source": "数字生命卡兹克",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-21",
+          "title": "字节 Seed Audio 1.0 发布，尝试统一人声与音效创作链路",
+          "summary": "Seed Audio 1.0 将语音、音效和影视级音频创作放在同一模型叙事中，说明多模态生成正在从单点能力走向端到端内容流水线。对创作工具来说，接下来要看可控性、版权边界和与视频生成的联动。",
+          "url": "https://seed.bytedance.com/zh/blog/%E4%BB%8E-%E4%BC%9A%E8%AF%B4-%E8%B5%B0%E5%90%91-%E4%BC%9A%E5%88%9B%E4%BD%9C-seed-audio-1-0-%E9%9F%B3%E9%A2%91%E5%88%9B%E4%BD%9C%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B8%83",
+          "source": "字节 Seed",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
+          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
+          "url": "https://www.kimi.com/blog/kimi-k3",
+          "source": "Moonshot AI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Inkling 975B 开源权重模型登上 HN",
+          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
+          "url": "https://thinkingmachines.ai/inkling/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "开源模型",
       "count": 20,
       "dates": [
@@ -34982,417 +36196,10 @@
       ]
     },
     {
-      "name": "多模态",
+      "name": "Claude Code",
       "count": 19,
       "dates": [
-        "2026-08-25",
-        "2026-08-17",
-        "2026-08-12",
-        "2026-08-11",
-        "2026-08-07",
-        "2026-08-06",
-        "2026-08-05",
-        "2026-08-03",
-        "2026-07-31",
-        "2026-07-30",
-        "2026-07-24",
-        "2026-07-21",
-        "2026-07-17",
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 8
-        },
-        {
-          "name": "AI 论文",
-          "count": 4
-        },
-        {
-          "name": "开源热门",
-          "count": 3
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 3
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-25",
-          "title": "ReWorld: An Interactive World Model with Long-Horizon Memory",
-          "summary": "ReWorld 关注交互式世界模型里“实时控制需要短上下文、长期一致性需要长记忆”的结构性冲突。它值得读，因为它把 KV cache、pose-indexed landmark bank 和训练期稀疏历史处理结合起来，给实时多模态交互系统提供了可借鉴的记忆设计。",
-          "url": "https://arxiv.org/abs/2608.23565v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-08-17",
-          "title": "Qwen 3.8 27B 复盘：开源多模态能力提升，但默认推理强度容易过度思考",
-          "summary": "Simon Willison 的试用笔记把 Qwen 3.8 27B 的亮点和摩擦都摆在一起：Apache 2.0、视觉能力和长上下文很有吸引力，但默认推理强度过高会让普通任务变慢变贵。它提醒开发者，开源模型不仅要看榜单，还要看默认推理策略是否适合产品调用。",
-          "url": "https://simonwillison.net/2026/Aug/16/qwen-38-27b",
-          "source": "Simon Willison",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-12",
-          "title": "Google AMIE 展示实时临床视频问诊能力",
-          "summary": "Google Research 与 DeepMind 把 AMIE 扩展到视频问诊场景，系统基于 Gemini 和 Project Astra，可解读视觉、听觉线索并引导虚拟体格检查。它的意义在于医疗 AI 不再只处理文本病史，而开始进入实时多模态交互和临床流程设计。",
-          "url": "https://blog.google/innovation-and-ai/models-and-research/google-research/amie-video-consultations",
-          "source": "Google Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-12",
-          "title": "MultiModal Code-Switching: Interleaving Visual Objects into Language for Explicit Object-Level Alignment",
-          "summary": "它把多模态预训练从整图-文本配对推进到对象级显式对齐，适合关注 MLLM grounding 与数据合成的人阅读。对象级监督能减少 referential ambiguity，这正是视觉 Agent 和文档理解常见痛点。",
-          "url": "https://arxiv.org/abs/2608.11167v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-08-12",
-          "title": "huggingface/transformers",
-          "summary": "覆盖文本、视觉、音频和多模态模型的主流模型定义与训练/推理框架。",
-          "url": "https://github.com/huggingface/transformers",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-11",
-          "title": "Meta 发布 Muse Glimmer：30B 开放权重模型瞄准本地常驻 Agent",
-          "summary": "Meta / Scale AI 相关发布把 Muse Glimmer 定位为可在消费级硬件上运行的 30B 多模态 Agent 模型，SGLang 同步给出 Day-0 推理支持。它的看点不是单纯参数规模，而是把长上下文、本地执行和 Agent 工作流作为模型设计目标。",
-          "url": "https://x.com/AIatMeta/status/2086757844544811485",
-          "source": "AI at Meta",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-11",
-          "title": "Hallucination-Free GUI Grounding via Regression-Free Layout-Aware Matching",
-          "summary": "纯视觉 GUI Agent 的核心瓶颈是坐标幻觉。该方法让冻结 MLLM 负责语义解析，再交给布局感知模型精确定位，给“看截图操作电脑”的 Agent 提供了更稳的技术分工。",
-          "url": "https://arxiv.org/abs/2608.09654v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-08-07",
-          "title": "The Illusion of Visual Tool-Use: A Causal Audit of Thinking with Images",
-          "summary": "这篇论文直接审计“边看图边调用 crop/zoom 工具”是否真的带来推理增益，结论指向一个很实用的问题：多模态 Agent 的工具调用可能只是增加 token 成本，而非改善因果决策。适合做视觉 Agent 评测和产品成本控制的人读。",
-          "url": "https://arxiv.org/abs/2608.06270v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-08-06",
-          "title": "NVIDIA Alpamayo 2 Super",
-          "summary": "重点在于开源和商用许可：自动驾驶模型从封闭 demo 走向可复现研究与产业验证，长尾场景处理会成为主要观察点。",
-          "url": "https://www.marktechpost.com/2026/08/05/nvidia-alpamayo-2-super-open-vla-model-autonomous-driving",
-          "source": "MarkTechPost / NVIDIA",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-05",
-          "title": "browser-use/video-use",
-          "summary": "面向 coding agent 的视频编辑项目，把视频处理任务暴露为可自动化的开发工作流。",
-          "url": "https://github.com/browser-use/video-use",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "MiniMax H3 发布，强调全能多模态与 2K 原生立体声视频",
-          "summary": "MiniMax H3 主打视频、音频和多模态生成能力，尤其强调 2K 原生立体声视频。多模态竞争已经从“能生成短片”转向分辨率、声音同步、可控性和开放生态的组合战。",
-          "url": "https://www.minimax.io/blog/minimax-h3",
-          "source": "MiniMax Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "Grok 视频分析",
-          "summary": "Elon Musk 称 Grok 已可分析任意视频。短期看是产品功能更新，长期看则是通用助手把视频作为一等输入后的交互变化。",
-          "url": "https://x.com/elonmusk/status/2083800942927839307",
-          "source": "xAI / Elon Musk",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-31",
-          "title": "Google DeepMind 发布 Gemini Robotics ER 2，强调视频理解、任务编排与多机器人协作",
-          "summary": "Gemini Robotics ER 2 把机器人能力从单机感知推进到任务编排和多机器人协作，值得关注的是它把视频理解作为物理场景中的通用输入，而不是只展示单点机械臂 demo。",
-          "url": "https://deepmind.google/blog/gemini-robotics-er-2-powering-robotics-with-video-understanding-task-orchestration-and-multi-robot-collaboration",
-          "source": "Google DeepMind Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "microsoft/VibeVoice",
-          "summary": "Microsoft 开源的 Frontier Voice AI 项目，继续推高语音生成与实时交互在开源侧的热度。",
-          "url": "https://github.com/microsoft/VibeVoice",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "Miora",
-          "summary": "Miora 面向品牌设计、影视创意等场景开放，支持自定义多模态模型、Agent 推理深度、Skill 市场和记忆系统。它说明设计类 Agent 正从单次生成图像走向可配置工作台。",
-          "url": "https://mp.weixin.qq.com/s/qQhq9nxoeCD68iMwQoEVFQ",
-          "source": "数字生命卡兹克",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-21",
-          "title": "字节 Seed Audio 1.0 发布，尝试统一人声与音效创作链路",
-          "summary": "Seed Audio 1.0 将语音、音效和影视级音频创作放在同一模型叙事中，说明多模态生成正在从单点能力走向端到端内容流水线。对创作工具来说，接下来要看可控性、版权边界和与视频生成的联动。",
-          "url": "https://seed.bytedance.com/zh/blog/%E4%BB%8E-%E4%BC%9A%E8%AF%B4-%E8%B5%B0%E5%90%91-%E4%BC%9A%E5%88%9B%E4%BD%9C-seed-audio-1-0-%E9%9F%B3%E9%A2%91%E5%88%9B%E4%BD%9C%E6%A8%A1%E5%9E%8B%E5%8F%91%E5%B8%83",
-          "source": "字节 Seed",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "Kimi K3 发布：2.8T 参数开源模型，支持原生视觉与百万 token 上下文",
-          "summary": "AI HOT 聚合显示 Kimi K3 已成为今日多源焦点，亮点集中在开源权重、原生多模态能力与超长上下文窗口。对开发者而言，它值得关注的不只是参数规模，而是能否把长上下文与视觉推理放进真实 Agent 工作流。",
-          "url": "https://www.kimi.com/blog/kimi-k3",
-          "source": "Moonshot AI",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
-          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
-          "source": "Amazon Web Services (AWS)",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "Inkling 975B 开源权重模型登上 HN",
-          "summary": "Thinking Machines 发布 975B open-weights LLM 后，讨论集中在开放权重、训练成本、推理门槛和巨型模型的实际可用性。",
-          "url": "https://thinkingmachines.ai/inkling/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "Claude",
-      "count": 17,
-      "dates": [
-        "2026-08-27",
-        "2026-08-26",
-        "2026-08-25",
-        "2026-08-24",
-        "2026-08-21",
-        "2026-08-19",
-        "2026-08-14",
-        "2026-08-13",
-        "2026-08-11",
-        "2026-08-10",
-        "2026-08-07",
-        "2026-07-28",
-        "2026-07-27",
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 9
-        },
-        {
-          "name": "社区热议",
-          "count": 3
-        },
-        {
-          "name": "开源热门",
-          "count": 3
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 2
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-27",
-          "title": "Claude in Chrome 全面上线，浏览器 Agent 进入付费用户日常工作流",
-          "summary": "Anthropic 宣布 Claude in Chrome 面向付费 Claude 套餐全面开放，用户可让 Claude 在浏览器中自主执行操作。相比普通网页助手，这次值得关注的是安全分类器和提示注入防护被放进产品说明中心，说明浏览器 Agent 的瓶颈已经从“能不能点网页”转向“能否可控地替用户行动”。",
-          "url": "https://claude.com/blog/claude-in-chrome-generally-available",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-26",
-          "title": "Claude 记忆打通聊天与 Cowork，用户可逐条查看和编辑",
-          "summary": "Anthropic 介绍 Claude 记忆已覆盖聊天和 Cowork 场景，并强调用户可以检查、编辑和决定哪些信息留在记忆里。它值得放在头条，因为长期 Agent 真正进入工作流后，记忆不再是便捷功能，而是可治理、可撤销、可审计的产品层。",
-          "url": "https://claude.com/blog/claudes-memory-works-everywhere-and-you-decide-whats-in-it",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-25",
-          "title": "Anthropic 最强模型用户吸引力不及更便宜工具，引发 HN 成本讨论",
-          "summary": "FT 文章在 HN 获得高热度，讨论焦点从模型能力转到价格、工作流锁定和普通用户是否能感知差异。它提醒开发者：模型榜单不是商业采用的唯一变量。",
-          "url": "https://www.ft.com/content/5ee49718-c258-4f01-aa32-7e5b76ae5245",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-24",
-          "title": "Anthropic 发布 AI 原生 SDLC 实战手册",
-          "summary": "Anthropic 将传统六阶段软件开发生命周期重构为 AI 嵌入的闭环流程，强调 intent.md、技能化编码标准、持续评测和人工审查。当代码生成不再是瓶颈，真正的工程约束会转向需求压缩、评审、部署和质量门禁。",
-          "url": "https://claude.com/blog/the-ai-native-sdlc-playbook",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-24",
-          "title": "anthropics/claude-plugins-community",
-          "summary": "Claude Cowork 与 Claude Code 的社区插件 marketplace 镜像，反映 Claude 生态正在从单工具扩展到插件分发。",
-          "url": "https://github.com/anthropics/claude-plugins-community",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-21",
-          "title": "Claude Platform 上线 Computer Use、Skills API 与 Files API",
-          "summary": "Anthropic 将 Computer Use、Skills API 和 Files API 推到 Claude Platform，并新增浏览器操作工具。重点不只是多几个 API，而是把“能操作软件、能调用团队技能、能产出文件”的 agent 工作流合到同一平台层。",
-          "url": "https://claude.com/blog/computer-use-skills-api-files-api",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-19",
-          "title": "Anthropic 展示 Claude 在蛋白质设计与分析化学研究中的工作流价值",
-          "summary": "Anthropic 的研究页把 Claude 放进蛋白质设计、分析化学和实验规划场景中，而不是只报告通用 benchmark。对企业和科研团队来说，这类案例更接近“模型如何进入专业工作流”的证据。",
-          "url": "https://www.anthropic.com/research/Claude-accelerates-protein-design",
-          "source": "Anthropic Research",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-19",
-          "title": "Claude Gmail 与 Google Drive 文件管理",
-          "summary": "Claude 官方 X 消息显示 Gmail 与 Drive 管理能力继续扩展。这个方向值得关注，因为办公 Agent 的竞争点正在从“能搜到文件”走向“能在权限边界内整理、归档和执行”。",
-          "url": "https://x.com/claudeai/status/2089806039088517356",
-          "source": "Claude on X",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-14",
-          "title": "Markleft",
-          "summary": "Show HN 里的 Markleft 关注的是 Agent 产物治理：在让 Claude 写计划之后，怎样用更小成本检查、批注和演进这些 Markdown 决策记录。",
-          "url": "https://blog.lysk.tech/markleft-ai-markdown-review/",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-13",
-          "title": "Claude in Chrome 侧边栏升级为 Claude Cowork 会话",
-          "summary": "Claude 浏览器侧边栏开始以 Cowork 会话保存历史，连接器和技能可以直接在浏览器上下文中工作，并支持桌面、Web、移动端任务切换。这意味着浏览器 Agent 不再只是临时浮窗，而是进入可追踪协作流。",
-          "url": "https://claude.com/blog/cowork-chrome-side-panel",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-11",
-          "title": "Claude 如何标记 AI 生成内容，社区关注可解释性与误判",
-          "summary": "Anthropic 支持文档被拿到 HN 讨论，焦点不是单个标记机制，而是平台如何向用户解释“哪些内容由 AI 生成、证据是什么、误判如何申诉”。",
-          "url": "https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-10",
-          "title": "Anthropic 称 Claude 提示注入防护接近实用化，Claude Code Auto Mode 将成为默认",
-          "summary": "Anthropic 研究人员称，通过模型训练、输入探测和意图分类器叠加，未见过的间接提示注入攻击在测试中成功率降至接近 0；同一脉络下，Claude Code 的自动模式将默认开启，但它也把权限分类器的可靠性推到台前。",
-          "url": "https://x.com/bcherny/status/2086520950259118464",
-          "source": "Boris Cherny / Claude Devs",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-07",
-          "title": "Anthropic 更新 Claude Fable 5 生物安全防护，误报率称降低约 85%",
-          "summary": "Anthropic 称新版生物安全路由减少了日常健康和教育类查询的误回退，同时仍会把双重用途病毒学、毒理学和分子设计请求转交给更强防护模型处理。重点不只是“放宽限制”，而是把高风险生物任务与普通科学学习区分得更细。",
-          "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
-          "source": "Anthropic",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "bradautomates/claude-video",
-          "summary": "给 Claude 增加 /watch 能力，下载视频、抽帧、转录并把材料交给 Claude 分析。",
-          "url": "https://github.com/bradautomates/claude-video",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "Claude 5 代模型上下文工程新规则引发 HN 热议",
-          "summary": "Anthropic 删除 Claude Code 超 80% 系统提示词仍保持评测表现，HN 讨论焦点转向：上下文应该是运行时可控结构，而不是越写越长的系统提示词。",
-          "url": "https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-27",
-          "title": "anthropics/claude-cookbooks",
-          "summary": "Anthropic 官方 Claude recipes/notebooks 集合，覆盖提示、工具、评测和应用样例，是 Claude 开发者常用参考库。",
-          "url": "https://github.com/anthropics/claude-cookbooks",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "Claude 语音模式扩展到 Opus、Sonnet、工具连接器与多语言",
-          "summary": "Anthropic 将 Claude 语音模式扩展到 Opus、Sonnet、Haiku，并支持 Gmail、Slack 等连接工具。对工作流用户来说，语音不再只是输入方式，而是可以携带模型选择和外部工具权限的会话层。",
-          "url": "https://claude.com/blog/think-through-hard-problems-in-voice-mode",
-          "source": "Claude Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
-      "name": "Claude Code",
-      "count": 17,
-      "dates": [
+        "2026-08-28",
         "2026-08-26",
         "2026-08-25",
         "2026-08-24",
@@ -35410,7 +36217,7 @@
       "sections": [
         {
           "name": "开源热门",
-          "count": 12
+          "count": 13
         },
         {
           "name": "产品 / 概念",
@@ -35419,9 +36226,31 @@
         {
           "name": "今日要闻",
           "count": 2
+        },
+        {
+          "name": "社区热议",
+          "count": 1
         }
       ],
       "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Claude quota ran out in 10 minutes, so I made a tool to find out why",
+          "summary": "开发者做了一个分析 Claude 配额消耗的工具，引发关于 coding agent 成本透明度的讨论。随着 agent 工作流变长，token 和配额观测会从“账单问题”变成工程生产力问题。",
+          "url": "https://github.com/kelviq/tare",
+          "source": "Show HN",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "anthropics/claude-plugins-official",
+          "summary": "Anthropic 官方维护的 Claude Code Plugins 目录。",
+          "url": "https://github.com/anthropics/claude-plugins-official",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
         {
           "date": "2026-08-26",
           "title": "multica-ai/andrej-karpathy-skills",
@@ -35574,6 +36403,209 @@
           "source": "Show HN",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "Claude",
+      "count": 18,
+      "dates": [
+        "2026-08-28",
+        "2026-08-27",
+        "2026-08-26",
+        "2026-08-25",
+        "2026-08-24",
+        "2026-08-21",
+        "2026-08-19",
+        "2026-08-14",
+        "2026-08-13",
+        "2026-08-11",
+        "2026-08-10",
+        "2026-08-07",
+        "2026-07-28",
+        "2026-07-27",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 9
+        },
+        {
+          "name": "社区热议",
+          "count": 4
+        },
+        {
+          "name": "开源热门",
+          "count": 3
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "The load-bearing vocabulary of Claude",
+          "summary": "这篇文章在 Show HN/HN 圈层引发讨论，核心是 Claude 对某些词汇和表达方式的反应会显著改变协作质量。它提醒开发者，提示词不是魔法，而是人机协议的一部分。",
+          "url": "https://louisabraham.github.io/load-bearing/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-27",
+          "title": "Claude in Chrome 全面上线，浏览器 Agent 进入付费用户日常工作流",
+          "summary": "Anthropic 宣布 Claude in Chrome 面向付费 Claude 套餐全面开放，用户可让 Claude 在浏览器中自主执行操作。相比普通网页助手，这次值得关注的是安全分类器和提示注入防护被放进产品说明中心，说明浏览器 Agent 的瓶颈已经从“能不能点网页”转向“能否可控地替用户行动”。",
+          "url": "https://claude.com/blog/claude-in-chrome-generally-available",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-26",
+          "title": "Claude 记忆打通聊天与 Cowork，用户可逐条查看和编辑",
+          "summary": "Anthropic 介绍 Claude 记忆已覆盖聊天和 Cowork 场景，并强调用户可以检查、编辑和决定哪些信息留在记忆里。它值得放在头条，因为长期 Agent 真正进入工作流后，记忆不再是便捷功能，而是可治理、可撤销、可审计的产品层。",
+          "url": "https://claude.com/blog/claudes-memory-works-everywhere-and-you-decide-whats-in-it",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-25",
+          "title": "Anthropic 最强模型用户吸引力不及更便宜工具，引发 HN 成本讨论",
+          "summary": "FT 文章在 HN 获得高热度，讨论焦点从模型能力转到价格、工作流锁定和普通用户是否能感知差异。它提醒开发者：模型榜单不是商业采用的唯一变量。",
+          "url": "https://www.ft.com/content/5ee49718-c258-4f01-aa32-7e5b76ae5245",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-24",
+          "title": "Anthropic 发布 AI 原生 SDLC 实战手册",
+          "summary": "Anthropic 将传统六阶段软件开发生命周期重构为 AI 嵌入的闭环流程，强调 intent.md、技能化编码标准、持续评测和人工审查。当代码生成不再是瓶颈，真正的工程约束会转向需求压缩、评审、部署和质量门禁。",
+          "url": "https://claude.com/blog/the-ai-native-sdlc-playbook",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-24",
+          "title": "anthropics/claude-plugins-community",
+          "summary": "Claude Cowork 与 Claude Code 的社区插件 marketplace 镜像，反映 Claude 生态正在从单工具扩展到插件分发。",
+          "url": "https://github.com/anthropics/claude-plugins-community",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "Claude Platform 上线 Computer Use、Skills API 与 Files API",
+          "summary": "Anthropic 将 Computer Use、Skills API 和 Files API 推到 Claude Platform，并新增浏览器操作工具。重点不只是多几个 API，而是把“能操作软件、能调用团队技能、能产出文件”的 agent 工作流合到同一平台层。",
+          "url": "https://claude.com/blog/computer-use-skills-api-files-api",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-19",
+          "title": "Anthropic 展示 Claude 在蛋白质设计与分析化学研究中的工作流价值",
+          "summary": "Anthropic 的研究页把 Claude 放进蛋白质设计、分析化学和实验规划场景中，而不是只报告通用 benchmark。对企业和科研团队来说，这类案例更接近“模型如何进入专业工作流”的证据。",
+          "url": "https://www.anthropic.com/research/Claude-accelerates-protein-design",
+          "source": "Anthropic Research",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-19",
+          "title": "Claude Gmail 与 Google Drive 文件管理",
+          "summary": "Claude 官方 X 消息显示 Gmail 与 Drive 管理能力继续扩展。这个方向值得关注，因为办公 Agent 的竞争点正在从“能搜到文件”走向“能在权限边界内整理、归档和执行”。",
+          "url": "https://x.com/claudeai/status/2089806039088517356",
+          "source": "Claude on X",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-14",
+          "title": "Markleft",
+          "summary": "Show HN 里的 Markleft 关注的是 Agent 产物治理：在让 Claude 写计划之后，怎样用更小成本检查、批注和演进这些 Markdown 决策记录。",
+          "url": "https://blog.lysk.tech/markleft-ai-markdown-review/",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-13",
+          "title": "Claude in Chrome 侧边栏升级为 Claude Cowork 会话",
+          "summary": "Claude 浏览器侧边栏开始以 Cowork 会话保存历史，连接器和技能可以直接在浏览器上下文中工作，并支持桌面、Web、移动端任务切换。这意味着浏览器 Agent 不再只是临时浮窗，而是进入可追踪协作流。",
+          "url": "https://claude.com/blog/cowork-chrome-side-panel",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-11",
+          "title": "Claude 如何标记 AI 生成内容，社区关注可解释性与误判",
+          "summary": "Anthropic 支持文档被拿到 HN 讨论，焦点不是单个标记机制，而是平台如何向用户解释“哪些内容由 AI 生成、证据是什么、误判如何申诉”。",
+          "url": "https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-10",
+          "title": "Anthropic 称 Claude 提示注入防护接近实用化，Claude Code Auto Mode 将成为默认",
+          "summary": "Anthropic 研究人员称，通过模型训练、输入探测和意图分类器叠加，未见过的间接提示注入攻击在测试中成功率降至接近 0；同一脉络下，Claude Code 的自动模式将默认开启，但它也把权限分类器的可靠性推到台前。",
+          "url": "https://x.com/bcherny/status/2086520950259118464",
+          "source": "Boris Cherny / Claude Devs",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-07",
+          "title": "Anthropic 更新 Claude Fable 5 生物安全防护，误报率称降低约 85%",
+          "summary": "Anthropic 称新版生物安全路由减少了日常健康和教育类查询的误回退，同时仍会把双重用途病毒学、毒理学和分子设计请求转交给更强防护模型处理。重点不只是“放宽限制”，而是把高风险生物任务与普通科学学习区分得更细。",
+          "url": "https://www.anthropic.com/news/improving-fable-5-s-biology-safeguards",
+          "source": "Anthropic",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "bradautomates/claude-video",
+          "summary": "给 Claude 增加 /watch 能力，下载视频、抽帧、转录并把材料交给 Claude 分析。",
+          "url": "https://github.com/bradautomates/claude-video",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "Claude 5 代模型上下文工程新规则引发 HN 热议",
+          "summary": "Anthropic 删除 Claude Code 超 80% 系统提示词仍保持评测表现，HN 讨论焦点转向：上下文应该是运行时可控结构，而不是越写越长的系统提示词。",
+          "url": "https://claude.com/blog/the-new-rules-of-context-engineering-for-claude-5-generation-models",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-27",
+          "title": "anthropics/claude-cookbooks",
+          "summary": "Anthropic 官方 Claude recipes/notebooks 集合，覆盖提示、工具、评测和应用样例，是 Claude 开发者常用参考库。",
+          "url": "https://github.com/anthropics/claude-cookbooks",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "Claude 语音模式扩展到 Opus、Sonnet、工具连接器与多语言",
+          "summary": "Anthropic 将 Claude 语音模式扩展到 Opus、Sonnet、Haiku，并支持 Gmail、Slack 等连接工具。对工作流用户来说，语音不再只是输入方式，而是可以携带模型选择和外部工具权限的会话层。",
+          "url": "https://claude.com/blog/think-through-hard-problems-in-voice-mode",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -36694,8 +37726,9 @@
     },
     {
       "name": "Agent Skills",
-      "count": 11,
+      "count": 12,
       "dates": [
+        "2026-08-28",
         "2026-08-27",
         "2026-08-25",
         "2026-08-24",
@@ -36712,11 +37745,24 @@
           "count": 10
         },
         {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
           "name": "产品 / 概念",
           "count": 1
         }
       ],
       "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Warp 公开基于 Claude 的自我改进 Agent 技术路线",
+          "summary": "Warp 介绍了如何用基础技能和改进技能构建自我改进循环，把人类反馈转成 agent 可复用的行为更新。它的价值在于把“提示词调优”落成文件化、可审查、可迭代的技能资产。",
+          "url": "https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
         {
           "date": "2026-08-27",
           "title": "tt-a1i/archify",
@@ -36820,8 +37866,9 @@
     },
     {
       "name": "cs.LG",
-      "count": 11,
+      "count": 12,
       "dates": [
+        "2026-08-28",
         "2026-08-27",
         "2026-08-17",
         "2026-08-14",
@@ -36833,10 +37880,19 @@
       "sections": [
         {
           "name": "AI 论文",
-          "count": 11
+          "count": 12
         }
       ],
       "items": [
+        {
+          "date": "2026-08-28",
+          "title": "WikiSkill: Compiling Agent Experience into Persistent Knowledge for Skill Evolution",
+          "summary": "这篇论文把 agent 经验沉淀成持久知识库，用于后续技能演化，正好回应了近期 Claude Skills、Codex skills 和团队工作流中的核心问题：经验如何从一次会话迁移到下一次任务。值得读的是它把“记忆”从聊天历史拉到可编译、可复用的技能资产。",
+          "url": "https://arxiv.org/abs/2608.27454v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
         {
           "date": "2026-08-27",
           "title": "Agentic Autoresearch for Cell-Edge Power Control: Radically Redefining the Researcher's Role",
@@ -36935,6 +37991,144 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "MCP",
+      "count": 11,
+      "dates": [
+        "2026-08-28",
+        "2026-08-20",
+        "2026-08-14",
+        "2026-08-07",
+        "2026-08-04",
+        "2026-07-24",
+        "2026-07-22",
+        "2026-07-20",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 5
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 2
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Concord",
+          "summary": "Concord MCP 试图在多种 coding agent 之间建立通信桥，适合关注跨工具协作和任务交接的人继续跟踪。",
+          "url": "https://github.com/Get-Concord-AI/concord-mcp",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-20",
+          "title": "agentscope-ai/QwenPaw",
+          "summary": "面向个人 AI 助手的自托管项目，支持多聊天应用、MCP 与可扩展能力，适合观察国产 agent 生态如何把 harness、skills 和部署体验整合到一起。",
+          "url": "https://github.com/agentscope-ai/QwenPaw",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-14",
+          "title": "Show HN：MCP Memory 用 Google OKF 和 SQLite FTS5 做快速 Agent 记忆",
+          "summary": "这个项目把 Agent 记忆做成 MCP 组件，结合 OKF 和 SQLite FTS5 提供可搜索记忆层。它代表了社区对“轻量、本地、可解释记忆”的持续需求。",
+          "url": "https://github.com/fellowgeek/mcp-memory",
+          "source": "Show HN",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-14",
+          "title": "holaboss-ai/holaOS",
+          "summary": "开源 All-in-one AI agent workspace，面向 Claude Code、Codex、浏览器、文件和 100+ 集成提供共享记忆。",
+          "url": "https://github.com/holaboss-ai/holaOS",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-07",
+          "title": "Agent Plugins 1.0.0 发布，试图把 Skills 与 MCP Server 打包成统一插件",
+          "summary": "Google Developers Blog 介绍的 Agent Plugins 1.0.0 使用 plugin.json 与固定目录布局，把 Agent Skills、工具和 MCP server 组合成可迁移包。它的意义在于减少不同 IDE、编码智能体和运行时之间重复封装。",
+          "url": "https://developers.googleblog.com/agent-plugins-package-your-skills-tools-and-more",
+          "source": "Google Developers Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-04",
+          "title": "Armature",
+          "summary": "Agent 上线后最缺的往往不是更多工具，而是知道每个会话发生了什么。Armature 把产品分析和评测接到 MCP 会话上，方向契合企业 Agent 的可观测性需求。",
+          "url": "https://armature.tech/",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "Euclid-MCP: A Model Context Protocol Server for Deterministic Logical Reasoning via Prolog",
+          "summary": "它把 MCP 与 Prolog 这类确定性逻辑推理结合，提供了一个很具体的方向：让 LLM 把模糊语言交给可验证工具处理。对构建高可靠 Agent 工具链的人来说，这是比再加一个搜索工具更值得研究的 MCP 形态。",
+          "url": "https://arxiv.org/abs/2607.21412",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "tradesdontlie/tradingview-mcp",
+          "summary": "把 Claude Code 连接到 TradingView Desktop，用于个人图表分析自动化，是 MCP 从开发工具扩展到垂直工作流的例子。",
+          "url": "https://github.com/tradesdontlie/tradingview-mcp",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "tirth8205/code-review-graph",
+          "summary": "本地优先的代码智能图，用于 MCP 和 CLI，让 AI coding tools 读取更少、更相关的代码上下文。",
+          "url": "https://github.com/tirth8205/code-review-graph",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "KnockOutEZ/wigolo",
+          "summary": "给 AI coding agent 使用的本地优先 web 搜索、抓取和研究 MCP 工具，无需 API key。",
+          "url": "https://github.com/KnockOutEZ/wigolo",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
+          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
+          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
+          "source": "Amazon Web Services (AWS)",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -37455,134 +38649,6 @@
       ]
     },
     {
-      "name": "MCP",
-      "count": 10,
-      "dates": [
-        "2026-08-20",
-        "2026-08-14",
-        "2026-08-07",
-        "2026-08-04",
-        "2026-07-24",
-        "2026-07-22",
-        "2026-07-20",
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 5
-        },
-        {
-          "name": "今日要闻",
-          "count": 2
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        },
-        {
-          "name": "AI 论文",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-20",
-          "title": "agentscope-ai/QwenPaw",
-          "summary": "面向个人 AI 助手的自托管项目，支持多聊天应用、MCP 与可扩展能力，适合观察国产 agent 生态如何把 harness、skills 和部署体验整合到一起。",
-          "url": "https://github.com/agentscope-ai/QwenPaw",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-14",
-          "title": "Show HN：MCP Memory 用 Google OKF 和 SQLite FTS5 做快速 Agent 记忆",
-          "summary": "这个项目把 Agent 记忆做成 MCP 组件，结合 OKF 和 SQLite FTS5 提供可搜索记忆层。它代表了社区对“轻量、本地、可解释记忆”的持续需求。",
-          "url": "https://github.com/fellowgeek/mcp-memory",
-          "source": "Show HN",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-14",
-          "title": "holaboss-ai/holaOS",
-          "summary": "开源 All-in-one AI agent workspace，面向 Claude Code、Codex、浏览器、文件和 100+ 集成提供共享记忆。",
-          "url": "https://github.com/holaboss-ai/holaOS",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-07",
-          "title": "Agent Plugins 1.0.0 发布，试图把 Skills 与 MCP Server 打包成统一插件",
-          "summary": "Google Developers Blog 介绍的 Agent Plugins 1.0.0 使用 plugin.json 与固定目录布局，把 Agent Skills、工具和 MCP server 组合成可迁移包。它的意义在于减少不同 IDE、编码智能体和运行时之间重复封装。",
-          "url": "https://developers.googleblog.com/agent-plugins-package-your-skills-tools-and-more",
-          "source": "Google Developers Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-04",
-          "title": "Armature",
-          "summary": "Agent 上线后最缺的往往不是更多工具，而是知道每个会话发生了什么。Armature 把产品分析和评测接到 MCP 会话上，方向契合企业 Agent 的可观测性需求。",
-          "url": "https://armature.tech/",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "Euclid-MCP: A Model Context Protocol Server for Deterministic Logical Reasoning via Prolog",
-          "summary": "它把 MCP 与 Prolog 这类确定性逻辑推理结合，提供了一个很具体的方向：让 LLM 把模糊语言交给可验证工具处理。对构建高可靠 Agent 工具链的人来说，这是比再加一个搜索工具更值得研究的 MCP 形态。",
-          "url": "https://arxiv.org/abs/2607.21412",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "tradesdontlie/tradingview-mcp",
-          "summary": "把 Claude Code 连接到 TradingView Desktop，用于个人图表分析自动化，是 MCP 从开发工具扩展到垂直工作流的例子。",
-          "url": "https://github.com/tradesdontlie/tradingview-mcp",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "tirth8205/code-review-graph",
-          "summary": "本地优先的代码智能图，用于 MCP 和 CLI，让 AI coding tools 读取更少、更相关的代码上下文。",
-          "url": "https://github.com/tirth8205/code-review-graph",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "KnockOutEZ/wigolo",
-          "summary": "给 AI coding agent 使用的本地优先 web 搜索、抓取和研究 MCP 工具，无需 API key。",
-          "url": "https://github.com/KnockOutEZ/wigolo",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "AWS 用 Bedrock 与 MCP 服务器构建“agentic vision”方案",
-          "summary": "AWS 把视觉智能、Bedrock 与 MCP 串成企业 Agent 场景，说明 MCP 正从开发者工具接口扩展到云厂商的行业解决方案叙事中。",
-          "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNdERNRmdkOTNUaWNHRE5tcXl5cXRSNDl4eElySzNKQnBkc0luempRdFNBeGE4anltTW85QmRYVVlfcHc3dWFvOUdPR25VYXp0QkE5RTNadm5zZ1JMM3V0V3lpQlZnRzdmSEw4Vl9SNzE2VDR5YkpoazVSbWp1Tk0xNW84MkpJQzd6TWdVU19BaG5iUVIwSXJac3NQVUhic2xlaUNQZlR0azRndElSLS1tRHlodklrUERDcFREYzd0VXBmZUti?oc=5",
-          "source": "Amazon Web Services (AWS)",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "Skills",
       "count": 10,
       "dates": [
@@ -37692,6 +38758,116 @@
           "title": "ibelick/ui-skills",
           "summary": "ui-skills 将设计工程经验包装成可复用 skill，适合观察 Claude Code/Codex 这类工具如何把界面手艺沉淀成执行规范。",
           "url": "https://github.com/ibelick/ui-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Agent Memory",
+      "count": 9,
+      "dates": [
+        "2026-08-28",
+        "2026-08-24",
+        "2026-08-19",
+        "2026-08-18",
+        "2026-08-10",
+        "2026-08-07",
+        "2026-08-03"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 5
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 3
+        },
+        {
+          "name": "AI 论文",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Edge Agent Memory",
+          "summary": "Polign 展示了一个面向边缘场景的轻量记忆层，关注低依赖、可迁移和 agent 会话状态管理。",
+          "url": "https://polign.com/blog-edge-agent-memory",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "thedotmack/claude-mem",
+          "summary": "跨会话持久上下文工具，压缩 agent 会话并在后续任务中注入相关记忆。",
+          "url": "https://github.com/thedotmack/claude-mem",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-24",
+          "title": "OzBrain",
+          "summary": "OzBrain 在 Show HN 获得较高讨论度，主张让 agents 与团队共享知识上下文。它切中的痛点是 agent 不是一次性脚本，而需要长期记忆、团队语境和可复用知识资产。",
+          "url": "https://ozbrain.com",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-19",
+          "title": "volcengine/OpenViking",
+          "summary": "Self-evolving Context Database for AI Agents，试图统一 Agent 记忆、知识 RAG 与 Skills。",
+          "url": "https://github.com/volcengine/OpenViking",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-18",
+          "title": "akitaonrails/ai-memory",
+          "summary": "面向 agent coding CLI 的长期记忆与跨厂商交接方案。",
+          "url": "https://github.com/akitaonrails/ai-memory",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-10",
+          "title": "TEPA: Revoking Stale Memories for Conflict-Robust Language Agents",
+          "summary": "长期记忆系统最危险的问题不是记不住，而是旧事实继续污染 prompt。TEPA 把记忆有效性做成显式状态，并保留撤销历史用于审计，正好回应生产 Agent 的记忆治理痛点。",
+          "url": "https://arxiv.org/abs/2608.07429v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-10",
+          "title": "Remembrane",
+          "summary": "在长期记忆论文和产品同时升温的背景下，Remembrane 代表了另一条务实路线：先把可迁移、可备份、可审计的本地记忆文件做好。",
+          "url": "https://github.com/satyasairay/remembrane",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-07",
+          "title": "TencentCloud/TencentDB-Agent-Memory",
+          "summary": "面向 Agent 的数据库记忆层项目，当日新增星标突出，适合关注长期记忆、状态持久化和企业数据接入的人跟进。",
+          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "TencentCloud/TencentDB-Agent-Memory",
+          "summary": "围绕 Agent Memory 的数据库/云服务项目，和今天论文栏的记忆主题形成呼应。",
+          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -38104,6 +39280,107 @@
       ]
     },
     {
+      "name": "视频生成",
+      "count": 8,
+      "dates": [
+        "2026-08-28",
+        "2026-08-26",
+        "2026-08-18",
+        "2026-08-13",
+        "2026-08-12",
+        "2026-08-03",
+        "2026-07-17"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        },
+        {
+          "name": "开源热门",
+          "count": 3
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Gemini Omni 1.1 Flash 强化生成式视频控制",
+          "summary": "Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。",
+          "url": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control",
+          "source": "Google DeepMind Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "calesthio/OpenMontage",
+          "summary": "开源 agentic video production system，包含生产 pipeline、工具和技能知识文件。",
+          "url": "https://github.com/calesthio/OpenMontage",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-26",
+          "title": "OpenRouter 视频生成 API 指南",
+          "summary": "OpenRouter 发布视频生成 API 接入指南，强调以代码方式调用不同视频生成能力。对应用开发者来说，统一路由层正在从文本模型扩展到多模态生成。",
+          "url": "https://openrouter.ai/blog/tutorials/video-generation-api",
+          "source": "OpenRouter",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-18",
+          "title": "harry0703/MoneyPrinterTurbo",
+          "summary": "利用大模型和自动化工作流，根据主题或关键词一键生成高清短视频。",
+          "url": "https://github.com/harry0703/MoneyPrinterTurbo",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-13",
+          "title": "Lightricks/LTX-2",
+          "summary": "Official Python inference and LoRA trainer package for the LTX-2 audio-video generative model.",
+          "url": "https://github.com/Lightricks/LTX-2",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "Runway 上线 Seedance 2.5，支持 50 个角色参考",
+          "summary": "Runway 宣布 Seedance 2.5 上线，支持最多 50 个独特角色参考，并可生成最长 30 秒、与音乐同步的片段。视频生成工具的竞争点正在从单段质量扩展到角色一致性、音乐同步和可控长片段。",
+          "url": "https://x.com/runwayml/status/2087251184658657346",
+          "source": "Runway",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "MiniMax H3 发布，强调全能多模态与 2K 原生立体声视频",
+          "summary": "MiniMax H3 主打视频、音频和多模态生成能力，尤其强调 2K 原生立体声视频。多模态竞争已经从“能生成短片”转向分辨率、声音同步、可控性和开放生态的组合战。",
+          "url": "https://www.minimax.io/blog/minimax-h3",
+          "source": "MiniMax Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "Google Vids：Gemini Omni 与个人数字分身",
+          "summary": "Google Vids 新增基于提示词和参考图生成/编辑视频片段，以及上传自拍和语音后生成个人数字分身的能力，面向 Google AI Pro、Ultra 和 Workspace 商业客户。",
+          "url": "https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars",
+          "source": "Google Blog",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "软件工程",
       "count": 8,
       "dates": [
@@ -38202,97 +39479,6 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "Agent Memory",
-      "count": 7,
-      "dates": [
-        "2026-08-24",
-        "2026-08-19",
-        "2026-08-18",
-        "2026-08-10",
-        "2026-08-07",
-        "2026-08-03"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 4
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 2
-        },
-        {
-          "name": "AI 论文",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-24",
-          "title": "OzBrain",
-          "summary": "OzBrain 在 Show HN 获得较高讨论度，主张让 agents 与团队共享知识上下文。它切中的痛点是 agent 不是一次性脚本，而需要长期记忆、团队语境和可复用知识资产。",
-          "url": "https://ozbrain.com",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-19",
-          "title": "volcengine/OpenViking",
-          "summary": "Self-evolving Context Database for AI Agents，试图统一 Agent 记忆、知识 RAG 与 Skills。",
-          "url": "https://github.com/volcengine/OpenViking",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-18",
-          "title": "akitaonrails/ai-memory",
-          "summary": "面向 agent coding CLI 的长期记忆与跨厂商交接方案。",
-          "url": "https://github.com/akitaonrails/ai-memory",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-10",
-          "title": "TEPA: Revoking Stale Memories for Conflict-Robust Language Agents",
-          "summary": "长期记忆系统最危险的问题不是记不住，而是旧事实继续污染 prompt。TEPA 把记忆有效性做成显式状态，并保留撤销历史用于审计，正好回应生产 Agent 的记忆治理痛点。",
-          "url": "https://arxiv.org/abs/2608.07429v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-08-10",
-          "title": "Remembrane",
-          "summary": "在长期记忆论文和产品同时升温的背景下，Remembrane 代表了另一条务实路线：先把可迁移、可备份、可审计的本地记忆文件做好。",
-          "url": "https://github.com/satyasairay/remembrane",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-07",
-          "title": "TencentCloud/TencentDB-Agent-Memory",
-          "summary": "面向 Agent 的数据库记忆层项目，当日新增星标突出，适合关注长期记忆、状态持久化和企业数据接入的人跟进。",
-          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "TencentCloud/TencentDB-Agent-Memory",
-          "summary": "围绕 Agent Memory 的数据库/云服务项目，和今天论文栏的记忆主题形成呼应。",
-          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         }
       ]
     },
@@ -39228,6 +40414,170 @@
       ]
     },
     {
+      "name": "创作工具",
+      "count": 6,
+      "dates": [
+        "2026-08-28",
+        "2026-08-12",
+        "2026-08-10",
+        "2026-07-30",
+        "2026-07-24",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        },
+        {
+          "name": "开源热门",
+          "count": 2
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Midjourney 开放 V8.2 图像编辑模型测试",
+          "summary": "Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。",
+          "url": "https://updates.midjourney.com/edit-model-for-v8",
+          "source": "Midjourney Updates",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "Runway 上线 Seedance 2.5，支持 50 个角色参考",
+          "summary": "Runway 宣布 Seedance 2.5 上线，支持最多 50 个独特角色参考，并可生成最长 30 秒、与音乐同步的片段。视频生成工具的竞争点正在从单段质量扩展到角色一致性、音乐同步和可控长片段。",
+          "url": "https://x.com/runwayml/status/2087251184658657346",
+          "source": "Runway",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-10",
+          "title": "Airy",
+          "summary": "Show HN 讨论度最高的创作产品，价值在于把语音生成从专业音频工作站下沉到更短链路的内容生产流程。",
+          "url": "https://airy.so",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "Google DeepMind 在 Flow Music 中推出 Lyria 3.5",
+          "summary": "Lyria 3.5 强调音乐性、歌词、人声和创作控制，说明生成式音频正在从一次性输出走向更可控的创作流程。对内容工具团队来说，控制粒度比单纯音质提升更值得关注。",
+          "url": "https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control",
+          "source": "Google DeepMind",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "palmier-io/palmier-pro",
+          "summary": "开源 macOS 视频编辑器，主打 AI 创作工作流；Show HN 讨论热度较高，适合关注本地创作工具的人跟进。",
+          "url": "https://github.com/palmier-io/palmier-pro",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "jamiepine/voicebox",
+          "summary": "开源 AI voice studio，覆盖克隆、听写和语音创作流程。",
+          "url": "https://github.com/jamiepine/voicebox",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "工作流",
+      "count": 6,
+      "dates": [
+        "2026-08-28",
+        "2026-07-31",
+        "2026-07-28",
+        "2026-07-23",
+        "2026-07-22",
+        "2026-07-20"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 3
+        },
+        {
+          "name": "开源热门",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Derive",
+          "summary": "Derive 把 artifacts 与工作流作为可发布、可复用对象来组织，反映 AI 产物正在从一次性输出转向可管理资产。",
+          "url": "https://github.com/derive-to/derive",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-31",
+          "title": "deerwork-ai/deer-workflow",
+          "summary": "开源图工程 runtime，在 TypeScript 中保留编排，把语义工作委托给可替换 Agent runtime。",
+          "url": "https://github.com/deerwork-ai/deer-workflow",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
+          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
+          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
+          "source": "GitHub Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "ComposioHQ/awesome-claude-skills",
+          "summary": "Claude Skills、资源与自定义工作流工具的 curated list。",
+          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "Fractal",
+          "summary": "Fractal 代表了今天反复出现的“Agent 递归/分治”趋势：把复杂任务拆成可重复调用的循环，而不是单次长提示。看点会落在循环终止、状态压缩和人工接管。",
+          "url": "https://github.com/plasma-ai/fractal",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-20",
+          "title": "概念 · Workflow-first Agent",
+          "summary": "今天的 YouTube 课程、SearchOS 论文和 HN 讨论共同指向一个趋势：Agent 的上限越来越取决于流程状态、计划审查、证据登记和验收标准，而不是简单堆上下文或工具数量。",
+          "url": "https://classmatexiaoming96-ux.github.io/youtube_course/bcM9dP_uXJU.html",
+          "source": "Daily Digest",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "推理模型",
       "count": 6,
       "dates": [
@@ -39314,84 +40664,84 @@
       ]
     },
     {
-      "name": "视频生成",
+      "name": "本地推理",
       "count": 6,
       "dates": [
-        "2026-08-26",
-        "2026-08-18",
-        "2026-08-13",
+        "2026-08-28",
+        "2026-08-20",
         "2026-08-12",
-        "2026-08-03",
-        "2026-07-17"
+        "2026-08-04",
+        "2026-07-31",
+        "2026-07-30"
       ],
       "sections": [
         {
-          "name": "产品 / 概念",
-          "count": 2
-        },
-        {
           "name": "开源热门",
+          "count": 3
+        },
+        {
+          "name": "社区热议",
           "count": 2
         },
         {
-          "name": "今日要闻",
-          "count": 2
+          "name": "产品 / 概念",
+          "count": 1
         }
       ],
       "items": [
         {
-          "date": "2026-08-26",
-          "title": "OpenRouter 视频生成 API 指南",
-          "summary": "OpenRouter 发布视频生成 API 接入指南，强调以代码方式调用不同视频生成能力。对应用开发者来说，统一路由层正在从文本模型扩展到多模态生成。",
-          "url": "https://openrouter.ai/blog/tutorials/video-generation-api",
-          "source": "OpenRouter",
+          "date": "2026-08-28",
+          "title": "Small Models Have Arrived",
+          "summary": "小模型话题继续升温，HN 讨论集中在本地部署、低延迟、隐私和任务专用模型是否已经足以替代一部分大模型调用。它与今天端侧翻译模型压缩形成呼应。",
+          "url": "https://calv.info/small-models-have-arrived",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-20",
+          "title": "Shoehorn",
+          "summary": "Shoehorn 的价值在于把量化体验做成开发者可试的工具，而不是只停留在论文或框架参数。它适合用来评估小机器上模型质量、延迟和成本之间的实际折中。",
+          "url": "https://notactuallytreyanastasio.github.io/shoehorn/",
+          "source": "Show HN",
           "section": "products",
           "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-18",
-          "title": "harry0703/MoneyPrinterTurbo",
-          "summary": "利用大模型和自动化工作流，根据主题或关键词一键生成高清短视频。",
-          "url": "https://github.com/harry0703/MoneyPrinterTurbo",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-08-13",
-          "title": "Lightricks/LTX-2",
-          "summary": "Official Python inference and LoRA trainer package for the LTX-2 audio-video generative model.",
-          "url": "https://github.com/Lightricks/LTX-2",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         },
         {
           "date": "2026-08-12",
-          "title": "Runway 上线 Seedance 2.5，支持 50 个角色参考",
-          "summary": "Runway 宣布 Seedance 2.5 上线，支持最多 50 个独特角色参考，并可生成最长 30 秒、与音乐同步的片段。视频生成工具的竞争点正在从单段质量扩展到角色一致性、音乐同步和可控长片段。",
-          "url": "https://x.com/runwayml/status/2087251184658657346",
-          "source": "Runway",
-          "section": "headlines",
-          "section_label": "今日要闻"
+          "title": "Apple Silicon macOS VM 中 llama.cpp 推理提速 11-16 倍",
+          "summary": "trycua 团队通过 Metal 能力兼容层让 macOS 虚拟机中的 llama.cpp 使用更新内核，部分模型接近裸机性能。社区讨论点在于本地开发环境、隔离运行和 GPU passthrough 是否能同时成立。",
+          "url": "https://github.com/trycua/cua/blob/main/blog/gpu-passthrough-macos-vms.md",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         },
         {
-          "date": "2026-08-03",
-          "title": "MiniMax H3 发布，强调全能多模态与 2K 原生立体声视频",
-          "summary": "MiniMax H3 主打视频、音频和多模态生成能力，尤其强调 2K 原生立体声视频。多模态竞争已经从“能生成短片”转向分辨率、声音同步、可控性和开放生态的组合战。",
-          "url": "https://www.minimax.io/blog/minimax-h3",
-          "source": "MiniMax Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
+          "date": "2026-08-04",
+          "title": "antirez/ds4",
+          "summary": "DeepSeek 4 Flash and PRO local inference engine for Metal, CUDA and ROCm; useful signal for local model runtime experimentation.",
+          "url": "https://github.com/antirez/ds4",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         },
         {
-          "date": "2026-07-17",
-          "title": "Google Vids：Gemini Omni 与个人数字分身",
-          "summary": "Google Vids 新增基于提示词和参考图生成/编辑视频片段，以及上传自拍和语音后生成个人数字分身的能力，面向 Google AI Pro、Ultra 和 Workspace 商业客户。",
-          "url": "https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars",
-          "source": "Google Blog",
-          "section": "products",
-          "section_label": "产品 / 概念"
+          "date": "2026-07-31",
+          "title": "gavamedia/deltafin",
+          "summary": "在单设备上运行完整 Kimi K3，并提供 OpenAI-compatible API server 给本地聊天和 coding agent 使用。",
+          "url": "https://github.com/gavamedia/deltafin",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "drumih/turbo-fieldfare",
+          "summary": "让 Gemma 4 26B-A4B 在任意 M 系列 MacBook 上以约 2GB 内存运行，降低大模型本地推理门槛。",
+          "url": "https://github.com/drumih/turbo-fieldfare",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -39808,6 +41158,74 @@
       ]
     },
     {
+      "name": "人机协作",
+      "count": 5,
+      "dates": [
+        "2026-08-28",
+        "2026-08-20",
+        "2026-08-03",
+        "2026-07-17",
+        "2026-07-16"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 3
+        },
+        {
+          "name": "社区热议",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "The load-bearing vocabulary of Claude",
+          "summary": "这篇文章在 Show HN/HN 圈层引发讨论，核心是 Claude 对某些词汇和表达方式的反应会显著改变协作质量。它提醒开发者，提示词不是魔法，而是人机协议的一部分。",
+          "url": "https://louisabraham.github.io/load-bearing/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-20",
+          "title": "Tuning the Stochastic Machine: A Systems Engineer's Operating Model for Human-AI Engineering",
+          "summary": "它把专家纠错后“错误随会话死亡”的问题定义为运营问题，而不是工具问题。对搭建 coding agent 流程的人，这篇提供了把纠错、规则和验证机制沉淀成系统资产的理论框架。",
+          "url": "https://arxiv.org/abs/2608.19125v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "一篇“我为什么不用 AI 写作”的反向热门帖",
+          "summary": "作者解释自己在写作流程中不使用 AI 的原因，HN 讨论焦点转向创作里的声音、责任和认知劳动。它值得放进社区栏，因为它代表了技术圈内部对“默认使用 AI”的反思。",
+          "url": "https://www.antipope.org/charlie/blog-static/2026/08/on-the-non-use-of-ai-in-my-wri.html",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-17",
+          "title": "Plover: Steering GUI Agents through Plan-Centric Interaction",
+          "summary": "这篇把 GUI Agent 的失败归因到“执行漂移”，提出围绕计划进行交互和纠偏。它的价值在于把用户意图、动态界面状态和 Agent 执行动作放进同一个可审查循环，适合做桌面/浏览器自动化的人读。",
+          "url": "https://arxiv.org/abs/2607.15193v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-07-16",
+          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
+          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
+          "url": "https://arxiv.org/abs/2607.14049v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "企业 Agent",
       "count": 5,
       "dates": [
@@ -39871,78 +41289,6 @@
           "source": "OpenBMB",
           "section": "products",
           "section_label": "产品 / 概念"
-        }
-      ]
-    },
-    {
-      "name": "创作工具",
-      "count": 5,
-      "dates": [
-        "2026-08-12",
-        "2026-08-10",
-        "2026-07-30",
-        "2026-07-24",
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 2
-        },
-        {
-          "name": "开源热门",
-          "count": 2
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-12",
-          "title": "Runway 上线 Seedance 2.5，支持 50 个角色参考",
-          "summary": "Runway 宣布 Seedance 2.5 上线，支持最多 50 个独特角色参考，并可生成最长 30 秒、与音乐同步的片段。视频生成工具的竞争点正在从单段质量扩展到角色一致性、音乐同步和可控长片段。",
-          "url": "https://x.com/runwayml/status/2087251184658657346",
-          "source": "Runway",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-08-10",
-          "title": "Airy",
-          "summary": "Show HN 讨论度最高的创作产品，价值在于把语音生成从专业音频工作站下沉到更短链路的内容生产流程。",
-          "url": "https://airy.so",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "Google DeepMind 在 Flow Music 中推出 Lyria 3.5",
-          "summary": "Lyria 3.5 强调音乐性、歌词、人声和创作控制，说明生成式音频正在从一次性输出走向更可控的创作流程。对内容工具团队来说，控制粒度比单纯音质提升更值得关注。",
-          "url": "https://deepmind.google/blog/were-launching-lyria-35-in-google-flow-music-with-advances-across-musicality-lyrics-vocals-and-creative-control",
-          "source": "Google DeepMind",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "palmier-io/palmier-pro",
-          "summary": "开源 macOS 视频编辑器，主打 AI 创作工作流；Show HN 讨论热度较高，适合关注本地创作工具的人跟进。",
-          "url": "https://github.com/palmier-io/palmier-pro",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "jamiepine/voicebox",
-          "summary": "开源 AI voice studio，覆盖克隆、听写和语音创作流程。",
-          "url": "https://github.com/jamiepine/voicebox",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         }
       ]
     },
@@ -40155,78 +41501,6 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
-        }
-      ]
-    },
-    {
-      "name": "工作流",
-      "count": 5,
-      "dates": [
-        "2026-07-31",
-        "2026-07-28",
-        "2026-07-23",
-        "2026-07-22",
-        "2026-07-20"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 2
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 2
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-31",
-          "title": "deerwork-ai/deer-workflow",
-          "summary": "开源图工程 runtime，在 TypeScript 中保留编排，把语义工作委托给可替换 Agent runtime。",
-          "url": "https://github.com/deerwork-ai/deer-workflow",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "GitHub Copilot 推出 Harness 工作流，把原型、规划、实现与审查串成单一开发回路",
-          "summary": "GitHub Blog 介绍的 Harness 思路强调让 AI 在同一工作流里完成 prototype、planning、implementation 和 review，而不是把聊天、IDE、PR 审查割裂成几个孤岛。它反映了 AI 编程工具正在从“补全代码”走向“治理整个变更过程”。",
-          "url": "https://github.blog/ai-and-ml/github-copilot/the-harness-is-all-you-need-mostly",
-          "source": "GitHub Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "ComposioHQ/awesome-claude-skills",
-          "summary": "Claude Skills、资源与自定义工作流工具的 curated list。",
-          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "Fractal",
-          "summary": "Fractal 代表了今天反复出现的“Agent 递归/分治”趋势：把复杂任务拆成可重复调用的循环，而不是单次长提示。看点会落在循环终止、状态压缩和人工接管。",
-          "url": "https://github.com/plasma-ai/fractal",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-20",
-          "title": "概念 · Workflow-first Agent",
-          "summary": "今天的 YouTube 课程、SearchOS 论文和 HN 讨论共同指向一个趋势：Agent 的上限越来越取决于流程状态、计划审查、证据登记和验收标准，而不是简单堆上下文或工具数量。",
-          "url": "https://classmatexiaoming96-ux.github.io/youtube_course/bcM9dP_uXJU.html",
-          "source": "Daily Digest",
-          "section": "products",
-          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -40514,78 +41788,6 @@
       ]
     },
     {
-      "name": "本地推理",
-      "count": 5,
-      "dates": [
-        "2026-08-20",
-        "2026-08-12",
-        "2026-08-04",
-        "2026-07-31",
-        "2026-07-30"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 3
-        },
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-20",
-          "title": "Shoehorn",
-          "summary": "Shoehorn 的价值在于把量化体验做成开发者可试的工具，而不是只停留在论文或框架参数。它适合用来评估小机器上模型质量、延迟和成本之间的实际折中。",
-          "url": "https://notactuallytreyanastasio.github.io/shoehorn/",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-12",
-          "title": "Apple Silicon macOS VM 中 llama.cpp 推理提速 11-16 倍",
-          "summary": "trycua 团队通过 Metal 能力兼容层让 macOS 虚拟机中的 llama.cpp 使用更新内核，部分模型接近裸机性能。社区讨论点在于本地开发环境、隔离运行和 GPU passthrough 是否能同时成立。",
-          "url": "https://github.com/trycua/cua/blob/main/blog/gpu-passthrough-macos-vms.md",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-04",
-          "title": "antirez/ds4",
-          "summary": "DeepSeek 4 Flash and PRO local inference engine for Metal, CUDA and ROCm; useful signal for local model runtime experimentation.",
-          "url": "https://github.com/antirez/ds4",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-31",
-          "title": "gavamedia/deltafin",
-          "summary": "在单设备上运行完整 Kimi K3，并提供 OpenAI-compatible API server 给本地聊天和 coding agent 使用。",
-          "url": "https://github.com/gavamedia/deltafin",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "drumih/turbo-fieldfare",
-          "summary": "让 Gemma 4 26B-A4B 在任意 M 系列 MacBook 上以约 2GB 内存运行，降低大模型本地推理门槛。",
-          "url": "https://github.com/drumih/turbo-fieldfare",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
       "name": "机器人",
       "count": 5,
       "dates": [
@@ -40797,6 +41999,78 @@
       ]
     },
     {
+      "name": "端侧模型",
+      "count": 5,
+      "dates": [
+        "2026-08-28",
+        "2026-08-21",
+        "2026-08-11",
+        "2026-07-30",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 3
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "腾讯混元将端侧翻译模型压缩至 440MB",
+          "summary": "腾讯混元把 Hy-MT2-1.8B 通过低比特量化压到 440MB，并落地到哔哩哔哩直播弹幕翻译。相比云端大模型新闻，这类端侧压缩说明 AI 产品正在追求更低延迟、更低成本和更强隐私边界。",
+          "url": "https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ%3D%3D&mid=2247498367&idx=1&sn=f1a5cf87eb06015cbe995bd5ef8b5d0a",
+          "source": "腾讯混元",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "125M on-device MIDI autocomplete",
+          "summary": "它不是大模型竞赛，而是展示小参数模型在端侧创作工具里的可用性：低延迟、隐私友好，也更容易嵌入具体创作软件。",
+          "url": "https://simedw.com/2026/08/20/midi-autocomplete/",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-11",
+          "title": "Needle2",
+          "summary": "Show HN 里最有讨论度的端侧 Agent 模型项目。它的亮点在于把模型体积压到 14MB，目标场景从手机扩展到可穿戴、智能家居和机器人。",
+          "url": "https://cactuscompute.com/needle",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "Cactus Hybrid",
+          "summary": "它把“本地先答、云端兜底”的混合策略做成模型级信号，适合移动端和隐私敏感应用。亮点是置信度探针，而不只是又一个小模型封装。",
+          "url": "https://github.com/cactus-compute/cactus-hybrid",
+          "source": "Hacker News / GitHub",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "cactus-compute/cactus-hybrid",
+          "summary": "端侧模型回答时输出置信度分数，低置信度自动转交云端模型，是小模型 + 大模型混合部署的具体实现样本。",
+          "url": "https://github.com/cactus-compute/cactus-hybrid",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "自我改进",
       "count": 5,
       "dates": [
@@ -40861,6 +42135,131 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "训练数据",
+      "count": 5,
+      "dates": [
+        "2026-08-28",
+        "2026-08-19",
+        "2026-08-17",
+        "2026-07-28",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 3
+        },
+        {
+          "name": "今日要闻",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "诉讼指控 xAI 使用 CSAM 材料训练 Grok",
+          "summary": "Ars Technica 报道称，一项诉讼指控 xAI 使用儿童性虐待材料及其 AI 衍生图像训练 Grok。无论案件最终结果如何，它都把训练数据来源、模型输出再训练和有害内容销毁义务推到了更高风险的法律前线。",
+          "url": "https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says",
+          "source": "Ars Technica",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-19",
+          "title": "Google 收购 Spirit Airlines 破产数据引发 AI 训练数据争议",
+          "summary": "HN 对这条新闻的争论集中在邮件、聊天和业务文档能否作为 AI 资产被拍卖，以及破产程序中的用户数据边界。它把训练数据问题从开放网页推进到企业历史数据和隐私预期。",
+          "url": "https://www.theregister.com/ai-and-ml/2026/08/18/google-buys-crashed-airline-spirits-data-at-auction-because-ai/5288962",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-17",
+          "title": "What happens when an LLM never sees material beyond fifth grade?",
+          "summary": "这个实验把训练语料的上限设成五年级材料，社区讨论模型能否从受限知识中泛化出更高阶能力。它适合用来反思 benchmark 背后的数据分布和教育式训练假设。",
+          "url": "https://littlelearner-ll.github.io/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-28",
+          "title": "HN 热议：AI 公司为了训练数据处理稀有书籍，引发版权和文化保存争论",
+          "summary": "742 points / 468 comments 的讨论集中在训练数据稀缺之后，AI 公司会把成本转嫁到图书馆、档案和版权边界上。它不是单纯新闻，而是关于“数据来源是否可审计、是否可替代”的长期问题。",
+          "url": "https://twitter.com/HedgieMarkets/status/2081534588485296565",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "Anthropic 盗版书籍版权案达成 15 亿美元和解，训练数据合规成本被重新定价",
+          "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
+          "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
+          "source": "The Decoder",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "AI Coding",
+      "count": 4,
+      "dates": [
+        "2026-08-28",
+        "2026-08-21",
+        "2026-07-22"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 3
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "JetBrains/go-modern-guidelines",
+          "summary": "帮助 AI coding agents 编写现代 Go 的指南，适合作为团队级代码风格上下文。",
+          "url": "https://github.com/JetBrains/go-modern-guidelines",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "AI 没有抹掉初级工程师价值，反而改变了价值位置",
+          "summary": "这篇文章的讨论焦点是：AI 让初级工程师少做机械实现，但也放大了读代码、提问题、验证输出和理解业务的价值。社区分歧在于公司是否愿意继续培养这些能力。",
+          "url": "https://franciscotrindade.me/blog/the-kids-are-really-alright/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "Huzzah：一种新的 AI 编码工作方式引发讨论",
+          "summary": "Huzzah 的文章在 Show HN 和 HN 主站都引发高讨论，核心不是又一个编辑器，而是开发者如何把 AI 生成、人工判断和可维护代码放进同一流程。",
+          "url": "https://www.danielvaughn.dev/posts/huzzah/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "CACM 文章引发讨论：AI 没让编程更容易，只是让它难在不同地方",
+          "summary": "讨论从“生产率是否提升”转向“验证、架构判断和问题分解是否变得更重要”。它提醒团队别把 AI coding 当作直接替代编码时间，而要重新设计 review、测试和需求澄清流程。",
+          "url": "https://cacm.acm.org/opinion/ai-didnt-make-programming-easier-it-just-made-it-differently-difficult/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -41557,64 +42956,6 @@
           "title": "Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents",
           "summary": "安全 Agent 评测常只看是否攻破或完成 CTF，这篇把推理成本、工具调用和遥测查询一起纳入评价。它对企业安全团队有阅读价值，因为真实 SOC 场景里预算和成功率同等重要。",
           "url": "https://arxiv.org/abs/2607.15263v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "人机协作",
-      "count": 4,
-      "dates": [
-        "2026-08-20",
-        "2026-08-03",
-        "2026-07-17",
-        "2026-07-16"
-      ],
-      "sections": [
-        {
-          "name": "AI 论文",
-          "count": 3
-        },
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-20",
-          "title": "Tuning the Stochastic Machine: A Systems Engineer's Operating Model for Human-AI Engineering",
-          "summary": "它把专家纠错后“错误随会话死亡”的问题定义为运营问题，而不是工具问题。对搭建 coding agent 流程的人，这篇提供了把纠错、规则和验证机制沉淀成系统资产的理论框架。",
-          "url": "https://arxiv.org/abs/2608.19125v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-08-03",
-          "title": "一篇“我为什么不用 AI 写作”的反向热门帖",
-          "summary": "作者解释自己在写作流程中不使用 AI 的原因，HN 讨论焦点转向创作里的声音、责任和认知劳动。它值得放进社区栏，因为它代表了技术圈内部对“默认使用 AI”的反思。",
-          "url": "https://www.antipope.org/charlie/blog-static/2026/08/on-the-non-use-of-ai-in-my-wri.html",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-17",
-          "title": "Plover: Steering GUI Agents through Plan-Centric Interaction",
-          "summary": "这篇把 GUI Agent 的失败归因到“执行漂移”，提出围绕计划进行交互和纠偏。它的价值在于把用户意图、动态界面状态和 Agent 执行动作放进同一个可审查循环，适合做桌面/浏览器自动化的人读。",
-          "url": "https://arxiv.org/abs/2607.15193v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        },
-        {
-          "date": "2026-07-16",
-          "title": "Deep Interaction: An Efficient Human-AI Interaction Method for Large Reasoning Models",
-          "summary": "论文关注大推理模型出错后的交互成本，不是简单让模型重答，而是让用户更高效地定位错误步骤。它的价值在于把“人类纠错”作为推理系统的一等能力，适合关注 CoT 可控性和人机协作界面的读者。",
-          "url": "https://arxiv.org/abs/2607.14049v1",
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
@@ -42645,64 +43986,6 @@
       ]
     },
     {
-      "name": "端侧模型",
-      "count": 4,
-      "dates": [
-        "2026-08-21",
-        "2026-08-11",
-        "2026-07-30",
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 3
-        },
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-21",
-          "title": "125M on-device MIDI autocomplete",
-          "summary": "它不是大模型竞赛，而是展示小参数模型在端侧创作工具里的可用性：低延迟、隐私友好，也更容易嵌入具体创作软件。",
-          "url": "https://simedw.com/2026/08/20/midi-autocomplete/",
-          "source": "Hacker News",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-08-11",
-          "title": "Needle2",
-          "summary": "Show HN 里最有讨论度的端侧 Agent 模型项目。它的亮点在于把模型体积压到 14MB，目标场景从手机扩展到可穿戴、智能家居和机器人。",
-          "url": "https://cactuscompute.com/needle",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-30",
-          "title": "Cactus Hybrid",
-          "summary": "它把“本地先答、云端兜底”的混合策略做成模型级信号，适合移动端和隐私敏感应用。亮点是置信度探针，而不只是又一个小模型封装。",
-          "url": "https://github.com/cactus-compute/cactus-hybrid",
-          "source": "Hacker News / GitHub",
-          "section": "products",
-          "section_label": "产品 / 概念"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "cactus-compute/cactus-hybrid",
-          "summary": "端侧模型回答时输出置信度分数，低置信度自动转交云端模型，是小模型 + 大模型混合部署的具体实现样本。",
-          "url": "https://github.com/cactus-compute/cactus-hybrid",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
       "name": "能源",
       "count": 4,
       "dates": [
@@ -42755,64 +44038,6 @@
           "summary": "今日 Google News 头部条目聚焦数据中心与 AI 能源消耗。随着模型训练、推理和主权 AI 工厂同时扩张，能源不再只是成本项，也会变成选址、监管、企业 ESG 与模型效率路线的共同约束。",
           "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPZTdJQ0Ywb3FHcmNHRHFScm9RdzlIcWNRa1NZV0ZJVW0xTVFHSFdwTFk3VEMyTDBuMTlDbEFMTWZ2WlpPTGZXakx4SnJUQzgySGlmZVVZemRXUXpnYV9UWjhQenlBazl0X21pbEtQSzdRUFlRUFVfX3RqMk1UdzhOd1FkN19OTUtYZE5fc2tvbG01Uno1?oc=5",
           "source": "Google News",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
-      "name": "训练数据",
-      "count": 4,
-      "dates": [
-        "2026-08-19",
-        "2026-08-17",
-        "2026-07-28",
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 3
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-19",
-          "title": "Google 收购 Spirit Airlines 破产数据引发 AI 训练数据争议",
-          "summary": "HN 对这条新闻的争论集中在邮件、聊天和业务文档能否作为 AI 资产被拍卖，以及破产程序中的用户数据边界。它把训练数据问题从开放网页推进到企业历史数据和隐私预期。",
-          "url": "https://www.theregister.com/ai-and-ml/2026/08/18/google-buys-crashed-airline-spirits-data-at-auction-because-ai/5288962",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-17",
-          "title": "What happens when an LLM never sees material beyond fifth grade?",
-          "summary": "这个实验把训练语料的上限设成五年级材料，社区讨论模型能否从受限知识中泛化出更高阶能力。它适合用来反思 benchmark 背后的数据分布和教育式训练假设。",
-          "url": "https://littlelearner-ll.github.io/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-28",
-          "title": "HN 热议：AI 公司为了训练数据处理稀有书籍，引发版权和文化保存争论",
-          "summary": "742 points / 468 comments 的讨论集中在训练数据稀缺之后，AI 公司会把成本转嫁到图书馆、档案和版权边界上。它不是单纯新闻，而是关于“数据来源是否可审计、是否可替代”的长期问题。",
-          "url": "https://twitter.com/HedgieMarkets/status/2081534588485296565",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-23",
-          "title": "Anthropic 盗版书籍版权案达成 15 亿美元和解，训练数据合规成本被重新定价",
-          "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
-          "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
-          "source": "The Decoder",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -43109,49 +44334,6 @@
           "source": "bobdahacker",
           "section": "headlines",
           "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
-      "name": "AI Coding",
-      "count": 3,
-      "dates": [
-        "2026-08-21",
-        "2026-07-22"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 3
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-21",
-          "title": "AI 没有抹掉初级工程师价值，反而改变了价值位置",
-          "summary": "这篇文章的讨论焦点是：AI 让初级工程师少做机械实现，但也放大了读代码、提问题、验证输出和理解业务的价值。社区分歧在于公司是否愿意继续培养这些能力。",
-          "url": "https://franciscotrindade.me/blog/the-kids-are-really-alright/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-08-21",
-          "title": "Huzzah：一种新的 AI 编码工作方式引发讨论",
-          "summary": "Huzzah 的文章在 Show HN 和 HN 主站都引发高讨论，核心不是又一个编辑器，而是开发者如何把 AI 生成、人工判断和可维护代码放进同一流程。",
-          "url": "https://www.danielvaughn.dev/posts/huzzah/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "CACM 文章引发讨论：AI 没让编程更容易，只是让它难在不同地方",
-          "summary": "讨论从“生产率是否提升”转向“验证、架构判断和问题分解是否变得更重要”。它提醒团队别把 AI coding 当作直接替代编码时间，而要重新设计 review、测试和需求澄清流程。",
-          "url": "https://cacm.acm.org/opinion/ai-didnt-make-programming-easier-it-just-made-it-differently-difficult/",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
         }
       ]
     },
@@ -43977,6 +45159,49 @@
       ]
     },
     {
+      "name": "cs.SE",
+      "count": 3,
+      "dates": [
+        "2026-08-28",
+        "2026-08-14"
+      ],
+      "sections": [
+        {
+          "name": "AI 论文",
+          "count": 3
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "SWE-Prime: Fewer Trajectories, Better Performance",
+          "summary": "软件工程 agent 的成本瓶颈常在多轨迹采样和反复尝试，这篇论文主张用更少轨迹拿到更好表现。对做编码 agent 的工程师来说，它比单纯刷榜更有阅读价值，因为它直接指向推理预算、任务选择和采样效率。",
+          "url": "https://arxiv.org/abs/2608.27449v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-28",
+          "title": "From Static to Dynamic: Benchmarking Real-World Code Review with MCR-Bench",
+          "summary": "代码评审比补全更接近真实团队协作：它需要理解上下文、历史修改和动态讨论。MCR-Bench 值得关注，因为它把 code review 评测从静态片段推向真实世界过程，更贴近 coding agent 的生产使用。",
+          "url": "https://arxiv.org/abs/2608.27442v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        },
+        {
+          "date": "2026-08-14",
+          "title": "QuoteBench: How Matched Scores Can Hide Command-Path Failures",
+          "summary": "这篇很适合做 coding agent 基建自检：同一个 Bash 回复在不同序列化、包装、再解析通道里可能完全失败。它提醒评测不能只看最终任务分，还要分清错误来自模型生成，还是来自执行传输层。",
+          "url": "https://arxiv.org/abs/2608.13547v1",
+          "source": "arXiv",
+          "section": "papers",
+          "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
       "name": "macOS",
       "count": 3,
       "dates": [
@@ -44690,6 +45915,50 @@
       ]
     },
     {
+      "name": "开发者平台",
+      "count": 3,
+      "dates": [
+        "2026-08-28",
+        "2026-07-30",
+        "2026-07-29"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 3
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Claude Console 新增个人密钥与服务账号密钥",
+          "summary": "Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。",
+          "url": "https://platform.claude.com/docs/en/release-notes/overview#august-27-2026",
+          "source": "Claude Platform Release Notes",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-30",
+          "title": "OpenAI 发布 GPT-5.6 模型家族：Sol、Terra 与 Luna",
+          "summary": "GPT-5.6 系列把旗舰推理、低成本通用模型和更便宜的轻量模型拆成三档，主打更高 token 效率和更清晰的任务分层。对开发者而言，重点不是单一榜单第一，而是能否按任务风险选择 Sol、Terra 或 Luna。",
+          "url": "https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency",
+          "source": "OpenAI",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-29",
+          "title": "Gemini API Managed Agents 默认升级 3.6 Flash，加入环境钩子与免费套餐",
+          "summary": "Google 把 Managed Agents 的默认模型、运行钩子和入门成本一起调整，说明托管式 Agent 正在从实验功能变成可持续的开发者平台能力。",
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/expanding-managed-agents-gemini-api",
+          "source": "Google Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "开放模型",
       "count": 3,
       "dates": [
@@ -44780,6 +46049,54 @@
           "summary": "Numbat 面向安全团队提供 Agent 活动可见性，并支持在执行前拦截选定操作。它代表 Agent 安全从事后日志分析前移到运行时策略控制。",
           "url": "https://research.perplexity.ai/articles/securing-agents-across-perplexity%E2%80%99s-client-endpoints-with-numbat",
           "source": "Perplexity",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "成本效率",
+      "count": 3,
+      "dates": [
+        "2026-08-28",
+        "2026-08-06",
+        "2026-07-24"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 2
+        },
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Small Models Have Arrived",
+          "summary": "小模型话题继续升温，HN 讨论集中在本地部署、低延迟、隐私和任务专用模型是否已经足以替代一部分大模型调用。它与今天端侧翻译模型压缩形成呼应。",
+          "url": "https://calv.info/small-models-have-arrived",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-06",
+          "title": "Neon 称用更便宜开源模型在检索任务上击败前沿模型",
+          "summary": "HN 对这类案例的兴趣在于工程取舍：如果任务被缩窄到检索与路由，开源小模型可能比通用大模型更便宜、更可控。",
+          "url": "https://neon.com/blog/how-castform-neon-beats-frontier-models-on-price-and-efficiency",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-24",
+          "title": "微软 MAI 模型路线强调成本-效果前沿：让 Copilot 与 Excel 在真实任务中学习",
+          "summary": "Satya Nadella 介绍 MAI 模型家族，重点是用独立评估系统优化 GitHub Copilot、Excel 等产品任务，而不是单纯追逐通用榜单。它值得关注，因为企业模型策略正在从“最大模型”转向“真实场景下每美元有效智能”。",
+          "url": "https://x.com/satyanadella/status/2080329851127669104",
+          "source": "Satya Nadella",
           "section": "headlines",
           "section_label": "今日要闻"
         }
@@ -44881,6 +46198,53 @@
           "source": "OpenRouter Blog",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "提示词",
+      "count": 3,
+      "dates": [
+        "2026-08-28",
+        "2026-08-03"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 2
+        },
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "The load-bearing vocabulary of Claude",
+          "summary": "这篇文章在 Show HN/HN 圈层引发讨论，核心是 Claude 对某些词汇和表达方式的反应会显著改变协作质量。它提醒开发者，提示词不是魔法，而是人机协议的一部分。",
+          "url": "https://louisabraham.github.io/load-bearing/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "AI 财务建议在 HN 引发热议：效果取决于你会不会问",
+          "summary": "MIT Sloan 文章在 HN 获得高讨论度，核心争议不是 AI 能否给建议，而是普通人是否知道如何提出足够具体、可校验的问题。讨论也提醒金融场景里的免责声明和个性化边界不能省略。",
+          "url": "https://mitsloan.mit.edu/ideas-made-to-matter/ai-financial-advice-surprisingly-good-especially-if-you-ask-right-questions",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-03",
+          "title": "smevals",
+          "summary": "smevals 的价值不在规模，而在提醒团队用小而稳定的样例持续测模型、提示词和 eval 框架本身。它适合被当作轻量回归测试的起点。",
+          "url": "https://simonwillison.net/2026/Jul/31/smevals",
+          "source": "Simon Willison",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -45077,6 +46441,58 @@
           "source": "MiniMax",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "模型选择",
+      "count": 3,
+      "dates": [
+        "2026-08-28",
+        "2026-08-14",
+        "2026-07-22"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Experiential Open OpenRouter",
+          "summary": "社区项目尝试用真实调用反馈改进模型选择，适合观察模型路由平台如何从静态排行榜走向动态使用信号。",
+          "url": "https://github.com/experientiallabs/experiential",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        },
+        {
+          "date": "2026-08-14",
+          "title": "一个 prompt 跑 11 个模型：社区讨论模型选择为什么不能只看排行榜",
+          "summary": "Netlify 的实验展示同一提示在不同模型里的结果差异，引发 HN 讨论：真实应用更关心可预测性、工具链兼容和错误模式，而不是单点 benchmark 排名。",
+          "url": "https://www.netlify.com/blog/one-prompt-11-models-very-different-results",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-07-22",
+          "title": "AlexsJones/llmfit",
+          "summary": "用一个命令评估数百个模型和 provider 是否适配本机硬件，切中本地开放模型部署前的选型痛点。",
+          "url": "https://github.com/AlexsJones/llmfit",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -46494,6 +47910,40 @@
       ]
     },
     {
+      "name": "Claude Skills",
+      "count": 2,
+      "dates": [
+        "2026-08-28",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "ComposioHQ/awesome-claude-skills",
+          "summary": "Claude Skills 资源与工具集合，适合快速观察技能生态的分类和用法。",
+          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "ComposioHQ/awesome-claude-skills",
+          "summary": "Claude Skills、资源与自定义工作流工具的 curated list。",
+          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "Cloudflare",
       "count": 2,
       "dates": [
@@ -46701,6 +48151,44 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "Go",
+      "count": 2,
+      "dates": [
+        "2026-08-28",
+        "2026-08-12"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        },
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "JetBrains/go-modern-guidelines",
+          "summary": "帮助 AI coding agents 编写现代 Go 的指南，适合作为团队级代码风格上下文。",
+          "url": "https://github.com/JetBrains/go-modern-guidelines",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        },
+        {
+          "date": "2026-08-12",
+          "title": "Google Developers：Go 适合 AI-assisted software engineering",
+          "summary": "Go 语言是否更适合 AI 辅助开发在 HN 引发大量讨论，焦点集中在静态类型、简单语法、工具链和代码可读性。它把“AI 更喜欢哪种语言”从 token 长度争论拉回可维护性和验证成本。",
+          "url": "https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
         }
       ]
     },
@@ -48620,6 +50108,44 @@
       ]
     },
     {
+      "name": "小模型",
+      "count": 2,
+      "dates": [
+        "2026-08-28",
+        "2026-08-17"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        },
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Small Models Have Arrived",
+          "summary": "小模型话题继续升温，HN 讨论集中在本地部署、低延迟、隐私和任务专用模型是否已经足以替代一部分大模型调用。它与今天端侧翻译模型压缩形成呼应。",
+          "url": "https://calv.info/small-models-have-arrived",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-17",
+          "title": "cactus-compute/needle",
+          "summary": "14MB foundation model，面向手机、可穿戴、智能家居和机器人等 tiny device。",
+          "url": "https://github.com/cactus-compute/needle",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "就业",
       "count": 2,
       "dates": [
@@ -48971,40 +50497,6 @@
       ]
     },
     {
-      "name": "开发者平台",
-      "count": 2,
-      "dates": [
-        "2026-07-30",
-        "2026-07-29"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 2
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-30",
-          "title": "OpenAI 发布 GPT-5.6 模型家族：Sol、Terra 与 Luna",
-          "summary": "GPT-5.6 系列把旗舰推理、低成本通用模型和更便宜的轻量模型拆成三档，主打更高 token 效率和更清晰的任务分层。对开发者而言，重点不是单一榜单第一，而是能否按任务风险选择 Sol、Terra 或 Luna。",
-          "url": "https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency",
-          "source": "OpenAI",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        },
-        {
-          "date": "2026-07-29",
-          "title": "Gemini API Managed Agents 默认升级 3.6 Flash，加入环境钩子与免费套餐",
-          "summary": "Google 把 Managed Agents 的默认模型、运行钩子和入门成本一起调整，说明托管式 Agent 正在从实验功能变成可持续的开发者平台能力。",
-          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/expanding-managed-agents-gemini-api",
-          "source": "Google Blog",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "开源 AI",
       "count": 2,
       "dates": [
@@ -49149,48 +50641,11 @@
       ]
     },
     {
-      "name": "成本效率",
+      "name": "成本观测",
       "count": 2,
       "dates": [
-        "2026-08-06",
-        "2026-07-24"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        },
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-06",
-          "title": "Neon 称用更便宜开源模型在检索任务上击败前沿模型",
-          "summary": "HN 对这类案例的兴趣在于工程取舍：如果任务被缩窄到检索与路由，开源小模型可能比通用大模型更便宜、更可控。",
-          "url": "https://neon.com/blog/how-castform-neon-beats-frontier-models-on-price-and-efficiency",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-24",
-          "title": "微软 MAI 模型路线强调成本-效果前沿：让 Copilot 与 Excel 在真实任务中学习",
-          "summary": "Satya Nadella 介绍 MAI 模型家族，重点是用独立评估系统优化 GitHub Copilot、Excel 等产品任务，而不是单纯追逐通用榜单。它值得关注，因为企业模型策略正在从“最大模型”转向“真实场景下每美元有效智能”。",
-          "url": "https://x.com/satyanadella/status/2080329851127669104",
-          "source": "Satya Nadella",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
-      "name": "提示词",
-      "count": 2,
-      "dates": [
-        "2026-08-03"
+        "2026-08-28",
+        "2026-08-20"
       ],
       "sections": [
         {
@@ -49204,20 +50659,20 @@
       ],
       "items": [
         {
-          "date": "2026-08-03",
-          "title": "AI 财务建议在 HN 引发热议：效果取决于你会不会问",
-          "summary": "MIT Sloan 文章在 HN 获得高讨论度，核心争议不是 AI 能否给建议，而是普通人是否知道如何提出足够具体、可校验的问题。讨论也提醒金融场景里的免责声明和个性化边界不能省略。",
-          "url": "https://mitsloan.mit.edu/ideas-made-to-matter/ai-financial-advice-surprisingly-good-especially-if-you-ask-right-questions",
-          "source": "Hacker News",
+          "date": "2026-08-28",
+          "title": "Claude quota ran out in 10 minutes, so I made a tool to find out why",
+          "summary": "开发者做了一个分析 Claude 配额消耗的工具，引发关于 coding agent 成本透明度的讨论。随着 agent 工作流变长，token 和配额观测会从“账单问题”变成工程生产力问题。",
+          "url": "https://github.com/kelviq/tare",
+          "source": "Show HN",
           "section": "community",
           "section_label": "社区热议"
         },
         {
-          "date": "2026-08-03",
-          "title": "smevals",
-          "summary": "smevals 的价值不在规模，而在提醒团队用小而稳定的样例持续测模型、提示词和 eval 框架本身。它适合被当作轻量回归测试的起点。",
-          "url": "https://simonwillison.net/2026/Jul/31/smevals",
-          "source": "Simon Willison",
+          "date": "2026-08-20",
+          "title": "Frugal Tokens",
+          "summary": "当团队开始把 agent 接入日常开发，成本观测就不再是账单月底才看的事情。Frugal Tokens 的产品价值在于把模型选择、任务类型和 token 消耗放到同一张决策表里。",
+          "url": "https://demo.frugaltokens.com/",
+          "source": "Show HN",
           "section": "products",
           "section_label": "产品 / 概念"
         }
@@ -49580,44 +51035,6 @@
       ]
     },
     {
-      "name": "模型选择",
-      "count": 2,
-      "dates": [
-        "2026-08-14",
-        "2026-07-22"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        },
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-14",
-          "title": "一个 prompt 跑 11 个模型：社区讨论模型选择为什么不能只看排行榜",
-          "summary": "Netlify 的实验展示同一提示在不同模型里的结果差异，引发 HN 讨论：真实应用更关心可预测性、工具链兼容和错误模式，而不是单点 benchmark 排名。",
-          "url": "https://www.netlify.com/blog/one-prompt-11-models-very-different-results",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        },
-        {
-          "date": "2026-07-22",
-          "title": "AlexsJones/llmfit",
-          "summary": "用一个命令评估数百个模型和 provider 是否适配本机硬件，切中本地开放模型部署前的选型痛点。",
-          "url": "https://github.com/AlexsJones/llmfit",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
       "name": "求职自动化",
       "count": 2,
       "dates": [
@@ -49648,6 +51065,74 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "治理",
+      "count": 2,
+      "dates": [
+        "2026-08-28",
+        "2026-08-21"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Claude Console 新增个人密钥与服务账号密钥",
+          "summary": "Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。",
+          "url": "https://platform.claude.com/docs/en/release-notes/overview#august-27-2026",
+          "source": "Claude Platform Release Notes",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-08-21",
+          "title": "AWS 总结无厂商锁定的企业级 Agentic AI 模式",
+          "summary": "AWS 文章聚焦企业如何扩展 agentic AI：把工具、检索、权限、监控与模型选择拆成可替换组件。今天多家平台都在推 agent 能力，这类架构模式的价值在于提醒团队先设计边界，而不是把业务流程锁死在单一供应商里。",
+          "url": "https://aws.amazon.com/blogs/machine-learning/scaling-agentic-ai-enterprise-patterns-without-vendor-lock-in/",
+          "source": "Amazon Web Services",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "法律风险",
+      "count": 2,
+      "dates": [
+        "2026-08-28",
+        "2026-07-23"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "诉讼指控 xAI 使用 CSAM 材料训练 Grok",
+          "summary": "Ars Technica 报道称，一项诉讼指控 xAI 使用儿童性虐待材料及其 AI 衍生图像训练 Grok。无论案件最终结果如何，它都把训练数据来源、模型输出再训练和有害内容销毁义务推到了更高风险的法律前线。",
+          "url": "https://arstechnica.com/tech-policy/2026/08/elon-musks-xai-used-child-porn-to-train-grok-models-lawsuit-says",
+          "source": "Ars Technica",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        },
+        {
+          "date": "2026-07-23",
+          "title": "Anthropic 盗版书籍版权案达成 15 亿美元和解，训练数据合规成本被重新定价",
+          "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
+          "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
+          "source": "The Decoder",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -50106,6 +51591,40 @@
           "title": "Terence Tao《AI 时代的数学》幻灯片在 HN 引发讨论",
           "summary": "157 points / 62 comments 的讨论集中在 AI 对数学发现、证明检查和协作研究的影响。相比普通“AI 会不会取代研究者”的争论，这份材料更适合看顶级数学家如何拆分工具能力和研究判断。",
           "url": "https://teorth.github.io/tao-web/slides/age-of-ai-icm-2026.pdf",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "组织文化",
+      "count": 2,
+      "dates": [
+        "2026-08-28",
+        "2026-08-24"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 2
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "CEO 裁开发者给 AI 腾位置，开发者做了开源 AI CEO",
+          "summary": "OpenExecutive 在 HN 引发高热讨论，表面是反讽项目，实际讨论的是管理层把 AI 当替代品时，软件团队如何反击这种叙事。它说明社区对“AI 替代开发者”的抵触不只是情绪，而是对组织决策质量的质疑。",
+          "url": "https://github.com/SenteLabsAI/OpenExecutive",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        },
+        {
+          "date": "2026-08-24",
+          "title": "“AI refuser” 离职故事继续引发职业伦理讨论",
+          "summary": "一位从理想岗位离职的 AI refuser 在 HN 引发讨论，焦点不是技术可行性，而是员工是否应参与自己认为有害的自动化项目。对企业来说，AI rollout 已经变成组织信任问题。",
+          "url": "https://www.smh.com.au/technology/this-ai-refuser-quit-her-dream-job-and-hopes-others-follow-20260818-p60pdu.html",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
@@ -50990,6 +52509,30 @@
           "source": "GitHub Blog",
           "section": "headlines",
           "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
+      "name": "AI Artifacts",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Derive",
+          "summary": "Derive 把 artifacts 与工作流作为可发布、可复用对象来组织，反映 AI 产物正在从一次性输出转向可管理资产。",
+          "url": "https://github.com/derive-to/derive",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -52170,6 +53713,30 @@
       ]
     },
     {
+      "name": "AI 管理",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "CEO 裁开发者给 AI 腾位置，开发者做了开源 AI CEO",
+          "summary": "OpenExecutive 在 HN 引发高热讨论，表面是反讽项目，实际讨论的是管理层把 AI 当替代品时，软件团队如何反击这种叙事。它说明社区对“AI 替代开发者”的抵触不只是情绪，而是对组织决策质量的质疑。",
+          "url": "https://github.com/SenteLabsAI/OpenExecutive",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "AI 编码",
       "count": 1,
       "dates": [
@@ -52382,6 +53949,30 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "API 密钥",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Claude Console 新增个人密钥与服务账号密钥",
+          "summary": "Claude Console 现在支持个人密钥和服务账号密钥，并让密钥继承关联账户权限、组织移除后自动失效。对团队来说，这不是单纯的控制台小改，而是把 API 用量追踪、工作区边界和账户治理推进了一步。",
+          "url": "https://platform.claude.com/docs/en/release-notes/overview#august-27-2026",
+          "source": "Claude Platform Release Notes",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -52646,6 +54237,30 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "Agent Workflow",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "calesthio/OpenMontage",
+          "summary": "开源 agentic video production system，包含生产 pipeline、工具和技能知识文件。",
+          "url": "https://github.com/calesthio/OpenMontage",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -53226,6 +54841,30 @@
       ]
     },
     {
+      "name": "Android",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Devx",
+          "summary": "把 AI coding agent 带到移动终端与桌面双环境，适合观察低资源、本地化开发代理的可行性。",
+          "url": "https://github.com/apvcode/Termux-Dev",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "App Builder",
       "count": 1,
       "dates": [
@@ -53603,30 +55242,6 @@
           "title": "virgiliojr94/book-to-skill",
           "summary": "把技术书 PDF 转成可供 Claude Code 学习、引用和工作时调用的 skill，适合把长文档沉淀为 agent 可用知识资产。",
           "url": "https://github.com/virgiliojr94/book-to-skill",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
-        }
-      ]
-    },
-    {
-      "name": "Claude Skills",
-      "count": 1,
-      "dates": [
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-23",
-          "title": "ComposioHQ/awesome-claude-skills",
-          "summary": "Claude Skills、资源与自定义工作流工具的 curated list。",
-          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -54204,30 +55819,6 @@
           "summary": "Show HN 的关注点很工程化：并行跑多个编码 Agent 时，隔离工作树比共享目录更容易比较结果、回滚失败和合并有效 patch。",
           "url": "https://shikigami.dev/",
           "source": "Show HN",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "Go",
-      "count": 1,
-      "dates": [
-        "2026-08-12"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-12",
-          "title": "Google Developers：Go 适合 AI-assisted software engineering",
-          "summary": "Go 语言是否更适合 AI 辅助开发在 HN 引发大量讨论，焦点集中在静态类型、简单语法、工具链和代码可读性。它把“AI 更喜欢哪种语言”从 token 长度争论拉回可维护性和验证成本。",
-          "url": "https://developers.googleblog.com/why-go-is-an-ideal-language-for-ai-assisted-software-engineering/",
-          "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
         }
@@ -56634,30 +58225,6 @@
       ]
     },
     {
-      "name": "cs.SE",
-      "count": 1,
-      "dates": [
-        "2026-08-14"
-      ],
-      "sections": [
-        {
-          "name": "AI 论文",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-14",
-          "title": "QuoteBench: How Matched Scores Can Hide Command-Path Failures",
-          "summary": "这篇很适合做 coding agent 基建自检：同一个 Bash 回复在不同序列化、包装、再解析通道里可能完全失败。它提醒评测不能只看最终任务分，还要分清错误来自模型生成，还是来自执行传输层。",
-          "url": "https://arxiv.org/abs/2608.13547v1",
-          "source": "arXiv",
-          "section": "papers",
-          "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
       "name": "eBPF",
       "count": 1,
       "dates": [
@@ -56726,6 +58293,30 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
+        }
+      ]
+    },
+    {
+      "name": "上下文",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "thedotmack/claude-mem",
+          "summary": "跨会话持久上下文工具，压缩 agent 会话并在后续任务中注入相关记忆。",
+          "url": "https://github.com/thedotmack/claude-mem",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
         }
       ]
     },
@@ -59226,6 +60817,30 @@
       ]
     },
     {
+      "name": "反馈闭环",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Warp 公开基于 Claude 的自我改进 Agent 技术路线",
+          "summary": "Warp 介绍了如何用基础技能和改进技能构建自我改进循环，把人类反馈转成 agent 可复用的行为更新。它的价值在于把“提示词调优”落成文件化、可审查、可迭代的技能资产。",
+          "url": "https://claude.com/blog/how-warp-builds-self-improving-agents-on-claude",
+          "source": "Claude Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "可信 NLP",
       "count": 1,
       "dates": [
@@ -59754,6 +61369,30 @@
       ]
     },
     {
+      "name": "图像编辑",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Midjourney 开放 V8.2 图像编辑模型测试",
+          "summary": "Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。",
+          "url": "https://updates.midjourney.com/edit-model-for-v8",
+          "source": "Midjourney Updates",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "图搜索",
       "count": 1,
       "dates": [
@@ -59939,6 +61578,30 @@
           "title": "Fractal",
           "summary": "Fractal 代表了今天反复出现的“Agent 递归/分治”趋势：把复杂任务拆成可重复调用的循环，而不是单次长提示。看点会落在循环终止、状态压缩和人工接管。",
           "url": "https://github.com/plasma-ai/fractal",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "多 Agent 协作",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Concord",
+          "summary": "Concord MCP 试图在多种 coding agent 之间建立通信桥，适合关注跨工具协作和任务交接的人继续跟踪。",
+          "url": "https://github.com/Get-Concord-AI/concord-mcp",
           "source": "Show HN",
           "section": "products",
           "section_label": "产品 / 概念"
@@ -60714,6 +62377,30 @@
       ]
     },
     {
+      "name": "实时翻译",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "腾讯混元将端侧翻译模型压缩至 440MB",
+          "summary": "腾讯混元把 Hy-MT2-1.8B 通过低比特量化压到 440MB，并落地到哔哩哔哩直播弹幕翻译。相比云端大模型新闻，这类端侧压缩说明 AI 产品正在追求更低延迟、更低成本和更强隐私边界。",
+          "url": "https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ%3D%3D&mid=2247498367&idx=1&sn=f1a5cf87eb06015cbe995bd5ef8b5d0a",
+          "source": "腾讯混元",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "实时通信",
       "count": 1,
       "dates": [
@@ -60878,30 +62565,6 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "小模型",
-      "count": 1,
-      "dates": [
-        "2026-08-17"
-      ],
-      "sections": [
-        {
-          "name": "开源热门",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-17",
-          "title": "cactus-compute/needle",
-          "summary": "14MB foundation model，面向手机、可穿戴、智能家居和机器人等 tiny device。",
-          "url": "https://github.com/cactus-compute/needle",
-          "source": "GitHub",
-          "section": "repos",
-          "section_label": "开源热门"
         }
       ]
     },
@@ -61578,6 +63241,30 @@
       ]
     },
     {
+      "name": "开发者 API",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Gemini Omni 1.1 Flash 强化生成式视频控制",
+          "summary": "Google DeepMind 发布 Gemini Omni 1.1 Flash，重点放在视频生成的可控性：延展场景、指定首尾帧过渡，并提供 4K 输出。相比只比拼画质，这类控制接口更接近开发者能嵌入产品的生成式视频能力。",
+          "url": "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control",
+          "source": "Google DeepMind Blog",
+          "section": "headlines",
+          "section_label": "今日要闻"
+        }
+      ]
+    },
+    {
       "name": "开发者社区",
       "count": 1,
       "dates": [
@@ -61890,6 +63577,30 @@
       ]
     },
     {
+      "name": "开源讽刺",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "社区热议",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "CEO 裁开发者给 AI 腾位置，开发者做了开源 AI CEO",
+          "summary": "OpenExecutive 在 HN 引发高热讨论，表面是反讽项目，实际讨论的是管理层把 AI 当替代品时，软件团队如何反击这种叙事。它说明社区对“AI 替代开发者”的抵触不只是情绪，而是对组织决策质量的质疑。",
+          "url": "https://github.com/SenteLabsAI/OpenExecutive",
+          "source": "Hacker News",
+          "section": "community",
+          "section_label": "社区热议"
+        }
+      ]
+    },
+    {
       "name": "异步系统",
       "count": 1,
       "dates": [
@@ -61982,30 +63693,6 @@
           "source": "arXiv",
           "section": "papers",
           "section_label": "AI 论文"
-        }
-      ]
-    },
-    {
-      "name": "成本观测",
-      "count": 1,
-      "dates": [
-        "2026-08-20"
-      ],
-      "sections": [
-        {
-          "name": "产品 / 概念",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-20",
-          "title": "Frugal Tokens",
-          "summary": "当团队开始把 agent 接入日常开发，成本观测就不再是账单月底才看的事情。Frugal Tokens 的产品价值在于把模型选择、任务类型和 token 消耗放到同一张决策表里。",
-          "url": "https://demo.frugaltokens.com/",
-          "source": "Show HN",
-          "section": "products",
-          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -62603,6 +64290,30 @@
           "title": "mattpocock/skills",
           "summary": "面向真实工程师的 skills 集合，把个人 `.agents` 工作流沉淀成可复用能力包。",
           "url": "https://github.com/mattpocock/skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "插件",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "anthropics/claude-plugins-official",
+          "summary": "Anthropic 官方维护的 Claude Code Plugins 目录。",
+          "url": "https://github.com/anthropics/claude-plugins-official",
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
@@ -63618,6 +65329,30 @@
       ]
     },
     {
+      "name": "本地自动化",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Devx",
+          "summary": "把 AI coding agent 带到移动终端与桌面双环境，适合观察低资源、本地化开发代理的可行性。",
+          "url": "https://github.com/apvcode/Termux-Dev",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
       "name": "本地计算",
       "count": 1,
       "dates": [
@@ -63902,6 +65637,30 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
+        }
+      ]
+    },
+    {
+      "name": "模型压缩",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "腾讯混元将端侧翻译模型压缩至 440MB",
+          "summary": "腾讯混元把 Hy-MT2-1.8B 通过低比特量化压到 440MB，并落地到哔哩哔哩直播弹幕翻译。相比云端大模型新闻，这类端侧压缩说明 AI 产品正在追求更低延迟、更低成本和更强隐私边界。",
+          "url": "https://mp.weixin.qq.com/s?__biz=MzkwODU2OTQyNQ%3D%3D&mid=2247498367&idx=1&sn=f1a5cf87eb06015cbe995bd5ef8b5d0a",
+          "source": "腾讯混元",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -64386,30 +66145,6 @@
       ]
     },
     {
-      "name": "治理",
-      "count": 1,
-      "dates": [
-        "2026-08-21"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-21",
-          "title": "AWS 总结无厂商锁定的企业级 Agentic AI 模式",
-          "summary": "AWS 文章聚焦企业如何扩展 agentic AI：把工具、检索、权限、监控与模型选择拆成可替换组件。今天多家平台都在推 agent 能力，这类架构模式的价值在于提醒团队先设计边界，而不是把业务流程锁死在单一供应商里。",
-          "url": "https://aws.amazon.com/blogs/machine-learning/scaling-agentic-ai-enterprise-patterns-without-vendor-lock-in/",
-          "source": "Amazon Web Services",
-          "section": "headlines",
-          "section_label": "今日要闻"
-        }
-      ]
-    },
-    {
       "name": "法律",
       "count": 1,
       "dates": [
@@ -64478,30 +66213,6 @@
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "法律风险",
-      "count": 1,
-      "dates": [
-        "2026-07-23"
-      ],
-      "sections": [
-        {
-          "name": "今日要闻",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-07-23",
-          "title": "Anthropic 盗版书籍版权案达成 15 亿美元和解，训练数据合规成本被重新定价",
-          "summary": "这不是单个实验室的诉讼尾声，而是把语料来源、集体诉讼赔偿和未来训练数据采购成本连到一起。对模型公司和企业采购方来说，重点是版权风险正在从抽象争论变成可量化的财务项目。",
-          "url": "https://the-decoder.com/anthropics-1-5b-piracy-settlement-with-book-authors-is-a-record-loss-that-hands-ai-labs-their-biggest-legal-win",
-          "source": "The Decoder",
-          "section": "headlines",
-          "section_label": "今日要闻"
         }
       ]
     },
@@ -65078,6 +66789,30 @@
           "source": "Google AI",
           "section": "products",
           "section_label": "产品 / 概念"
+        }
+      ]
+    },
+    {
+      "name": "生成式媒体",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "今日要闻",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Midjourney 开放 V8.2 图像编辑模型测试",
+          "summary": "Midjourney 向用户开放首个 V8.2 图像编辑模型测试，支持指令编辑、以图生图、多参考图、局部重绘与扩画。它把 Midjourney 从“生成一张图”推进到“围绕已有视觉资产反复修改”，对设计工作流的影响比单次出图更直接。",
+          "url": "https://updates.midjourney.com/edit-model-for-v8",
+          "source": "Midjourney Updates",
+          "section": "headlines",
+          "section_label": "今日要闻"
         }
       ]
     },
@@ -66275,30 +68010,6 @@
           "title": "软件团队如何真实使用 AI：社区转向组织层面的问题",
           "summary": "Linear 数据引发的讨论不再只问“哪个模型更强”，而是问团队如何分配 AI 编程、审查、产品和运营任务。它适合作为 AI 编程从个人效率工具进入团队流程的观察点。",
           "url": "https://linear.app/data",
-          "source": "Hacker News",
-          "section": "community",
-          "section_label": "社区热议"
-        }
-      ]
-    },
-    {
-      "name": "组织文化",
-      "count": 1,
-      "dates": [
-        "2026-08-24"
-      ],
-      "sections": [
-        {
-          "name": "社区热议",
-          "count": 1
-        }
-      ],
-      "items": [
-        {
-          "date": "2026-08-24",
-          "title": "“AI refuser” 离职故事继续引发职业伦理讨论",
-          "summary": "一位从理想岗位离职的 AI refuser 在 HN 引发讨论，焦点不是技术可行性，而是员工是否应参与自己认为有害的自动化项目。对企业来说，AI rollout 已经变成组织信任问题。",
-          "url": "https://www.smh.com.au/technology/this-ai-refuser-quit-her-dream-job-and-hopes-others-follow-20260818-p60pdu.html",
           "source": "Hacker News",
           "section": "community",
           "section_label": "社区热议"
@@ -68010,6 +69721,30 @@
       ]
     },
     {
+      "name": "资源集合",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "开源热门",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "ComposioHQ/awesome-claude-skills",
+          "summary": "Claude Skills 资源与工具集合，适合快速观察技能生态的分类和用法。",
+          "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+          "source": "GitHub",
+          "section": "repos",
+          "section_label": "开源热门"
+        }
+      ]
+    },
+    {
       "name": "跨源摘要",
       "count": 1,
       "dates": [
@@ -68030,6 +69765,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "路由平台",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Experiential Open OpenRouter",
+          "summary": "社区项目尝试用真实调用反馈改进模型选择，适合观察模型路由平台如何从静态排行榜走向动态使用信号。",
+          "url": "https://github.com/experientiallabs/experiential",
+          "source": "Hacker News",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -68246,6 +70005,30 @@
           "source": "GitHub",
           "section": "repos",
           "section_label": "开源热门"
+        }
+      ]
+    },
+    {
+      "name": "边缘计算",
+      "count": 1,
+      "dates": [
+        "2026-08-28"
+      ],
+      "sections": [
+        {
+          "name": "产品 / 概念",
+          "count": 1
+        }
+      ],
+      "items": [
+        {
+          "date": "2026-08-28",
+          "title": "Edge Agent Memory",
+          "summary": "Polign 展示了一个面向边缘场景的轻量记忆层，关注低依赖、可迁移和 agent 会话状态管理。",
+          "url": "https://polign.com/blog-edge-agent-memory",
+          "source": "Show HN",
+          "section": "products",
+          "section_label": "产品 / 概念"
         }
       ]
     },
@@ -68949,19 +70732,19 @@
   "sources": [
     {
       "name": "GitHub",
-      "count": 180
+      "count": 185
     },
     {
       "name": "Hacker News",
-      "count": 173
+      "count": 177
     },
     {
       "name": "arXiv",
-      "count": 136
+      "count": 140
     },
     {
       "name": "Show HN",
-      "count": 35
+      "count": 40
     },
     {
       "name": "IT之家",
@@ -68980,12 +70763,12 @@
       "count": 11
     },
     {
-      "name": "OpenAI",
+      "name": "Claude Blog",
       "count": 10
     },
     {
-      "name": "Claude Blog",
-      "count": 9
+      "name": "OpenAI",
+      "count": 10
     },
     {
       "name": "Anthropic Research",
@@ -68994,6 +70777,10 @@
     {
       "name": "OpenRouter",
       "count": 7
+    },
+    {
+      "name": "Ars Technica",
+      "count": 6
     },
     {
       "name": "Amazon Web Services",
@@ -69012,10 +70799,6 @@
       "count": 5
     },
     {
-      "name": "Ars Technica",
-      "count": 5
-    },
-    {
       "name": "GitHub Blog",
       "count": 5
     },
@@ -69026,6 +70809,10 @@
     {
       "name": "数字生命卡兹克",
       "count": 5
+    },
+    {
+      "name": "Google DeepMind Blog",
+      "count": 4
     },
     {
       "name": "The Verge",
@@ -69050,10 +70837,6 @@
     {
       "name": "Google Blog",
       "count": 4
-    },
-    {
-      "name": "Google DeepMind Blog",
-      "count": 3
     },
     {
       "name": "xAI News",
@@ -69090,6 +70873,14 @@
     {
       "name": "Moonshot AI",
       "count": 3
+    },
+    {
+      "name": "Midjourney Updates",
+      "count": 2
+    },
+    {
+      "name": "腾讯混元",
+      "count": 2
     },
     {
       "name": "AWS",
@@ -69170,6 +70961,14 @@
     {
       "name": "Petapixel",
       "count": 2
+    },
+    {
+      "name": "AI HOT topic cluster",
+      "count": 1
+    },
+    {
+      "name": "Claude Platform Release Notes",
+      "count": 1
     },
     {
       "name": "通义千问 / X",
@@ -69484,10 +71283,6 @@
       "count": 1
     },
     {
-      "name": "腾讯混元",
-      "count": 1
-    },
-    {
       "name": "IT之家 / TechCrunch / Anthropic",
       "count": 1
     },
@@ -69537,10 +71332,6 @@
     },
     {
       "name": "Suno",
-      "count": 1
-    },
-    {
-      "name": "Midjourney Updates",
       "count": 1
     },
     {
