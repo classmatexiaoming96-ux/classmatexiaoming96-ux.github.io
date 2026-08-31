@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用纯 Python 从零搭建 AI Agent - Tech With Tim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #9ca3af;
+      --text-muted: #64748b;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-purple: #9f7aea;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+    }
+    body {
+      background:
+        radial-gradient(circle at 20% 0%, rgba(99,179,237,.14), transparent 34%),
+        linear-gradient(135deg, #111827 0%, var(--bg-primary) 58%);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+    .page { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 56px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px; color: var(--accent);
+      text-decoration: none; border: 1px solid rgba(99,179,237,.28);
+      padding: 8px 14px; border-radius: 6px; margin-bottom: 22px;
+      background: transparent; transition: background .2s, color .2s;
+    }
+    .back-link:hover { background: var(--accent); color: var(--bg-primary); }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,.28);
+    }
+    .eyebrow { color: var(--accent); font: 500 12px/1.2 "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+    h1 { font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.1; letter-spacing: 0; margin-bottom: 14px; }
+    .subtitle { color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 20px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; }
+    .badge { border: 1px solid var(--card-border); color: var(--text-secondary); border-radius: 6px; padding: 5px 10px; background: rgba(255,255,255,.04); font-size: .86rem; }
+    .video-wrap { border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; margin-bottom: 26px; background: #000; aspect-ratio: 16 / 9; }
+    iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(22px, 4vw, 34px);
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { margin: 34px 0 14px; font-size: 1.35rem; line-height: 1.35; color: #f8fafc; }
+    h3 { margin: 24px 0 10px; font-size: 1.05rem; color: #f8fafc; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    blockquote {
+      margin: 20px 0; padding: 16px 18px; border-left: 3px solid var(--accent-purple);
+      background: rgba(159,122,234,.08); border-radius: 0 8px 8px 0; color: var(--text-primary);
+    }
+    table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; overflow: hidden; border-radius: 8px; border: 1px solid var(--card-border); }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--card-border); text-align: left; vertical-align: top; color: var(--text-secondary); }
+    th { color: var(--text-primary); background: rgba(99,179,237,.1); font-weight: 600; }
+    tr:last-child td { border-bottom: 0; }
+    .timestamp-list { display: grid; gap: 10px; margin: 16px 0 8px; }
+    .time-row { display: grid; grid-template-columns: 82px 1fr; gap: 12px; padding: 12px 14px; border: 1px solid var(--card-border); border-radius: 8px; background: rgba(255,255,255,.035); }
+    .time { font-family: "JetBrains Mono", monospace; color: var(--accent); font-size: .86rem; }
+    .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .btn {
+      background: transparent; border: 1px solid var(--accent); color: var(--accent);
+      padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer;
+      transition: background 0.2s, color 0.2s; text-decoration: none;
+    }
+    .btn:hover { background: var(--accent); color: var(--bg-primary); }
+    code { font-family: "JetBrains Mono", monospace; color: #bae6fd; background: rgba(99,179,237,.08); padding: 2px 5px; border-radius: 4px; }
+    pre { white-space: pre-wrap; background: rgba(0,0,0,.28); border: 1px solid var(--card-border); border-radius: 8px; padding: 14px; overflow-x: auto; color: #dbeafe; margin: 14px 0; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">Pure Python Agent Course</div>
+      <h1>用纯 Python 从零搭建 AI Agent</h1>
+      <p class="subtitle">Building AI Agents in Pure Python - Beginner Course</p>
+      <div class="meta">
+        <span class="badge">Tech With Tim</span>
+        <span class="badge">37:24</span>
+        <span class="badge">32,862 views</span>
+        <span class="badge">模型 · 工具 · 循环 · 上下文</span>
+      </div>
+    </header>
+
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/c9AnqCeyxbI" title="Building AI Agents in Pure Python - Beginner Course" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+    <article class="content-card">
+      <h2>一、问题引入：为什么要先用纯 Python 写一遍 Agent</h2>
+      <p>这个视频的价值不在于展示一个更炫的框架，而是把 AI Agent 最小可运行的骨架拆开：一个语言模型、若干工具，以及一个持续决策的循环。很多教程会从 LangChain、CrewAI、AutoGen 或某个现成 SDK 开始，初学者很快能跑出 demo，却不一定知道每一次工具调用为什么发生、工具结果怎样回到模型、上下文为什么会膨胀。</p>
+      <p>Tech With Tim 的做法更接近“把发动机摆在桌面上”。他先解释模型本质上只是接收文本并生成文本，然后把工具定义成普通 Python 函数，再用一个循环把模型输出、工具调用、工具结果和下一轮模型请求串起来。看完之后，你不一定会抛弃框架，但会更清楚框架替你隐藏了哪些关键状态。</p>
+      <blockquote>可转述的核心判断：一个 Agent 不神秘，它就是模型、工具和循环；上下文与工具结果必须由开发者显式喂回模型。</blockquote>
+
+      <h2>二、核心概念解释：模型、工具、循环和消息历史</h2>
+      <h3>模型只是“会生成文本的脑”</h3>
+      <p>视频开头强调，模型可以是本地的 Ollama、Docker Model Runner、LM Studio，也可以是 OpenAI、Anthropic 等云端服务。无论来源如何，开发者面对的都是一个 API：把消息传进去，拿到一段结构化响应。模型不自动记得刚才说过什么，它看到的“记忆”来自你传入的消息列表。</p>
+      <h3>工具就是模型可请求的外部动作</h3>
+      <p>工具可以是 MCP server、Web search、第三方 API，也可以只是本地 Python 函数。视频为了教学选择本地函数，因为这样最容易看清楚契约：工具要有名字、参数、描述和返回值；模型提出调用请求，程序负责真正执行。</p>
+      <h3>循环让聊天机器人变成 Agent</h3>
+      <p>如果只发一次请求、收一次回答，那更像普通聊天机器人。Agent 的关键是循环：模型发现缺少信息时请求工具，程序执行工具并把结果作为新消息追加，再次请求模型，直到模型不再要求工具调用并返回最终答案。这个循环既是能力来源，也是风险来源，因为它可能运行很多轮、产生费用，并把错误工具结果继续放大。</p>
+      <h3>上下文工程不是口号，而是消息列表管理</h3>
+      <p>视频里反复指出，消息历史就是上下文窗口的主要内容。系统消息约束身份和边界，用户消息提出任务，assistant 消息记录模型之前说过什么，tool 消息承载工具执行结果。所谓 context engineering，实际就是决定哪些信息应该继续放进这份列表，哪些需要裁剪、摘要或丢弃。</p>
+
+      <h2>三、关键论点 / 实操步骤：从一次 completion 到可调用工具的 mini-agent</h2>
+      <h3>步骤 1：先跑通最小 completion</h3>
+      <p>第一段代码只做一件事：创建客户端，选择模型，把一条用户消息传给 chat completion。它看起来普通，却是后面所有 Agent 行为的底座。模型输出的不是“行动”，而是一个响应对象；开发者要知道如何取出可读文本、如何读取 message、如何判断是否包含 tool calls。</p>
+      <pre><code>messages = [
+    {"role": "user", "content": "Explain what an AI agent is in one sentence."}
+]
+response = client.chat.completions.create(model="...", messages=messages)
+print(response.choices[0].message.content)</code></pre>
+      <p>这一小段代码的教学意义是：先不要急着写工具。你需要确认模型 API、模型名称、API key 和 message schema 都能正常工作，否则后面循环出错时很难定位问题。</p>
+
+      <h3>步骤 2：把消息历史显式保存下来</h3>
+      <p>接着，视频把单次请求改成终端聊天循环：读取用户输入，追加到 <code>messages</code>，调用模型，把 assistant 的回复也追加回 <code>messages</code>。这样下一轮请求才会“知道”前面聊过什么。这里的重点不是 Python 语法，而是状态归属：模型无状态，应用层有状态。</p>
+      <p>这一步也解释了为什么长对话会越来越贵、越来越慢，因为每一轮都可能把越来越长的历史重新发给模型。真实系统通常会加摘要、检索、短期记忆和长期记忆，但它们本质上仍然是在控制传给模型的上下文。</p>
+
+      <h3>步骤 3：用 JSON schema 描述工具</h3>
+      <p>视频里的工具是 Python 函数，例如读取文件、写文件、列出目录或做简单处理。为了让模型知道怎样调用它们，程序要把工具暴露成 schema：函数名、用途描述、参数名、参数类型、哪些字段必填。描述越清楚，模型越不容易把参数拼错。</p>
+      <p>这里最容易犯的错是把工具当成“模型自己会执行的能力”。模型只会产生 tool call 结构；真正的权限边界、文件路径检查、异常处理和结果序列化，都在你的 Python 运行时里完成。</p>
+
+      <h3>步骤 4：识别 tool_calls 并执行真实函数</h3>
+      <p>当模型返回的 message 带有 tool calls 时，程序不能直接把 <code>message.content</code> 当最终答案。视频演示了如何遍历每个 tool call，解析函数名和 JSON 参数，映射到本地 Python 函数，然后捕获异常并把执行结果追加成 tool role 消息。</p>
+      <pre><code>for tool_call in message.tool_calls:
+    args = json.loads(tool_call.function.arguments)
+    result = available_tools[tool_call.function.name](**args)
+    messages.append({
+        "role": "tool",
+        "tool_call_id": tool_call.id,
+        "content": str(result)
+    })</code></pre>
+      <p>这个片段是整节课最重要的转折点：模型提出意图，程序执行动作，结果回到模型。只有把工具结果放回消息历史，模型才有能力基于真实执行结果继续推理。</p>
+
+      <h3>步骤 5：把“单次工具调用”升级为 Agent run</h3>
+      <p>最终版本把上述逻辑包成一次 <code>run_agent</code>：每次用户输入触发一个内部 while loop。循环中调用模型，若无工具调用就返回最终文本；若有工具调用就执行并继续。外层 while loop 负责持续接收用户输入，内层 while loop 负责完成一次任务。</p>
+      <p>这种双层结构很实用：外层管理会话生命周期，内层管理任务生命周期。真实产品还会加入最大轮数、超时、费用预算、可取消信号和工具权限提示，否则一个坏 prompt 或坏工具可能让循环停不下来。</p>
+
+      <h2>四、对比表格 / 决策矩阵</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>实现方式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>主要风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>单次 LLM completion</td>
+            <td>问答、摘要、固定格式改写</td>
+            <td>最简单，状态少，容易测试</td>
+            <td>无法主动执行动作，也无法基于工具结果继续推进</td>
+            <td>先用它验证模型、提示词和输出格式</td>
+          </tr>
+          <tr>
+            <td>带消息历史的聊天循环</td>
+            <td>交互式助手、命令行问答、学习型 demo</td>
+            <td>能保留上下文，用户体验接近聊天产品</td>
+            <td>上下文越来越长，费用和幻觉风险上升</td>
+            <td>加入摘要和窗口裁剪后再用于长会话</td>
+          </tr>
+          <tr>
+            <td>纯 Python 工具调用 Agent</td>
+            <td>教学、内部自动化、小型文件或数据操作</td>
+            <td>运行机制透明，权限边界可自己控制</td>
+            <td>需要自己处理 schema、错误、重试和终止条件</td>
+            <td>适合打基础，也适合低依赖内部工具</td>
+          </tr>
+          <tr>
+            <td>框架型 Agent</td>
+            <td>复杂编排、多工具、多角色、多记忆系统</td>
+            <td>生态完整，上手快，集成能力强</td>
+            <td>抽象层隐藏问题，调试成本可能更高</td>
+            <td>先理解纯 Python 版本，再选择框架</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>五、引用块：把视频里的判断翻译成工程原则</h2>
+      <blockquote>Agent 的循环不是装饰品。没有循环，模型只能回答；有循环，程序才能在“思考、行动、观察、再思考”之间往返。</blockquote>
+      <blockquote>工具调用的安全边界不在模型里，而在执行器里。模型可以请求写文件，真正允许写哪里、失败后返回什么，必须由代码决定。</blockquote>
+      <blockquote>消息历史就是你的上下文账本。少记一步，模型会丢状态；全都保留，系统会变慢、变贵，也更难控制。</blockquote>
+
+      <h2>六、时间戳目录</h2>
+      <div class="timestamp-list">
+        <div class="time-row"><span class="time">00:00</span><span>课程目标：不用框架，从纯 Python 理解 AI Agent 的真实构造。</span></div>
+        <div class="time-row"><span class="time">01:10</span><span>定义 Agent：模型、工具、循环，以及可选的上下文和记忆。</span></div>
+        <div class="time-row"><span class="time">04:00</span><span>模型 API 与 chat completion：messages、role、content 的基本格式。</span></div>
+        <div class="time-row"><span class="time">08:30</span><span>为什么模型没有内建记忆：每轮请求都要显式传入历史消息。</span></div>
+        <div class="time-row"><span class="time">12:00</span><span>构建聊天循环：用户输入、assistant 回复、退出条件和上下文增长。</span></div>
+        <div class="time-row"><span class="time">17:00</span><span>定义工具 schema：函数名、参数、描述和 OpenAI-compatible 工具格式。</span></div>
+        <div class="time-row"><span class="time">22:00</span><span>读取 tool_calls：模型不执行函数，只产生结构化调用请求。</span></div>
+        <div class="time-row"><span class="time">27:00</span><span>执行工具并把结果追加回 messages，让模型基于观察继续推理。</span></div>
+        <div class="time-row"><span class="time">32:00</span><span>封装 run_agent：一次用户任务内部可以有多轮工具调用。</span></div>
+        <div class="time-row"><span class="time">36:00</span><span>总结：160 行左右就能搭出可扩展 mini-agent，但生产化还需要边界控制。</span></div>
+      </div>
+
+      <h2>七、相关推荐</h2>
+      <p>如果你刚开始理解 Agent，这一课适合放在框架课之前看。看完以后，再去读 Claude Code、MCP、sub-agent 和 coding harness 的课程，会更容易分辨哪些是模型能力，哪些只是运行时编排。</p>
+      <div class="links">
+        <a class="btn" href="index.html">返回全部课程</a>
+        <a class="btn" href="FwOTs4UxQS4.html">AI Agents, Clearly Explained</a>
+        <a class="btn" href="C2GpeepcmYs.html">Claude Code 开发者速成课</a>
+        <a class="btn" href="RWp5cejTApU.html">DeepSeek Harness 开发者预览</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
