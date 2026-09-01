@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buzz AI：让 Claude Code、Codex 和团队在同一个工作台协作</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --muted: #64748b;
+      --purple: #a78bfa;
+      --green: #34d399;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(135deg, rgba(99,179,237,0.08), transparent 32%),
+        linear-gradient(225deg, rgba(167,139,250,0.08), transparent 30%),
+        var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+    }
+    main { width: min(980px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 64px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .back-link, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.2s;
+      font-weight: 650;
+    }
+    .back-link:hover, .btn:hover { background: var(--accent); color: var(--bg-primary); transform: translateY(-1px); }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin: 24px 0 2rem;
+    }
+    .eyebrow { color: var(--green); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.12; margin: 12px 0; letter-spacing: 0; }
+    .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin: 0 0 20px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 0; }
+    .pill { border: 1px solid var(--card-border); background: var(--card-bg); border-radius: 999px; color: var(--text-secondary); padding: 6px 12px; font-size: 0.9rem; }
+    .video {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: #000;
+      margin: 24px 0;
+    }
+    .video iframe { width: 100%; height: 100%; border: 0; }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 { margin: 0 0 14px; font-size: 1.35rem; line-height: 1.3; }
+    h3 { margin: 22px 0 8px; font-size: 1.05rem; color: #f8fafc; }
+    p { color: var(--text-secondary); margin: 0 0 14px; }
+    strong { color: var(--text-primary); }
+    blockquote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 3px solid var(--purple);
+      background: rgba(167,139,250,0.08);
+      color: var(--text-primary);
+      border-radius: 0 10px 10px 0;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 18px 0; color: var(--text-secondary); font-size: 0.95rem; }
+    th, td { border: 1px solid var(--card-border); padding: 12px; vertical-align: top; text-align: left; }
+    th { color: var(--text-primary); background: rgba(255,255,255,0.06); }
+    ul, ol { color: var(--text-secondary); padding-left: 22px; }
+    li { margin-bottom: 8px; }
+    .timestamp { display: grid; grid-template-columns: 86px 1fr; gap: 12px; border-bottom: 1px solid var(--card-border); padding: 10px 0; }
+    .timestamp time { color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .rec { border: 1px solid var(--card-border); border-radius: 10px; padding: 14px; background: rgba(255,255,255,0.035); }
+    @media (max-width: 680px) {
+      main { width: min(100% - 24px, 980px); padding-top: 20px; }
+      .hero, .content-card { padding: 1.1rem; }
+      .timestamp { grid-template-columns: 1fr; gap: 2px; }
+      table { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <div class="eyebrow">AI Agent Collaboration · Buzz AI</div>
+      <h1>把 Claude Code、Codex 和团队成员放进同一个 Agent 工作台</h1>
+      <p class="subtitle">英文原题：Claude Code + Codex Can FINALLY Work Together (Buzz AI)</p>
+      <div class="meta">
+        <span class="pill">Riley Brown</span>
+        <span class="pill">55:16</span>
+        <span class="pill">65,810 views</span>
+        <span class="pill">Claude Code · Codex · ACP · Workflow</span>
+      </div>
+    </header>
+
+    <section class="video" aria-label="YouTube 视频嵌入">
+      <iframe src="https://www.youtube.com/embed/P1KpxzLVg7c" title="Claude Code + Codex Can FINALLY Work Together (Buzz AI)" allowfullscreen></iframe>
+    </section>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么 Agent 需要一个“团队工作台”</h2>
+      <p>这期视频讨论的是 Buzz：一个把聊天、频道、团队成员和 AI 编程代理放在一起的工作台。Riley Brown 的开场不是单纯介绍一个新 App，而是演示同一条消息同时发给 Claude Code、Codex、Grok、Kimi 等不同代理，随后所有代理在同一个上下文里阅读、回复、分工。这件事的价值在于，它把原本散在终端、IDE、ChatGPT、Claude、Cursor 和手机里的任务，拉回到一个可以被团队看见、复用和继续追问的空间。</p>
+      <p>过去使用 coding agent 的方式通常是“一个任务开一个会话”：你在 Claude Code 里写需求，在 Codex 里做 review，在 Cursor 里改文件，再把结果复制回 Slack 或文档。这个流程的问题不是模型不够强，而是上下文迁移成本太高。每换一个工具，都要重新解释背景、目标、限制和当前状态。Buzz 想解决的正是这层协作摩擦：让人和 agent 一样进入频道，让频道成为某个项目、功能、客户或日常流程的长期上下文容器。</p>
+      <p>视频中反复出现的关键词是 <strong>agent native Slack</strong>。这不是说 Buzz 只是 Slack 的开源替代品，而是说它把“消息”从人对人的沟通，扩展成“人、团队、工具代理、远程任务和自动化触发器都能读写的工作流事件”。对于已经把 Claude Code、Codex 或其他 agent 用在真实业务里的人，这种产品形态值得认真观察。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：Buzz、Harness、ACP 与频道上下文</h2>
+      <h3>Buzz 不是另一个模型入口，而是协作层</h3>
+      <p>Riley 和嘉宾 Vinnie 都强调，Buzz 的吸引力不只是“可以替代 Slack”。如果只是聊天软件，它很难解释为什么 AI 开发者会兴奋。更重要的是它站在模型和业务工作之间，扮演一个协作层：你可以把 Claude Code、Codex、OpenCode 或其他支持协议的 harness 接入，让它们在同一条消息线程里工作。这样一来，模型能力不再被锁在某个单独客户端里，而是变成频道中的一个可点名成员。</p>
+      <h3>Harness 是 agent 的运行外壳</h3>
+      <p>视频里提到 Buzz 会检测本机已经安装的 harness，并让用户为不同 agent 安装 connector。可以把 harness 理解为 agent 的运行外壳：它负责启动模型客户端、连接本地项目、执行工具、处理权限审批，并把结果返回给 Buzz。Claude Code、Codex、OpenCode 或 Cursor agent 都可以视为不同 harness 或 harness 生态的一部分。</p>
+      <h3>ACP 让不同 agent 能接入同一个界面</h3>
+      <p>嘉宾提到的 ACP connector 是理解 Buzz 的关键。视频没有深入协议细节，但从演示可以看出，Buzz 希望通过一个通用接口和各种 agent harness 通信。用户不需要每次为不同模型重写工作流，而是把“谁来做事”抽象成频道里的 agent 成员。只要某个工具能通过 connector 暴露能力，它就可以成为 Buzz 工作区的一部分。</p>
+      <h3>频道是任务、功能和上下文的容器</h3>
+      <p>Vinnie 的实际用法很朴素：一个频道对应一个 feature、idea 或 task。比如要做 landing page，就开一个频道，把人和 agent 拉进来，先讨论三个方案，再让 agent 并行产出三个设计。这种模式比“给一个 agent 一次性扔一大段 prompt”更接近真实团队工作，因为频道保留了前因后果、选择依据和中间产物。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤：如何把 Buzz 用成真实工作流</h2>
+      <h3>1. 先连接已有订阅，而不是重新买一套模型</h3>
+      <p>视频最实际的一点是：Buzz 的定位不是替你购买模型，而是让你复用现有 Claude Code、Codex 等订阅。Riley 展示的价值在于同一工作区里可以同时点名多个 agent，让不同模型或工具链在同一个任务上贡献结果。对于“token budgeting, not token maxing”的团队，这意味着可以把快模型、强模型和专用工具分配给不同类型任务，而不是所有事都交给最贵模型。</p>
+      <h3>2. 给 agent 固定模型和角色，但不要过度设计</h3>
+      <p>Vinnie 的配置方式很克制：他没有写复杂系统提示词，而是把默认 agent 固定到不同模型上。一个 agent 用更强的模型处理规划、编码和复杂推理，另一个 agent 用更快或更便宜的模型做摘要、复查和轻量任务。这个经验对团队更有用，因为早期最大的风险不是“角色不够精细”，而是工具太复杂，没人愿意持续使用。</p>
+      <h3>3. 用频道组织工作，而不是用私聊堆历史</h3>
+      <p>视频里的重要方法论是把频道当成任务容器。每个频道有明确主题：一个功能、一个设计方向、一个客户问题、一个每日研究流程。人类成员可以先讨论需求，再点名 agent 去做并行产出。这样 agent 的输出不会孤立在某个终端会话里，而是自然成为团队讨论的一部分。</p>
+      <h3>4. 用手机处理远程代理任务</h3>
+      <p>Riley 重点展示了 Buzz 的移动端。他把它类比为 ChatGPT App 里远程连接 Codex 的体验：扫描 QR code 后，手机就能查看和控制正在运行的 agent 工作。这个能力看似只是便利性，但对真实业务很关键。很多 agent 任务会在后台跑几分钟到几十分钟，如果只能坐在电脑前等待，自动化价值会被大幅削弱；如果能从手机接收结果、继续追问和批准下一步，它才更像一个随时可调度的团队成员。</p>
+      <h3>5. 谨慎使用自动化和 webhook</h3>
+      <p>视频讨论到 workflows、trigger 和外部信息注入。Riley 想象的场景是：每天固定时间抓取细分领域创作者、AI 新闻或社交媒体动态，然后把结果送进 Buzz，让 agent 在早晨直接开始分析。嘉宾也提醒目前这部分还有不稳定和 bug。对工程团队来说，这意味着 Buzz 的自动化适合从低风险流程开始：摘要、研究、提醒、候选生成，而不是一上来就让它无人值守地改生产代码。</p>
+      <blockquote>
+        <p>这期视频最值得带走的判断是：Buzz 的新意不在于“又多一个聊天工具”，而在于它让 agent 协作变成一个团队能看见、能分配、能延续的工作界面。</p>
+      </blockquote>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格：什么时候该用 Buzz，什么时候不用</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工作方式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险与建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>单独使用 Claude Code / Codex</td>
+            <td>个人开发、一次性修 bug、明确代码修改</td>
+            <td>上下文直接贴近仓库，权限和工具链清晰，最少中间层</td>
+            <td>多人协作和跨工具复盘较弱；结果容易散在不同会话中</td>
+          </tr>
+          <tr>
+            <td>Buzz 频道 + 单个强 agent</td>
+            <td>产品方案、代码计划、研究任务、需求澄清</td>
+            <td>频道保留完整讨论历史，人类团队和 agent 共享上下文</td>
+            <td>早期先保持角色简单；不要用复杂 prompt 把频道变成黑盒</td>
+          </tr>
+          <tr>
+            <td>Buzz 频道 + 多个 agent 并行</td>
+            <td>多个方案对比、设计探索、代码 review、竞品研究</td>
+            <td>可以让不同模型或工具链从不同角度给结果，再由人类裁决</td>
+            <td>需要明确验收标准；否则多 agent 会制造更多噪音而不是确定性</td>
+          </tr>
+          <tr>
+            <td>Buzz workflow / trigger</td>
+            <td>每日情报、例行摘要、内容候选、监控提醒</td>
+            <td>外部信息进入统一工作台，早晨可以直接从结果开始工作</td>
+            <td>视频里也承认还可能 buggy；高风险动作必须加审批和回滚机制</td>
+          </tr>
+          <tr>
+            <td>传统 Slack + 手动复制 AI 输出</td>
+            <td>已有团队流程短期不能迁移</td>
+            <td>组织成本低，成员无需学习新界面</td>
+            <td>上下文迁移最重；agent 不是频道成员，只是外部工具</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、关键观点：从“调用模型”到“运营 agent 团队”</h2>
+      <p>这期视频真正有价值的地方，是把 agent 的讨论从“哪个模型更强”转向“怎么让 agent 进入团队流程”。Buzz 不保证每个 agent 都更聪明，也不神化多 agent 协作。它展示的是一种新界面：人发一条消息，不同 agent 读取同一上下文、用各自工具行动、把结果回写到同一频道。这个界面一旦稳定，会改变很多团队的工作分配方式。</p>
+      <p>Riley 后半段提到自己的内容团队，以及他正在思考如何让六七个人一起进入 Buzz 工作区。这说明 Buzz 的目标不是个人玩具，而是团队操作系统：谁在做什么、哪个 agent 负责研究、哪个 agent 做管理、哪些任务每天自动触发，都可以在同一个空间里被讨论和调整。</p>
+      <p>不过，视频也给了一个重要边界：不要因为工具支持多 agent，就假设多 agent 自动可靠。真正的生产用法仍然需要频道命名、模型分工、权限审批、人工复核和失败处理。Buzz 让协作更顺，但不会替代工程治理。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <div class="timestamp"><time>00:00</time><span>开场演示：在 Buzz 中同时向 Claude Code、Codex、Grok、Kimi 等多个 agent 发消息。</span></div>
+      <div class="timestamp"><time>02:00</time><span>解释 Buzz 为什么像 agent native Slack：不是只有聊天，而是让不同 agent 共用上下文。</span></div>
+      <div class="timestamp"><time>06:00</time><span>嘉宾 Vinnie 讨论 viral 原因：替代 Slack 只是表层，更深层是上下文和 agent 协作。</span></div>
+      <div class="timestamp"><time>10:00</time><span>连接本机已有 harness：Buzz 检测 Claude Code、Codex 等工具，并通过 connector 接入。</span></div>
+      <div class="timestamp"><time>16:00</time><span>模型分工：把不同默认 agent 固定到强模型、快模型或轻量任务上。</span></div>
+      <div class="timestamp"><time>22:00</time><span>频道工作流：一个频道对应一个 feature、idea 或 task，让人类和 agent 共同推进。</span></div>
+      <div class="timestamp"><time>30:00</time><span>移动端体验：通过 QR code 连接后，在手机上查看、控制和继续 agent 任务。</span></div>
+      <div class="timestamp"><time>38:00</time><span>workflow、trigger 与外部数据：把每日研究、社交媒体和业务信息送进 Buzz。</span></div>
+      <div class="timestamp"><time>45:00</time><span>Riley 分享自己的 Buzz 用法：管理 agent、内容团队协作和长期频道上下文。</span></div>
+      <div class="timestamp"><time>53:00</time><span>总结：Buzz 可能是一种重要的 agent form factor，后续值得持续观察。</span></div>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <div class="rec-grid">
+        <a class="rec" href="index.html">返回完整课程列表</a>
+        <a class="rec" href="c9AnqCeyxbI.html">用纯 Python 从零搭建 AI Agent</a>
+        <a class="rec" href="C2GpeepcmYs.html">Claude Code 开发者速成课</a>
+        <a class="rec" href="oBuWXUy7stw.html">Claude Code + Codex 协同工作台</a>
+        <a class="rec" href="ulNsa0sD8N0.html">Harness Engineering：把助手变成系统</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
