@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Agent Harness：插件化 Coding Agent 工作台实测 - Owain Lewis</title>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #16161f;
+      --text-primary: #e2e8f0;
+      --text-secondary: #9ca3af;
+      --text-muted: #667085;
+      --accent: #63b3ed;
+      --accent-hover: #4299e1;
+      --accent-soft: rgba(99, 179, 237, 0.13);
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.08);
+      --danger: #f87171;
+      --success: #34d399;
+      --warning: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.75;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .back-link:hover {
+      background: var(--accent);
+      color: var(--bg-primary);
+    }
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      margin: 0 0 10px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.05;
+      margin: 0 0 14px;
+      letter-spacing: 0;
+    }
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin: 0 0 20px;
+      max-width: 900px;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .pill {
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.86rem;
+    }
+    .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      background: #000;
+      margin-bottom: 2rem;
+    }
+    .video-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+    h2 {
+      font-size: clamp(1.4rem, 2.6vw, 2rem);
+      line-height: 1.25;
+      margin: 0 0 1rem;
+    }
+    h3 {
+      font-size: 1.08rem;
+      margin: 1.4rem 0 0.45rem;
+      color: #f8fafc;
+    }
+    p { margin: 0 0 1rem; color: var(--text-secondary); }
+    strong { color: var(--text-primary); }
+    .note-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 18px 0 4px;
+    }
+    .note {
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px;
+      background: rgba(255,255,255,0.035);
+    }
+    .note b {
+      display: block;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .note span { color: var(--text-secondary); font-size: 0.94rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0 8px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+    }
+    th, td {
+      text-align: left;
+      vertical-align: top;
+      padding: 14px;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text-secondary);
+    }
+    th {
+      background: rgba(99,179,237,0.12);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    tr:last-child td { border-bottom: 0; }
+    blockquote {
+      margin: 18px 0;
+      border-left: 4px solid var(--accent);
+      padding: 14px 18px;
+      background: var(--accent-soft);
+      color: var(--text-primary);
+      border-radius: 0 10px 10px 0;
+      font-size: 1.02rem;
+    }
+    .timeline {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .time-row {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .time-row:last-child { border-bottom: 0; }
+    .time {
+      color: var(--accent);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight: 700;
+    }
+    .rec-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .rec {
+      display: block;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px;
+      background: rgba(255,255,255,0.035);
+    }
+    .rec small { display: block; color: var(--text-muted); margin-top: 6px; }
+    @media (max-width: 720px) {
+      .page { width: min(100% - 24px, 1120px); padding-top: 18px; }
+      .time-row { grid-template-columns: 1fr; gap: 4px; }
+      th, td { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <a class="back-link" href="index.html">← 返回课程列表</a>
+
+    <header class="hero">
+      <p class="eyebrow">Agent Harness · Plugins · Multi-Agent Orchestration</p>
+      <h1>DeepSeek Agent Harness：把 Coding Agent 变成可插拔工作台</h1>
+      <p class="subtitle">英文原题：I Tested DeepSeek Agent Harness Against Codex and Claude Code。Owain Lewis 用一次真实的代码审查和并行修 bug 演示，比较 DeepSeek Agent Harness、Codex 与 Claude Code 的工作形态差异。</p>
+      <div class="meta">
+        <span class="pill">频道：Owain Lewis</span>
+        <span class="pill">时长：13 分 27 秒</span>
+        <span class="pill">播放量：18,964</span>
+        <span class="pill">上传日期：2026-08-22</span>
+      </div>
+    </header>
+
+    <section class="video-frame" aria-label="视频嵌入">
+      <iframe src="https://www.youtube.com/embed/kFvEReALJL8" title="I Tested DeepSeek Agent Harness Against Codex and Claude Code" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </section>
+
+    <section class="content-card">
+      <h2>一、问题引入：为什么还需要另一个 Agent Harness</h2>
+      <p>这支视频表面是在试用 DeepSeek 的 Agent Harness，真正讨论的是一个更实际的问题：当一个开发者每天同时推进多个项目、几十个任务，并且想把 Claude Code、Codex、本地模型或云端 runner 混在一起用时，单一终端或单一聊天窗口很快会变成管理瓶颈。Owain 的判断很直接：模型能力之外，谁能把任务、权限、工具、轨迹和插件做成可编排系统，谁就更接近下一代开发工作台。</p>
+      <p>他先展示自己写的自定义看板扩展。这个看板不是独立项目管理工具，而是运行在 Harness 里的插件 UI：能看到正在执行的任务、归档工作、子代理调用、token 用量、等待人工处理的项目，以及是否按项目分组。这里的重点不是“看板好看”，而是 Harness 允许开发者把代理运行状态投射成自己的工作界面。</p>
+      <blockquote>核心判断：Agent 的竞争不只在模型回答质量，也在于你能否把它接进自己的任务系统、审查流程和多代理调度方式。</blockquote>
+      <p>这与 Codex、Claude Code 的默认体验形成对比。Codex 更像成熟的工程代理和任务执行环境，Claude Code 更贴近终端开发者习惯；DeepSeek Agent Harness 则把“代理本身可以被插件化改造”放到台前。视频后半段也承认它并不是全面胜出，特别是在成本模式和现阶段可靠性上，Owain 仍然更偏向订阅制的 Codex。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>二、核心概念解释：Harness、插件、模式和轨迹</h2>
+      <h3>1. Harness 不是模型，而是模型周围的操作系统</h3>
+      <p>视频里的 Harness 可以理解成一层代理运行时：它把模型 provider、工具权限、任务会话、UI 扩展、agent loop 和执行轨迹组织起来。用户一开始需要 DeepSeek API key，但后续可以切换不同模型 provider，例如 DeepSeek、OpenRouter、本地模型或其他接口。模型是“推理引擎”，Harness 决定这个引擎能看到什么、能调用什么、如何并发工作、如何被人观察。</p>
+      <h3>2. 插件化 UI 是它最突出的差异</h3>
+      <p>Owain 反复强调“everything is a plug-in”。这句话在视频中不是抽象口号：他展示的看板插件能把 agent session、任务状态、归档项、token 统计和等待人工确认的事项合到一个界面里。相比之下，如果在 Claude Code 或 Codex 中实现同样界面，通常需要另写一个外部应用，再通过 API 或本地状态去接入。</p>
+      <h3>3. 模式决定工具边界</h3>
+      <p>Harness 提供不同运行模式：标准模式适合大多数日常任务；minimal 模式只保留很少工具；PTC 代表 programmatic tool calling，让代理写代码来定制自己的工具调用路径；creator 模式用于交互式构建插件和扩展。这里的工程意义是：权限和工具不是固定开关，而可以被组织成不同的工作画像。</p>
+      <h3>4. 轨迹视图是 Agent Debugger</h3>
+      <p>视频展示了 trajectory view，用来查看每一步工具调用、搜索历史和执行过程。对做过 Langfuse、OpenTelemetry 或 agent tracing 的工程师来说，这就是代理工作流的可观测性入口。它可以回答“为什么这个任务跑了很久”“哪个子代理在等待”“工具调用是否重复”等问题。</p>
+      <div class="note-grid">
+        <div class="note"><b>看板</b><span>把多项目、多任务、多会话的运行状态聚合成可扫描视图。</span></div>
+        <div class="note"><b>模式</b><span>把工具权限、agent loop 和插件能力组合成不同执行环境。</span></div>
+        <div class="note"><b>Provider</b><span>让同一个 Harness 可以连接 API 模型、订阅入口或本地模型。</span></div>
+        <div class="note"><b>Trajectory</b><span>把代理过程从黑盒聊天变成可复盘、可优化的执行记录。</span></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>三、关键论点与实操步骤</h2>
+      <h3>安装与启动：先跑起来，再在浏览器里工作</h3>
+      <p>Owain 的安装演示很简短：复制官方命令到终端，启动后 Harness 会在本地端口提供 Web 界面。进入界面后，它看起来有点像 Codex 风格的浏览器工作台，可以打开多个项目、多个 session，并在侧边栏中切换。这个设计对“同一天处理 5 到 6 个项目、50 到 60 个任务”的开发者尤其重要，因为终端 multiplexer 虽然强大，但在 agentic coding 场景里很难给出全局任务状态。</p>
+      <h3>配置权限：workspace 与 full access 要分清</h3>
+      <p>视频里能看到权限切换：workspace 权限只允许写当前目录，full access 则扩大到当前目录之外。这个选择不是 UI 细节，而是安全边界。一个会调用 shell、读写文件、调用第三方插件的代理，一旦进入 full access，风险就接近“能代表用户操作整台机器”。因此，默认用 workspace，只有明确需要跨目录操作时才提升，是更稳妥的工程习惯。</p>
+      <h3>连接 Claude Code 与 Codex：让 Harness 当协调器</h3>
+      <p>最值得看的部分，是 Owain 把 Claude Code 和 Codex 当作工具调用目标。他让 Harness ping 本机上的 Claude Code 和 Codex，并把它们作为可调度的 worker。换句话说，DeepSeek Harness 不一定要替代 Codex，它也可以作为上层协调器，把不同代理分配到不同任务里。</p>
+      <p>这也是视频标题里“against Codex and Claude Code”的真正含义：它不是简单比谁回答更好，而是在比较三类角色。Codex 是强执行者，Claude Code 是熟悉的终端工作流，DeepSeek Harness 的价值则在于能把多个执行者接到同一个可视化、可插件化的流程。</p>
+      <h3>用 Agent OS 管理任务：先生成 ticket，再并行派工</h3>
+      <p>Owain 还展示了自己正在开发的 Agent OS：里面有类似看板的任务管理，可以存知识库、配置 runner、运行云端或虚拟机上的代理，并用 inbox 接收代理回报。演示中，他给 Harness 一个很粗糙的提示：“review the code and find any bugs we need to fix”，让代理在代码库里找 bug，并通过 MCP server 创建任务。</p>
+      <p>生成的任务并不是一句话 TODO，而是包含 bug 描述、为什么重要、涉及代码位置和修复建议。随后他采用 coordinator-worker pattern，把 4 个 bug fix 分派给 4 个隔离 worktree 里的 agent session，并由一个主 session 监控它们的完成状态。这是视频最有工程价值的实操：把“一个大任务”拆成“可审查的 ticket + 多个隔离执行者 + 总控复核”。</p>
+      <h3>遇到代理不知道自己有工具：上下文和自描述仍然重要</h3>
+      <p>演示中还有一个非常现实的片段：代理一开始没有意识到自己有 RPC 能力来创建新 session，Owain 需要提醒它可以调用 `session.create`、`session.prompt` 一类能力。这个细节说明，哪怕 Harness 暴露了强工具，代理也未必自动知道何时使用。工具自描述、系统提示、示例任务和失败恢复仍然是多代理系统的关键工程面。</p>
+      <h3>价格判断：API key 模式适合实验，不一定适合高频开发</h3>
+      <p>Owain 试用了两天，估算只把 20% 编码工作放进这个 Harness 就花了约 2 美元；如果全天使用，可能两天达到 6 到 7 美元。他因此认为，对高频开发者来说，订阅制通常更可控。这个判断不代表 API 模式没有价值，反而给出了边界：探索新 Harness、跑特定模型、搭私有流程时 API 很灵活；日常重度 coding agent 使用时，成本可预测性更重要。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>四、对比表格：什么时候选 DeepSeek Harness、Codex 或 Claude Code</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工具/模式</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>主要风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DeepSeek Agent Harness</strong></td>
+            <td>想搭自定义 Agent 工作台、插件 UI、多模型 provider、多代理协调器。</td>
+            <td>插件化程度高，可定制 UI、工具、agent loop、权限模式和轨迹视图。</td>
+            <td>社区插件安全风险较高；API key 计费对重度开发不够可预测；代理仍需清晰工具提示。</td>
+            <td>适合做 agent platform 原型、团队内部工具和多代理实验，不必马上替换主力 coding agent。</td>
+          </tr>
+          <tr>
+            <td><strong>Codex</strong></td>
+            <td>需要稳定完成工程任务、代码修改、测试验证、长期上下文任务。</td>
+            <td>执行质量和工程闭环强，订阅制成本更易预估，适合日常主力开发。</td>
+            <td>自定义 UI 和外部协调层能力不如插件式 Harness 直接。</td>
+            <td>继续作为主执行者；需要多代理编排时，可以让 Harness 或任务系统调度 Codex。</td>
+          </tr>
+          <tr>
+            <td><strong>Claude Code</strong></td>
+            <td>偏好终端、需要和本地开发习惯强绑定、希望快速在 shell 中协作。</td>
+            <td>贴近命令行工作流，容易和已有开发环境结合。</td>
+            <td>多项目、多 session、多任务状态在终端里不够可视化，长时间并行工作容易丢上下文。</td>
+            <td>适合作为熟悉的 worker；在复杂编排中可以由上层系统派工。</td>
+          </tr>
+          <tr>
+            <td><strong>本地模型 + Harness</strong></td>
+            <td>隐私、离线、成本实验，或需要控制模型运行环境。</td>
+            <td>理论上更可控，也能接入同一插件体系。</td>
+            <td>硬件成本高，速度和能力未必达到云端 frontier 模型体验。</td>
+            <td>优先用于低风险、低成本、可容错任务；关键代码修改仍要用强模型复核。</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-card">
+      <h2>五、引用块：这支视频最该带走的判断</h2>
+      <blockquote>如果把 Agent 看成只会回答问题的模型，你会比较模型分数；如果把 Agent 看成工作系统，你会比较任务编排、权限边界、插件生态和可观测性。</blockquote>
+      <p>这句话不是视频原文逐字引用，而是对整段演示的浓缩。Owain 的真正兴趣点，是 Harness 让开发者把“代理过程”产品化：有看板、有 runner、有 inbox、有轨迹、有 provider、有插件。对于团队来说，这比单次回答质量更接近生产力系统。</p>
+      <blockquote>第三方插件越强，越要把安全模型想清楚；因为它们面对的不是普通网页，而是能接触凭据和文件系统的代理。</blockquote>
+      <p>视频也提醒了安全问题：从互联网安装的插件可能获得代理上下文、工具调用能力、凭据和本机文件访问路径。插件化是优势，同时也是攻击面。真正落地时，应该把插件来源、权限声明、审计日志、隔离执行和撤销机制纳入最低设计要求。</p>
+    </section>
+
+    <section class="content-card">
+      <h2>六、时间戳目录</h2>
+      <div class="timeline">
+        <div class="time-row"><span class="time">00:00</span><p>开场：介绍 DeepSeek Agent Harness 的定位，强调“everything is a plug-in”，包括 UI 也能扩展。</p></div>
+        <div class="time-row"><span class="time">00:45</span><p>展示自定义 Kanban 扩展：任务、归档、token、子代理调用和待人工处理事项聚合在一个看板里。</p></div>
+        <div class="time-row"><span class="time">02:00</span><p>安装与本地启动：复制命令到终端，浏览器打开本地端口，进入类似 Codex 的 Web 工作台。</p></div>
+        <div class="time-row"><span class="time">03:00</span><p>界面与权限：多项目、多 session、workspace/full access 权限，以及 standard、minimal、PTC、creator 等模式。</p></div>
+        <div class="time-row"><span class="time">04:10</span><p>工具调用 Claude Code 与 Codex：把它们作为本机 worker，让 Harness 承担上层协调器角色。</p></div>
+        <div class="time-row"><span class="time">05:05</span><p>设置与模型 provider：DeepSeek API key 起步，也可以切换 OpenRouter、本地模型、GitHub Copilot 等 provider。</p></div>
+        <div class="time-row"><span class="time">06:20</span><p>插件配置与 agent presets：关闭或开启工具，调整 parallel tool calls，构造不同工具子集。</p></div>
+        <div class="time-row"><span class="time">07:10</span><p>Agent OS 演示：任务看板、知识库、runner、agent run 跟踪与 inbox 回传。</p></div>
+        <div class="time-row"><span class="time">08:20</span><p>让代理审查代码并创建 bug ticket：每张任务包含问题、影响、代码位置和修复建议。</p></div>
+        <div class="time-row"><span class="time">09:25</span><p>Coordinator-worker pattern：四个 bug fix 分派到四个独立 worktree，由主 session 监控。</p></div>
+        <div class="time-row"><span class="time">10:35</span><p>Trajectory view：查看工具调用轨迹、审计历史和子代理状态，用于调试执行过程。</p></div>
+        <div class="time-row"><span class="time">11:20</span><p>安全提醒：第三方插件可能接触代理上下文、凭据和本机资源，安装前必须审慎。</p></div>
+        <div class="time-row"><span class="time">12:00</span><p>成本讨论：API key 计费适合探索，但重度 coding agent 工作可能不如订阅制可控。</p></div>
+        <div class="time-row"><span class="time">13:00</span><p>结论：Harness 的最大吸引力是可定制 UI 和插件系统，现阶段可作为多代理实验平台。</p></div>
+      </div>
+    </section>
+
+    <section class="content-card">
+      <h2>七、相关推荐</h2>
+      <p>如果你关心这类“模型之外的开发工作台”，建议把本页和以下课程连起来看：先理解 Harness Engineering，再看多代理协作，再回到具体工具的速成课。</p>
+      <div class="rec-list">
+        <a class="rec" href="index.html">返回课程列表<small>查看全部 AI / Claude 技术分享课程。</small></a>
+        <a class="rec" href="RWp5cejTApU.html">DeepSeek Harness 开发者预览<small>同样聚焦 Harness、插件和轨迹视图，适合作为前置背景。</small></a>
+        <a class="rec" href="ulNsa0sD8N0.html">Harness Engineering：把 AI 编程助手变成可进化系统<small>从 rules、skills、MCP、hooks 理解工作台层。</small></a>
+        <a class="rec" href="P1KpxzLVg7c.html">Buzz AI：让 Claude Code、Codex 和团队在同一个工作台协作<small>继续看多 agent、多工具协同在团队场景中的落地。</small></a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
