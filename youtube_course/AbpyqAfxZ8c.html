@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 软件工厂实战：把 Codex 与 Claude Code 放进工程流水线 — Owain Lewis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16161f;
+      --bg-card-hover: #1c1c28;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 179, 237, 0.3);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888a0;
+      --text-muted: #55556a;
+      --accent-cyan: #63b3ed;
+      --accent-blue: #4299e1;
+      --accent-purple: #9f7aea;
+      --gradient-start: #1a1a2e;
+      --gradient-end: #0a0a0f;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.7;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-header, main, footer { position: relative; z-index: 1; }
+    .page-header { padding: 40px 0 32px; }
+
+    .back-link, .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .back-link { color: var(--text-secondary); border-color: var(--border-color); background: rgba(255, 255, 255, 0.04); margin-bottom: 24px; }
+    .back-link:hover, .btn:hover { color: var(--bg-primary); background: var(--accent-cyan); transform: translateX(-2px); }
+
+    .hero {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle { color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 18px; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .meta-badge.time { color: var(--accent-cyan); border-color: rgba(99, 179, 237, 0.2); background: rgba(99, 179, 237, 0.08); }
+    .meta-badge.source { color: var(--accent-purple); border-color: rgba(159, 122, 234, 0.2); background: rgba(159, 122, 234, 0.08); }
+
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      background: #000;
+      margin-bottom: 32px;
+    }
+
+    .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .content-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(12px);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 32px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin: 24px 0 12px; }
+    p { color: var(--text-secondary); margin: 0 0 14px; line-height: 1.75; }
+    ul, ol { color: var(--text-secondary); margin: 0 0 14px; padding-left: 24px; }
+    li { margin-bottom: 8px; }
+
+    blockquote {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 3px solid var(--accent-purple);
+      background: rgba(159, 122, 234, 0.06);
+      border-radius: 0 8px 8px 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 18px 0;
+      font-size: 0.875rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.55;
+    }
+
+    th { background: rgba(255, 255, 255, 0.03); color: var(--text-primary); font-weight: 600; }
+    tr:nth-child(even) td { background: rgba(255, 255, 255, 0.01); }
+    code { background: rgba(255, 255, 255, 0.06); padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: var(--accent-cyan); }
+    .timestamp-list { list-style: none; padding-left: 0; }
+    .timestamp-list li { display: grid; grid-template-columns: 90px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); }
+    .timestamp { font-family: 'JetBrains Mono', monospace; color: var(--accent-cyan); font-size: 0.85rem; }
+    .recommendations { display: grid; gap: 12px; }
+    .recommendations a { color: var(--accent-cyan); text-decoration: none; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px 14px; background: rgba(255,255,255,0.03); }
+    .recommendations a:hover { border-color: var(--border-hover); background: rgba(99, 179, 237, 0.08); }
+    footer { padding: 40px 0; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+
+    @media (max-width: 640px) {
+      body { padding: 0 16px; }
+      .hero, .content-card { padding: 20px; }
+      .page-title { font-size: 1.45rem; }
+      .timestamp-list li { grid-template-columns: 1fr; gap: 4px; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <a href="index.html" class="back-link">← 返回课程列表</a>
+    <section class="hero">
+      <h1 class="page-title">AI 软件工厂实战：把 Codex 与 Claude Code 放进工程流水线</h1>
+      <p class="subtitle">I Built an Agentic Software Factory with Codex and Claude Code</p>
+      <div class="page-meta">
+        <span class="meta-badge source">Owain Lewis</span>
+        <span class="meta-badge time">20:50</span>
+        <span class="meta-badge">53,870 次观看</span>
+        <span class="meta-badge">Software Factory · Agents · Sandbox</span>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/AbpyqAfxZ8c" title="I Built an Agentic Software Factory with Codex and Claude Code" allowfullscreen></iframe>
+    </div>
+
+    <article class="content-card">
+      <h2>一、问题引入：软件工厂不是再买一个聊天机器人</h2>
+      <p>这个视频讨论的不是“让 AI 写更多代码”这么简单的事。Owain Lewis 把焦点放在工程系统本身：一个需求从想法、ticket、设计、拆解、实现、测试、review 到合并，原本就是一条流程；所谓 AI 软件工厂，是把 agent 放进这条流程里，让它承接那些可以被规范化、验证和重复执行的环节。</p>
+      <p>视频一开场就回应了一个常见质疑：网上关于 AI software factory 的说法很多，听上去像概念营销。但作者的结论更朴素：它真正有价值的地方不是把人完全拿掉，而是把已经存在的工程活动变成更清晰的输入、步骤和检查点。换句话说，Agent 的效果上限很大程度取决于团队有没有把工作说清楚。</p>
+      <p>这也是本视频适合开发者看的原因。它没有把 Codex、Claude Code、Factory 或 Docker sandbox 当成魔法，而是把它们拆回工程语言：队列、规格、验收条件、任务分解、执行器、代码审查、权限隔离和合并策略。</p>
+
+      <h2>二、核心概念解释：把开发流程变成可交给 Agent 的接口</h2>
+      <h3>1. Intent：需求入口不能是含糊愿望</h3>
+      <p>作者先把传统开发流程抽象成 intent。这个 intent 可能来自客户问题、PM、stakeholder，也可能来自开发者自己的想法。进入 AI 软件工厂之前，它需要被转成一个可处理的工作项，而不是一句“帮我优化一下系统”。</p>
+      <p>对 Agent 来说，最危险的输入不是复杂，而是不明确。一个含糊需求会让模型自己补上下文、自己假设边界、自己决定验收标准；在个人 demo 里这可能看起来很快，在团队工程里就会变成不可追责的随机输出。</p>
+
+      <h3>2. Spec：先设计，再执行</h3>
+      <p>视频里反复强调的核心动作是 planning and design。作者展示了一个非常简单的 plan skill：把 brief 或 spec 转成结构化 ticket，包含 outcome、context、acceptance criteria 以及 agent 完成任务所需的其他信息。这个步骤看似普通，却是 AI 软件工厂能稳定运行的基础。</p>
+      <p>这里的关键不是模板有多复杂，而是团队是否愿意把“为什么做、做什么、怎么算完成”写出来。AI 工具越强，越不能跳过这一步，因为模型很擅长填空，也很容易填错空。</p>
+
+      <h3>3. Worker：Agent 是执行单元，不是唯一决策者</h3>
+      <p>在作者的流程里，Claude Code、Codex、Pi 等工具都可以作为 worker。视频给出的观点是：具体用哪个 Agent 没有大家想象得那么决定性，真正决定效果的是 workflow。也就是说，Agent 是流水线里的执行器，而不是流程本身。</p>
+      <p>这个判断对工程团队很实用。不要把能力建设押注在某个模型的 UI 上，而应该沉淀可以迁移的工作契约：ticket 格式、上下文包、代码检查、测试门禁、review 规则、合并策略。模型可以替换，流程资产应该留下。</p>
+
+      <h2>三、关键论点与实操步骤：从手工工厂到自动化工厂</h2>
+      <h3>手工软件工厂：先让单个 ticket 可交付</h3>
+      <p>视频前半段展示的是“手工工厂”流程：人负责写清设计和计划，然后把实现任务交给 Agent。Agent 在独立上下文里完成代码、测试和 PR，最后由人或另一个 Agent review。作者说自己现在大多数开发工作都采用这种方式：把时间花在规划和设计上，实际实现时交给 Agent。</p>
+      <p>这个阶段的价值是训练团队写好任务。不要急着做全自动化，先确认一个 ticket 在无人陪跑的情况下能被 Agent 完成、能被测试证明、能被 review 接住。只有这个最小闭环稳定，后面的队列化、批处理和自动合并才有意义。</p>
+
+      <h3>自动化软件工厂：Factory 编排 intake、refine、build、test、review、merge</h3>
+      <p>后半段作者展示了自己用 Rust 写的开源项目 Factory。它把软件工厂的想法编码成一个可运行系统：从 intake 拿到 idea，经过 agent 生成 specification 和 task，再进入 build、testing、review，最后等待 merge。人不再逐步敲命令，而是在任务板上协调状态。</p>
+      <p>这并不意味着系统可以无限信任。相反，越自动化越需要明确的状态机。一个 ticket 什么时候可以进入 build？测试失败后应该回到哪个状态？review 是人看、Agent 看，还是两者都看？这些问题如果不在流程中定义，自动化只会把混乱放大。</p>
+
+      <h3>Sandbox：自动化之前先限制破坏半径</h3>
+      <p>作者专门讲了 sandboxing。视频里的说法很直接：如果要在生产或团队环境中运行这类系统，就必须小心 worker 的权限。作者本地常用 Git worktree，团队或 VM 环境则倾向 Docker sandbox、普通容器或其他隔离方案。</p>
+      <p>这点值得单独拎出来，因为很多 AI 编码流程失败不是模型不会写代码，而是执行环境没有边界。Agent 需要读仓库、安装依赖、运行测试、改文件、提交补丁，但它不应该默认拥有破坏数据库、删除共享目录、污染主分支或泄露凭据的能力。</p>
+
+      <h3>成本：确定性轮询，只有真正开工时才花 token</h3>
+      <p>视频也回应了成本问题。作者认为，一个设计良好的工厂系统不应该每秒都调用模型。Factory 的思路是大部分时间用确定性代码轮询 GitHub 或任务队列；只有发现真实工作项时，才启动 Agent 消耗 token。</p>
+      <p>这个设计让成本从“持续燃烧”变成“按工作触发”。对企业团队来说，这比单纯问某个模型每月多少钱更重要：你需要知道 token 花在了什么 ticket 上，输出是否通过测试，失败是否可重试，是否能审计。</p>
+
+      <h3>质量边界：AI 不够聪明的任务仍然需要人</h3>
+      <p>作者没有把软件工厂描述成完全自治。他明确承认，有些任务不适合完全交给 Agent。架构判断、产品权衡、安全边界、复杂跨团队依赖，仍然需要工程师批判性思考。AI 工厂更适合机械性升级、清晰 bug fix、重复迁移、局部重构和已有标准下的实现。</p>
+      <p>这也是正确使用它的分界线：能写清验收条件、能自动或半自动验证、失败代价可控的任务，可以进入工厂；需要新战略、隐性业务判断或高风险生产操作的任务，需要人站在流程前面。</p>
+
+      <h2>四、对比表格：什么时候用哪种 Agent 工作流</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>工作流</th>
+            <th>适用场景</th>
+            <th>优点</th>
+            <th>风险</th>
+            <th>决策建议</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>聊天式协作</td>
+            <td>探索问题、解释代码、快速生成小片段</td>
+            <td>启动成本低，人能实时纠偏</td>
+            <td>上下文容易散，结果难复现</td>
+            <td>适合研究和小修，不适合作为团队交付主流程</td>
+          </tr>
+          <tr>
+            <td>手工软件工厂</td>
+            <td>单个 ticket 已经有清晰 spec 和验收标准</td>
+            <td>人控制设计，Agent 负责实现，风险可控</td>
+            <td>吞吐量受人工派单和 review 影响</td>
+            <td>作为团队引入 AI 编码的第一阶段最稳妥</td>
+          </tr>
+          <tr>
+            <td>自动化 Factory</td>
+            <td>大量低到中风险任务，可排队、可测试、可 review</td>
+            <td>可批量处理 ticket，流程一致性更高</td>
+            <td>状态机、权限、失败恢复没做好会放大事故</td>
+            <td>只在手工闭环稳定后引入，并先限制任务类型</td>
+          </tr>
+          <tr>
+            <td>完全自治合并</td>
+            <td>依赖升级、格式修复、生成物刷新等低风险变更</td>
+            <td>几乎不占人工时间，适合高频维护</td>
+            <td>误判影响可能直接进入主分支</td>
+            <td>需要强测试、强权限隔离和可回滚策略</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>五、引用块：视频里最值得带走的判断</h2>
+      <blockquote>
+        <p>真正重要的不是你选择哪个 Agent，而是你有没有把工作流设计好。</p>
+      </blockquote>
+      <p>这句话基本概括了整支视频。Claude Code、Codex 或 Pi 都只是执行器；能不能稳定交付，取决于需求是否被整理成可执行 ticket，环境是否被隔离，测试是否能给出反馈，review 是否能守住质量门槛。</p>
+      <blockquote>
+        <p>AI 软件工厂更像 CI/CD 的下一步：把一致的工程流程套到 AI 编码任务上。</p>
+      </blockquote>
+      <p>作者用 CI/CD 类比很准确。过去团队把部署从手工操作变成流水线，不是为了取消工程师，而是为了让每个人都走同一套可靠流程。AI 软件工厂也应该如此：它应该提升一致性，而不是让每个开发者各自发明 prompt 手艺。</p>
+
+      <h2>六、时间戳目录：20 分钟看懂软件工厂闭环</h2>
+      <ul class="timestamp-list">
+        <li><span class="timestamp">00:00</span><span>介绍 AI software factory 的争议与价值：不是炒作，而是把 Agent 放进既有工程流程。</span></li>
+        <li><span class="timestamp">01:30</span><span>定义传统软件开发链路：intent、backlog、design、planning、implementation、review、merge。</span></li>
+        <li><span class="timestamp">04:00</span><span>演示手工工厂：用 plan skill 把 spec 转成 ticket，再交给 Codex 或 Claude Code 执行。</span></li>
+        <li><span class="timestamp">07:20</span><span>强调 workflow 比具体 Agent 更重要：模型可替换，任务契约和验收标准要沉淀。</span></li>
+        <li><span class="timestamp">09:00</span><span>引入 Factory 项目：用 Rust 编码 intake、refine、build、test、review、merge 的自动化循环。</span></li>
+        <li><span class="timestamp">12:30</span><span>展示任务板与流水线运行：人主要负责协调，系统负责把 ticket 推过标准化阶段。</span></li>
+        <li><span class="timestamp">15:00</span><span>讨论 sandbox：本地可用 worktree，团队环境需要 Docker sandbox 或容器隔离。</span></li>
+        <li><span class="timestamp">17:00</span><span>回应成本质疑：确定性轮询不烧 token，只有真正执行 Agent 时才产生模型成本。</span></li>
+        <li><span class="timestamp">18:20</span><span>回应能力边界：AI 不适合所有任务，人仍然需要做架构、风险和产品判断。</span></li>
+        <li><span class="timestamp">20:00</span><span>总结：把机械、清晰、可验证的任务交给工厂，把关键判断留给工程师。</span></li>
+      </ul>
+
+      <h2>七、相关推荐</h2>
+      <div class="recommendations">
+        <a href="index.html">返回完整课程列表，继续浏览所有 AI 编程工作流课程</a>
+        <a href="kFvEReALJL8.html">DeepSeek Agent Harness：把 Coding Agent 变成可插拔工作台</a>
+        <a href="P1KpxzLVg7c.html">Buzz AI：让 Claude Code、Codex 和团队在同一个工作台协作</a>
+        <a href="ulNsa0sD8N0.html">Harness Engineering：从模型、工具到多会话 Ralph loop</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    由 AI 自动整理字幕并生成 ·
+    <a class="btn" href="https://github.com/classmatexiaoming96-ux/classmatexiaoming96-ux.github.io">GitHub Pages</a>
+  </footer>
+</body>
+</html>
